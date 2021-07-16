@@ -29,12 +29,10 @@ export class BreadcrumbCustom extends React.Component{
     }
 
     render =() => {
-        const {breadcrumbItems} = this.state;
         return (
             <Breadcrumb>
-                {breadcrumbItems && breadcrumbItems.map((item, index) => {
-                    <Breadcrumb.Item href={item.href}><FontAwesomeIcon icon={item.icon}/> {item.name}</Breadcrumb.Item>
-                })}
+               
+                    <Breadcrumb.Item href="#"> TRANG CHỦ</Breadcrumb.Item>
             </Breadcrumb>
         )
     }
