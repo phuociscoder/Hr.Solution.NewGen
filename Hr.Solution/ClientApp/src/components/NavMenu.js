@@ -4,7 +4,9 @@ import './NavMenu.css';
 import logo from '../assets/logo.png';
 import avatar from '../assets/avatar.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faEnvelopeOpenText, faIdCardAlt, faPowerOff, faUnlockAlt } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faEnvelopeOpenText, faIdCardAlt, faPowerOff, faUnlockAlt, faUser, faUsers, faUsersCog } from '@fortawesome/free-solid-svg-icons'
+import { RoutePath } from './Common/Constants';
+import { Link } from 'react-router-dom';
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
@@ -39,26 +41,24 @@ export class NavMenu extends Component {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link href="/counter"><i className="" /> QUẢN LÝ NHÂN VIÊN</Nav.Link>
+              <Link className="navbar-dark navbar-nav nav-link" to={RoutePath.EMPLOYEE_MANAGEMENT}><i className="" /><span><FontAwesomeIcon icon={faUsers} /> QUẢN LÝ NHÂN VIÊN</span></Link>
               <Nav.Link href="#link">Link</Nav.Link>
             </Nav>
             <Form inline>
-            <Image width={45} height={40} src={avatar} rounded />
-            <span className="ml-2 mr-2" style={{ color: "whitesmoke" }}><b>NGUYỄN HỮU PHƯỚC</b><br/><i>QUẢN TRỊ VIÊN</i></span>
-            
+              <Image width={45} height={40} src={avatar} rounded />
+              <span className="ml-2 mr-2" style={{ color: "whitesmoke" }}><b>NGUYỄN HỮU PHƯỚC</b><br /><i>QUẢN TRỊ VIÊN</i></span>
+
               <NavDropdown alignRight menu title={
-                
                 <React.Fragment>
-                  <FontAwesomeIcon color="whitesmoke" size="lg" icon={faCog}/>
-                  
+                  <FontAwesomeIcon color="whitesmoke" size="lg" icon={faCog} />
                 </React.Fragment>
 
               } id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1"><FontAwesomeIcon icon={faUnlockAlt}></FontAwesomeIcon>  Đổi Mật Khẩu</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2"><FontAwesomeIcon icon={faEnvelopeOpenText}/> Thông Báo <Badge variant="danger">10</Badge></NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3"><FontAwesomeIcon icon={faIdCardAlt}/> Thông Tin Cá Nhân</NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.2"><FontAwesomeIcon icon={faEnvelopeOpenText} /> Thông Báo <Badge variant="danger">10</Badge></NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.3"><FontAwesomeIcon icon={faIdCardAlt} /> Thông Tin Cá Nhân</NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4"><FontAwesomeIcon color="red" icon={faPowerOff}/> Đăng Xuất</NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.4"><FontAwesomeIcon color="red" icon={faPowerOff} /> Đăng Xuất</NavDropdown.Item>
               </NavDropdown>
 
 

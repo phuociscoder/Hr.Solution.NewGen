@@ -7,14 +7,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export class BreadcrumbCustom extends React.Component{
     constructor(props){
         super(props);
+        this.state= {
+            breadcrumbItems : []
+        }
     }
     componentDidMount =() => {
-        const path =window.location.pathname;
-        this.setState({path});
+        this.generateBreadcrumbItems();
     }
 
     generateBreadcrumbItems =() => {
-        const {path} = this.state;
+        const {path} = window.location.pathname;
         let items = [];
         switch (path) {
             case RoutePath.EMPLOYEE_MANAGEMENT:
@@ -23,16 +25,24 @@ export class BreadcrumbCustom extends React.Component{
                 break;
         
             default:
+                items.push({name: "TRANG CHỦ", href: RoutePath.HOME });
                 break;
         }
         this.setState({breadcrumbItems: items});
+        console.log(items);
     }
 
     render =() => {
+        const {breadcrumbItems} = this.state;
         return (
             <Breadcrumb>
+            {breadcrumbItems && breadcrumbItems.map((item, index) => {
+                return(
+                <Breadcrumb.Item href={item.href}><FontAwesomeIcon icon={faHome}/> {item.name}</Breadcrumb.Item>
+                )
+            })}
                
-                    <Breadcrumb.Item href="#"> TRANG CHỦ</Breadcrumb.Item>
+                    
             </Breadcrumb>
         )
     }

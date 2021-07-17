@@ -13,10 +13,33 @@ code {
   border-color: #1861ac;
 }
 
-body{
-  background-color: lightgray;
-}
 
 .container-main{
-  margin: 50px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 10px;
+}
+
+.tree-node:hover{
+  background-color: #c1daf7;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-icon{
+color: red;
+}
+
+.btn-icon:hover{
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.custom-table-data > thead > tr {
+  background-color: #1b6ec2;
+  color: whitesmoke;
+}
+
+.custom-table-data > tbody > tr {
+cursor: pointer;
 }
