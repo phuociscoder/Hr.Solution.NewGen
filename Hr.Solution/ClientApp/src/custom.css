@@ -35,11 +35,40 @@ color: red;
   cursor: pointer;
 }
 
-.custom-table-data > thead > tr {
+.card-header , .custom-table-data > thead > tr {
   background-color: #1b6ec2;
   color: whitesmoke;
 }
 
+
+
 .custom-table-data > tbody > tr {
 cursor: pointer;
 }
+
+#dropdown-employeeOptions::after{
+  display: none;
+}
+
+.menu-link{
+  text-decoration: none !important ;
+}
+
+.employee-link .list-group-item{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.employee-link .list-group-item :hover{
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #c1daf7;
+}
+
+.modal-header{
+  background-color: #1b6ec2;
+  font-weight: bold;
+  border-bottom: none;
+  color: whitesmoke;
+}
+

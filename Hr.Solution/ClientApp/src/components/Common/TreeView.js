@@ -2,7 +2,6 @@ import { faChevronDown, faChevronRight, faSearch, faTimesCircle } from "@fortawe
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Card } from "react-bootstrap";
-import './TreeView.css';
 
 export class TreeView extends React.Component {
     constructor(props) {
