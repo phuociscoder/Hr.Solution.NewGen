@@ -1,24 +1,12 @@
 import { faGripVertical, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Dropdown, Image, Popover } from "react-bootstrap";
+import { Dropdown, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { BaseListing } from "../../Common/BaseListing";
 import { NoDataTableContent } from "../../Common/NoDataTableContent";
 
 export class EmployeeTable extends BaseListing {
-
-    generateMenuOptions = (id) => {
-        return (
-            <Popover id="popover-basic">
-                <Popover.Title as="h3">Popover right</Popover.Title>
-                <Popover.Content>
-                    And here's some <strong></strong> content. It's very engaging.
-                    right?
-                </Popover.Content>
-            </Popover>
-        )
-    }
 
     generateContent = () => {
         return (

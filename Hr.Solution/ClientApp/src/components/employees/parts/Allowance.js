@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, Col, Container, Jumbotron, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
+import { AllowanceInfo } from "./Allowance.info";
 import { AllowanceList } from "./Allowance.list";
 
 export class Allowance extends React.Component{
@@ -8,16 +9,22 @@ export class Allowance extends React.Component{
         super(props);
     }
 
+    onModelChange =(model) => {
+        console.log(model);
+    }
+
     render =() => {
         return(
             <Container fluid className="mt-1 ml-1">
         <Row>
             <Col xs={4}>
                 <div className="form-group list-sub-content ">
-                    <AllowanceList/>
+                    <AllowanceList onModelChange={this.onModelChange}/>
                     </div> 
             </Col>
-            <Col></Col>
+            <Col>
+            <AllowanceInfo/>
+            </Col>
         </Row>
             </Container>
         

@@ -99,6 +99,11 @@ cursor: pointer;
   border-bottom-color: #e9ecef ;
 }
 
+.allowance-link{
+  max-height: 500px;
+  overflow-y: auto;
+}
+
 .btn-icon-menu:hover{
   color: red;
 }

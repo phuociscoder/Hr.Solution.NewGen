@@ -1,9 +1,7 @@
 import { faCheck, faShareSquare, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "bootstrap";
 import React from "react";
 import { Modal } from "react-bootstrap";
-import ModalHeader from "react-bootstrap/esm/ModalHeader";
 
 export class ActionType {
     static SaveChange = 1;

@@ -1,9 +1,8 @@
-import { faSearch, faUser, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { BaseListing } from "../../Common/BaseListing";
 import { RoutePath } from "../../Common/Constants";
 import { DepartmentFilter } from "../parts/DepartmentFilter";
 import { EmployeeTable } from "./EmployeeTable";
@@ -31,7 +30,7 @@ export class EmployeeListing extends React.Component {
             {id:6, code: 'EMP006',fullName: 'Nguyễn Hoàng Đức', gender:1, department: 'Đội Tuyển VN', role: 'Tiền vệ', doB: '22/01/1998', contractType: 'Toàn thời gian', avatar: 'https://nguoinoitieng.tv/images/nnt/99/0/bdyn.jpg' },
             {id:7, code: 'EMP007',fullName: 'Quế Ngọc Hải', gender:1, department: 'Đội Tuyển VN', role: 'Hậu vệ', doB: '25/07/1994', contractType: 'Toàn thời gian', avatar: 'https://photo-cms-baonghean.zadn.vn/w607/Uploaded/2021/eslysyrlmyl/2021_06_21/2file458991289_2162021.jpg' }
         ];
-        this.setState({employees : null});
+        this.setState({employees});
     }
 
     onDepartmentSelectedChange =(ids) => {
