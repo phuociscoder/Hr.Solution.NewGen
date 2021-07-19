@@ -13,6 +13,9 @@ code {
   border-color: #1861ac;
 }
 
+.w-40{
+  width: 40%;
+}
 
 .container-main{
   margin-left: 20px;
@@ -62,7 +65,6 @@ cursor: pointer;
 .employee-link .list-group-item :hover{
   font-weight: bold;
   cursor: pointer;
-  background-color: #c1daf7;
 }
 
 .modal-header{
@@ -71,4 +73,34 @@ cursor: pointer;
   border-bottom: none;
   color: whitesmoke;
 }
+
+.employee-link .list-group-item.active{
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1b6ec2;
+    font-weight: bold;
+}
+
+.list-sub-content{
+  background-color: #e9ecef;
+}
+
+.allowance-link .list-group-item:hover{
+  font-weight: bold;
+  cursor: pointer;
+  background-color:#e9ecef;
+}
+
+.allowance-link .list-group-item.active{
+  font-weight: bold;
+  cursor: pointer;
+  color: black;
+  background-color:#e9ecef;
+  border-bottom-color: #e9ecef ;
+}
+
+.btn-icon-menu:hover{
+  color: red;
+}
+
 

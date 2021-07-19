@@ -32,7 +32,6 @@ export class DepartmentFilter extends React.Component{
     }
     
     onDepartmentSelectedChange =(ids) => {
-        debugger;
         const {onDepartmentSelectedChange} = this.props;
         onDepartmentSelectedChange(ids);
     }
