@@ -39,3 +39,14 @@ export class Mode {
     static Edit=2;
     static View =3;
 }
+
+export class Relation {
+    static Father = 1; 
+    static Mother =2;
+    static Child =3;
+    static All=[
+        {id: this.Father, name: "Cha"},
+        {id: this.Mother, name: "Mẹ"},
+        {id: this.Child, name: "Con cái"}
+    ];
+}

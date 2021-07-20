@@ -1,17 +1,18 @@
-import { faCheck, faList, faShareSquare, faTimes, faUserAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faFileInvoiceDollar, faInfoCircle, faList, faShareSquare, faTimes, faUserAlt, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Accordion, Button, Card, Col, Container, Jumbotron, ListGroup, Row } from "react-bootstrap";
 import { ActionButtonsGroup } from "../../Common/ActionButtonsGroup";
 import { EmployeeSection } from "../Constanst";
 import { Allowance } from "../parts/Allowance";
+import { Dependant } from "../parts/Dependant";
 import { GeneralInformation } from "../parts/GeneralInformation";
 
 export class EmployeeCreate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedSection: EmployeeSection.GeneralInformation
+            selectedSection: EmployeeSection.Dependant
         };
     }
 
@@ -130,7 +131,7 @@ export class EmployeeCreate extends React.Component {
                 <Accordion activeKey={selectedSection} defaultActiveKey={EmployeeSection.GeneralInformation}>
                     <Card>
                         <Accordion.Toggle as={Card.Header} onClick={() => this.onSectionHeaderClick(EmployeeSection.GeneralInformation)} eventKey={EmployeeSection.GeneralInformation}>
-                            THÔNG TIN CÁ NHÂN
+                           <FontAwesomeIcon icon={faInfoCircle}/> THÔNG TIN CÁ NHÂN
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey={EmployeeSection.GeneralInformation}>
                             <Card.Body>
@@ -140,7 +141,7 @@ export class EmployeeCreate extends React.Component {
                     </Card>
                     <Card>
                         <Accordion.Toggle as={Card.Header} onClick={() => this.onSectionHeaderClick(EmployeeSection.Allowance)} eventKey={EmployeeSection.Allowance}>
-                            PHỤ CẤP
+                           <FontAwesomeIcon icon={faFileInvoiceDollar}/> PHỤ CẤP
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey={EmployeeSection.Allowance}>
                             <Card.Body style={{padding: 0}}>
@@ -150,10 +151,12 @@ export class EmployeeCreate extends React.Component {
                     </Card>
                     <Card>
                         <Accordion.Toggle as={Card.Header} onClick={() => this.onSectionHeaderClick(EmployeeSection.Dependant)} eventKey={EmployeeSection.Dependant}>
-                            Click me!
+                           <FontAwesomeIcon icon={faUserFriends}/> NGƯỜI PHỤ THUỘC
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey={EmployeeSection.Dependant}>
-                            <Card.Body>Hello! I'm another body</Card.Body>
+                            <Card.Body>
+                                <Dependant/>
+                            </Card.Body>
                         </Accordion.Collapse>
                     </Card>
                     <Card>
