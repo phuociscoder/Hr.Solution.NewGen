@@ -108,4 +108,14 @@ cursor: pointer;
   color: red;
 }
 
+.img-thumb{
+  width: 70px;
+  border-style: solid;
+  border-width: thick;
+  border-color: white;
+  border-radius: 10px;
+  box-shadow: 10px;
+  box-shadow: 5px 5px 10px lightgrey;
+}
+
 

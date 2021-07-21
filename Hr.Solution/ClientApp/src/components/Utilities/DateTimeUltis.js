@@ -5,7 +5,7 @@ const getYears =() => {
     const startPreviousYear = currentYear - 120;
     let years =[];
     for (let index = startPreviousYear; index <=currentYear; index++) {
-        years.shift(index);
+        years.unshift(index);
     }
     return years;
 }

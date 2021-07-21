@@ -4,6 +4,7 @@ import { BaseListing } from "../../Common/BaseListing";
 import React from 'react';
 import { Relation } from "../Constanst";
 import { Modal } from "react-bootstrap";
+import { DependantInformation } from "./Dependant.info";
 
 export class DependantTable extends BaseListing{
 
@@ -12,9 +13,21 @@ export class DependantTable extends BaseListing{
         super();
         this.state={
             showRemoveModal: false,
-            removeItem: null
+            removeItem: null,
+            showEditModal: false,
+            editModel: null
         }
     }
+    
+
+    onShowRemoveModal =(item) => {
+        this.setState({showRemoveModal: true, removeItem: item});
+    }
+
+    onHideRemoveModal =() => {
+        this.setState({showRemoveModal: false, removeItem: null});
+    }
+
     onProcessRemoveItem =() => {
         const {removeItem} = this.state;
         if(!removeItem) return;
@@ -23,14 +36,6 @@ export class DependantTable extends BaseListing{
         onProcessRemoveItem(removeItem);
         this.onHideRemoveModal();
 
-    }
-
-    onShowRemoveModal =(item) => {
-        this.setState({showRemoveModal: true, removeItem: item});
-    }
-
-    onHideRemoveModal =() => {
-        this.setState({showRemoveModal: false, removeItem: null});
     }
 
     generateRemoveModal =() => {
@@ -48,7 +53,35 @@ export class DependantTable extends BaseListing{
             </Modal>
         )
     }
+
+    onShowEditModal=(item) => {
+        this.setState({showEditModal: true, editModel: item});
+    }
     
+    onHideEditModal=(item) => {
+        this.setState({showEditModal: false, editModel: null});
+    }
+
+    onProcessEditModel =()=> {
+
+    }
+
+    generaEditModal=()=> {
+        const {showEditModal, editModel} = this.state;
+        return (
+            <Modal show={showEditModal} backdrop="static" centered>
+                <Modal.Header>Sửa thông tin người phụ thuộc</Modal.Header>
+                <Modal.Body>
+                    <DependantInformation model={editModel}/>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-primary" onClick={this.onProcessEditModel}><FontAwesomeIcon icon={faEdit}/> Xác nhận</button>
+                    <button className="btn btn-danger" onClick={this.onHideEditModal}><FontAwesomeIcon icon={faTimes}/> Hủy bỏ</button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
     generateContent =() => {
         const {data} = this.state;
         return(
@@ -77,7 +110,7 @@ export class DependantTable extends BaseListing{
                           <td>{item.phone}</td>
                           <td className="align-middle" style={{textAlign: "center"}}>{item.isTax ? <FontAwesomeIcon className="text-success" icon={faCheckCircle}/> : null }</td>
                           <td>
-                              <button className="btn btn-info"><FontAwesomeIcon icon={faEdit}/></button>
+                              <button className="btn btn-info" onClick={() => this.onShowEditModal(item)}><FontAwesomeIcon icon={faEdit}/></button>
                               <button fieldValue={item.id} onClick={() => this.onShowRemoveModal(item)} className="btn btn-danger ml-2"><FontAwesomeIcon icon={faTrash}/></button>
                           </td>
                       </tr>
@@ -88,6 +121,7 @@ export class DependantTable extends BaseListing{
                   </tr>} 
             </tbody>
             {this.generateRemoveModal()}
+            {this.generaEditModal()}
             </>
         )
     }

@@ -1,18 +1,20 @@
-import { faCheck, faFileInvoiceDollar, faInfoCircle, faList, faShareSquare, faTimes, faUserAlt, faUserFriends } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faCheck, faFileInvoiceDollar, faFileSignature, faInfoCircle, faList, faShareSquare, faTimes, faUserAlt, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Accordion, Button, Card, Col, Container, Jumbotron, ListGroup, Row } from "react-bootstrap";
 import { ActionButtonsGroup } from "../../Common/ActionButtonsGroup";
 import { EmployeeSection } from "../Constanst";
 import { Allowance } from "../parts/Allowance";
+import { Constract } from "../parts/Constract";
 import { Dependant } from "../parts/Dependant";
 import { GeneralInformation } from "../parts/GeneralInformation";
+import { PayrollBasic } from "../parts/PayrollBasic";
 
 export class EmployeeCreate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedSection: EmployeeSection.Dependant
+            selectedSection: EmployeeSection.PayrollInfo
         };
     }
 
@@ -101,22 +103,10 @@ export class EmployeeCreate extends React.Component {
                             <span fieldName={EmployeeSection.Dependant}><FontAwesomeIcon icon={faUserAlt} /> NGƯỜI PHỤ THUỘC</span>
                         </ListGroup.Item>
                         <ListGroup.Item className="pt-2 pb-2 pl-3"
-                            fieldName={EmployeeSection.Constract}
-                            onClick={this.onChangeSection}
-                            active={selectedSection === EmployeeSection.Constract} >
-                            <span fieldName={EmployeeSection.Constract}><FontAwesomeIcon icon={faUserAlt} /> HỢP ĐỒNG LAO ĐỘNG</span>
-                        </ListGroup.Item>
-                        <ListGroup.Item className="pt-2 pb-2 pl-3"
-                            fieldName={EmployeeSection.DayLeave}
-                            onClick={this.onChangeSection}
-                            active={selectedSection === EmployeeSection.DayLeave} >
-                            <span fieldName={EmployeeSection.DayLeave}><FontAwesomeIcon icon={faUserAlt} /> NGÀY NGHỈ</span>
-                        </ListGroup.Item>
-                        <ListGroup.Item className="pt-2 pb-2 pl-3"
                             fieldName={EmployeeSection.PayrollInfo}
                             onClick={this.onChangeSection}
                             active={selectedSection === EmployeeSection.PayrollInfo} >
-                            <span fieldName={EmployeeSection.PayrollInfo}><FontAwesomeIcon icon={faUserAlt} /> THÔNG TIN LƯƠNG</span>
+                            <span fieldName={EmployeeSection.PayrollInfo}><FontAwesomeIcon icon={faUserAlt} /> THÔNG TIN CB TÍNH CÔNG</span>
                         </ListGroup.Item>
                     </ListGroup>
                 </Card.Body>
@@ -160,27 +150,13 @@ export class EmployeeCreate extends React.Component {
                         </Accordion.Collapse>
                     </Card>
                     <Card>
-                        <Accordion.Toggle as={Card.Header} onClick={() => this.onSectionHeaderClick(EmployeeSection.Constract)} eventKey={EmployeeSection.Constract}>
-                            Click me!
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey={EmployeeSection.Constract}>
-                            <Card.Body>Hello! I'm another body</Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} onClick={() => this.onSectionHeaderClick(EmployeeSection.DayLeave)} eventKey={EmployeeSection.DayLeave}>
-                            Click me!
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey={EmployeeSection.DayLeave}>
-                            <Card.Body>Hello! I'm another body</Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                    <Card>
                         <Accordion.Toggle as={Card.Header} onClick={() => this.onSectionHeaderClick(EmployeeSection.PayrollInfo)} eventKey={EmployeeSection.PayrollInfo}>
-                            Click me!
+                            <FontAwesomeIcon icon={faAddressCard}/> THÔNG TIN CB TÍNH CÔNG
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey={EmployeeSection.PayrollInfo}>
-                            <Card.Body>Hello! I'm another body</Card.Body>
+                            <Card.Body>
+                                <PayrollBasic />
+                            </Card.Body>
                         </Accordion.Collapse>
                     </Card>
                 </Accordion>

@@ -1,9 +1,10 @@
-import { faGripVertical, faUserEdit } from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt, faGripVertical, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Dropdown, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { BaseListing } from "../../Common/BaseListing";
+import { RoutePath } from "../../Common/Constants";
 import { NoDataTableContent } from "../../Common/NoDataTableContent";
 
 export class EmployeeTable extends BaseListing {
@@ -43,6 +44,9 @@ export class EmployeeTable extends BaseListing {
 
                                             <Dropdown.Menu>
                                                 <Dropdown.Item ><Link className="menu-link"><span><FontAwesomeIcon icon={faUserEdit}/> Thông tin cá nhân </span></Link></Dropdown.Item>
+                                                <Dropdown.Item ><Link className="menu-link" to={`${RoutePath.EMPLOYEE_CONTRACT.replace(':id', item.id)}`}><span><FontAwesomeIcon icon={faFileAlt}/> Hợp đồng lao động </span></Link></Dropdown.Item>
+                                                <Dropdown.Item ><Link className="menu-link"><span><FontAwesomeIcon icon={faFileAlt}/> Nghỉ phép </span></Link></Dropdown.Item>
+                                                <Dropdown.Item ><Link className="menu-link"><span><FontAwesomeIcon icon={faFileAlt}/> TimeShift </span></Link></Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </td>

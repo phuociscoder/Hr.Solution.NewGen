@@ -1,6 +1,8 @@
-import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPlus, faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { Modal } from "react-bootstrap";
+import { DependantInformation } from "./Dependant.info";
 import { DependantTable } from "./Dependant.table";
 
 export class Dependant extends React.Component {
@@ -9,6 +11,7 @@ export class Dependant extends React.Component {
         this.state = {
             searchText: null,
             data: null,
+            showAddModal: false
         }
     }
 
@@ -42,6 +45,34 @@ export class Dependant extends React.Component {
         console.log(data);
     }
 
+    onShowAddModal =() => {
+        this.setState({showAddModal: true});
+    }
+    onHideAddModal=()=> {
+        this.setState({showAddModal: false});
+    }
+
+    onProcessAddModel =() => {
+
+    }
+
+    generateAddModal =() => {
+        const {showAddModal} = this.state;
+        return (
+            <Modal show={showAddModal} backdrop="static" centered>
+                <Modal.Header>Thêm người phụ thuộc</Modal.Header>
+                <Modal.Body>
+                    <DependantInformation model={null}/>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-primary" onClick={this.onProcessAddModel}><FontAwesomeIcon icon={faEdit}/> Xác nhận</button>
+                    <button className="btn btn-danger" onClick={this.onHideAddModal}><FontAwesomeIcon icon={faTimes}/> Hủy bỏ</button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
+
     render = () => {
         const { data } = this.state;
         return (
@@ -49,11 +80,12 @@ export class Dependant extends React.Component {
                 <div className="d-flex justify-content-end pr-0">
                     <input className="form-control w-50" onChange={this.onSearchTextChange} type="text" placeholder="Tìm kiếm"></input>
                     <button className="btn btn-primary " onClick={this.onSearch}><FontAwesomeIcon icon={faSearch} /></button>
-                    <button className="btn btn-primary ml-2"><FontAwesomeIcon icon={faPlus} /> Thêm mới</button>
+                    <button className="btn btn-primary ml-2" onClick={this.onShowAddModal}><FontAwesomeIcon icon={faPlus} /> Thêm mới</button>
                 </div>
                 <div className="mt-2">
                     <DependantTable onProcessRemoveItem={this.onProcessRemoveItem} data={data} />
                 </div>
+                {this.generateAddModal()}
             </div>
 
         )

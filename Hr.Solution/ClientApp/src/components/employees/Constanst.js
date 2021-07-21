@@ -50,3 +50,43 @@ export class Relation {
         {id: this.Child, name: "Con cái"}
     ];
 }
+
+export class EmployeeType {
+    static Official = 1;
+    static PartTime =2;
+    static Probation =3;
+    static Intern =4;
+    static All=[
+        {id: this.Official, name: "Chính thức"},
+        {id: this.PartTime, name: "Bán thời gian"},
+        {id: this.Probation, name: "Thử việc"},
+        {id: this.Intern, name: "Thực tập sinh"}
+    ];
+}
+
+export class WorkerType{
+    static Nomal = 1;
+    static All =[
+        {id: this.Nomal, name:"Nhân viên bình thường"}
+    ];
+}
+
+export class LeaveWeekGroup {
+    static Sunday =1;
+    static Weekend =2;
+    static All=[
+        {id: this.Sunday, name: "Nghỉ chủ nhật"},
+        {id: this.Weekend, name: "Nghỉ Thứ 7/CN"}
+    ];
+}
+
+export class ContractType{
+    static Pernament = 1;
+    static NotPernament =2;
+    static Probation =3;
+    static All =[
+        {id: this.Pernament, name: "Không thời hạn"},
+        {id: this.NotPernament, name: "Có thời hạn"},
+        {id: this.Probation, name: "Thử việc"}
+    ]
+}
