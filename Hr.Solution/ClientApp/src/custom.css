@@ -23,6 +23,11 @@ code {
   margin-top: 10px;
 }
 
+.container-content{
+  height: 82vh;
+  width: 100%;
+}
+
 .tree-node:hover{
   background-color: #c1daf7;
   font-weight: bold;
@@ -116,6 +121,15 @@ cursor: pointer;
   border-radius: 10px;
   box-shadow: 10px;
   box-shadow: 5px 5px 10px lightgrey;
+}
+
+.category-link{
+  cursor: pointer;
+}
+
+.category-link:hover{
+  background-color: #e9ecef;
+  font-weight: bold;
 }
 
 

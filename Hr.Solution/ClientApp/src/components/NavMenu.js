@@ -4,7 +4,7 @@ import './NavMenu.css';
 import logo from '../assets/logo.png';
 import avatar from '../assets/avatar.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faEnvelopeOpenText, faIdCardAlt, faPowerOff, faUnlockAlt, faUser, faUsers, faUsersCog } from '@fortawesome/free-solid-svg-icons'
+import { faBezierCurve, faCog, faEnvelopeOpenText, faIdCardAlt, faPowerOff, faUnlockAlt, faUser, faUsers, faUsersCog } from '@fortawesome/free-solid-svg-icons'
 import { RoutePath } from './Common/Constants';
 import { Link } from 'react-router-dom';
 
@@ -42,7 +42,21 @@ export class NavMenu extends Component {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Link className="navbar-dark navbar-nav nav-link" to={RoutePath.EMPLOYEE_MANAGEMENT}><i className="" /><span><FontAwesomeIcon icon={faUsers} /> QUẢN LÝ NHÂN VIÊN</span></Link>
-              <Nav.Link href="#link">Link</Nav.Link>
+              <NavDropdown alignRight menu title={
+                <React.Fragment>
+                  <FontAwesomeIcon color="whitesmoke" size="lg" icon={faCog} /> QUẢN LÝ THIẾT LẬP
+                </React.Fragment>
+
+              } id="basic-nav-dropdown">
+                <NavDropdown.Item href="#action/3.1"><Link to={RoutePath.CATEGORY_LIST} className="navbar-dark navbar-nav nav-link">
+                  <FontAwesomeIcon icon={faBezierCurve}/> Thiết lập danh mục 
+                  </Link>
+                  </NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.2"><FontAwesomeIcon icon={faEnvelopeOpenText} /> Thông Báo <Badge variant="danger">10</Badge></NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.3"><FontAwesomeIcon icon={faIdCardAlt} /> Thông Tin Cá Nhân</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#action/3.4"><FontAwesomeIcon color="red" icon={faPowerOff} /> Đăng Xuất</NavDropdown.Item>
+              </NavDropdown>
             </Nav>
             <Form inline>
               <Image width={45} height={40} src={avatar} rounded />

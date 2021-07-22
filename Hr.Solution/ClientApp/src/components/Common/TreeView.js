@@ -124,7 +124,7 @@ export class TreeView extends React.Component {
     render = () => {
         const { nodes } = this.state;
         return (
-            <Card>
+            <Card className="h-100">
                 <Card.Header>
                     <div className=" d-flex inline">
                         <div style={{width: "80%"}}>
@@ -165,7 +165,7 @@ export class TreeView extends React.Component {
                     <div className="form-inline">
                         <span>Đã chọn : {nodes.filter(x => x.isSelected).length}</span>
                         <span className="ml-2" >||</span>
-                       <span onClick={this.onClearAll} className="btn-icon ml-2"> <FontAwesomeIcon icon={faTimesCircle}/> Xóa tất cả</span>
+                       <button onClick={this.onClearAll} className="btn btn-danger ml-2"> <FontAwesomeIcon icon={faTimesCircle}/> Xóa tất cả</button>
                     </div>
                 </Card.Footer>
             </Card>
