@@ -3,8 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Card, Container, Image } from "react-bootstrap";
 import { DepartmentFilter } from "../../../employees/parts/DepartmentFilter";
-import Select from 'react-select';
-import { isTemplateExpression } from "typescript";
 import { CustomSelect } from "../../../Common/CustomSelect";
 
 export class DepartmentConfig extends React.Component{

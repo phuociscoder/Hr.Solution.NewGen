@@ -1,49 +1,49 @@
 import React from "react";
-import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
-import { RoutePath } from "./Common/Constants";
-import { faHome, faAddressCard } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Breadcrumb, Container } from "react-bootstrap";
+import { AppRoute } from "./AppRoute";
+import { Link } from "react-router-dom";
 
-export class BreadcrumbCustom extends React.Component{
-    constructor(props){
+export class BreadcrumbCustom extends React.Component {
+    constructor(props) {
         super(props);
-        this.state= {
-            breadcrumbItems : []
+        this.state = {
+            breadcrumbItems: [],
+            path: ''
         }
     }
-    componentDidMount =() => {
+    componentDidMount = () => {
         this.generateBreadcrumbItems();
     }
 
-    generateBreadcrumbItems =() => {
-        const {path} = window.location.pathname;
-        let items = [];
-        switch (path) {
-            case RoutePath.EMPLOYEE_MANAGEMENT:
-                items.push({name: "TRANG CHỦ", href: RoutePath.HOME, icon: {faHome} });
-                items.push({name: "QUẢN LÝ NHÂN VIÊN", href: RoutePath.EMPLOYEE_MANAGEMENT, icon: {faAddressCard} });
-                break;
-        
-            default:
-                items.push({name: "TRANG CHỦ", href: RoutePath.HOME });
-                break;
-        }
-        this.setState({breadcrumbItems: items});
-        console.log(items);
+    generateBreadcrumbItems = () => {
+        const { path } = this.state;
+        return AppRoute.ALL.find(x => x.path === path || path.includes(x.alias));
     }
 
-    render =() => {
-        const {breadcrumbItems} = this.state;
+
+    shouldComponentUpdate = (nextProps) => {
+        if (this.props.path != nextProps.path) {
+            this.setState({ path: nextProps.path });
+        }
+        return true;
+    }
+
+
+
+    render = () => {
+        const breadcrumbItem = this.generateBreadcrumbItems();
+        const name = breadcrumbItem ? breadcrumbItem.name : "TRANG CHỦ";
         return (
-            <Breadcrumb>
-            {breadcrumbItems && breadcrumbItems.map((item, index) => {
-                return(
-                <Breadcrumb.Item href={item.href}><FontAwesomeIcon icon={faHome}/> {item.name}</Breadcrumb.Item>
-                )
-            })}
-               
-                    
-            </Breadcrumb>
+            <>
+                <Breadcrumb>
+                    {breadcrumbItem?.parent && breadcrumbItem.parent.map((item, index) => {
+                        return (
+                            <Breadcrumb.Item><Link to={item.path}>{item.name}</Link></Breadcrumb.Item>
+                        )
+                    })}
+                    <Breadcrumb.Item active>{name}</Breadcrumb.Item>
+                </Breadcrumb>
+            </>
         )
     }
 }

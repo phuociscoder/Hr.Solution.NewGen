@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { BreadcrumbCustom } from './BreadcrumbCustom';
 import { NavMenu } from './NavMenu';
-
 export class Layout extends Component {
   static displayName = Layout.name;
 
@@ -9,10 +7,7 @@ export class Layout extends Component {
     return (
       <div>
         <NavMenu />
-        <BreadcrumbCustom></BreadcrumbCustom>
-        <div className="container-main">
           {this.props.children}
-          </div>
       </div>
     );
   }

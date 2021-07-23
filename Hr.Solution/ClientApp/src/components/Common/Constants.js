@@ -1,15 +1,3 @@
-export class RoutePath {
-//administration
-    static CATEGORY_LIST ="/category";
-    static CONFIG ="/config/"
-    static CONFIG_DEPARTMENT ="/config/department";
-
-    static HOME ="/";
-    static EMPLOYEE_MANAGEMENT ="/employees";
-    static EMPLOYEE_CREATE="/employees/create";
-    static EMPLOYEE_CONTRACT="/employees/contract/:id";
-    
-}
 
 export class Currency {
     static VND = 1;

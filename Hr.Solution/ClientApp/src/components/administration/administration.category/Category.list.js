@@ -2,7 +2,7 @@ import { faAngleRight, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Card, Container, ListGroup } from "react-bootstrap";
-import { RoutePath } from "../../Common/Constants";
+import { AppRoute } from "../../AppRoute";
 
 export class CategoryListing extends React.Component {
     constructor(props) {
@@ -43,7 +43,7 @@ export class CategoryListing extends React.Component {
     }
     
     onClickCategory=(code) => {
-        const path = `${RoutePath.CONFIG}${code}`;
+        const path = `${AppRoute.CONFIG}${code}`;
         this.props.history.push(path);
     }
 

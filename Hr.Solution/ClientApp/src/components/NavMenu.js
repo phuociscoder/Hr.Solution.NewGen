@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Badge, Button, Dropdown, Form, FormControl, Image, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Badge, Button, Dropdown, Form, FormControl, Image, Modal, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import './NavMenu.css';
 import logo from '../assets/logo.png';
 import avatar from '../assets/avatar.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBezierCurve, faCog, faEnvelopeOpenText, faIdCardAlt, faPowerOff, faUnlockAlt, faUser, faUsers, faUsersCog } from '@fortawesome/free-solid-svg-icons'
-import { RoutePath } from './Common/Constants';
+import { faBezierCurve, faCheck, faCog, faEnvelopeOpenText, faIdCardAlt, faPowerOff, faTimes, faUnlockAlt, faUser, faUsers, faUsersCog } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
+import { AppRoute } from './AppRoute';
+import { AuthorizeService } from '../services/auth.service';
+
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
@@ -16,7 +18,8 @@ export class NavMenu extends Component {
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
-      collapsed: true
+      collapsed: true,
+      showLogOutModal: false
     };
   }
 
@@ -24,6 +27,33 @@ export class NavMenu extends Component {
     this.setState({
       collapsed: !this.state.collapsed
     });
+  }
+
+  onLogOutClick =() => {
+    this.setState({showLogOutModal: true});
+  }
+
+  processLogOut =() => {
+     AuthorizeService.logout();
+     window.location.href ="/login";
+  }
+
+  generateConfirmModalLogout =() => {
+    const {showLogOutModal} = this.state;
+    return (
+      <Modal show={showLogOutModal} backdrop="static" centered>
+        <Modal.Header>
+          Xác nhận đăng xuất
+        </Modal.Header>
+        <Modal.Body>
+          <span><b>Bạn chắc chắn muốn đăng xuất ?</b></span>
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-primary" onClick={this.processLogOut}><FontAwesomeIcon icon={faCheck} /> Xác nhận</button>
+          <button className="btn btn-danger" onClick={() => this.setState({showLogOutModal: false})}><FontAwesomeIcon icon={faTimes}/> Hủy bỏ</button>
+        </Modal.Footer>
+      </Modal>
+    )
   }
 
   render() {
@@ -41,14 +71,14 @@ export class NavMenu extends Component {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Link className="navbar-dark navbar-nav nav-link" to={RoutePath.EMPLOYEE_MANAGEMENT}><i className="" /><span><FontAwesomeIcon icon={faUsers} /> QUẢN LÝ NHÂN VIÊN</span></Link>
+              <Link className="navbar-dark navbar-nav nav-link" to={AppRoute.EMPLOYEE_MANAGEMENT.path}><i className="" /><span><FontAwesomeIcon icon={faUsers} /> QUẢN LÝ NHÂN VIÊN</span></Link>
               <NavDropdown alignRight menu title={
                 <React.Fragment>
                   <FontAwesomeIcon color="whitesmoke" size="lg" icon={faCog} /> QUẢN LÝ THIẾT LẬP
                 </React.Fragment>
 
               } id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1"><Link to={RoutePath.CATEGORY_LIST} className="navbar-dark navbar-nav nav-link">
+                <NavDropdown.Item href="#action/3.1"><Link to={AppRoute.CATEGORY_LIST.path} className="navbar-dark navbar-nav nav-link">
                   <FontAwesomeIcon icon={faBezierCurve}/> Thiết lập danh mục 
                   </Link>
                   </NavDropdown.Item>
@@ -72,14 +102,16 @@ export class NavMenu extends Component {
                 <NavDropdown.Item href="#action/3.2"><FontAwesomeIcon icon={faEnvelopeOpenText} /> Thông Báo <Badge variant="danger">10</Badge></NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.3"><FontAwesomeIcon icon={faIdCardAlt} /> Thông Tin Cá Nhân</NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4"><FontAwesomeIcon color="red" icon={faPowerOff} /> Đăng Xuất</NavDropdown.Item>
+                <NavDropdown.Item  onClick={this.onLogOutClick}><span><FontAwesomeIcon color="red" icon={faPowerOff} /> Đăng Xuất </span></NavDropdown.Item>
               </NavDropdown>
 
 
             </Form>
           </Navbar.Collapse>
         </Navbar>
+        {this.generateConfirmModalLogout()}
       </header>
+      
     );
   }
 }

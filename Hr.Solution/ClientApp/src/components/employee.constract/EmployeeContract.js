@@ -27,6 +27,7 @@ export class EmployeeContract extends React.Component {
     render = () => {
         const {data} = this.state;
         return (
+            
             <Container fluid >
                 <div className="w-100"><h4>HỢP ĐỒNG LAO ĐỘNG</h4></div>
                 <div className="w-100">
@@ -35,7 +36,6 @@ export class EmployeeContract extends React.Component {
                 <div>
                     <EmployeeContractTable data={data}/>
                 </div>
-                
             </Container>
 
         )

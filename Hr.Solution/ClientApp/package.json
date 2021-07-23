@@ -2,7 +2,6 @@
   "name": "hr.solution",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://phuociscoder.github.io/Hr.Solution.NewGen",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -46,8 +45,6 @@
     "build": "react-scripts build",
     "test": "cross-env CI=true react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "lint": "eslint ./src/"
   },
   "browserslist": {

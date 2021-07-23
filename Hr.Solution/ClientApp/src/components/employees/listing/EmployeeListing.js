@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { RoutePath } from "../../Common/Constants";
+import { AppRoute } from "../../AppRoute";
 import { DepartmentFilter } from "../parts/DepartmentFilter";
 import { EmployeeTable } from "./EmployeeTable";
 
@@ -39,7 +39,6 @@ export class EmployeeListing extends React.Component {
 
     render =() => {
         const {employees} = this.state;
-        console.log(employees);
         return (
             <Container fluid>
                 <Row>
@@ -53,7 +52,7 @@ export class EmployeeListing extends React.Component {
                      </div>
                      <div>
                          <button className="btn btn-primary ml-1"><span><FontAwesomeIcon icon={faSearch}/> Tìm kiếm</span></button>
-                         <Link to={RoutePath.EMPLOYEE_CREATE} className="btn btn-primary ml-1"><span><FontAwesomeIcon icon={faUserPlus}/> Thêm nhân viên</span></Link>
+                         <Link to={AppRoute.EMPLOYEE_CREATE.path} className="btn btn-primary ml-1"><span><FontAwesomeIcon icon={faUserPlus}/> Thêm nhân viên</span></Link>
                      </div>
                 </Row>
                 <Row style={{height: '100%'}}>
