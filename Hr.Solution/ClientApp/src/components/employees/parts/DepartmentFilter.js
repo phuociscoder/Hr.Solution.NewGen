@@ -1,6 +1,5 @@
 import React from "react";
-import { Card } from "react-bootstrap";
-import { TreeView, Widget } from "../../Common/TreeView";
+import { TreeView } from "../../Common/TreeView";
 
 export class DepartmentFilter extends React.Component{
     constructor(props)

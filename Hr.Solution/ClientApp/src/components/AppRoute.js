@@ -10,9 +10,9 @@ export class AppRoute {
 
     //Config
     static CONFIG ="/config/"
-    static CATEGORY_LIST ={path:"/categoryww", name:"THIẾT LẬP DANH MỤC", parent: [this.HOME] };
+    static CATEGORY_LIST ={path:"/category", name:"THIẾT LẬP DANH MỤC", parent: [this.HOME] };
     
-    static CONFIG_DEPARTMENT ={path:`${this.CONFIG}department`, name:"THIẾT LẬP PHÒNG BAN/BỘ PHẬN", parent: [this.HOME, this.CATEGORY_LIST] };
+    static CONFIG_DEPARTMENT ={path:`${this.CONFIG}department`, name:"THIẾT LẬP PHÒNG BAN/BỘ PHẬN", parent: [this.HOME, this.CATEGORY_LIST] }; // /config/deparment
 
     static ALL =[this.HOME, this.EMPLOYEE_MANAGEMENT, this.EMPLOYEE_CONTRACT, this.EMPLOYEE_CREATE, this.CATEGORY_LIST, this.CONFIG_DEPARTMENT];
 }
