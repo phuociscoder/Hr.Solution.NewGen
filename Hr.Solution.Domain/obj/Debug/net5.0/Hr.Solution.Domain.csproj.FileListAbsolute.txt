@@ -1,0 +1,12 @@
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\bin\Debug\net5.0\Hr.Solution.Domain.deps.json
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\bin\Debug\net5.0\Hr.Solution.Domain.dll
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\bin\Debug\net5.0\ref\Hr.Solution.Domain.dll
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\bin\Debug\net5.0\Hr.Solution.Domain.pdb
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\obj\Debug\net5.0\Hr.Solution.Domain.csprojAssemblyReference.cache
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\obj\Debug\net5.0\Hr.Solution.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\obj\Debug\net5.0\Hr.Solution.Domain.AssemblyInfoInputs.cache
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\obj\Debug\net5.0\Hr.Solution.Domain.AssemblyInfo.cs
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\obj\Debug\net5.0\Hr.Solution.Domain.csproj.CoreCompileInputs.cache
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\obj\Debug\net5.0\Hr.Solution.Domain.dll
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\obj\Debug\net5.0\ref\Hr.Solution.Domain.dll
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Domain\obj\Debug\net5.0\Hr.Solution.Domain.pdb
