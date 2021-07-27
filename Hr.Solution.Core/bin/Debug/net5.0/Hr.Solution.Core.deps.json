@@ -9,7 +9,7 @@
       "Hr.Solution.Core/1.0.0": {
         "dependencies": {
           "Dapper": "2.0.90",
-          "Hr.Solution.Domain": "1.0.0",
+          "Hr.Solution.Data": "1.0.0",
           "System.Data.SqlClient": "4.8.2"
         },
         "runtime": {
@@ -99,9 +99,9 @@
         }
       },
       "System.Security.Principal.Windows/4.7.0": {},
-      "Hr.Solution.Domain/1.0.0": {
+      "Hr.Solution.Data/1.0.0": {
         "runtime": {
-          "Hr.Solution.Domain.dll": {}
+          "Hr.Solution.Data.dll": {}
         }
       }
     }
@@ -182,7 +182,7 @@
       "path": "system.security.principal.windows/4.7.0",
       "hashPath": "system.security.principal.windows.4.7.0.nupkg.sha512"
     },
-    "Hr.Solution.Domain/1.0.0": {
+    "Hr.Solution.Data/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

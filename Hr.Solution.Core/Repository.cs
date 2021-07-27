@@ -38,8 +38,6 @@ namespace Hr.Solution.Core
         public async Task<SearchPagedResults<T>> QueryAsync<T>(string procedureName, object filters) where T : class
         {
 
-            if(!filters)
-
             using (var connection = dbContext.GetDBConnection())
             {
                 var parameters = ConvertToParams(filters);
@@ -52,7 +50,7 @@ namespace Hr.Solution.Core
                 var resultModel = new SearchPagedResults<T>
                 {
                     Data = data,
-                    HasMore =  data.Count < total,
+                    HasMore =  false,
                     PageIndex = 0,
                     PageSize = 50
                 };
