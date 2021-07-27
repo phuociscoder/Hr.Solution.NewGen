@@ -26,6 +26,8 @@ namespace Hr.Solution
 
             services.AddScoped<IDbContext>( x=> new DbContext(connectionString));
 
+            services.AddScoped<IRepository, Repository>();
+
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory

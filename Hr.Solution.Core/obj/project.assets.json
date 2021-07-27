@@ -139,6 +139,16 @@
             "rid": "win"
           }
         }
+      },
+      "Hr.Solution.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/Hr.Solution.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Hr.Solution.Domain.dll": {}
+        }
       }
     }
   },
@@ -473,11 +483,17 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Hr.Solution.Domain/1.0.0": {
+      "type": "project",
+      "path": "../Hr.Solution.Domain/Hr.Solution.Domain.csproj",
+      "msbuildProject": "../Hr.Solution.Domain/Hr.Solution.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
       "Dapper >= 2.0.90",
+      "Hr.Solution.Domain >= 1.0.0",
       "System.Data.SqlClient >= 4.8.2"
     ]
   },
@@ -507,7 +523,11 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Projects\\Hr.Solution.NewGen\\Hr.Solution.Domain\\Hr.Solution.Domain.csproj": {
+              "projectPath": "D:\\Projects\\Hr.Solution.NewGen\\Hr.Solution.Domain\\Hr.Solution.Domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
