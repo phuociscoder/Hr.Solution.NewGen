@@ -1,3 +1,4 @@
+using Hr.Solution.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -20,6 +21,10 @@ namespace Hr.Solution
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddScoped<IDbContext>( x=> new DbContext(connectionString));
 
             services.AddControllersWithViews();
 
