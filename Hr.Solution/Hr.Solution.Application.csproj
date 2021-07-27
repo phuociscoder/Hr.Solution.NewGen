@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -23,7 +23,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hr.Solution.Core\Hr.Solution.Core.csproj" />
-    <ProjectReference Include="..\Hr.Solution.Domain\Hr.Solution.Domain.csproj" />
+    <ProjectReference Include="..\Hr.Solution.Domain\Hr.Solution.Data.csproj" />
+    <ProjectReference Include="..\Hr.Solution.Utilities\Hr.Solution.Utilities.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

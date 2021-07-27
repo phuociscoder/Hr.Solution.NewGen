@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "p07LPybpAvyh1xfp4JFKpqn2jjf3cmkVdBvTiKpxqUCn1k6YAcB29+eyUYhLkwZR7cgyBvEJVRZ+Aw7oqPo25g==",
+  "dgSpecHash": "cGqWcK1uDcCsUb3WPMgORAwA9mzsXTWy++b4JhjCAtOedrwCngarchpf6R4zDRUYpr8mnpPTAr8fUGt4JEftsA==",
   "success": true,
-  "projectFilePath": "D:\\Projects\\Hr.Solution.NewGen\\Hr.Solution.Domain\\Hr.Solution.Domain.csproj",
+  "projectFilePath": "D:\\Projects\\Hr.Solution.NewGen\\Hr.Solution.Domain\\Hr.Solution.Data.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
