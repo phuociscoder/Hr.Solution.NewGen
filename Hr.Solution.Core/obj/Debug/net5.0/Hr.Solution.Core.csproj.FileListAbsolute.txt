@@ -10,3 +10,6 @@ D:\Projects\Hr.Solution.NewGen\Hr.Solution.Core\obj\Debug\net5.0\Hr.Solution.Cor
 D:\Projects\Hr.Solution.NewGen\Hr.Solution.Core\obj\Debug\net5.0\Hr.Solution.Core.dll
 D:\Projects\Hr.Solution.NewGen\Hr.Solution.Core\obj\Debug\net5.0\ref\Hr.Solution.Core.dll
 D:\Projects\Hr.Solution.NewGen\Hr.Solution.Core\obj\Debug\net5.0\Hr.Solution.Core.pdb
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Core\obj\Debug\net5.0\Hr.Solution.Core.csproj.CopyComplete
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Core\bin\Debug\net5.0\Hr.Solution.Data.dll
+D:\Projects\Hr.Solution.NewGen\Hr.Solution.Core\bin\Debug\net5.0\Hr.Solution.Data.pdb
