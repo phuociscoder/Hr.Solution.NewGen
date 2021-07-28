@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Hr.Solution.Domain.Query;
 using Hr.Solution.Domain.Responses;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,13 @@ namespace Hr.Solution.Core
             this.dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Execute a store procedure and return number of rows affected
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="procedureName">Name of Procedure</param>
+        /// <param name="args">Parameters of Procedure</param>
+        /// <returns></returns>
         public async Task<int> ExecuteAsync<T>(string procedureName, object args) where T : class
         {
             using (var connection = dbContext.GetDBConnection())
@@ -37,7 +45,7 @@ namespace Hr.Solution.Core
 
         public async Task<SearchPagedResults<T>> QueryAsync<T>(string procedureName, object filters) where T : class
         {
-
+            var generalFilters = filters as BaseSearchQuery;
             using (var connection = dbContext.GetDBConnection())
             {
                 var parameters = ConvertToParams(filters);
@@ -45,28 +53,36 @@ namespace Hr.Solution.Core
                      .ConfigureAwait(false);
 
                 var data = results.Read<T>().ToList();
-                var informations = !results.IsConsumed ? results.Read().FirstOrDefault(): null;
-                
+                var total = !results.IsConsumed ? results.Read().FirstOrDefault()?.Total : data.Count;
+
+                var pageIndex = generalFilters != null ? generalFilters.PageIndex : 0;
+                var pageSize = generalFilters != null ? generalFilters.PageSize : 20;
+
                 var resultModel = new SearchPagedResults<T>
                 {
                     Data = data,
-                    HasMore =  false,
-                    PageIndex = 0,
-                    PageSize = 50
+                    HasMore = total > (pageIndex * 10 + pageSize),
+                    PageIndex = pageIndex,
+                    PageSize = pageSize
                 };
-
                 return resultModel;
             }
         }
 
-        public Task<GridReader> QueryMultiAsync(string procedureName, object filters)
+        public async Task<GridReader> QueryMultiAsync(string procedureName, object filters)
         {
-            throw new NotImplementedException();
+            using (var connection = dbContext.GetDBConnection())
+            {
+                return await connection.QueryMultipleAsync(procedureName, ConvertToParams(filters), commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+            }
         }
 
-        public Task<T> SingleOrDefault<T>(string procedureName, object filters) where T : class
+        public async Task<T> SingleOrDefault<T>(string procedureName, object filters) where T : class
         {
-            throw new NotImplementedException();
+            using (var connection = dbContext.GetDBConnection())
+            {
+                return await connection.QuerySingleOrDefaultAsync<T>(procedureName, ConvertToParams(filters), commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+            }
         }
 
         private DynamicParameters ConvertToParams(object paramsObject)

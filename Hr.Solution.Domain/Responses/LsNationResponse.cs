@@ -14,5 +14,13 @@ namespace Hr.Solution.Domain.Responses
         public string NationName2 { get; }
         public int Ordinal { get; }
         public string Note { get; }
+
+        public IEnumerable<LsProvinceResponse> Provinces { get; set; }
+    }
+
+    public class LsProvinceResponse { 
+        public Guid ID { get; }
+        public string ProvinceCode { get; }
+        public string ProvinceName { get; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Hr.Solution.Core;
+using Hr.Solution.Domain.Query;
 using Hr.Solution.Domain.Requests;
 using Hr.Solution.Domain.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,9 @@ namespace Hr.Solution.Controllers
         [HttpGet, Route("")]
         public async Task<ActionResult> GetAll()
         {
-            
-            var result = await _repo.QueryAsync<LsNationResponse>("GetLSNationList", null).ConfigureAwait(false);
+
+            var search = new LsNationSearchQueryParams();
+            var result = await _repo.QuerySingleIncludeAsync<LsNationResponse>("GetLSNationList", null).ConfigureAwait(false);
             return Ok(result);
         }
     }
