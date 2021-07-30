@@ -1,0 +1,3 @@
+{
+	"ConnectionString": "Server=LAPTOP-69PCBT57\\SQLEXPRESS;Database=EmployeeManagement;User Id=phuocnugyen;Password=Phu@c202279;"
+}
