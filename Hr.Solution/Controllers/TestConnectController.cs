@@ -25,7 +25,7 @@ namespace Hr.Solution.Controllers
         {
 
             var search = new LsNationSearchQueryParams();
-            var result = await _repo.QuerySingleIncludeAsync<LsNationResponse>("GetLSNationList", null).ConfigureAwait(false);
+            string result = null;
             return Ok(result);
         }
     }
