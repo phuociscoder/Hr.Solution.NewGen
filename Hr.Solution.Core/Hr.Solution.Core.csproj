@@ -13,4 +13,9 @@
     <ProjectReference Include="..\Hr.Solution.Domain\Hr.Solution.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Interfaces\" />
+    <Folder Include="Services\Impl\" />
+  </ItemGroup>
+
 </Project>
