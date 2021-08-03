@@ -21,3 +21,29 @@ html {
   margin-left: -160px;
   margin-top: 20px;
 }
+
+.example-appear {
+  opacity: 0.01;
+}
+.example-appear.example-appear-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.navItem-enter{
+  opacity: 0.01;
+}
+
+.navItem-enter.navItem-enter-active{
+  opacity: 1;
+  transition: opacity 500ms ease-in ;
+}
+
+.navItem-leave{
+  opacity: 1;
+}
+
+.navItem-leave.navItem-leave-active{
+  opacity: 0.01;
+  transition:opacity 500ms ease-in ;
+}
