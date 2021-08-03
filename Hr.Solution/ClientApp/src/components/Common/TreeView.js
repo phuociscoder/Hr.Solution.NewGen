@@ -1,6 +1,7 @@
 import { faChevronDown, faChevronRight, faSearch, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import { Card } from "react-bootstrap";
 
 export class TreeView extends React.Component {
@@ -105,6 +106,7 @@ export class TreeView extends React.Component {
             nodes && nodes.map((item, index) => {
                 return (
                     <div className="ml-4">
+                        <ReactCSSTransitionGroup transitionName="navItem" transitionAppearTimeout={500} transitionEnterTimeout={500} transitionLeaveTimeout={500}>
                         <div className="tree-node">
                             {
                                 this.isHasChild(item.id) && <FontAwesomeIcon icon={item.isExpanded ? faChevronDown : faChevronRight} onClick={() => this.onExpanedClick(item.id)} />
@@ -114,7 +116,9 @@ export class TreeView extends React.Component {
                         {
                             item.isExpanded && this.renderChild(item.id)
                         }
+                        </ReactCSSTransitionGroup>
                     </div>
+                    
                 )
             })
         )
@@ -146,6 +150,7 @@ export class TreeView extends React.Component {
                     {nodes && nodes.filter(x => !x.parent).map((item, index) => {
                         return (
                             <>
+                            <ReactCSSTransitionGroup transitionName="navItem" transitionEnterTimeout={500} transitionLeaveTimeout={500}> 
                                 <div className="tree-node">
                                     {
                                         this.isHasChild(item.id) && <FontAwesomeIcon icon={item.isExpanded ? faChevronDown : faChevronRight} onClick={() => this.onExpanedClick(item.id)} />
@@ -155,6 +160,7 @@ export class TreeView extends React.Component {
                                 {
                                     item.isExpanded && this.renderChild(item.id)
                                 }
+                                </ReactCSSTransitionGroup>
                             </>
                         )
                     }

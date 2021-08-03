@@ -1,0 +1,117 @@
+.offCanvas{
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 2.5vw;
+    box-shadow: 1px 1px 3px grey;
+  }
+   .offCanvas-content{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 2.5vw;
+    z-index: 3;
+    background-image: linear-gradient(180deg, #2a2d81 0%, #66baf2 88%);
+   }
+  
+   .offCanvas-backdrop{
+     position: relative;
+     width: 100vw;
+     height: 100%;
+     z-index: 2;
+     background-color: black;
+     opacity: 0.8;
+   }
+
+   .offCanvas-backdrop-none{
+    position: relative;
+    width: 100vw;
+    height: 100%;
+    z-index: 2;
+    opacity: 0.8;
+    display: none;
+  }
+  
+   .offCanvas-toggle{
+     position: absolute;
+     top: 0;
+     height: 100%;
+     width: 15vw;
+     z-index: 3;
+     box-shadow: 2px 2px 8px black;
+     background-image: linear-gradient(180deg, #2a2d81 0%, #66baf2 88%);
+  
+   }
+
+   .btn-item-collapse > *[class="dropdown-toggle btn btn-primary"]{
+     height: 10vh;
+     width: 100%;
+     padding: 0;
+     background: none;
+     border: none;
+   }
+
+   .btn-item-collapse:hover{
+     background-image: linear-gradient(180deg, #2a2d81 0%, #66baf2 88%);
+   }
+
+   .btn-item-collapse.dropright > .dropdown-toggle::after {
+    display: none;
+  }
+
+  .toggle-btn{
+    margin-right: 14px;
+  }
+
+
+  .menu-expand-item{
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .menu-expand-item:hover {
+    text-decoration-line: underline;
+    font-weight: bolder;
+    color: whitesmoke;
+  }
+
+
+
+
+   
+.offCanvasTranOff-appear{
+    width: 15vw;
+}
+
+.offCanvasTranOff-appear.offCanvasTranOff-appear-active{
+    width: 2vw;
+    transition: width 500ms;
+}
+  
+  .offCanvasTran-appear {
+    width: 2vw;
+  }
+  
+  .offCanvasTran-appear.offCanvasTran-appear-active{
+    width: 15vw;
+    transition: width 500ms;
+  }
+ 
+  .offCanvasBackdrop-appear {
+    opacity: 0;
+  }
+  
+  .offCanvasBackdrop-appear.offCanvasBackdrop-appear-active{
+    opacity: 0.8;
+    transition: opacity 500ms ease;
+  }
+
+  .offCanvasBackdropOff-appear {
+    opacity: 0.8;
+    background-color: black;
+  }
+  
+  .offCanvasBackdropOff-appear.offCanvasBackdropOff-appear-active{
+    opacity: 0;
+    transition: opacity 500ms ease;
+  }

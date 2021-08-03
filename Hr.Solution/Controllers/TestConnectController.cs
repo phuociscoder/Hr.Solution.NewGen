@@ -1,10 +1,6 @@
-﻿using Dapper;
-using Hr.Solution.Core;
+﻿using Hr.Solution.Core;
 using Hr.Solution.Domain.Query;
-using Hr.Solution.Domain.Requests;
-using Hr.Solution.Domain.Responses;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hr.Solution.Controllers

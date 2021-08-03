@@ -1,6 +1,15 @@
 /* Provide sufficient contrast against white background */
+
+#root{
+  background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
+}
+
 a {
   color: #0366d6;
+}
+
+.white{
+  color: whitesmoke;
 }
 
 code {
@@ -8,13 +17,18 @@ code {
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Nunito Sans', Arial, Helvetica, sans-serif;
+  
 }
 
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
+}
+
+.cursor-pointer{
+  cursor: pointer;
 }
 
 .w-40{
@@ -49,12 +63,6 @@ color: red;
   font-weight: bold;
   cursor: pointer;
 }
-
-.card-header , .custom-table-data > thead > tr {
-  background-color: #1b6ec2;
-  color: whitesmoke;
-}
-
 
 
 .custom-table-data > tbody > tr {
@@ -156,4 +164,113 @@ z-index: 99999;
   box-shadow: 5px 5px 8px lightgray;
 }
 
+
+.loader:empty {
+  position: absolute;
+  background-color: #66baf2;
+  background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+  top: calc(50% - 4em);
+  left: calc(50% - 4em);
+  width: 6em;
+  height: 6em;
+  border: 1.1em solid #2a2d81;
+  border-left: 1.1em solid #66baf2;
+  border-radius: 50%;
+  animation: load8 1.1s infinite linear;
+}
+
+@keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* custom theme*/
+.bg-dark{
+  background-color: #66baf2;
+  background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+}
+
+.table > thead{
+  background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+}
+
+.card-header, .table > thead > tr {
+  background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+  color: whitesmoke;
+  text-shadow: 1px 1px 10px lightgrey;
+}
+
+.btn-primary {background-image: linear-gradient(to right, #2a2d81 0%,  #00d2ff  100%)}
+.btn-primary {
+     transition: 0.5s;
+     background-size: 200% auto;
+     text-shadow: 1px 1px 10px lightgrey;
+   }
+
+.btn-primary:hover {
+     background-position: right center; /* change the direction of the change here */
+     color: #fff;
+     text-decoration: none;
+   }
+
+
+.btn-danger {background-image: linear-gradient(to right, #dc2430 0%, #f8e88a 100%)}
+.btn-danger {
+      transition: 0.5s;
+      background-size: 200% auto;   
+      text-shadow: 1px 1px 10px lightgrey;
+    }
+a , span, label, p {
+  text-shadow: 1px 1px 10px lightgrey;
+}
+.btn-danger:hover {
+      background-position: right center; /* change the direction of the change here */
+      color: #fff;
+      text-decoration: none;
+    }
+
+.btn-info {background-image: linear-gradient(to right, #24C6DC 0%, #514A9D  51%, #24C6DC  100%)}
+.btn-info {
+       text-align: center;
+       transition: 0.5s;
+       background-size: 200% auto;
+       color: white;            
+       box-shadow: 0 0 20px #eee;
+       display: block;
+     }
+
+.btn-info:hover {
+      background-position: right center; /* change the direction of the change here */
+      color: #fff;
+      text-decoration: none;
+     }
+    
+      
+ .table-hover tbody tr:hover{
+  background-image: linear-gradient( 109.6deg,  rgb(32, 39, 131) 11.2%, rgb(129, 180, 238) 91.1% );
+  color: whitesmoke;
+  background-position: right center;
+  transition: 0.5s;
+  background-size: 200% auto; 
+ }
+
+
+.dropdown-menu {
+  background-image: linear-gradient(to top, #48c6ef 0%, #6f86d6 100%);
+  color: whitesmoke;
+  box-shadow: 2px 2px 8px rgb(129, 180, 238) ;
+}
+
+.dropdown-item{
+  color: whitesmoke;
+}
+
+
+
+   
+  
 

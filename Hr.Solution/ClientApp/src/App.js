@@ -20,13 +20,25 @@ require('./custom.css');
 
 export default class App extends Component {
   static displayName = App.name;
+  state = {
+    loading: true
+  }
 
-  render =() => {
-    return (
-      <Switch>
-        <Route exact path="/login" component={Login}/>
+  componentDidMount = () => {
+    this.demoAsyncCall().then(() => this.setState({ loading: false }));
+  }
 
-        <Layout>
+  render = () => {
+    const { loading } = this.state;
+    if (loading) {
+      return null;
+    } else {
+      return (
+
+        <Switch>
+          <Route exact path="/login" component={Login} />
+
+          <Layout>
             <Switch>
               <Route exact path={[AppRoute.EMPLOYEE_MANAGEMENT.path]} component={EmployeeListing} />
               <Route exact path={[AppRoute.EMPLOYEE_CREATE.path]} component={EmployeeCreate} />
@@ -37,23 +49,14 @@ export default class App extends Component {
             </Switch>
           </Layout>
 
-          <Route component={NotFound404}/>
-        
-      </Switch>
-    )
+          <Route component={NotFound404} />
+
+        </Switch>
+      )
+    }
   }
 
-  render_() {
-    return (
-      <Switch>
-
-        <Route path={AppRoute.ALL.map((item) => item)}>
-          
-        </Route>
-
-        <Route path={['/not-found']} component={NotFound404} />
-
-      </Switch>
-    );
+   demoAsyncCall() {
+    return new Promise((resolve) => setTimeout(() => resolve(), 2500));
   }
 }
