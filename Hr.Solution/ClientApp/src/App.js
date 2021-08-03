@@ -40,17 +40,15 @@ export default class App extends Component {
 
           <Layout>
             <Switch>
-              <Route exact path={[AppRoute.EMPLOYEE_MANAGEMENT.path]} component={EmployeeListing} />
+              <Route exact path={[AppRoute.EMPLOYEE_MANAGEMENT.path]} component={AuthorizationComponent(EmployeeListing)} />
               <Route exact path={[AppRoute.EMPLOYEE_CREATE.path]} component={EmployeeCreate} />
               <Route exact path={[AppRoute.EMPLOYEE_CONTRACT.path]} component={EmployeeContract} />
-              <Route exact path={[AppRoute.CATEGORY_LIST.path]} component={CategoryListing} />
-              <Route exact path={[AppRoute.CONFIG_DEPARTMENT.path]} component={DepartmentConfig} />
+              <Route exact path={[AppRoute.CATEGORY_LIST.path]} component={AuthorizationComponent(CategoryListing)} />
+              <Route exact path={[AppRoute.CONFIG_DEPARTMENT.path]} component={AuthorizationComponent(DepartmentConfig)} />
               <Route exact path={[AppRoute.HOME.path]} component={Home} />
+              <Route component={NotFound404} />
             </Switch>
           </Layout>
-
-          <Route component={NotFound404} />
-
         </Switch>
       )
     }

@@ -58,8 +58,8 @@ export class NavMenu extends Component {
 
   render() {
     return (
-      <header>
-        <Navbar bg="dark" variant="dark" expand="lg">
+      <>
+        <Navbar bg="dark" variant="dark" expand="lg" className="nav-top-bar">
           <Navbar.Brand href="#home">
             <img
               alt=""
@@ -70,25 +70,8 @@ export class NavMenu extends Component {
             />{' '}Hr Solution</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <Link className="navbar-dark navbar-nav nav-link" to={AppRoute.EMPLOYEE_MANAGEMENT.path}><i className="" /><span><FontAwesomeIcon icon={faUsers} /> QUẢN LÝ NHÂN VIÊN</span></Link>
-              <NavDropdown alignRight menu title={
-                <React.Fragment>
-                  <FontAwesomeIcon color="whitesmoke" size="lg" icon={faCog} /> QUẢN LÝ THIẾT LẬP
-                </React.Fragment>
-
-              } id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1"><Link to={AppRoute.CATEGORY_LIST.path} className="navbar-dark navbar-nav nav-link">
-                  <FontAwesomeIcon icon={faBezierCurve}/> Thiết lập danh mục 
-                  </Link>
-                  </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2"><FontAwesomeIcon icon={faEnvelopeOpenText} /> Thông Báo <Badge variant="danger">10</Badge></NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3"><FontAwesomeIcon icon={faIdCardAlt} /> Thông Tin Cá Nhân</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4"><FontAwesomeIcon color="red" icon={faPowerOff} /> Đăng Xuất</NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-            <Form inline>
+            
+            <Form className="ml-auto" inline>
               <Image width={45} height={40} src={avatar} rounded />
               <span className="ml-2 mr-2" style={{ color: "whitesmoke" }}><b>NGUYỄN HỮU PHƯỚC</b><br /><i>QUẢN TRỊ VIÊN</i></span>
 
@@ -110,7 +93,7 @@ export class NavMenu extends Component {
           </Navbar.Collapse>
         </Navbar>
         {this.generateConfirmModalLogout()}
-      </header>
+      </>
       
     );
   }

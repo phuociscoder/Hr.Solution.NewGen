@@ -21,6 +21,42 @@ body {
   
 }
 
+.main-container{
+  height: 100vh;
+}
+
+.content-container{
+  height: 95vh;
+}
+
+.component-container{
+  width: 100%;
+  padding: 0px 0px 0px 10px;
+}
+
+.component-title{
+  font-size: large;
+  font-weight: bold;
+}
+
+.component-content{
+  position: relative;
+  height: 89vh;
+  padding: 5px 10px 5px 10px;
+}
+
+.nav-top-bar{
+  padding-left: 5vh;
+  height: 5vh;
+  box-shadow: 2px 2px 5px grey;
+}
+
+.notfound-image{
+  opacity: 0.6;
+  border-radius: 50%;
+  margin-bottom: 50px;
+}
+
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;

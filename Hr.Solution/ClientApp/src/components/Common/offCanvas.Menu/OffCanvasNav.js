@@ -94,7 +94,7 @@ export class OffcanvasNav extends React.Component {
                     isToggle &&
                     <>
                         <ReactCSSTransitionGroup transitionName="offCanvasBackdrop" transitionAppear={true} transitionLeave={true} transitionEnter={true}>
-                            <div className="offCanvas-backdrop" />
+                            <div onClick={this.toggleMenu} className="offCanvas-backdrop" />
                         </ReactCSSTransitionGroup>
                         <ReactCSSTransitionGroup transitionName="offCanvasTran" transitionAppear={true} transitionLeave={true}>
                             <div className="offCanvas-toggle d-flex flex-column">

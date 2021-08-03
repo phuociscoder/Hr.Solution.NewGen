@@ -10,12 +10,12 @@ export class Layout extends Component {
 
   render () {
     return (
-      <div>
+      <div className="main-container">
         <ReactCSSTransitionGroup transitionName="example"
         transitionAppear ={true} transitionAppearTimeout="5000">
         <NavMenu />
 
-        <div className="d-flex">
+        <div className="d-flex content-container">
         <OffcanvasNav/>
           {this.props.children}
       </div>
