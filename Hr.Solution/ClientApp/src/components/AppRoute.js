@@ -2,6 +2,7 @@
 
 export class AppRoute {
     static HOME = {path:"/", name: "TRANG CHỦ", parent: null}
+    static MAINTAIN = {path:"/maintain", name: "Bảo TRÌ", parent: null}
     //Employee
     static EMPLOYEE_MANAGEMENT = {path:"/employees", name:"QUẢN LÝ NHÂN VIÊN", parent: [this.HOME] };
     static EMPLOYEE_CREATE = {path:"/employees/create", name:"THÊM NHÂN VIÊN", parent: [this.HOME, this.EMPLOYEE_MANAGEMENT] };

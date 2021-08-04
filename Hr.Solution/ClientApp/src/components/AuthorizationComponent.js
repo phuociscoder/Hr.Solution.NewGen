@@ -19,10 +19,10 @@ const AuthorizationComponent = WrappedComponent => {
             this.getComponentName();
         }
 
-        getComponentName =() => {
+        getComponentName = () => {
             const path = window.location.pathname;
             const title = AppRoute.ALL.find(x => x.path === path || path.includes(x.alias)).name;
-            this.setState({title});
+            this.setState({ title });
         }
 
         render = () => {
@@ -35,13 +35,12 @@ const AuthorizationComponent = WrappedComponent => {
                             <BreadcrumbCustom path={path} />
                         </div>
                     </div>
-                    <div className="component-content">
-                    <ReactCSSTransitionGroup transitionName="example" transitionAppear={true}>
-                    {WrappedComponent ? <WrappedComponent {...this.props} /> : <Redirect to="/login" />}
-                    </ReactCSSTransitionGroup>
-                    </div>
-                    
 
+                    <ReactCSSTransitionGroup transitionName="example" transitionAppear={true}>
+                        <div className="component-content d-flex flex-column w-100">
+                            {WrappedComponent ? <WrappedComponent {...this.props} /> : <Redirect to="/login" />}
+                        </div>
+                    </ReactCSSTransitionGroup>
                 </div>
             )
         }

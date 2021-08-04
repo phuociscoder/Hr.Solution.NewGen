@@ -51,9 +51,6 @@ export class CategoryListing extends React.Component {
         const {data} = this.state;
         return (
             <Container>
-                <div className="w-100">
-                    <h4>THIẾT LẬP DANH MỤC</h4>
-                </div>
                 <Card>
                     <Card.Header>
                         <div>

@@ -8,7 +8,8 @@ export class NotFound404 extends React.Component {
         return(
             <div className="d-flex flex-column justify-content-center align-items-center container-content">
                 <Image className="notfound-image" src={notFoundImg}/>
-                <span>Có lỗi xảy ra ! Chúng tôi không tìm thấy trang của bạn !</span>
+                <span><b>Có lỗi xảy ra !</b> <br/> Chúng tôi không tìm thấy trang của bạn .<br/>Hoặc bạn không có quyền truy cập vào trang này.</span>
+                <span></span>
                 <Link to="/">Trở về trang chủ</Link>
             </div>
         )

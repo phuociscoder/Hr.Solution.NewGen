@@ -1,5 +1,6 @@
 ﻿using Hr.Solution.Core;
 using Hr.Solution.Domain.Query;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

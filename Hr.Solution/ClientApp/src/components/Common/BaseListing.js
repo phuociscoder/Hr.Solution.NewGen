@@ -29,7 +29,7 @@ export class BaseListing extends React.Component {
     render = () => {
         return (
             <>
-                <div className="d-flex flex-column" style={{ maxHeight: '100%' }}>
+                <div className="d-flex flex-column h-100 w-100" style={{ maxHeight: '100%' }}>
                     <Table striped bordered hover size="lg" className="custom-table-data">
                         {this.generateContent()}
                     </Table>

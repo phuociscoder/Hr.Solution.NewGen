@@ -67,6 +67,9 @@ body {
   cursor: pointer;
 }
 
+.w-20{
+  width: 20%;
+}
 .w-40{
   width: 40%;
 }
@@ -85,9 +88,16 @@ body {
   background-image: linear-gradient(180deg, white, #a3c6eb);
 }
 
+.card{
+  background-color: transparent;
+}
+
 .tree-node:hover{
-  background-color: #c1daf7;
-  font-weight: bold;
+  background-image: linear-gradient( 109.6deg,  rgb(32, 39, 131) 11.2%, rgb(129, 180, 238) 91.1% );
+  color: whitesmoke;
+  background-position: right center;
+  transition: 300ms;
+  background-size: 200% auto; 
   cursor: pointer;
 }
 
@@ -179,8 +189,11 @@ cursor: pointer;
 }
 
 .category-link:hover{
-  background-color: #e9ecef;
-  font-weight: bold;
+  background-image: linear-gradient( 109.6deg,  rgb(32, 39, 131) 11.2%, rgb(129, 180, 238) 91.1% );
+  color: whitesmoke;
+  background-position: right center;
+  transition: 300ms;
+  background-size: 200% auto; 
 }
 
 .form-login-container{

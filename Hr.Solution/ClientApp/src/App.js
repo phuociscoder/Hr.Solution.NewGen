@@ -16,6 +16,7 @@ import { NotFound404 } from './components/NotFound404';
 
 import { Redirect, Switch } from 'react-router-dom';
 import { Login } from './components/auth/Login';
+import { MaintainPage } from './components/Maintaince';
 require('./custom.css');
 
 export default class App extends Component {
@@ -37,6 +38,7 @@ export default class App extends Component {
 
         <Switch>
           <Route exact path="/login" component={Login} />
+          <Route exact path="/maintain" component={MaintainPage} />
 
           <Layout>
             <Switch>
