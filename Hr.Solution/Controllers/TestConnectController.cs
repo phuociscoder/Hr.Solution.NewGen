@@ -18,11 +18,10 @@ namespace Hr.Solution.Controllers
         }
 
         [HttpGet, Route("")]
+        [Authorize]
         public async Task<ActionResult> GetAll()
         {
-
-            var search = new LsNationSearchQueryParams();
-            string result = null;
+            string result = "Authorized here , LOL";
             return Ok(result);
         }
     }
