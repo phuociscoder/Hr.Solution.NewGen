@@ -18,7 +18,6 @@ namespace Hr.Solution.Controllers
         }
 
         [HttpGet, Route("")]
-        [Authorize]
         public async Task<ActionResult> GetAll()
         {
             string result = "Authorized here , LOL";

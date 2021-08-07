@@ -4,6 +4,25 @@
   background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
 }
 
+.w-5{
+  width: 5%;
+}
+.w-10{
+  width: 10%;
+}
+.w-15{
+  width: 15%;
+}
+.w-20{
+  width: 20%;
+}
+.w-30{
+  width: 30%;
+}
+.w-40{
+  width: 40%;
+}
+
 a {
   color: #0366d6;
 }
@@ -19,6 +38,33 @@ code {
 body {
   font-family: 'Nunito Sans', Arial, Helvetica, sans-serif;
   
+}
+
+.react-date-picker__wrapper{
+  border:none !important;
+}
+
+.react-calendar__navigation{
+  background-color: #66baf2;
+  background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+}
+
+.react-calendar__navigation button
+{
+  color: whitesmoke;
+  background-color: transparent !important;
+}
+
+.react-calendar__navigation button:hover
+{
+  background-color: transparent !important;
+  animation: heartBeat;
+  animation-duration: 1s;
+}
+
+.react-calendar{
+  animation: fadeIn;
+  animation-duration: 600ms;
 }
 
 .main-container{
@@ -40,7 +86,6 @@ body {
 }
 
 .component-content{
-  position: relative;
   height: 89vh;
   padding: 5px 10px 5px 10px;
 }
@@ -67,12 +112,7 @@ body {
   cursor: pointer;
 }
 
-.w-20{
-  width: 20%;
-}
-.w-40{
-  width: 40%;
-}
+
 
 .container-main{
   margin-left: 20px;
@@ -80,8 +120,8 @@ body {
   margin-top: 10px;
 }
 
-.container-content{
-  height: 94vh;
+.container-login{
+  height: 100vh;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -206,7 +246,7 @@ z-index: 99999;
 
 .form-login{
   width: 20%;
-  height: 45%;
+  height: auto;
   background-color: whitesmoke;
   opacity: 0.8;
   border-radius: 10px;
@@ -245,6 +285,12 @@ z-index: 99999;
 
 .table > thead{
   background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+}
+
+.modal-header{
+  background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+  color: whitesmoke;
+  text-shadow: 1px 1px 10px lightgrey;
 }
 
 .card-header, .table > thead > tr {
@@ -297,8 +343,25 @@ a , span, label, p {
       color: #fff;
       text-decoration: none;
      }
-    
-      
+
+
+.btn-success {background-image: linear-gradient(to right, #56ab2f 0%, #a8e063  51%, #56ab2f  100%)}
+.btn-success {
+     
+      text-align: center;
+      transition: 0.5s;
+      background-size: 200% auto;
+      color: white;            
+      box-shadow: 0 0 20px #eee;
+      display: block;
+      }
+
+.btn-success:hover {
+      background-position: right center; /* change the direction of the change here */
+      color: #fff;
+      text-decoration: none;
+      }
+           
  .table-hover tbody tr:hover{
   background-image: linear-gradient( 109.6deg,  rgb(32, 39, 131) 11.2%, rgb(129, 180, 238) 91.1% );
   color: whitesmoke;

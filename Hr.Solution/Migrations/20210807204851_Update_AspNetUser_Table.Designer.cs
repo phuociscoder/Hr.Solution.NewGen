@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hr.Solution.Application.Migrations
 {
     [DbContext(typeof(AuthenticationDbContext))]
-    [Migration("20210804210815_Update_AspnetUsers_Fields")]
-    partial class Update_AspnetUsers_Fields
+    [Migration("20210807204851_Update_AspNetUser_Table")]
+    partial class Update_AspNetUser_Table
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,12 @@ namespace Hr.Solution.Application.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -40,11 +46,29 @@ namespace Hr.Solution.Application.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDomain")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFirstLogin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLock")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNeverLock")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LockAfter")
+                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -78,6 +102,9 @@ namespace Hr.Solution.Application.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime?>("ValidDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

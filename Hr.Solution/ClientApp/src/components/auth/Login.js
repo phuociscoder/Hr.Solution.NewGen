@@ -1,9 +1,11 @@
 import React from "react";
-import { Card, Image } from "react-bootstrap";
-import { Link, Redirect } from "react-router-dom";
+import { Image } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import background from "../../assets/Background.jpg";
 import logo from "../../assets/logo.png";
-import { AuthorizeService } from "../../services/auth.service";
+import { AuthenticationManager } from "../../AuthenticationManager";
+import { LanguageSelect } from "../Common/language/LanguageSelect";
+import LoginServices from "./Login.services";
 
 export class Login extends React.Component {
     constructor() {
@@ -30,12 +32,28 @@ export class Login extends React.Component {
     onLogin = () => {
         if (!this.isValid()) return;
         const { userName, passWord } = this.state;
-        const response = AuthorizeService.login(userName, passWord);
-        if (response.status === "success") {
+        LoginServices.Login(userName, passWord).then(result => {
+            if(result.data)
+            {
+            const userInfo = Object.assign({}, {...result.data.userClaim, token: result.data.token});
+            AuthenticationManager.SetUserInfo(userInfo);
             this.props.history.push("/");
-        } else {
-            this.setState({ error: response });
-        }
+            }
+        }, error => {
+            const data = error.response.data;
+            switch (data.status) {
+                case "LOCKED":
+                    this.setState({error:{message:"Tài khoản đã bị khóa."}});
+                    break;
+                case "DEACTIVATED":
+                    this.setState({error:{message:"Tài khoản đã bị ngừng hoạt động."}});
+                    break;
+            
+                default:
+                    this.setState({error:{message:"Sai tên đăng nhập hoặc mật khẩu"}});
+                    break;
+            }
+        });
     }
 
 
@@ -45,7 +63,7 @@ export class Login extends React.Component {
         return (
             <>
                 <div className="w-100 h-100">
-                    <div className="justify-content-center align-items-center container-content"
+                    <div className="justify-content-center align-items-center container-login"
                         style={{
                             backgroundImage: `url(${background})`,
                             backgroundRepeat: 'no-repeat',
@@ -58,7 +76,7 @@ export class Login extends React.Component {
                         }}></div>
 
                     <div className="form-login-container d-flex justify-content-center align-items-center">
-                        <div className="form-login pt-3 pl-5 pr-5">
+                        <div className="form-login pt-3 pl-5 pr-5 pb-5">
                             <div className="w-100 d-flex justify-content-center" style={{ height: '100px', backgroundColor: "white" }}>
                                 <Image src={logo} width={100} height="100%" />
                             </div>
@@ -70,6 +88,9 @@ export class Login extends React.Component {
                                 {
                                     error != null && <span style={{ color: "red" }}><i>*{error?.message}</i></span>
                                 }
+                            </div>
+                            <div className="w-100 mt-2">
+                                <LanguageSelect/>
                             </div>
                             <div className="w-100" style={{ marginTop: '25px' }}>
                                 <button disabled={!this.isValid()} onClick={this.onLogin} className=" form-control btn btn-primary">Đăng nhập</button>

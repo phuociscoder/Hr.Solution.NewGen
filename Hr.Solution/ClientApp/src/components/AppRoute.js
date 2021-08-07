@@ -15,5 +15,9 @@ export class AppRoute {
     
     static CONFIG_DEPARTMENT ={path:`${this.CONFIG}department`, name:"THIẾT LẬP PHÒNG BAN/BỘ PHẬN", parent: [this.HOME, this.CATEGORY_LIST] }; // /config/deparment
 
-    static ALL =[this.HOME, this.EMPLOYEE_MANAGEMENT, this.EMPLOYEE_CONTRACT, this.EMPLOYEE_CREATE, this.CATEGORY_LIST, this.CONFIG_DEPARTMENT];
+    //admin
+    static ADMIN ="/admin";
+    static ADMIN_ACOUNT = {path: `${this.ADMIN}/account`, name: "QUẢN LÝ TÀI KHOẢN", parent: [this.HOME]};
+
+    static ALL =[this.HOME, this.EMPLOYEE_MANAGEMENT, this.EMPLOYEE_CONTRACT, this.EMPLOYEE_CREATE, this.CATEGORY_LIST, this.CONFIG_DEPARTMENT, this.ADMIN_ACOUNT];
 }

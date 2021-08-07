@@ -1,5 +1,6 @@
 ﻿using Hr.Solution.Application.Authentication;
 using Hr.Solution.Application.Authentication.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -33,12 +34,29 @@ namespace Hr.Solution.Application.Controllers
         [Route("login")]
         public async Task<ActionResult> Login([FromBody] LoginModel model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
-            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+            var user = await userManager.FindByNameAsync(model.UserName);
+
+            if (user == null)
             {
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "INVALID", Message = "Wrong username or password" });
+            }
+
+            if (!user.IsNeverLock && (user.AccessFailedCount >= user.LockAfter || user.IsLock))
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "LOCKED", Message = "User has been locked" });
+            }
+
+            if (!user.IsActive)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "DEACTIVATED", Message = "User has been Deactived" });
+            }
+
+            if (await userManager.CheckPasswordAsync(user, model.Password))
+            {
+                await userManager.ResetAccessFailedCountAsync(user);
                 var userRoles = await userManager.GetRolesAsync(user);
                 var authClaims = new List<Claim> {
-                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
@@ -66,14 +84,34 @@ namespace Hr.Solution.Application.Controllers
                 });
             }
 
+            if (!user.IsNeverLock)
+            {
+                await userManager.AccessFailedAsync(user);
+            }
+
             return Unauthorized();
         }
 
+        [HttpPut]
+        [Route("/unlock/{id}")]
+        [Authorize]
+        public async Task<ActionResult> UnLock(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null) return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "NOTFOUND", Message = "User Not Found" });
+            user.AccessFailedCount = 0;
+            user.IsLock = false;
+            var result = await userManager.UpdateAsync(user);
+            if (result.Succeeded) return Ok(user);
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "ERROR", Message = "Cannot unlock user" });
+        }
+
         [HttpPost]
-        [Route("register")]
+        [Route("")]
+        [Authorize]
         public async Task<ActionResult> RegisterUser([FromBody] RegisterUserModel model)
         {
-            var existsUser = await userManager.FindByEmailAsync(model.Email);
+            var existsUser = await userManager.FindByNameAsync(model.UserName);
             if (existsUser != null)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable, new Response { Status = "Error", Message = $"User create fail, user with email {model.Email} is existing !" });
@@ -81,22 +119,63 @@ namespace Hr.Solution.Application.Controllers
 
             ApplicationUser user = new ApplicationUser
             {
+                UserName = model.UserName,
                 Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
+                FullName = model.FullName,
+                IsActive = model.IsActive,
+                IsAdmin = model.IsAdmin,
+                IsDomain = model.IsDomain,
+                Avatar = model.Avatar,
+                Code = model.Code,
+                IsFirstLogin = true,
+                IsLock = model.IsLock,
+                IsNeverLock = model.IsNeverLock,
+                LockAfter = model.LockAfter,
+                ValidDate = model.ValidDate,
+                SecurityStamp = Guid.NewGuid().ToString()
+
             };
-
             var result = await userManager.CreateAsync(user, model.Password);
-
             if (!result.Succeeded)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Cannot create user , error from API" });
             }
-
             return Ok(new Response { Status = "Successed", Message = "Create user successfully." });
+        }
 
+        [HttpPut]
+        [Route("{id}")]
+        [Authorize]
+        public async Task<ActionResult> Update(string id, [FromBody] UpdateUserModel model)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null) return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = $"Cannot found user." });
+
+            user.Avatar = model.Avatar ?? user.Avatar;
+            user.Email = model.Email ?? user.Email;
+            user.IsActive = model.IsActive;
+            user.IsAdmin = model.IsAdmin;
+            user.IsDomain = model.IsDomain;
+            user.IsLock = model.IsLock;
+            user.LockAfter = model.LockAfter;
+            user.IsNeverLock = model.IsNeverLock;
+            user.FullName = model.FullName;
+            user.ValidDate = model.ValidDate;
+
+            var result = await userManager.UpdateAsync(user);
+            if (result.Succeeded) return Ok(user);
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Update User Fail" });
+        }
+
+        [HttpPut, Route("/changePassword/{id}")]
+        [Authorize]
+        public async Task<ActionResult> ChangePassword(string id, [FromBody] ChangePasswordModel model)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null) return StatusCode(StatusCodes.Status404NotFound, new Response { Status = StatusCodes.Status404NotFound.ToString(), Message = "User Not Found" });
+            var result = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            if (result.Succeeded) return Ok(user);
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = StatusCodes.Status500InternalServerError.ToString(), Message = "Cannot change password" });
         }
     }
 }

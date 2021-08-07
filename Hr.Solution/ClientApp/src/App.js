@@ -17,6 +17,7 @@ import { NotFound404 } from './components/NotFound404';
 import { Redirect, Switch } from 'react-router-dom';
 import { Login } from './components/auth/Login';
 import { MaintainPage } from './components/Maintaince';
+import { AccountListing } from './components/administration/admin.account';
 require('./custom.css');
 
 export default class App extends Component {
@@ -26,7 +27,7 @@ export default class App extends Component {
   }
 
   componentDidMount = () => {
-    this.demoAsyncCall().then(() => this.setState({ loading: false }));
+     this.setState({ loading: false });
   }
 
   render = () => {
@@ -47,16 +48,15 @@ export default class App extends Component {
               <Route exact path={[AppRoute.EMPLOYEE_CONTRACT.path]} component={EmployeeContract} />
               <Route exact path={[AppRoute.CATEGORY_LIST.path]} component={AuthorizationComponent(CategoryListing)} />
               <Route exact path={[AppRoute.CONFIG_DEPARTMENT.path]} component={AuthorizationComponent(DepartmentConfig)} />
+
+              <Route exact path={[AppRoute.ADMIN_ACOUNT.path]} component={AuthorizationComponent(AccountListing)} />
               <Route exact path={[AppRoute.HOME.path]} component={Home} />
               <Route component={NotFound404} />
-            </Switch>
+            </Switch> 
           </Layout>
         </Switch>
       )
     }
   }
 
-   demoAsyncCall() {
-    return new Promise((resolve) => setTimeout(() => resolve(), 2500));
-  }
 }

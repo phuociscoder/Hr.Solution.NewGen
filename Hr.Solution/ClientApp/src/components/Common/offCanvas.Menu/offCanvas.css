@@ -75,6 +75,11 @@
     color: whitesmoke;
   }
 
+  .icon-toggle{
+    animation: heartBeat;
+    animation-duration: 2s;
+  }
+
 
 
 
