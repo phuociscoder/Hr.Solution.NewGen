@@ -8,7 +8,7 @@ namespace Hr.Solution.Application.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AspNetRoles",
+                name: "AspNetSystemRoles",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -18,7 +18,21 @@ namespace Hr.Solution.Application.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                    table.PrimaryKey("PK_AspNetSystemRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetDataRoles",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetDataRoles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,7 +61,7 @@ namespace Hr.Solution.Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
+                name: "AspNetSystemRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -58,11 +72,11 @@ namespace Hr.Solution.Application.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.PrimaryKey("PK_AspNetSystemRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        name: "FK_AspNetSystemRoleClaims_AspNetSystemRoles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
+                        principalTable: "AspNetSystemRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -109,7 +123,7 @@ namespace Hr.Solution.Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
+                name: "AspNetUserSystemRoles",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -117,11 +131,11 @@ namespace Hr.Solution.Application.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_AspNetUserSystemRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        name: "FK_AspNetUserSystemRoles_AspNetSystemRoles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
+                        principalTable: "AspNetSystemRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -131,6 +145,30 @@ namespace Hr.Solution.Application.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+               name: "AspNetUserDataRoles",
+               columns: table => new
+               {
+                   UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                   RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+               },
+               constraints: table =>
+               {
+                   table.PrimaryKey("PK_AspNetUserDataRoles", x => new { x.UserId, x.RoleId });
+                   table.ForeignKey(
+                       name: "FK_AspNetUserSystemRoles_AspNetDataRoles_RoleId",
+                       column: x => x.RoleId,
+                       principalTable: "AspNetDataRoles",
+                       principalColumn: "Id",
+                       onDelete: ReferentialAction.Cascade);
+                   table.ForeignKey(
+                       name: "FK_AspNetUserSystemRoles_AspNetUsers_UserId",
+                       column: x => x.UserId,
+                       principalTable: "AspNetUsers",
+                       principalColumn: "Id",
+                       onDelete: ReferentialAction.Cascade);
+               });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
@@ -154,12 +192,19 @@ namespace Hr.Solution.Application.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
-                table: "AspNetRoleClaims",
+                table: "AspNetSystemRoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
+                name: "SystemRoleNameIndex",
+                table: "AspNetSystemRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "DataRoleNameIndex",
+                table: "AspNetDataRoles",
                 column: "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
@@ -175,8 +220,13 @@ namespace Hr.Solution.Application.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId",
-                table: "AspNetUserRoles",
+                name: "IX_AspNetUserSystemRoles_RoleId",
+                table: "AspNetUserSystemRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserDataRoles_RoleId",
+                table: "AspNetUserDataRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
@@ -195,7 +245,7 @@ namespace Hr.Solution.Application.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
+                name: "AspNetSystemRoleClaims");
 
             migrationBuilder.DropTable(
                 name: "AspNetUserClaims");
@@ -204,13 +254,19 @@ namespace Hr.Solution.Application.Migrations
                 name: "AspNetUserLogins");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
+                name: "AspNetUserSystemRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserDataRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "AspNetSystemRoles");
+
+            migrationBuilder.DropTable(
+               name: "AspNetDataRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

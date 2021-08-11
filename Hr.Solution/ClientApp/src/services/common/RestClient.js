@@ -25,15 +25,15 @@ export default class RestClient {
 
     static SendGetRequestWithParameters = (url, params) => {
         const query = this.convertToQueryString(params);
-        return axios.get(`${url}${query}`);
+        return axios.get(`${url}${query}`, { headers: this.getHeader() });
     }
 
     static convertToQueryString = (params) => {
+        
         let query = "?";
-        Object.keys(params).map((item, index) => {
-            query = query + `${item}=${params[item]}&`;
-        });
-
+        for (const [key, value] of Object.entries(params)) {
+            query = query + `${key}=${value}&`
+        }
         return query;
     }
 

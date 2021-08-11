@@ -54,16 +54,16 @@ namespace Hr.Solution.Application.Controllers
             if (await userManager.CheckPasswordAsync(user, model.Password))
             {
                 await userManager.ResetAccessFailedCountAsync(user);
-                var userRoles = await userManager.GetRolesAsync(user);
+               // var userRoles = await userManager.GetRolesAsync(user);
                 var authClaims = new List<Claim> {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
-                foreach (var role in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, role));
-                }
+               // foreach (var role in userRoles)
+               // {
+               //     authClaims.Add(new Claim(ClaimTypes.Role, role));
+               // }
 
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
 
@@ -108,7 +108,6 @@ namespace Hr.Solution.Application.Controllers
 
         [HttpPost]
         [Route("")]
-        [Authorize]
         public async Task<ActionResult> RegisterUser([FromBody] RegisterUserModel model)
         {
             var existsUser = await userManager.FindByNameAsync(model.UserName);

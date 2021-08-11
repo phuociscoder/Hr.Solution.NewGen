@@ -7,15 +7,17 @@ namespace Hr.Solution.Application.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "LastName",
+            migrationBuilder.AddColumn<string>(
+                name: "FullName",
                 table: "AspNetUsers",
-                newName: "FullName");
+                type: "nvarchar(max)",
+                nullable: true);
 
-            migrationBuilder.RenameColumn(
-                name: "FirstName",
+            migrationBuilder.AddColumn<string>(
+                name: "Code",
                 table: "AspNetUsers",
-                newName: "Code");
+                type: "nvarchar(max)",
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "Avatar",

@@ -31,7 +31,7 @@ export class OffcanvasNav extends React.Component {
              <DropdownButton id="dropdown-basic-button" className="btn-item-collapse mt-3" drop="right" title={<FontAwesomeIcon icon={faBuffer} className="icon-toggle" size="2x" />}>
                     <Link to={AppRoute.ADMIN_ACOUNT.path} className="dropdown-item">Quản Lý Tài Khoản</Link>
                     <Link to={AppRoute.MAINTAIN.path} className="dropdown-item">Nhóm Phân Quyền</Link>
-                    <Link to={AppRoute.MAINTAIN.path} className="dropdown-item">Phân Quyền Hệ Thống</Link>
+                    <Link to={AppRoute.ADMIN_SYSTEM_ROLE.path} className="dropdown-item">Phân Quyền Hệ Thống</Link>
                     <Link to={AppRoute.MAINTAIN.path} className="dropdown-item">Phân Quyền Vùng Dữ Liệu</Link>
                     
                 </DropdownButton>
@@ -61,7 +61,7 @@ export class OffcanvasNav extends React.Component {
                     <span className="ml-2 white d-flex"><FontAwesomeIcon icon={faBuffer} color="white" /> <h5 className="ml-2"><b>THIẾT LẬP</b></h5></span>
                     <Link to={AppRoute.ADMIN_ACOUNT.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Quản Lý Tài Khoản</Link>
                     <Link to={AppRoute.MAINTAIN.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Nhóm Phân Quyền</Link>
-                    <Link to={AppRoute.MAINTAIN.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Phân Quyền Hệ Thống</Link>
+                    <Link to={AppRoute.ADMIN_SYSTEM_ROLE.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Phân Quyền Hệ Thống</Link>
                     <Link to={AppRoute.MAINTAIN.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Phân Quyền Vùng Dữ Liệu</Link>
                 </div>
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Hr.Solution.Data.Requests;
+using Hr.Solution.Data.Responses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,7 @@ namespace Hr.Solution.Core.Services.Interfaces
 {
    public interface ISystemRoleServices
     {
+        Task<List<SystemRoleResponse>> GetAll(SystemRoleRequest request);
+        Task<SystemRoleResponse> Create(CreateSystemRoleRequest request);
     }
 }

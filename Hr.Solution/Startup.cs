@@ -1,5 +1,7 @@
 using Hr.Solution.Application.Authentication;
 using Hr.Solution.Core;
+using Hr.Solution.Core.Services.Impl;
+using Hr.Solution.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -66,6 +68,8 @@ namespace Hr.Solution
 
             services.AddScoped<IRepository, Repository>();
 
+            AddDependency(services);
+
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -74,6 +78,8 @@ namespace Hr.Solution
                 configuration.RootPath = "ClientApp/build";
             });
         }
+
+        
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -113,6 +119,11 @@ namespace Hr.Solution
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+        }
+
+        private void AddDependency(IServiceCollection services)
+        {
+            services.AddScoped<ISystemRoleServices, SystemRoleServices>();
         }
     }
 }

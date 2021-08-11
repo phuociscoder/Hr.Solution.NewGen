@@ -38,8 +38,8 @@ namespace Hr.Solution.Core
         {
             using (var connection = dbContext.GetDBConnection())
             {
-                var result = await connection.ExecuteScalarAsync<T>(procedureName, ConvertToParams(args), commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
-                return result;
+                var result = await connection.ExecuteReaderAsync(procedureName, ConvertToParams(args), commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+                return result.Parse<T>().First();
             }
         }
 

@@ -18,6 +18,7 @@ export class AppRoute {
     //admin
     static ADMIN ="/admin";
     static ADMIN_ACOUNT = {path: `${this.ADMIN}/account`, name: "QUẢN LÝ TÀI KHOẢN", parent: [this.HOME]};
+    static ADMIN_SYSTEM_ROLE = {path: `${this.ADMIN}/sysrole`, name: "PHÂN QUYỀN CHỨC NĂNG", parent: [this.HOME]};
 
-    static ALL =[this.HOME, this.EMPLOYEE_MANAGEMENT, this.EMPLOYEE_CONTRACT, this.EMPLOYEE_CREATE, this.CATEGORY_LIST, this.CONFIG_DEPARTMENT, this.ADMIN_ACOUNT];
+    static ALL =[this.HOME, this.EMPLOYEE_MANAGEMENT, this.EMPLOYEE_CONTRACT, this.EMPLOYEE_CREATE, this.CATEGORY_LIST, this.CONFIG_DEPARTMENT, this.ADMIN_ACOUNT, this.ADMIN_SYSTEM_ROLE];
 }

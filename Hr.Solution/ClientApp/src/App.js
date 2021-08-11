@@ -18,6 +18,7 @@ import { Redirect, Switch } from 'react-router-dom';
 import { Login } from './components/auth/Login';
 import { MaintainPage } from './components/Maintaince';
 import { AccountListing } from './components/administration/admin.account';
+import { SystemRoleManagement } from './components/administration/admin.roles';
 require('./custom.css');
 
 export default class App extends Component {
@@ -50,6 +51,7 @@ export default class App extends Component {
               <Route exact path={[AppRoute.CONFIG_DEPARTMENT.path]} component={AuthorizationComponent(DepartmentConfig)} />
 
               <Route exact path={[AppRoute.ADMIN_ACOUNT.path]} component={AuthorizationComponent(AccountListing)} />
+              <Route exact path={[AppRoute.ADMIN_SYSTEM_ROLE.path]} component={AuthorizationComponent(SystemRoleManagement)} />
               <Route exact path={[AppRoute.HOME.path]} component={Home} />
               <Route component={NotFound404} />
             </Switch> 
