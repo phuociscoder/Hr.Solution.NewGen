@@ -124,6 +124,7 @@ namespace Hr.Solution
         private void AddDependency(IServiceCollection services)
         {
             services.AddScoped<ISystemRoleServices, SystemRoleServices>();
+            services.AddScoped<IUserServices, UserServices>();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Hr.Solution.Core.Services.Interfaces;
 using Hr.Solution.Data.Requests;
 using Hr.Solution.Data.Responses;
+using Hr.Solution.Domain.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +20,57 @@ namespace Hr.Solution.Core.Services.Impl
             this.repository = repository;
         }
 
+        public async Task<SystemRoleUserReponse> AddUser(SystemRoleAddUserRequest request)
+        {
+            return await repository.ExecuteScalarAsync<SystemRoleUserReponse>(ProcedureConstants.SP_SYSTEM_ROLE_ADD_USER, request);
+        }
+
         public async Task<SystemRoleResponse> Create(CreateSystemRoleRequest request)
         {
-            var newSystemRole = await repository.ExecuteScalarAsync<SystemRoleResponse>(ProcedureConstants.SP_SYSTEM_ROLE_INSERT, request);
-            return newSystemRole;
+            return await repository.ExecuteScalarAsync<SystemRoleResponse>(ProcedureConstants.SP_SYSTEM_ROLE_INSERT, request);
         }
 
         public async Task<List<SystemRoleResponse>> GetAll(SystemRoleRequest request)
         {
             var systemRoles = await repository.QueryAsync<SystemRoleResponse>(ProcedureConstants.SP_SYSTEM_ROLE_GET_ALL, request);
             return systemRoles.Data.OrderByDescending(x => x.CreatedOn).ToList();
+        }
+
+        public async Task<SystemRoleResponse> GetById(Guid id)
+        {
+            return await repository.SingleOrDefault<SystemRoleResponse>(ProcedureConstants.SP_SYSTEM_ROLE_GET_BY_ID, id);
+        }
+
+        public async Task<List<SystemRoleGetFunctionsReponse>> GetFunctions()
+        {
+            var result = await repository.QueryAsync<SystemRoleGetFunctionsReponse>(ProcedureConstants.SP_SYSTEM_ROLE_GET_FUNCTIONS, null);
+            return result.Data;
+        }
+
+        public async Task<List<SystemRolePermissionResponse>> GetRolePermissions(Guid roleId)
+        {
+            var result = await repository.QueryAsync<SystemRolePermissionResponse>(ProcedureConstants.SP_SYSTEM_ROLE_GET_ROLE_PERMISSIONS, new { roleId = roleId });
+            return result.Data;
+        }
+
+        public async Task<SearchPagedResults<SystemRoleUserReponse>> GetUsers(string roleId)
+        {
+            return await repository.QueryAsync<SystemRoleUserReponse>(ProcedureConstants.SP_SYSTEM_ROLE_GET_USERS, new { roleId = roleId });
+        }
+
+        public async Task<int> RemoveUser(Guid userRoleId)
+        {
+            return await repository.ExecuteAsync<SystemRoleUserReponse>(ProcedureConstants.SP_SYSTEM_ROLE_REMOVE_USER, new { userRoleId = userRoleId });
+        }
+
+        public async Task<SystemRoleResponse> Update(UpdateSystemRoleRequest request)
+        {
+            return await repository.ExecuteScalarAsync<SystemRoleResponse>(ProcedureConstants.SP_SYSTEM_ROLE_UPDATE, request);
+        }
+
+        public async Task<int> UpdatePermission(SystemRoleUpdatePermissionRequest request)
+        {
+            return await repository.ExecuteAsync<SystemRolePermissionResponse>(ProcedureConstants.SP_SYSTEM_ROLE_UPDATE_PERMISSION, request);
         }
     }
 }

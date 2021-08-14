@@ -60,17 +60,12 @@ namespace Hr.Solution.Application.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
-               // foreach (var role in userRoles)
-               // {
-               //     authClaims.Add(new Claim(ClaimTypes.Role, role));
-               // }
-
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
 
                 var token = new JwtSecurityToken(
                             issuer: configuration["JWT:ValidIssuer"],
                             audience: configuration["JWT:ValidAudience"],
-                            expires: DateTime.Now.AddHours(1),
+                            expires: DateTime.Now.AddDays(10),
                             claims: authClaims,
                             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
@@ -176,5 +171,7 @@ namespace Hr.Solution.Application.Controllers
             if (result.Succeeded) return Ok(user);
             return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = StatusCodes.Status500InternalServerError.ToString(), Message = "Cannot change password" });
         }
+
+
     }
 }

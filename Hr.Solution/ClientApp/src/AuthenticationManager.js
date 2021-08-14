@@ -32,7 +32,9 @@ export class AuthenticationManager {
     }
 
     static UserName = () => {
-        return JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO))?.userName;
+        var userInfo = JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO));
+        return userInfo ? userInfo["userName"] : "administrator";
+        
     }
 
     static FullName = () => {

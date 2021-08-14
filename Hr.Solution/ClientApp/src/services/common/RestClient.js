@@ -16,16 +16,20 @@ export default class RestClient {
     }
 
     static SendPutRequest = (url, params) => {
-        return axios.put(url, params, this.getHeader());
+        return axios.put(url, params, { headers: this.getHeader() });
     }
 
     static SendGetRequest = (url) => {
-        return axios.get(url);
+        return axios.get(url, {headers: this.getHeader()});
     }
 
     static SendGetRequestWithParameters = (url, params) => {
         const query = this.convertToQueryString(params);
         return axios.get(`${url}${query}`, { headers: this.getHeader() });
+    }
+
+    static SendDeleteRequest =(url) => {
+        return axios.delete(url, { headers: this.getHeader() });
     }
 
     static convertToQueryString = (params) => {

@@ -1,24 +1,38 @@
 import { faBuromobelexperte } from "@fortawesome/free-brands-svg-icons";
-import { faCheck, faPlus, faTimes, faUserShield } from "@fortawesome/free-solid-svg-icons";
+import { faUserShield } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Card, Modal } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
 import { TabType } from "./Constants";
 import './admin.roles.css';
 import { RoleList } from "./RoleList";
+import { RoleGroupMembers } from "./GroupMembers";
+import { RoleGroupPermissions } from "./GroupPermissions";
 import { AdminRoleServices } from "./admin.roles.services";
-import { debounce } from "lodash";
-import { ShowNotification } from "../../Common/notification/Notification";
 
 export class SystemRoleManagement extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             tabSelect: TabType.USER,
-            selectedRoleId: null
+            selectedRoleId: null,
+            sysFunctions: []
         }
 
+    }
+
+    componentDidMount =() => {
+        this.loadSystemFunctions();
+    }
+
+    loadSystemFunctions =() => {
+        AdminRoleServices.GetFunctions()
+        .then(response => {
+            this.setState({sysFunctions: response.data});
+        }, error => {
+
+        });
     }
 
     onChangeTab = (e) => {
@@ -31,11 +45,11 @@ export class SystemRoleManagement extends React.Component {
     }
 
     onRoleChange =(roleId) => {
-        console.log(roleId);
+        this.setState({selectedRoleId: roleId});
     }
 
     render = () => {
-        const { tabSelect} = this.state;
+        const { tabSelect, selectedRoleId, sysFunctions} = this.state;
         return (
             <div className="d-flex w-100 h-100">
                 <div className="w-20 h-100">
@@ -53,17 +67,16 @@ export class SystemRoleManagement extends React.Component {
                                 </button>
                             </div>
                         </Card.Header>
+                        <Card.Body>
+                            <div className="pt-2 pl-2 pr-2">
+                            {tabSelect === TabType.USER && <RoleGroupMembers selectedRoleId={selectedRoleId}/>}
+                            {tabSelect === TabType.ROLE && <RoleGroupPermissions selectedRoleId={selectedRoleId} functions={sysFunctions}/>}
+                            </div>
+                        </Card.Body>
                     </Card>
                 </div>
                 <ReactTooltip />
             </div>
         )
     }
-
-    // generateLockGroupModal =() => {
-    //     const {showLockGroupModal} = this.state;
-    //     return (
-    //         <Modal show={showLockGroupModal} 
-    //     )
-    // }
 }

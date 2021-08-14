@@ -40,3 +40,34 @@
     background-size: 200% auto; 
     cursor: pointer;
 }
+
+.permission-group-header{
+    background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+    color: whitesmoke;
+    text-shadow: 1px 1px 10px lightgrey;
+}
+
+.permission-container{
+    max-height: 72.5vh;
+    overflow-y: auto;
+}
+
+.permission-module-title{
+    padding: 10px;
+    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+}
+
+.permission-checkbox{
+    width: 18px;
+    height: 18px;
+}
+
+.permission:hover{
+    cursor: pointer;
+    background-color: #e9ecef;
+
+}
+
+.permission-submodule-title{
+    background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+}

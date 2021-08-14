@@ -40,6 +40,11 @@ body {
   
 }
 
+.row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
 .react-date-picker__wrapper{
   border:none !important;
 }
@@ -396,6 +401,9 @@ a , span, label, p {
   background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(0,149,218,0.85) 9.9%, rgba(56,80,114,1) 100.3% );
   border-left: none;
 }
+
+
+
 
 
 

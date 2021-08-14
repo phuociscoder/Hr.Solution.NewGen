@@ -1,8 +1,7 @@
-import { faBan, faCheck, faEdit, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faEdit, faLock, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Card, Modal } from "react-bootstrap";
-import ReactTooltip from "react-tooltip";
 import './admin.roles.css';
 import { AdminRoleServices } from "./admin.roles.services";
 import { debounce } from "lodash";
@@ -28,7 +27,6 @@ export class RoleList extends React.Component {
                 lock: false
             }
         }
-
     }
 
     componentDidMount = () => {
@@ -55,10 +53,6 @@ export class RoleList extends React.Component {
 
     }
 
-    onLockGroup = (roleId) => {
-        this.setState()
-    }
-
     onSelectRole = (id) => {
         const { onChange } = this.props;
         if (id === null || !onChange) return;
@@ -69,30 +63,33 @@ export class RoleList extends React.Component {
         this.setState({ showAddEditGroupModal: true });
     }
 
-    onHideModal = () => {
-        this.setState({ showAddEditGroupModal: false }, this.resetGroupModel);
+    onEditRole = (item) => {
+        this.setState({ groupModel: item, mode: Action.EDIT });
+        this.onShowAddEditGroupModal();
     }
 
-    onGroupModelTextChange =(e) => {
-        const {groupModel} = this.state;
+    onHideModal = () => {
+        this.setState({ showAddEditGroupModal: false, mode: Action.EDIT }, this.resetGroupModel);
+    }
+
+    onGroupModelTextChange = (e) => {
+        const { groupModel } = this.state;
         const type = e.target.type;
         const fieldName = e.target.getAttribute("fieldname");
-        if(type === "text" || type ==="textarea")
-        {
+        if (type === "text" || type === "textarea") {
             const value = e.target.value;
-            const newModel = Object.assign({},{...groupModel, [fieldName]: value });
-            this.setState({groupModel : newModel});
-        }else if(type === "checkbox")
-        {
+            const newModel = Object.assign({}, { ...groupModel, [fieldName]: value });
+            this.setState({ groupModel: newModel });
+        } else if (type === "checkbox") {
             const value = e.target.checked;
-            const newModel = Object.assign({},{...groupModel, [fieldName]: value });
-            this.setState({groupModel : newModel});
+            const newModel = Object.assign({}, { ...groupModel, [fieldName]: value });
+            this.setState({ groupModel: newModel });
         }
 
     }
 
-    resetGroupModel =() => {
-      const groupModel= {
+    resetGroupModel = () => {
+        const groupModel = {
             recID: null,
             roleId: null,
             roleName: null,
@@ -101,34 +98,34 @@ export class RoleList extends React.Component {
             description: null,
             lock: false
         };
-        this.setState({groupModel: groupModel});
+        this.setState({ groupModel: groupModel });
     }
 
-    processAddRole =() => {
-        const {groupModel} = this.state;
-        AdminRoleServices.Create(Object.assign({}, {...groupModel, currentUser: AuthenticationManager.UserId}))
-        .then(result => {
-            this.onLoadRoles();
-            this.onHideModal();
-            ShowNotification(NotificationType.SUCCESS, "Tạo mới phân quyền thành công!");
-        }, error => {
-            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra , không thể thêm mới phân quyền");
-        });
-        
+    processAddRole = () => {
+        const { groupModel } = this.state;
+        AdminRoleServices.Create(Object.assign({}, { ...groupModel, currentUser: AuthenticationManager.UserId }))
+            .then(result => {
+                this.onLoadRoles();
+                this.onHideModal();
+                ShowNotification(NotificationType.SUCCESS, "Tạo mới phân quyền thành công!");
+            }, error => {
+                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra , không thể thêm mới phân quyền");
+            });
     }
 
 
 
-    processEditRole= () => {
-
+    processEditRole = () => {
+        const { groupModel } = this.state;
+        AdminRoleServices.Update(groupModel.recID, Object.assign({}, { ...groupModel, modifiedBy: null }))
+            .then(response => {
+                this.onLoadRoles();
+                this.onHideModal();
+                ShowNotification(NotificationType.SUCCESS, "Chỉnh sửa phân quyền thành công!");
+            }, error => {
+                debugger;
+            });
     }
-
-    onShowMessage =(type, message) => {
-        const {onShowMessage} = this.props;
-        if(!onShowMessage) return;
-        onShowMessage(type, message);
-    }
-
 
     render = () => {
         const { roles, selectedRole } = this.state;
@@ -149,10 +146,12 @@ export class RoleList extends React.Component {
                                 return (
                                     <div key={item.recID} fieldName={item.recID} className={selectedRole === item.recID ? "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown active" : "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown"} onClick={() => this.onSelectRole(item.recID)}>
                                         <div className="d-flex">
-                                            <span><b>{item.roleName}-{item.roleId}</b></span>
+                                            <span className="text-uppercase"><b>{item.roleName}</b>-{item.roleId}</span>
                                             <div className="ml-auto">
-                                                <FontAwesomeIcon className="mr-2" onClick={() => alert(item.recID)} data-tip="remove" icon={faEdit} color="blue" />
-                                                <FontAwesomeIcon onClick={() => alert(item.recID)} data-tip="remove" icon={faBan} color="red" />
+                                                <FontAwesomeIcon className="mr-2" onClick={() => this.onEditRole(item)} icon={faEdit} color="blue" />
+                                                {
+                                                    item.lock && <FontAwesomeIcon icon={faLock} color="red" />
+                                                }
                                             </div>
                                         </div>
                                         <div className="d-flex">
@@ -162,6 +161,7 @@ export class RoleList extends React.Component {
                                     </div>
                                 )
                             })
+
                         }
                         {
                             !roles || roles.length === 0 &&
@@ -169,11 +169,10 @@ export class RoleList extends React.Component {
                                 Không có dữ liệu.
                             </div>
                         }
-                        <ReactTooltip />
+
                     </div>
                 </Card.Body>
                 {this.generateAddGroupModal()}
-                {/* {this.generateLockGroupModal()} */}
             </Card>
         )
     }
@@ -190,7 +189,13 @@ export class RoleList extends React.Component {
                     <div className="w-100 d-flex flex-column pl-2 pr-2">
                         <label>
                             Mã Nhóm:
-                            <input className="form-control w-50" placeholder="Mã nhóm" value={roleId} onChange={this.onGroupModelTextChange} fieldName="roleId"></input>
+                            <input className="form-control w-50"
+                                placeholder="Mã nhóm"
+                                value={roleId}
+                                onChange={this.onGroupModelTextChange}
+                                fieldName="roleId"
+                                disabled={mode === Action.EDIT}
+                            ></input>
                         </label>
                         <label>
                             Tên nhóm:
@@ -201,14 +206,14 @@ export class RoleList extends React.Component {
                             <input className="form-control" placeholder="Tên thay thế" value={roleSubName} onChange={this.onGroupModelTextChange} fieldName="roleSubName"></input>
                         </label>
                         <div className="ml-auto mt-2">
-                        <label>
-                            <input type="checkbox" checked={lock} fieldName="lock" onChange={this.onGroupModelTextChange} /> Bị khóa
-                        </label>
-                        <label className="ml-3">
-                        <input type="checkbox" checked={isAdmin} fieldName="isAdmin" onChange={this.onGroupModelTextChange} /> Toàn quyền
-                        </label>
+                            <label>
+                                <input type="checkbox" checked={lock} fieldName="lock" onChange={this.onGroupModelTextChange} /> Bị khóa
+                            </label>
+                            <label className="ml-3">
+                                <input type="checkbox" checked={isAdmin} fieldName="isAdmin" onChange={this.onGroupModelTextChange} /> Toàn quyền
+                            </label>
                         </div>
-                        
+
                         <label>
                             Mô tả:
                             <textarea rows={3} className="form-control" placeholder="Mô tả" value={description} onChange={this.onGroupModelTextChange} fieldName="description" />
@@ -217,7 +222,7 @@ export class RoleList extends React.Component {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <button className="btn btn-primary" onClick={() => {mode === Action.CREATE ? this.processAddRole() : this.processEditRole()}}>
+                    <button className="btn btn-primary" onClick={() => { mode === Action.CREATE ? this.processAddRole() : this.processEditRole() }}>
                         <FontAwesomeIcon icon={faCheck} />
                         <span className="ml-1">Lưu</span>
                     </button>

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hr.Solution.Core.Services.Interfaces
+namespace Hr.Solution.Data.Requests
 {
-   public interface IAuthenticationServices
+   public class UserRequest
     {
+        public string FreeText { get; set; }
     }
 }
