@@ -17,20 +17,24 @@ export class RoleList extends React.Component {
             roles: [],
             selectedRole: null,
             mode: Action.CREATE,
-            groupModel: {
-                recID: null,
-                roleId: null,
-                roleName: null,
-                roleSubName: null,
-                isAdmin: false,
-                description: null,
-                lock: false
-            }
+            groupModel: this.defaultGroupModel
+                
+            
         }
     }
 
     componentDidMount = () => {
         this.onLoadRoles(null);
+    }
+
+    defaultGroupModel = {
+        recID: null,
+        roleId: null,
+        roleName: null,
+        roleSubName: null,
+        isAdmin: false,
+        description: null,
+        lock: false
     }
 
     onLoadRoles = (name) => {
@@ -59,13 +63,13 @@ export class RoleList extends React.Component {
         this.setState({ selectedRole: id }, onChange(id));
     }
 
-    onShowAddEditGroupModal = () => {
-        this.setState({ showAddEditGroupModal: true });
-    }
-
-    onEditRole = (item) => {
-        this.setState({ groupModel: item, mode: Action.EDIT });
-        this.onShowAddEditGroupModal();
+    onShowAddEditGroupModal = (item) => {
+        if(item)
+        {
+            this.setState({ groupModel: item, showAddEditGroupModal: true, mode: Action.EDIT });
+            return;
+        }
+        this.setState({ showAddEditGroupModal: true, groupModel: this.defaultGroupModel, mode: Action.CREATE});
     }
 
     onHideModal = () => {
@@ -89,16 +93,8 @@ export class RoleList extends React.Component {
     }
 
     resetGroupModel = () => {
-        const groupModel = {
-            recID: null,
-            roleId: null,
-            roleName: null,
-            roleSubName: null,
-            isAdmin: false,
-            description: null,
-            lock: false
-        };
-        this.setState({ groupModel: groupModel });
+
+        this.setState({ groupModel: this.defaultGroupModel });
     }
 
     processAddRole = () => {
@@ -129,13 +125,12 @@ export class RoleList extends React.Component {
 
     render = () => {
         const { roles, selectedRole } = this.state;
-        console.log(roles);
         return (
             <Card className="h-100 shadow">
                 <Card.Header>
                     <div className="d-flex">
                         <input onChange={this.onRoleSearchTextChange} className="form-control flex-fill" placeholder="Tìm kiếm"></input>
-                        <button data-tip="Thêm nhóm quyền mới" className="btn btn-primary ml-1" onClick={this.onShowAddEditGroupModal}><FontAwesomeIcon icon={faPlus} /></button>
+                        <button data-tip="Thêm nhóm quyền mới" className="btn btn-primary ml-1" onClick={() =>this.onShowAddEditGroupModal()}><FontAwesomeIcon icon={faPlus} /></button>
                     </div>
 
                 </Card.Header>
@@ -148,7 +143,7 @@ export class RoleList extends React.Component {
                                         <div className="d-flex">
                                             <span className="text-uppercase"><b>{item.roleName}</b>-{item.roleId}</span>
                                             <div className="ml-auto">
-                                                <FontAwesomeIcon className="mr-2" onClick={() => this.onEditRole(item)} icon={faEdit} color="blue" />
+                                                <FontAwesomeIcon className="mr-2" onClick={() => this.onShowAddEditGroupModal(item)} icon={faEdit} color="blue" />
                                                 {
                                                     item.lock && <FontAwesomeIcon icon={faLock} color="red" />
                                                 }

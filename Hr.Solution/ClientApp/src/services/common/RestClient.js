@@ -33,7 +33,7 @@ export default class RestClient {
     }
 
     static convertToQueryString = (params) => {
-        
+        if(!params) return '';
         let query = "?";
         for (const [key, value] of Object.entries(params)) {
             query = query + `${key}=${value}&`

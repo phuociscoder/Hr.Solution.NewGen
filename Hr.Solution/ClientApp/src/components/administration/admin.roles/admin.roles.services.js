@@ -31,8 +31,8 @@ export class AdminRoleServices {
         return RestClient.SendPostRequest(this.addUserUrl, params);
     }
 
-    static GetUsers =(roleId) => {
-        return RestClient.SendGetRequest(this.getUsersUrl.replace("{0}", roleId))
+    static GetUsers =(roleId, params) => {
+        return RestClient.SendGetRequestWithParameters(this.getUsersUrl.replace("{0}", roleId), params)
     }
 
     static RemoveUser =(userRoleId) => {

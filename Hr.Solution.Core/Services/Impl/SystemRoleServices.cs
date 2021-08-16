@@ -53,9 +53,9 @@ namespace Hr.Solution.Core.Services.Impl
             return result.Data;
         }
 
-        public async Task<SearchPagedResults<SystemRoleUserReponse>> GetUsers(string roleId)
+        public async Task<SearchPagedResults<SystemRoleUserReponse>> GetUsers(string roleId, string freeText)
         {
-            return await repository.QueryAsync<SystemRoleUserReponse>(ProcedureConstants.SP_SYSTEM_ROLE_GET_USERS, new { roleId = roleId });
+            return await repository.QueryAsync<SystemRoleUserReponse>(ProcedureConstants.SP_SYSTEM_ROLE_GET_USERS, new { roleId = roleId, freeText = freeText });
         }
 
         public async Task<int> RemoveUser(Guid userRoleId)

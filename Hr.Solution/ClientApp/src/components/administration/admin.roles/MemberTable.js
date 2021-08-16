@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import {NoDataTableContent} from "../../Common/NoDataTableContent";
 import { Modal } from "react-bootstrap";
+import { Loading } from "../../Common/loading/Loading";
 
 export class MemberTable extends BaseListing{
 
@@ -38,7 +39,7 @@ export class MemberTable extends BaseListing{
     }
 
     generateContent =() => {
-        const {data} = this.state;
+        const {data, onLoading} = this.state;
         return(
             <>
                 <thead>
@@ -50,9 +51,17 @@ export class MemberTable extends BaseListing{
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="animate__animated animate__fadeIn">
                     {
-                       data && data.length >0 && data.map((item, index) => {
+                        onLoading && 
+                        <tr>
+                            <td className="text-center" colspan={5}>
+                                <Loading show={true}/> 
+                            </td>
+                        </tr>
+                    }
+                    {
+                      !onLoading && data && data.length >0 && data.map((item, index) => {
                            return (
                                <tr>
                                    <td>{item.userCode}</td>
@@ -67,7 +76,7 @@ export class MemberTable extends BaseListing{
                        })
                     }
                     {
-                        !data || data.length ===0 && <NoDataTableContent colspan={5}/>
+                       !onLoading && (!data || data.length ===0) && <NoDataTableContent colspan={5}/>
                     }
                 </tbody>
                 {this.generateRemoveModal()}

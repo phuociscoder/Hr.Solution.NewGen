@@ -11,13 +11,21 @@ export class BaseListing extends React.Component {
     }
 
     componentDidMount = () => {
-        const { data } = this.props;
+        const { data, onLoading } = this.props;
         if (data) {
             this.setState({ data });
+        }
+        if(onLoading !== undefined)
+        {
+            this.setState({onLoading: onLoading});
         }
     }
 
     shouldComponentUpdate = (nextProps) => {
+        if(this.props.onLoading !== nextProps.onLoading)
+        {
+            this.setState({onLoading: nextProps.onLoading});
+        }
         if (this.props.data != nextProps.data) {
             this.setState({ data: nextProps.data });
         }

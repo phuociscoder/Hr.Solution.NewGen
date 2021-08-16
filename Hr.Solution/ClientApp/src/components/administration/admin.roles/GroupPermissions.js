@@ -5,6 +5,8 @@ import { ShowNotification } from "../../Common/notification/Notification";
 import { AdminRoleServices } from "./admin.roles.services";
 import { FunctionType } from "./Constants";
 import { debounce } from "lodash";
+import { parseHTML } from "jquery";
+import HTMLReactParser from "html-react-parser";
 
 export class RoleGroupPermissions extends React.Component {
     constructor(props) {
@@ -101,25 +103,60 @@ export class RoleGroupPermissions extends React.Component {
             })
     }
 
-    onSearchPermissionChange =(e) => {
+    onSearchPermissionChange = (e) => {
         const value = e.target.value;
         this.onDebounceSearch(value);
     }
 
 
 
-     onDebounceSearch = debounce((value) => {
-        const {functions} = this.props;
-        const {notFoundPermission} = this.state;
-        let searchFunctions = Object.assign([],functions).filter(x => x.functionId.includes(value) || x.functionName.includes(value));
-        if(searchFunctions.length === 0)
+    onDebounceSearch = debounce((value) => {
+        const { functions } = this.props;
+        if(value === '' || !value || value.length ===0)
         {
-            this.setState({notFoundPermission: true});
+            this.setState({functions: functions, notFoundPermission: false}, this.loadPermissions(this.state.selectedRoleId));
             return;
         }
-        //Phuoc do next
-        if(notFoundPermission) this.setState({notFoundPermission: false});
-     },1000);
+        const { notFoundPermission } = this.state;
+        let searchFunctions = Object.assign([], functions).filter(x => x.functionId
+                                                                        .toLowerCase()
+                                                                        .trim()
+                                                                        .includes(value.toLowerCase().trim()) 
+                                                                        || x.functionName.toLowerCase().trim().includes(value.toLowerCase().trim()));
+        if (searchFunctions.length === 0) {
+            this.setState({ notFoundPermission: true });
+            return;
+        }
+        if (notFoundPermission) this.setState({ notFoundPermission: false });
+        this.loadTreeFunctions(searchFunctions);
+    }, 1000);
+
+    loadTreeFunctions = (searchFunctions) => {
+        const functions = Object.freeze(this.props.functions);
+        let results = [];
+        searchFunctions.forEach(func => {
+            if (func.level === 0) {
+                const childs = functions.filter(x => x.parentId === func.functionId);
+                results = [...new Set([...results, func, ...childs])];
+            }
+
+            if (func.level === 1) {
+                const parent = functions.find(x => x.functionId === func.parentId);
+                const childs = functions.filter(x => x.parentId === func.functionId);
+                results = [...new Set([...results, parent, func, ...childs])];
+            }
+
+            if (func.level === 2) {
+                const parent = functions.find(x => x.functionId === func.parentId);
+                if (parent.level === 1) {
+                    const root = functions.find(x => x.functionId === parent.parentId);
+                    results = [...new Set([...results, ...[root]])];
+                }
+                results = [...new Set([...results, ...[parent], func])];
+            }
+        });
+        this.setState({ functions: results }, this.loadPermissions(this.state.selectedRoleId));
+    }
 
     render = () => {
         const { permissions, notFoundPermission } = this.state;
@@ -143,7 +180,7 @@ export class RoleGroupPermissions extends React.Component {
                     </div>
                     <div className="permission-container d-flex flex-column align-self-stretch mt-1">
                         {
-                         !notFoundPermission && permissions && permissions.length > 0 && permissions.filter(x => x.functionType === FunctionType.Module && x.level === 0).map((item, index) => {
+                            !notFoundPermission && permissions && permissions.length > 0 && permissions.filter(x => x.functionType === FunctionType.Module && x.level === 0).map((item, index) => {
                                 return (
                                     <>
                                         <Row className="border permission-module-title mt-1">
@@ -218,12 +255,12 @@ export class RoleGroupPermissions extends React.Component {
                             })
                         }
                         {
-                            notFoundPermission && 
+                            notFoundPermission &&
                             <Row className="border permission-module-title mt-1">
-                                            <Col xs={12} className="text-center"><span className="text-uppercase"><b>Không tìm thấy chức năng này !</b></span></Col>
-                                        </Row>
+                                <Col xs={12} className="text-center"><span className="text-uppercase"><b>Không tìm thấy chức năng này !</b></span></Col>
+                            </Row>
                         }
-                        
+
                     </div>
                 </div>
             </div>

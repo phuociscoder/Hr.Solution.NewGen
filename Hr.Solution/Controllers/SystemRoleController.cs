@@ -62,9 +62,9 @@ namespace Hr.Solution.Application.Controllers
 
         [HttpGet, Route("get-users/{roleId}")]
         [Authorize]
-        public async Task<ActionResult> GetUsers(string roleId)
+        public async Task<ActionResult> GetUsers(string roleId, [FromQuery]string FreeText)
         {
-            var result = await systemRoleServices.GetUsers(roleId);
+            var result = await systemRoleServices.GetUsers(roleId, FreeText);
             return Ok(result);
         }
 

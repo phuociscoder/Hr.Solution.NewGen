@@ -19,7 +19,8 @@ export class RoleGroupMembers extends React.Component {
             showAddUserModal: false,
             searchAddUsers: [],
             selectedRoleId: null,
-            users: []
+            users: [],
+            onLoading: false
         }
     }
     componentDidMount =() => {
@@ -36,11 +37,12 @@ export class RoleGroupMembers extends React.Component {
         return true;
     }
 
-    loadRoleUsers = (roleId) => {
-        AdminRoleServices.GetUsers(roleId)
+    loadRoleUsers = (roleId, freeText) => {
+        this.setState({onLoading: true});
+        AdminRoleServices.GetUsers(roleId,{freeText: freeText?? ''})
             .then(response => {
                 if (response.data.data) {
-                    this.setState({ users: response.data.data });
+                    this.setState({ users: response.data.data , onLoading: false});
                 }
             }, error => {
                 ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập được danh sách tài khoản.");
@@ -121,17 +123,24 @@ export class RoleGroupMembers extends React.Component {
     }
     onDeboundSearchAddUser = debounce((freeText) => this.onSearchAddUser(freeText), 1000);
 
+    onSearchRoleUserChange =(e) => {
+        const value = e.target.value;
+        this.onDeboundSearchRoleUser(value);
+    }
+
+    onDeboundSearchRoleUser =debounce((value) => this.loadRoleUsers(this.state.selectedRoleId, value), 1000);
+
     render = () => {
-        const { users, selectedRoleId } = this.state;
+        const { users, selectedRoleId, onLoading } = this.state;
         return (
             <div className="d-flex flex-column w-100 animate__animated animate__fadeIn">
                 <div className="w-100 d-flex justify-content-end">
-                    <input disabled={selectedRoleId === null} className="w-40 form-control" placeholder="Tìm kiếm"></input>
+                    <input disabled={selectedRoleId === null} className="w-40 form-control" onChange={this.onSearchRoleUserChange} placeholder="Tìm kiếm"></input>
                     <button disabled={selectedRoleId === null} className="btn btn-primary ml-3" onClick={this.onShowAddUserModal}><FontAwesomeIcon icon={faUserPlus} /><span> Thêm tài khoản</span></button>
                 </div>
 
                 <div className="w-100 h-100 mt-2">
-                    <MemberTable data={users} onProcessRemoveUser={this.onProcessRemoveUser} />
+                    <MemberTable data={users} onProcessRemoveUser={this.onProcessRemoveUser} onLoading={onLoading} />
                 </div>
                 {this.generateAddUserModal()}
             </div>
