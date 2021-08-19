@@ -23,10 +23,12 @@ export class RoleGroupMembers extends React.Component {
             onLoading: false
         }
     }
-    componentDidMount =() => {
-        const {selectedRoleId} = this.props;
-        this.setState({selectedRoleId: selectedRoleId});
-        this.loadRoleUsers(selectedRoleId);
+    componentDidMount = () => {
+        const { selectedRoleId } = this.props;
+        this.setState({ selectedRoleId: selectedRoleId });
+        if (selectedRoleId) {
+            this.loadRoleUsers(selectedRoleId);
+        }
     }
 
     shouldComponentUpdate = (nextProps) => {
@@ -38,11 +40,11 @@ export class RoleGroupMembers extends React.Component {
     }
 
     loadRoleUsers = (roleId, freeText) => {
-        this.setState({onLoading: true});
-        AdminRoleServices.GetUsers(roleId,{freeText: freeText?? ''})
+        this.setState({ onLoading: true });
+        AdminRoleServices.GetUsers(roleId, { freeText: freeText ?? '' })
             .then(response => {
                 if (response.data.data) {
-                    this.setState({ users: response.data.data , onLoading: false});
+                    this.setState({ users: response.data.data, onLoading: false });
                 }
             }, error => {
                 ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập được danh sách tài khoản.");
@@ -60,17 +62,16 @@ export class RoleGroupMembers extends React.Component {
     onSearchAddUser = (freeText) => {
         AccountServices.GetAll({ freeText: freeText })
             .then(response => {
-                this.setState({showLoading: false});
+                this.setState({ showLoading: false });
                 if (!response.data) return;
                 let searchAddUsers = response.data;
-                const {users} =this.state;
-                if(users)
-                {
-                    searchAddUsers = searchAddUsers.filter(x => !users.some(y=> y.userId === x.id));
+                const { users } = this.state;
+                if (users) {
+                    searchAddUsers = searchAddUsers.filter(x => !users.some(y => y.userId === x.id));
                 }
                 this.setState({ searchAddUsers: searchAddUsers });
             }, error => {
-                this.setState({showLoading: false});
+                this.setState({ showLoading: false });
             });
     }
 
@@ -81,11 +82,10 @@ export class RoleGroupMembers extends React.Component {
                 if (!response.data) return;
                 const { users } = this.state;
                 users.unshift(response.data);
-                let {searchAddUsers} =this.state;
-                if(searchAddUsers)
-                {
-                    searchAddUsers = searchAddUsers.filter(x => !users.some(y=> y.userId === x.id));
-                    this.setState({searchAddUsers: searchAddUsers});
+                let { searchAddUsers } = this.state;
+                if (searchAddUsers) {
+                    searchAddUsers = searchAddUsers.filter(x => !users.some(y => y.userId === x.id));
+                    this.setState({ searchAddUsers: searchAddUsers });
                 }
                 this.setState({ users: users });
                 ShowNotification(NotificationType.SUCCESS, "Thêm tài khoản vào phân quyền thành công !");
@@ -118,17 +118,17 @@ export class RoleGroupMembers extends React.Component {
         if (!freeText) {
             this.setState({ searchAddUsers: [] });
         }
-        this.setState({showLoading: true});
+        this.setState({ showLoading: true });
         this.onDeboundSearchAddUser(freeText)
     }
     onDeboundSearchAddUser = debounce((freeText) => this.onSearchAddUser(freeText), 1000);
 
-    onSearchRoleUserChange =(e) => {
+    onSearchRoleUserChange = (e) => {
         const value = e.target.value;
         this.onDeboundSearchRoleUser(value);
     }
 
-    onDeboundSearchRoleUser =debounce((value) => this.loadRoleUsers(this.state.selectedRoleId, value), 1000);
+    onDeboundSearchRoleUser = debounce((value) => this.loadRoleUsers(this.state.selectedRoleId, value), 1000);
 
     render = () => {
         const { users, selectedRoleId, onLoading } = this.state;
@@ -156,7 +156,7 @@ export class RoleGroupMembers extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                     <input className="form-control" onChange={this.onSearchAddTextChange} placeholder="Nhập họ tên/Email/Tên đăng nhập..."></input>
-                    <div className="w-100 d-flex justify-content-center"><Loading show={showLoading}/></div>
+                    <div className="w-100 d-flex justify-content-center"><Loading show={showLoading} /></div>
                     {
                         searchAddUsers && searchAddUsers.length > 0 && searchAddUsers.map((item, index) => {
                             return (
