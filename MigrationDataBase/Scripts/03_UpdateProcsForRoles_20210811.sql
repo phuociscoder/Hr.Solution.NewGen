@@ -2,7 +2,7 @@ GO
 CREATE PROC spGelAllSystemRolesByName @name nvarchar(100)
 AS
 BEGIN
-	SELECT * FROM sys_Roles WHERE RoleName like N'%'+ISNULL(@name, '')+'%' OR  RoleSubName like N'%'+ISNULL(@name, '')+'%'
+	SELECT * FROM sys_Roles WHERE RoleName like N'%'+ISNULL(@name, '')+'%' OR  RoleSubName like N'%'+ISNULL(@name, '')+'%' OR  RoleID like N'%'+ISNULL(@name, '')+'%'
 END
 
 GO

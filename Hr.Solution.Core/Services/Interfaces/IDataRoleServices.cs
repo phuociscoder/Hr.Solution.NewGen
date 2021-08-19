@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Hr.Solution.Data.Requests;
+using Hr.Solution.Data.Responses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +8,13 @@ using System.Threading.Tasks;
 
 namespace Hr.Solution.Core.Services.Interfaces
 {
-   public class IDataRoleServices
+   public interface IDataRoleServices
     {
+        Task<List<DataRoleGetListResponse>> GetList(string freeText);
+        Task<Sys_DataDomain> Add(DataRoleAddRequest request);
+        Task<Sys_DataDomain> Update(DataRoleUpdateRequest request);
+        Task<List<DataDomain_SysRoleResponse>> GetDomainSysRoles(int domainId, string freeText);
+        Task<int> RemoveSysRole(int id);
+        Task<DataDomain_SysRoleResponse> AddSysRole(int domainId, DataRoleAddSysRoleRequest request);
     }
 }

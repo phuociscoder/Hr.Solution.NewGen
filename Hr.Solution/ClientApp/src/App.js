@@ -14,11 +14,12 @@ import AuthorizationComponent from './components/AuthorizationComponent';
 import { NotFound404 } from './components/NotFound404';
 
 
-import { Redirect, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { Login } from './components/auth/Login';
 import { MaintainPage } from './components/Maintaince';
 import { AccountListing } from './components/administration/admin.account';
-import { SystemRoleManagement } from './components/administration/admin.roles';
+import { SystemRoleManagement } from './components/administration/admin.roles/admin.sysRole';
+import { DataRoleManagement } from './components/administration/admin.roles/admin.dataRole';
 require('./custom.css');
 
 export default class App extends Component {
@@ -52,6 +53,7 @@ export default class App extends Component {
 
               <Route exact path={[AppRoute.ADMIN_ACOUNT.path]} component={AuthorizationComponent(AccountListing)} />
               <Route exact path={[AppRoute.ADMIN_SYSTEM_ROLE.path]} component={AuthorizationComponent(SystemRoleManagement)} />
+              <Route exact path={[AppRoute.ADMIN_DATA_ROLE.path]} component={AuthorizationComponent(DataRoleManagement)} />
               <Route exact path={[AppRoute.HOME.path]} component={Home} />
               <Route component={NotFound404} />
             </Switch> 

@@ -125,6 +125,8 @@ namespace Hr.Solution
         {
             services.AddScoped<ISystemRoleServices, SystemRoleServices>();
             services.AddScoped<IUserServices, UserServices>();
+            services.AddScoped<IDepartmentServices, DepartmentServices>();
+            services.AddScoped<IDataRoleServices, DataRoleServices>();
         }
     }
 }

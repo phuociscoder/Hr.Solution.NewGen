@@ -3,14 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Card, Modal } from "react-bootstrap";
 import './admin.roles.css';
-import { AdminRoleServices } from "./admin.roles.services";
+import { AdminDataRoleServices } from "./admin.dataRoles.services";
 import { debounce } from "lodash";
 import { Action } from "./Constants";
-import { AuthenticationManager } from "../../../AuthenticationManager";
-import { ShowNotification } from "../../Common/notification/Notification";
-import { NotificationType } from "../../Common/notification/Constants";
+import { AuthenticationManager } from "../../../../AuthenticationManager";
+import { ShowNotification } from "../../../Common/notification/Notification";
+import { NotificationType } from "../../../Common/notification/Constants";
 
-export class RoleList extends React.Component {
+export class DataRoleList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,8 +18,8 @@ export class RoleList extends React.Component {
             selectedRole: null,
             mode: Action.CREATE,
             groupModel: this.defaultGroupModel
-                
-            
+
+
         }
     }
 
@@ -27,18 +27,27 @@ export class RoleList extends React.Component {
         this.onLoadRoles(null);
     }
 
+    shouldComponentUpdate =(nextProps) => {
+        const {reload, searchText} = this.state;
+        if(nextProps.reload)
+        {
+            this.onLoadRoles(searchText);
+        }
+        return true;
+    }
+
     defaultGroupModel = {
-        recID: null,
-        roleId: null,
-        roleName: null,
-        roleSubName: null,
-        isAdmin: false,
+        id: null,
+        code: null,
+        name: null,
+        name2: null,
+        roleCount: null,
         description: null,
         lock: false
     }
 
     onLoadRoles = (name) => {
-        AdminRoleServices.GetAllRolesByName({ name: name ?? '' })
+        AdminDataRoleServices.GetAllRolesByName({ freeText: name ?? '' })
             .then(result => {
                 if (result.data && result.data.length > 0) {
                     this.setState({ roles: result.data });
@@ -54,6 +63,7 @@ export class RoleList extends React.Component {
     onRoleSearchTextChange = (e) => {
         const value = e.target.value;
         this.searchRoles(value);
+        this.setState({searchText: value});
 
     }
 
@@ -64,12 +74,11 @@ export class RoleList extends React.Component {
     }
 
     onShowAddEditGroupModal = (item) => {
-        if(item)
-        {
+        if (item) {
             this.setState({ groupModel: item, showAddEditGroupModal: true, mode: Action.EDIT });
             return;
         }
-        this.setState({ showAddEditGroupModal: true, groupModel: this.defaultGroupModel, mode: Action.CREATE});
+        this.setState({ showAddEditGroupModal: true, groupModel: this.defaultGroupModel, mode: Action.CREATE });
     }
 
     onHideModal = () => {
@@ -99,13 +108,15 @@ export class RoleList extends React.Component {
 
     processAddRole = () => {
         const { groupModel } = this.state;
-        AdminRoleServices.Create(Object.assign({}, { ...groupModel, currentUser: AuthenticationManager.UserId }))
+        debugger;
+        const currentUser = AuthenticationManager.UserName();
+        AdminDataRoleServices.Create(Object.assign({}, { ...groupModel, createdBy: AuthenticationManager.UserName() }))
             .then(result => {
                 this.onLoadRoles();
                 this.onHideModal();
-                ShowNotification(NotificationType.SUCCESS, "Tạo mới phân quyền thành công!");
+                ShowNotification(NotificationType.SUCCESS, "Tạo mới vùng dữ liệu thành công!");
             }, error => {
-                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra , không thể thêm mới phân quyền");
+                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra , không thể thêm mới vùng dữ liệu");
             });
     }
 
@@ -113,7 +124,7 @@ export class RoleList extends React.Component {
 
     processEditRole = () => {
         const { groupModel } = this.state;
-        AdminRoleServices.Update(groupModel.recID, Object.assign({}, { ...groupModel, modifiedBy: null }))
+        AdminDataRoleServices.Update(groupModel.id, Object.assign({}, { ...groupModel, active: true, modifiedBy: AuthenticationManager.UserName() }))
             .then(response => {
                 this.onLoadRoles();
                 this.onHideModal();
@@ -130,7 +141,7 @@ export class RoleList extends React.Component {
                 <Card.Header>
                     <div className="d-flex">
                         <input onChange={this.onRoleSearchTextChange} className="form-control flex-fill" placeholder="Tìm kiếm"></input>
-                        <button data-tip="Thêm nhóm quyền mới" className="btn btn-primary ml-1" onClick={() =>this.onShowAddEditGroupModal()}><FontAwesomeIcon icon={faPlus} /></button>
+                        <button data-tip="Thêm nhóm quyền mới" className="btn btn-primary ml-1" onClick={() => this.onShowAddEditGroupModal()}><FontAwesomeIcon icon={faPlus} /></button>
                     </div>
 
                 </Card.Header>
@@ -139,9 +150,9 @@ export class RoleList extends React.Component {
                         {
                             roles && roles.length > 0 && roles.map((item, index) => {
                                 return (
-                                    <div key={item.recID} fieldName={item.recID} className={selectedRole === item.recID ? "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown active" : "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown"} onClick={() => this.onSelectRole(item.recID)}>
+                                    <div key={item.id} fieldName={item.id} className={selectedRole === item.id ? "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown active" : "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown"} onClick={() => this.onSelectRole(item.id)}>
                                         <div className="d-flex">
-                                            <span className="text-uppercase"><b>{item.roleName}</b>-{item.roleId}</span>
+                                            <span className="text-uppercase"><b>{item.name}</b>-{item.code}</span>
                                             <div className="ml-auto">
                                                 <FontAwesomeIcon className="mr-2" onClick={() => this.onShowAddEditGroupModal(item)} icon={faEdit} color="blue" />
                                                 {
@@ -150,8 +161,8 @@ export class RoleList extends React.Component {
                                             </div>
                                         </div>
                                         <div className="d-flex">
-                                            <span><i>{item.roleSubName} (SL:{0})</i></span>
-                                            <span className="ml-auto mt-1"><i>{item.isAdmin ? 'Toàn quyền' : ''}</i></span>
+                                            <span><i>{item.name2} (SL:{item.roleCount})</i></span>
+                                            {/* <span className="ml-auto mt-1"><i>{item.isAdmin ? 'Toàn quyền' : ''}</i></span> */}
                                         </div>
                                     </div>
                                 )
@@ -174,39 +185,39 @@ export class RoleList extends React.Component {
 
     generateAddGroupModal = () => {
         const { showAddEditGroupModal, mode } = this.state;
-        const { roleId, roleName, roleSubName, isAdmin, lock, description } = this.state.groupModel;
+        const { id, code, name, name2, lock, description } = this.state.groupModel;
         return (
             <Modal show={showAddEditGroupModal} centered backdrop="static">
                 <Modal.Header>
-                    {mode === Action.CREATE ? 'TẠO MỚI PHÂN QUYỀN' : 'CHỈNH SỬA PHÂN QUYỀN'}
+                    {mode === Action.CREATE ? 'TẠO MỚI VÙNG DỮ LIỆU' : 'CHỈNH SỬA VÙNG DỮ LIỆU'}
                 </Modal.Header>
                 <Modal.Body className="group-role-container">
                     <div className="w-100 d-flex flex-column pl-2 pr-2">
                         <label>
-                            Mã Nhóm:
+                            Mã vùng dữ liệu:
                             <input className="form-control w-50"
-                                placeholder="Mã nhóm"
-                                value={roleId}
+                                placeholder="Mã vùng dữ liệu"
+                                value={code}
                                 onChange={this.onGroupModelTextChange}
-                                fieldName="roleId"
+                                fieldName="code"
                                 disabled={mode === Action.EDIT}
                             ></input>
                         </label>
                         <label>
-                            Tên nhóm:
-                            <input className="form-control" placeholder="Tên nhóm" value={roleName} onChange={this.onGroupModelTextChange} fieldName="roleName"></input>
+                            Tên vùng dữ liệu:
+                            <input className="form-control" placeholder="Tên vùng dữ liệu" value={name} onChange={this.onGroupModelTextChange} fieldName="name"></input>
                         </label>
                         <label>
                             Tên khác:
-                            <input className="form-control" placeholder="Tên thay thế" value={roleSubName} onChange={this.onGroupModelTextChange} fieldName="roleSubName"></input>
+                            <input className="form-control" placeholder="Tên thay thế" value={name2} onChange={this.onGroupModelTextChange} fieldName="name2"></input>
                         </label>
                         <div className="ml-auto mt-2">
                             <label>
                                 <input type="checkbox" checked={lock} fieldName="lock" onChange={this.onGroupModelTextChange} /> Bị khóa
                             </label>
-                            <label className="ml-3">
+                            {/* <label className="ml-3">
                                 <input type="checkbox" checked={isAdmin} fieldName="isAdmin" onChange={this.onGroupModelTextChange} /> Toàn quyền
-                            </label>
+                            </label> */}
                         </div>
 
                         <label>

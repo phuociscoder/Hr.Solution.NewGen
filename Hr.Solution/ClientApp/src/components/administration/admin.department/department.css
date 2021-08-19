@@ -1,0 +1,34 @@
+.company-container{
+    padding: 10px 10px 10px 10px;
+    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+}
+
+.department-checkbox{
+    height: 18px;
+    width: 18px;
+    cursor: pointer;
+}
+
+.sub-deparment{
+    padding: 10px 10px 10px 0px;
+    background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+    
+}
+
+.department {
+    padding: 10px 10px 10px 0px;
+}
+
+.department-container{
+    height: 81vh;
+    overflow-y: auto;
+
+}
+
+.department:hover , .sub-deparment:hover, .company-container:hover{
+    background-image: linear-gradient( 109.6deg,  rgb(32, 39, 131) 11.2%, rgb(129, 180, 238) 91.1% );
+    color: whitesmoke;
+    background-position: right center;
+    transition: 0.5s;
+    background-size: 200% auto; 
+}

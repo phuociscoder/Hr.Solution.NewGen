@@ -25,3 +25,23 @@ AS
 BEGIN
 	SELECT * FROM SYS_Permissions WHERE RoleID = @RoleId
 END
+
+GO
+ALTER PROC spSysRole_GetUsers @roleId nvarchar(450) , @freeText nvarchar(200)  
+AS  
+BEGIN  
+ SELECT 
+ ur.RecID as [Id], 
+ ur.RoleID as RoleId,
+ u.id as UserId,
+ u.UserName, 
+ u.FullName, 
+ u.Avatar, 
+ u.Email, 
+ u.code as Usercode 
+ FROM sys_UserRoles ur JOIN aspnetusers u on u.id = ur.UserID
+ where ur.RoleID = @roleId 
+ AND (u.FullName like N'%'+ISNULL(@freeText, '')+'%' OR u.UserName like N'%'+ISNULL(@freeText, '')+'%' OR u.Code like N'%'+ISNULL(@freeText, '')+'%' or u.Email like N'%'+ISNULL(@freeText, '')+'%')
+ and u.isactive=1  
+END
+

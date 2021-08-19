@@ -1,25 +1,25 @@
-import { BaseListing } from "../../Common/BaseListing";
+import { BaseListing } from "../../../Common/BaseListing";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
-import {NoDataTableContent} from "../../Common/NoDataTableContent";
+import { NoDataTableContent } from "../../../Common/NoDataTableContent";
 import { Modal } from "react-bootstrap";
-import { Loading } from "../../Common/loading/Loading";
+import { Loading } from "../../../Common/loading/Loading";
 
-export class MemberTable extends BaseListing{
+export class DataRoleMemberTable extends BaseListing{
 
     generateRemoveModal =() => {
         const {showRemoveModal} = this.state;
         return(
             <Modal show={showRemoveModal} backdrop="static" centered>
                 <Modal.Header>
-                    XÁC NHẬN XÓA TÀI KHOẢN
+                    XÁC NHẬN XÓA PHÂN QUYỀN
                 </Modal.Header>
                 <Modal.Body>
-                    <span>Chắc chắn xóa tài khoản khỏi phân quyền ?</span>
+                    <span>Chắc chắn xóa phân quyền khỏi vùng dữ liệu ?</span>
                 </Modal.Body>
                 <Modal.Footer>
-                    <button className="btn btn-primary" onClick={this.onProcessRemoveUser}><FontAwesomeIcon icon={faCheck}/><span> Đồng ý</span></button>
+                    <button className="btn btn-primary" onClick={this.onProcessRemoveRole}><FontAwesomeIcon icon={faCheck}/><span> Đồng ý</span></button>
                     <button className="btn btn-danger" onClick={this.onHideRemoveModal}><FontAwesomeIcon icon={faTimes}/><span> Hủy bỏ</span></button>
                 </Modal.Footer>
             </Modal>
@@ -27,14 +27,14 @@ export class MemberTable extends BaseListing{
     }
 
     onHideRemoveModal =() => {
-        this.setState({showRemoveModal: false, userRoleId: null});
+        this.setState({showRemoveModal: false, id: null});
     }
 
-    onProcessRemoveUser =() => {
-        const {userRoleId} = this.state;
-        const {onProcessRemoveUser} =this.props;
-        if(!onProcessRemoveUser) return;
-        onProcessRemoveUser(userRoleId);
+    onProcessRemoveRole =() => {
+        const {id} = this.state;
+        const {onProcessRemoveRole} =this.props;
+        if(!onProcessRemoveRole) return;
+        onProcessRemoveRole(id);
         this.onHideRemoveModal();
     }
 
@@ -44,10 +44,10 @@ export class MemberTable extends BaseListing{
             <>
                 <thead>
                     <tr>
-                        <th>Mã Tài Khoản</th>
-                        <th>Họ Tên</th>
-                        <th>Email</th>
-                        <th>Tên Đăng Nhập</th>
+                        <th>Mã Phân Quyền</th>
+                        <th>Tên Phân Quyền</th>
+                        <th>Tên Thay Thế</th>
+                        <th>Bị Khóa</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -63,13 +63,13 @@ export class MemberTable extends BaseListing{
                     {
                       !onLoading && data && data.length >0 && data.map((item, index) => {
                            return (
-                               <tr>
-                                   <td>{item.userCode}</td>
-                                   <td>{item.fullName}</td>
-                                   <td>{item.email}</td>
-                                   <td>{item.userName}</td>
+                               <tr key={item.id}>
+                                   <td>{item.roleCode}</td>
+                                   <td>{item.roleName}</td>
+                                   <td>{item.roleSubName}</td>
+                                   <td>{item.lock}</td>
                                    <td>
-                                       <button className="btn btn-danger" onClick={() => this.showRemoveUserModal(item.id)}><FontAwesomeIcon icon={faTrash}/></button>
+                                       <button className="btn btn-danger" onClick={() => this.showRemoveRoleModal(item.id)}><FontAwesomeIcon icon={faTrash}/></button>
                                    </td>
                                </tr>
                            )
@@ -84,7 +84,7 @@ export class MemberTable extends BaseListing{
         )
     }
 
-    showRemoveUserModal =(id) => {
-        this.setState({showRemoveModal: true, userRoleId: id});
+    showRemoveRoleModal =(id) => {
+        this.setState({showRemoveModal: true, id: id});
     }
 }

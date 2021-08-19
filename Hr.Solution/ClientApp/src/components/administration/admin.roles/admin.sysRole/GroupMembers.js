@@ -4,13 +4,13 @@ import React from "react";
 import { Image, Modal } from "react-bootstrap";
 import { AdminRoleServices } from "./admin.roles.services";
 import { debounce } from "lodash";
-import { AccountServices } from "../admin.account/Account.services";
-import noAvatar from '../../../assets/no-avatar.jpg';
-import { ShowNotification } from "../../Common/notification/Notification";
-import { NotificationType } from "../../Common/notification/Constants";
+import { AccountServices } from "../../admin.account/Account.services";
+import noAvatar from '../../../../assets/no-avatar.jpg';
+import { ShowNotification } from "../../../Common/notification/Notification";
+import { NotificationType } from "../../../Common/notification/Constants";
 import { MemberTable } from "./MemberTable";
 import _ from "lodash";
-import { Loading } from "../../Common/loading/Loading";
+import { Loading } from "../../../Common/loading/Loading";
 
 export class RoleGroupMembers extends React.Component {
     constructor(props) {

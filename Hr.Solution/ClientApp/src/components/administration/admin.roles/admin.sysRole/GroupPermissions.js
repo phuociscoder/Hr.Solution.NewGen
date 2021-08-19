@@ -1,12 +1,10 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import { NotificationType } from "../../Common/notification/Constants";
-import { ShowNotification } from "../../Common/notification/Notification";
+import { NotificationType } from "../../../Common/notification/Constants";
+import { ShowNotification } from "../../../Common/notification/Notification";
 import { AdminRoleServices } from "./admin.roles.services";
 import { FunctionType } from "./Constants";
 import { debounce } from "lodash";
-import { parseHTML } from "jquery";
-import HTMLReactParser from "html-react-parser";
 
 export class RoleGroupPermissions extends React.Component {
     constructor(props) {

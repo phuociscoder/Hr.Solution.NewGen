@@ -1,12 +1,9 @@
-import { param } from "jquery";
-import { AuthenticationManager } from "../../../AuthenticationManager";
-import  RestClient  from "../../../services/common/RestClient"
+import { AuthenticationManager } from "../../../../AuthenticationManager";
+import RestClient from "../../../../services/common/RestClient";
 
-export class AdminRoleServices {
-    static baseUrl = "/api/SystemRole";
-    static addUserUrl ="/api/SystemRole/add-user";
-    static getUsersUrl ="/api/SystemRole/get-users/{0}";
-    static removeUserUrl ="/api/SystemRole/delete-user/{0}";
+export class AdminDataRoleServices {
+    static baseUrl = "/api/DataRole";
+    static baseSysRoleUrl ="/api/DataRole/sysrole/{0}";
     static getFunctionsUrl ="/api/SystemRole/functions";
     static getRolePermissionsUrl ="/api/SystemRole/permissions/{0}";
     static updateRolePermissionUrl ="/api/SystemRole/permissions/{0}";
@@ -27,16 +24,16 @@ export class AdminRoleServices {
         return RestClient.SendGetRequestWithParameters(this.sysrolSearchUserUrl, params);
     }
 
-    static AddUser =(params) => {
-        return RestClient.SendPostRequest(this.addUserUrl, params);
+    static AddSysRole =(domainId, params) => {
+        return RestClient.SendPostRequest(this.baseSysRoleUrl.replace("{0}", domainId), params);
     }
 
-    static GetUsers =(roleId, params) => {
-        return RestClient.SendGetRequestWithParameters(this.getUsersUrl.replace("{0}", roleId), params)
+    static GetSysRoles =(domainId, params) => {
+        return RestClient.SendGetRequestWithParameters(this.baseSysRoleUrl.replace("{0}", domainId), params);
     }
 
-    static RemoveUser =(userRoleId) => {
-        return RestClient.SendDeleteRequest(this.removeUserUrl.replace("{0}", userRoleId));
+    static RemoveSysRole =(id) => {
+        return RestClient.SendDeleteRequest(this.baseSysRoleUrl.replace("{0}", id));
     }
 
     static GetFunctions =() => {
