@@ -26,6 +26,9 @@ namespace Hr.Solution.Core.Constants
         public static string SP_DATA_ROLE_GET_SYS_ROLES = "spSysDataRole_GetSysRoleMembers";
         public static string SP_DATA_ROLE_REMOVE_SYS_ROLE = "spSysDataRole_RemoveSysRoleMember";
         public static string SP_DATA_ROLE_ADD_SYS_ROLE = "spSysDataRole_AddSysRoleMember";
+        public static string SP_DATA_ROLE_GET_DEPARTMENTS = "spSysDomain_GetDomainDepartments";
+        public static string SP_DATA_ROLE_REMOVE_DEPARTMENTS = "spSysDomain_RemoveAllDomainDepartments";
+        public static string SP_DATA_ROLE_UPDATE_DEPARMENT = "spSysDomain_UpdateDomainDepartments";
 
         //User
         public static string SP_USER_GET = "spUser_GetByName";

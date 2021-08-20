@@ -47,5 +47,9 @@ namespace Hr.Solution.Data.Responses
         public string RoleSubName { get; set; }
         public bool Lock { get; set; }
     }
+
+    public class DataDomain_DepartmentResponse { 
+        public int DepartmentId { get; set; }
+    }
        
 }

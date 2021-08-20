@@ -10,6 +10,7 @@ import { DataRoleList } from "./DataRoleList";
 import { DataRoleGroupMembers } from "./DataRoleGroupMembers";
 import { AdminDataRoleServices } from "./admin.dataRoles.services";
 import { DepartmentList } from "../../admin.department";
+import { DataRoleDepartments } from "./DataRoleDepartments";
 
 export class DataRoleManagement extends React.Component {
     constructor(props) {
@@ -23,16 +24,6 @@ export class DataRoleManagement extends React.Component {
     }
 
     componentDidMount =() => {
-        this.loadSystemFunctions();
-    }
-
-    loadSystemFunctions =() => {
-        AdminDataRoleServices.GetFunctions()
-        .then(response => {
-            this.setState({sysFunctions: response.data});
-        }, error => {
-
-        });
     }
 
     onChangeTab = (e) => {
@@ -81,7 +72,7 @@ export class DataRoleManagement extends React.Component {
                         <Card.Body>
                             <div className="pt-2 pl-2 pr-2">
                             {tabSelect === TabType.ROLE && <DataRoleGroupMembers selectedRoleId={selectedRoleId} onRefesh={this.onRefesh}/>}
-                            {tabSelect === TabType.DEPARTMENT && <DepartmentList onValueChange={this.onDepartmentCheckedChange} />}
+                            {tabSelect === TabType.DEPARTMENT && <DataRoleDepartments selectedRoleId={selectedRoleId} />}
                             </div>
                         </Card.Body>
                     </Card>

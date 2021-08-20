@@ -68,5 +68,21 @@ namespace Hr.Solution.Application.Controllers
             var result = await dataRoleServices.AddSysRole(domainId, request);
             return Created(string.Empty, result);
         }
+
+        [HttpGet, Route("department/{domainId}")]
+        [Authorize]
+        public async Task<ActionResult> GetDepartments(int domainId)
+        {
+            var results = await dataRoleServices.GetDomainDepartments(domainId);
+            return Ok(results);
+        }
+
+        [HttpPost, Route("department/{domainId}")]
+        [Authorize]
+        public async Task<ActionResult> UpdateDomainDepartments(int domainId, DataRoleUpdateDepartmentsRequest request)
+        {
+            var result = await dataRoleServices.UpdateDomainDepartments(domainId, request);
+            return Created(string.Empty, result);
+        }
     }
 }

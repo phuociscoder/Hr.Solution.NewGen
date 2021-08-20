@@ -33,4 +33,8 @@ namespace Hr.Solution.Data.Requests
         public Guid RoleId { get; set; }
         public string CreatedBy { get; set; }
     }
+
+    public class DataRoleUpdateDepartmentsRequest { 
+        public List<int> DepartmentIds { get; set; }
+    }
 }

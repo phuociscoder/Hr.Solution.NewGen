@@ -29,6 +29,12 @@ namespace Hr.Solution.Core.Services.Impl
             return await repository.ExecuteScalarAsync<DataDomain_SysRoleResponse>(ProcedureConstants.SP_DATA_ROLE_ADD_SYS_ROLE, new {domainId= domainId, roleId =request.RoleId, createdBy= request.CreatedBy });
         }
 
+        public async Task<List<DataDomain_DepartmentResponse>> GetDomainDepartments(int domainId)
+        {
+            var response = await repository.QueryAsync<DataDomain_DepartmentResponse>(ProcedureConstants.SP_DATA_ROLE_GET_DEPARTMENTS, new { domainId = domainId });
+            return response.Data;
+        }
+
         public async Task<List<DataDomain_SysRoleResponse>> GetDomainSysRoles(int domainId, string freeText)
         {
             var response = await repository.QueryAsync<DataDomain_SysRoleResponse>(ProcedureConstants.SP_DATA_ROLE_GET_SYS_ROLES, new { domainId = domainId, freeText = freeText });
@@ -50,6 +56,17 @@ namespace Hr.Solution.Core.Services.Impl
         public async Task<Sys_DataDomain> Update(DataRoleUpdateRequest request)
         {
             return await repository.ExecuteScalarAsync<Sys_DataDomain>(ProcedureConstants.SP_DATA_ROLE_UPDATE, request);
+        }
+
+        public async Task<int> UpdateDomainDepartments(int domainId, DataRoleUpdateDepartmentsRequest request)
+        {
+            var removeDepartments = await repository.ExecuteAsync<DataDomain_DepartmentResponse>(ProcedureConstants.SP_DATA_ROLE_REMOVE_DEPARTMENTS, new { domainId = domainId });
+            foreach (var id in request.DepartmentIds)
+            {
+                await repository.ExecuteAsync<DataDomain_DepartmentResponse>(ProcedureConstants.SP_DATA_ROLE_UPDATE_DEPARMENT, new { domainId = domainId, departmentId = id });
+            }
+
+            return 1;
         }
     }
 }

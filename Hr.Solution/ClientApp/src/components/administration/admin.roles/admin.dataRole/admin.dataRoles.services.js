@@ -4,9 +4,7 @@ import RestClient from "../../../../services/common/RestClient";
 export class AdminDataRoleServices {
     static baseUrl = "/api/DataRole";
     static baseSysRoleUrl ="/api/DataRole/sysrole/{0}";
-    static getFunctionsUrl ="/api/SystemRole/functions";
-    static getRolePermissionsUrl ="/api/SystemRole/permissions/{0}";
-    static updateRolePermissionUrl ="/api/SystemRole/permissions/{0}";
+    static baseDataRoleDepartmentUrl ="/api/DataRole/department/{0}";
 
     static GetAllRolesByName =(params) => {
         return RestClient.SendGetRequestWithParameters(this.baseUrl, params);
@@ -36,16 +34,11 @@ export class AdminDataRoleServices {
         return RestClient.SendDeleteRequest(this.baseSysRoleUrl.replace("{0}", id));
     }
 
-    static GetFunctions =() => {
-        return RestClient.SendGetRequest(this.getFunctionsUrl);
+    static GetDataRoleDepartments =(domainId) => {
+        return RestClient.SendGetRequest(this.baseDataRoleDepartmentUrl.replace("{0}", domainId));
     }
 
-    static GetRolePermissions =(roleId) => {
-        return RestClient.SendGetRequest(this.getRolePermissionsUrl.replace("{0}", roleId));
-    }
-
-    static UpdateRolePermission =(roleId, params) => {
-        params["user"] =AuthenticationManager.UserName();
-        return RestClient.SendPostRequest(this.updateRolePermissionUrl.replace("{0}", roleId), params);
+    static UpdateDataRoleDepartments =(domainId ,departmentIds) => {
+        return RestClient.SendPostRequest(this.baseDataRoleDepartmentUrl.replace("{0}", domainId), departmentIds);
     }
 }

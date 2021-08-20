@@ -29,8 +29,18 @@ export class DepartmentList extends React.Component {
     }
 
     componentDidMount = () => {
-        this.loadDepartment(null);
+        const {values} = this.props;
+        this.setState({selectedIds: values}, this.loadDepartment(null));
     }
+
+    shouldComponentUpdate =(nextProps) => {
+        if(this.props.values !== nextProps.values)
+        {
+            this.setState({selectedIds: nextProps.values}, this.loadDepartment(null));
+        }
+        return true;
+    }
+
 
     loadDepartment = (freeText) => {
         this.setState({ loading: true });
