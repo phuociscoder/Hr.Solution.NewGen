@@ -45,18 +45,19 @@ END
 
 GO
 
-CREATE PROC spCategory_AddItem 
+ALTER PROC spCategory_AddItem 
 @code nvarchar(20),
 @name nvarchar(200),
 @name2 nvarchar(200),
 @functionId nvarchar(20),
 @ordinal int,
+@isActive bit,
 @note nvarchar(max),
 @createdBy nvarchar(20)
 AS
 BEGIN
-	INSERT INTO SYS_FunctionKeyValue(Code, [Name], [Name2], Ordinal, Note, FunctionId, CreatedBy, CreatedOn )
-	VALUES(@code, @name, @name2, @ordinal, @note, @functionId, @createdBy, GETDATE())
+	INSERT INTO SYS_FunctionKeyValue(Code, [Name], [Name2], Ordinal, Note, FunctionId, CreatedBy, CreatedOn, IsActive )
+	VALUES(@code, @name, @name2, @ordinal, @note, @functionId, @createdBy, GETDATE(), @isActive)
 
 	DECLARE @newId int = @@Identity
 	SELECT * FROM SYS_FunctionKeyValue WHERE Id =@newId
@@ -64,7 +65,7 @@ END
 
 GO
 
-CREATE PROC spCategory_UpdateItem
+alter PROC spCategory_UpdateItem
 @id int,
 @code nvarchar(20),
 @name nvarchar(200),
@@ -72,7 +73,8 @@ CREATE PROC spCategory_UpdateItem
 @functionId nvarchar(20),
 @ordinal int,
 @note nvarchar(max),
-@modifiedBy nvarchar(20)
+@modifiedBy nvarchar(20),
+@isActive bit
 AS
 BEGIN
 	UPDATE SYS_FunctionKeyValue
@@ -83,6 +85,7 @@ BEGIN
 	Ordinal = @ordinal,
 	Note =@note,
 	ModifiedOn = GETDATE(),
+	IsActive =@isActive,
 	ModifiedBy = @modifiedBy
 	WHERE Id=@id
 

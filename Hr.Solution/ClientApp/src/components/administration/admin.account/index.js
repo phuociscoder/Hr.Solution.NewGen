@@ -9,6 +9,8 @@ import { UnlockAccountModal } from "./UnlockAccountModal";
 import { Mode } from "./Constant";
 import RestClient from "../../../services/common/RestClient";
 import { AccountServices } from "./Account.services";
+import { ShowNotification } from "../../Common/notification/Notification";
+import { NotificationType } from "../../Common/notification/Constants";
 
 export class AccountListing extends React.Component{
     constructor(props){
@@ -24,18 +26,18 @@ export class AccountListing extends React.Component{
     }
 
     componentDidMount =() => {
-        this.loadData();
+        this.loadUsers(null);
 
     }
 
-    loadData =() => {
-        const data = [
-            { id: 1, code: "A001", userName:"phuoc.nguyen", firstName: "Nguyễn", lastName: "Hữu Phước", email: "huu.phuoc@yopmail.com", groupRoles: "ADMIN", isLocked: false, lockedDate: null, isActive: true, activeDate: (new Date()).toDateString() },
-            { id: 2, code: "A002", userName: "truong.ho11", firstName: "Hồ", lastName: "Nhật Trường", email: "ho.truong@yopmail.com", groupRoles: "ADMIN", isLocked: true, lockedDate: (new Date()).toDateString(), isActive: true, activeDate: (new Date()).toDateString() },
-            { id: 3, code: "A003", userName: "anh.tran04", firstName: "Trần", lastName: "Tuấn Anh", email: "anh.tran@yopmail.com", groupRoles: "ADMIN", isLocked: false, lockedDate: null, isActive: false, activeDate: (new Date()).toDateString() },
-            { id: 4, code: "A004", userName: "hoang.au", firstName: "Âu", lastName: "Văn Hoàng", email: "au.hoang@yopmail.com", groupRoles: "ADMIN", isLocked: false, lockedDate: null, isActive: true, activeDate: (new Date()).toDateString() }
-        ];
-        this.setState({ accounts: data });
+    loadUsers =(freeText) => {
+        AccountServices.GetAll({freeText: freeText??''})
+        .then(response => {
+            debugger;
+            this.setState({accounts: response.data});
+        }, error=> {
+            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể truy cập danh sách người dùng");
+        })
     }
 
     onShowCreateModal=()=> {

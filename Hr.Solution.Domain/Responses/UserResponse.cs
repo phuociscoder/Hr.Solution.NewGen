@@ -14,5 +14,11 @@ namespace Hr.Solution.Data.Responses
         public string FullName { get; set; }
         public string Code { get; set; }
         public string Avatar { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsLock { get; set; }
+        public int LockAfter { get; set; }
+        public bool IsNeverLock { get; set; }
+        public bool IsDomain { get; set; }
+        public DateTime? ValidDate { get; set; }
     }
 }
