@@ -1,0 +1,5 @@
+.category-container{
+    max-height: 82vh;
+    min-height: 50px;
+    overflow-y: auto;
+}

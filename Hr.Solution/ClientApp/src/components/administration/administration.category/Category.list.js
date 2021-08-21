@@ -3,52 +3,65 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Card, Container, ListGroup } from "react-bootstrap";
 import { AppRoute } from "../../AppRoute";
+import { Loading } from "../../Common/loading/Loading";
+import { NotificationType } from "../../Common/notification/Constants";
+import { ShowNotification } from "../../Common/notification/Notification";
+import { CategoryServices } from "./Category.services";
+import './Category.css';
+import { debounce } from "lodash";
 
 export class CategoryListing extends React.Component {
     constructor(props) {
         super(props);
-        this.state ={
-            data: [],
-            name: null
+        this.state = {
+            categories: [],
+            originCategories: [],
+            loading: false
         }
     }
 
-    componentDidMount =() => {
+    componentDidMount = () => {
+        this.setState({ loading: true });
         this.getCategories();
     }
 
-    getCategories =(name) => {
-        const data = [
-            {id: 1,code: "department", name: "Bộ Phận / Phòng ban"},
-            {id: 2,code: "NAT", name: "Quốc gia"},
-            {id: 3,code: "CITY", name: "Thành phố"},
-            {id: 4,code: "DIST", name: "Quận Huyện"},
-        ];
+    getCategories = () => {
+        CategoryServices.getCategories()
+            .then(response => {
+                this.setState({ categories: response.data, originCategories: response.data, loading: false });
+            }, error => {
+                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập dữ liệu danh mục");
+                this.setState({ loading: false });
+            })
+    }
 
-        if(name)
+    onSearchTextChange = (e) => {
+        const value = e.target.value;
+        const {originCategories} = this.state;
+        if(!value || value.trim() ==='')
         {
-            const filtered = data.filter(x => x.name.toLowerCase().includes(name.toLowerCase()));
-            const result = Object.assign([],filtered);
-            this.setState({data: result});
+            this.setState({categories: originCategories });
             return;
         }
-
-        this.setState({data: data});
+        this.setState({loading: true}, this.onDebounceSearch(value));
     }
 
-    onSearchTextChange =(e) => {
-        const value = e.target.value;
-        this.setState({name: value});
-        this.getCategories(value);
+    onDebounceSearch =debounce((name) => this.SearchCategories(name), 1000);
+
+    SearchCategories =(name) => {
+        const {originCategories} = this.state;
+        const filteredCategories = originCategories.filter(x => x.id.toLowerCase().trim().includes(name.toLowerCase().trim()) 
+                                                             || x.name.toLowerCase().trim().includes(name.toLowerCase().trim()));
+        this.setState({loading: false, categories: filteredCategories});
     }
-    
-    onClickCategory=(code) => {
-        const path = `${AppRoute.CONFIG}${code}`;
+
+    onClickCategory = (code) => {
+        const path = AppRoute.CATEGORY_DETAIL.path.replace(":id", code);
         this.props.history.push(path);
     }
 
     render = () => {
-        const {data} = this.state;
+        const { loading, categories } = this.state;
         return (
             <Container>
                 <Card>
@@ -57,24 +70,31 @@ export class CategoryListing extends React.Component {
                             <input type="text" onChange={this.onSearchTextChange} className="form-control" placeholder="Tìm kiếm danh mục..."></input>
                         </div>
                     </Card.Header>
-                    <Card.Body>
-                        <ListGroup>
-                            {data && data.length >0 && data.map((item, index) => {
-                                return (
-                                    <ListGroup.Item onClick={() =>this.onClickCategory(item.code)} className="category-link">
-                                        <div className="d-flex">
-                                            <span>{item.name}</span>
-                                            <FontAwesomeIcon className="ml-auto" icon={faAngleRight} color="grey"/>
-                                        </div>
+                    <Card.Body className="category-container">
+                        {loading &&
+                            <div className="w-100 d-flex justify-content-center">
+                                <Loading show={true} />
+                            </div>
+                        }
+                        {!loading &&
+                            <ListGroup>
+                                {categories && categories.length > 0 && categories.map((item, index) => {
+                                    return (
+                                        <ListGroup.Item onClick={() => this.onClickCategory(item.id)} className="category-link">
+                                            <div className="d-flex">
+                                                <span><i>{item.id}</i> - <b>{item.name}</b></span>
+                                                <FontAwesomeIcon className="ml-auto" icon={faAngleRight} color="grey" />
+                                            </div>
+                                        </ListGroup.Item>
+                                    )
+                                })}
+                                {
+                                    (!categories || categories.length === 0) && <ListGroup.Item>
+                                        Không có dữ liệu.
                                     </ListGroup.Item>
-                                )
-                            })}
-                            {
-                                (!data || data.length ===0) && <ListGroup.Item>
-                                    Không có dữ liệu.
-                                </ListGroup.Item>
-                            }
-                        </ListGroup>
+                                }
+                            </ListGroup>
+                        }
                     </Card.Body>
                 </Card>
             </Container>

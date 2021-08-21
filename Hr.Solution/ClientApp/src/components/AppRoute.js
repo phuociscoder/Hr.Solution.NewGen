@@ -13,6 +13,8 @@ export class AppRoute {
     static CONFIG = "/config/"
     static CATEGORY_LIST = { path: "/category", name: "THIẾT LẬP DANH MỤC", parent: [this.HOME] };
 
+    static CATEGORY_DETAIL ={path: "/category/:id", name: '', parent: [this.HOME, this.CATEGORY_LIST]}
+
     static CONFIG_DEPARTMENT = { path: `${this.CONFIG}department`, name: "THIẾT LẬP PHÒNG BAN/BỘ PHẬN", parent: [this.HOME, this.CATEGORY_LIST] }; // /config/deparment
 
     //admin
@@ -29,6 +31,7 @@ export class AppRoute {
     this.CONFIG_DEPARTMENT,
     this.ADMIN_ACOUNT,
     this.ADMIN_SYSTEM_ROLE,
-    this.ADMIN_DATA_ROLE
+    this.ADMIN_DATA_ROLE,
+    this.CATEGORY_DETAIL
     ];
 }

@@ -30,6 +30,14 @@ namespace Hr.Solution.Core.Constants
         public static string SP_DATA_ROLE_REMOVE_DEPARTMENTS = "spSysDomain_RemoveAllDomainDepartments";
         public static string SP_DATA_ROLE_UPDATE_DEPARMENT = "spSysDomain_UpdateDomainDepartments";
 
+        //Category
+        public static string SP_CATEGORY_GET_LIST = "sysCategory_GetCategory";
+        public static string SP_CATEGORY_GET_BY_ID = "spCategory_GetById";
+        public static string SP_CATEGORY_GET_ITEMS = "spCategory_GetItems";
+        public static string SP_CATEGORY_ADD_ITEM = "spCategory_AddItem";
+        public static string SP_CATEGORY_UPDATE_ITEM = "spCategory_UpdateItem";
+        public static string SP_CATEGORY_DELETE_ITEM = "spCategory_DeleteItem";
+
         //User
         public static string SP_USER_GET = "spUser_GetByName";
 

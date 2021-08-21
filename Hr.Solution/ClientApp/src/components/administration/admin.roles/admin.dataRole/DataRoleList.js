@@ -108,8 +108,6 @@ export class DataRoleList extends React.Component {
 
     processAddRole = () => {
         const { groupModel } = this.state;
-        debugger;
-        const currentUser = AuthenticationManager.UserName();
         AdminDataRoleServices.Create(Object.assign({}, { ...groupModel, createdBy: AuthenticationManager.UserName() }))
             .then(result => {
                 this.onLoadRoles();

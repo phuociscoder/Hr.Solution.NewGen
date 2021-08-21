@@ -11,7 +11,9 @@ import { CategoryListing } from './components/administration/administration.cate
 import { DepartmentConfig } from './components/administration/administration.category/department/department.config';
 import { AppRoute } from './components/AppRoute';
 import AuthorizationComponent from './components/AuthorizationComponent';
+import WrapperCategoryDetail from './components/administration/administration.category/WrapperCategoryDetail';
 import { NotFound404 } from './components/NotFound404';
+
 
 
 import { Switch } from 'react-router-dom';
@@ -20,6 +22,7 @@ import { MaintainPage } from './components/Maintaince';
 import { AccountListing } from './components/administration/admin.account';
 import { SystemRoleManagement } from './components/administration/admin.roles/admin.sysRole';
 import { DataRoleManagement } from './components/administration/admin.roles/admin.dataRole';
+import { CategoryDetail } from './components/administration/administration.category/Category.detail';
 require('./custom.css');
 
 export default class App extends Component {
@@ -49,6 +52,7 @@ export default class App extends Component {
               <Route exact path={[AppRoute.EMPLOYEE_CREATE.path]} component={EmployeeCreate} />
               <Route exact path={[AppRoute.EMPLOYEE_CONTRACT.path]} component={EmployeeContract} />
               <Route exact path={[AppRoute.CATEGORY_LIST.path]} component={AuthorizationComponent(CategoryListing)} />
+              <Route exact path={[AppRoute.CATEGORY_DETAIL.path]} component={WrapperCategoryDetail(CategoryDetail)}/>
               <Route exact path={[AppRoute.CONFIG_DEPARTMENT.path]} component={AuthorizationComponent(DepartmentConfig)} />
 
               <Route exact path={[AppRoute.ADMIN_ACOUNT.path]} component={AuthorizationComponent(AccountListing)} />

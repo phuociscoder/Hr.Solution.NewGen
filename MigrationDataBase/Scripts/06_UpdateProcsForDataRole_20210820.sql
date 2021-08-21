@@ -43,3 +43,6 @@ BEGIN
 	INSERT INTO SYS_DataDomainDetails (DDID, DepartmentId, CreatedBy, CreatedOn)
 	VALUES(@domainId, @departmentId, 'admin', GETDATE())
 END
+GO
+
+
