@@ -50,7 +50,7 @@ export class DataRoleList extends React.Component {
         AdminDataRoleServices.GetAllRolesByName({ freeText: name ?? '' })
             .then(result => {
                 if (result.data && result.data.length > 0) {
-                    this.setState({ roles: result.data });
+                    this.setState({ roles: result.data }, this.props.onRefreshed());
                     return;
                 }
                 this.setState({ roles: [] });

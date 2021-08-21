@@ -113,7 +113,7 @@ export class CategoryCommonDetailItem extends React.Component {
                             </label>
                             <div className="w-100 d-flex justify-content-end mt-3">
                                 {mode !== Mode.VIEW && <button className="btn btn-primary" onClick={() => this.setState({showModalProcessConfirm: true})}><FontAwesomeIcon icon={faCheck} /> <span> Lưu thay đổi</span></button>}
-                                {mode === Mode.EDIT && <button className="btn btn-danger ml-2"><FontAwesomeIcon icon={faTrash} /><span> Xóa</span></button>}
+                                {mode === Mode.EDIT && <button className="btn btn-danger ml-2" onClick={()=> this.setState({showModalRemoveComfirm: true})}><FontAwesomeIcon icon={faTrash} /><span> Xóa</span></button>}
                                 {mode !== Mode.VIEW && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span> Hủy bỏ</span></button>}
 
                             </div>
@@ -122,7 +122,26 @@ export class CategoryCommonDetailItem extends React.Component {
                 </Card>
                 {this.generateCancelModalConfirm()}
                 {this.generateProcessModalConfirm()}
+                {this.generateRemoveModalConfirm()}
             </>
+        )
+    }
+
+    generateRemoveModalConfirm =() => {
+        const {showModalRemoveComfirm} = this.state;
+        return (
+            <Modal show={showModalRemoveComfirm} backdrop="static" centered>
+                <Modal.Header>
+                    XÁC NHẬN XÓA
+                </Modal.Header>
+                <Modal.Body>
+                    Chắc chắn xóa chỉ mục khỏi danh mục ?
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-primary" onClick={this.onProcessRemoveConfirm}><FontAwesomeIcon icon={faCheck}/> <span>Đồng ý</span></button>
+                    <button className="btn btn-danger" onClick={() => this.setState({showModalRemoveComfirm: false})}><FontAwesomeIcon icon={faTimes}/> <span>Hủy bỏ</span></button>
+                </Modal.Footer>
+            </Modal>
         )
     }
 
@@ -163,6 +182,19 @@ export class CategoryCommonDetailItem extends React.Component {
         )
     }
 
+    onProcessRemoveConfirm =() => {
+        const {model} = this.state;
+        CategoryServices.DeleteCategoryItem(model.id)
+        .then(response => {
+            ShowNotification(NotificationType.SUCCESS, "Xóa chỉ mục khỏi danh mục thành công");
+            this.setState({showModalRemoveComfirm: false, model: this.resetModel(), editModel: null, mode: Mode.VIEW}, this.onRefresh(true));
+        }, error => {
+            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể xóa chỉ mục khỏi danh mục");
+            this.setState({showModalRemoveComfirm: false});
+        })
+
+    }
+
     onProcessConfirm =() => {
         const {model, mode, category} = this.state;
         if(mode === Mode.CREATE)
@@ -172,7 +204,7 @@ export class CategoryCommonDetailItem extends React.Component {
             .then(response => {
                 const newModel = response.data;
                 ShowNotification(NotificationType.SUCCESS, "Thêm chỉ mục vào danh sách thành công");
-                this.setState({mode: Mode.EDIT, model: newModel, editModel: newModel, showModalProcessConfirm: false}, this.onRefesh(true));
+                this.setState({ model: this.resetModel(), showModalProcessConfirm: false}, this.onRefresh(true));
             }, error => {
                 this.setState({showModalProcessConfirm: false});
                 ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thêm chỉ mục vào danh sách");
@@ -184,7 +216,7 @@ export class CategoryCommonDetailItem extends React.Component {
             .then(response =>{
                 const editModel = response.data;
                 ShowNotification(NotificationType.SUCCESS, "Cập nhật chỉ mục thành công");
-                this.setState({model: editModel, editModel: editModel, showModalProcessConfirm: false}, this.onRefesh(true));
+                this.setState({model: editModel, editModel: editModel, showModalProcessConfirm: false}, this.onRefresh(true));
             }, error=> {
                 this.setState({showModalProcessConfirm: false});
                 ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể cập nhật chỉ mục ");
@@ -192,7 +224,7 @@ export class CategoryCommonDetailItem extends React.Component {
         }
     }
 
-    onRefesh =(value) => {
+    onRefresh =(value) => {
         const {onRefresh} = this.props;
         if(onRefresh) onRefresh(true);
         

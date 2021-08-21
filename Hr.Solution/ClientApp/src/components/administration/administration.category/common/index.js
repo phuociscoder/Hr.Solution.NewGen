@@ -29,8 +29,11 @@ export class CategoryCommonDetail extends React.Component{
         return true;
     }
 
-    onRefesh =(value) => {
-        this.setState({refesh: value});
+    onRefresh =(value) => {
+        this.setState({refresh: value});
+    }
+    onRefreshed =()=> {
+        this.setState({refresh: false});
     }
 
     onCategoryItemChange =(item) => {
@@ -38,14 +41,14 @@ export class CategoryCommonDetail extends React.Component{
     }
 
     render =() => {
-        const {category, refesh, selectedItem} = this.state;
+        const {category, refresh, selectedItem} = this.state;
         return (
             <div className="d-flex w-100 h-100">
             <div className="w-20 h-100">
-                <CategoryCommonList onChange={this.onCategoryItemChange} category={category}/>
+                <CategoryCommonList onRefreshed={this.onRefreshed} refresh={refresh} onChange={this.onCategoryItemChange} category={category}/>
             </div>
             <div className="flex-fill ml-2 h-100">
-               <CategoryCommonDetailItem category={category} onRefesh={this.onRefesh} model={selectedItem} />
+               <CategoryCommonDetailItem category={category} onRefresh={this.onRefresh} model={selectedItem} />
             </div>
             <ReactTooltip />
         </div>

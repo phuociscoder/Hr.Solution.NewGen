@@ -28,6 +28,6 @@ export class CategoryServices {
 
     static DeleteCategoryItem =(itemId) => {
         const currentUser = AuthenticationManager.UserName();
-        return RestClient.SendDeleteRequest(`${this.baseCategoryItem}/${itemId}`, {deletedBy: currentUser});
+        return RestClient.SendPutRequest(`${this.baseCategoryItem}/delete/${itemId}`, {deletedBy: currentUser});
     }
 }

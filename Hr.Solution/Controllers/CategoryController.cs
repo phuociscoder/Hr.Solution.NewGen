@@ -61,11 +61,12 @@ namespace Hr.Solution.Application.Controllers
             return Ok(result);
         }
 
-        [HttpDelete, Route("item/{id}")]
+        [HttpPut, Route("item/delete/{id}")]
         [Authorize]
-        public async Task<ActionResult> DeleteCategoryItem(int id, [FromBody] string deletedBy)
+        public async Task<ActionResult> DeleteCategoryItem(int id, [FromBody]DeleteCategoryItemRequest request)
         {
-            var result = await categoryServices.DeleteCategoryItem(new DeleteCategoryItemRequest { Id = id, DeletedBy = deletedBy });
+            request.Id = id;
+            var result = await categoryServices.DeleteCategoryItem(request);
             return Ok(result);
         }
     }

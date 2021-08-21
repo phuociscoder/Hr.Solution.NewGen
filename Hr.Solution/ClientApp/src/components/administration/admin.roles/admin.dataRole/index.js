@@ -49,13 +49,16 @@ export class DataRoleManagement extends React.Component {
             this.setState({reload: true});
         }
     }
+    onRefreshed =() => {
+        this.setState({reload: false});
+    }
 
     render = () => {
         const { tabSelect, selectedRoleId, reload} = this.state;
         return (
             <div className="d-flex w-100 h-100">
                 <div className="w-20 h-100">
-                    <DataRoleList reload={reload} onChange={this.onRoleChange} />
+                    <DataRoleList reload={reload} onRefreshed={this.onRefreshed} onChange={this.onRoleChange} />
                 </div>
                 <div className="flex-fill ml-2 h-100">
                     <Card className="h-100">
