@@ -1,8 +1,8 @@
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faKey, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Modal, NavDropdown } from "react-bootstrap";
-import { Mode, PasswordType } from "./Constant";
+import { DefaultPassword, Mode, PasswordType } from "./Constant";
 import { ImageUploader } from "../../Common/ImageUploader";
 import { CustomDatePicker } from "../../Common/DatePicker";
 import axios from "axios";
@@ -14,39 +14,34 @@ export class AddEditAccountModal extends React.Component {
         this.state = {
             showModal: false,
             mode: Mode.CREATE,
-            passwordType : PasswordType.Default,
+            passwordType: PasswordType.Default,
             password: null,
             passwordConfirm: null,
-            model: {
-               code: null,
-               userName: null,
-               fullName: null,
-               email: null,
-               validDate: null,
-               isAdmin: false,
-               isNeverLock: false,
-               isDomain: false,
-               isLock: false,
-               isActive: true,
-               password: 'Hr@123456',
-               lockAfter: 3,
-               avatar: null
-            }
+            model: this.initModel
         }
     }
 
+    initModel = {
+        code: null,
+        userName: null,
+        fullName: null,
+        email: null,
+        validDate: null,
+        isAdmin: false,
+        isNeverLock: false,
+        isDomain: false,
+        isLock: false,
+        isActive: true,
+        password: DefaultPassword.value,
+        lockAfter: 3,
+        avatar: null
+    }
+
     componentDidMount = () => {
-        this.testAPI();
         const { showModal } = this.props;
         if (showModal) {
             this.setState({ showModal });
         }
-    }
-
-    testAPI =() => {
-        axios.get("/api/testconnect").then(result =>{
-            console.log(result);
-        }, error => {});
     }
 
     onHideModal = () => {
@@ -54,61 +49,91 @@ export class AddEditAccountModal extends React.Component {
         this.setState({ showModal: false, model: {} }, onCancelProcess());
     }
 
-    onPasswordTypeChange =(type) => {
-        if(!isNaN(type))
-        {
-            this.setState({passwordType: type});
+    onPasswordTypeChange = (type) => {
+        if (!isNaN(type)) {
+            this.setState({ passwordType: type });
         }
     }
 
-    onAvatarChange =(image) => {
-        const {model} = this.state;
-        const newModel = Object.assign({},{...model, avatar: image});
-        this.setState({model: newModel});
+    onAvatarChange = (image) => {
+        const { model } = this.state;
+        const newModel = Object.assign({}, { ...model, avatar: image });
+        this.setState({ model: newModel });
     }
 
-    onInputChange =(e) => {
+    onInputChange = (e) => {
         const fieldName = e.target.getAttribute("fieldname");
         const value = e.target.value;
-        const newModel = Object.assign({}, {...this.state.model, [fieldName]: value});
-        this.setState({model: newModel});
+        const newModel = Object.assign({}, { ...this.state.model, [fieldName]: value });
+        this.setState({ model: newModel });
     }
 
-    onCheckboxChange =(e) => {
+    onCheckboxChange = (e) => {
         const fieldName = e.target.getAttribute("fieldname");
         const value = e.target.checked;
-        const newModel = Object.assign({}, {...this.state.model, [fieldName]: value});
-        this.setState({model: newModel});
+        const newModel = Object.assign({}, { ...this.state.model, [fieldName]: value });
+        this.setState({ model: newModel });
     }
 
-    onValidDateChange =(value) => {
+    onValidDateChange = (value) => {
+        const { model } = this.state;
+        const newModel = Object.assign({}, { ...model, validDate: value });
+        this.setState({ model: newModel });
+    }
+
+    onProcessAccount = () => {
+        const password = this.getPassword();
+        if (!password) {
+            let errors = "Mật khẩu không trùng khớp";
+            this.setState({ errorMessages: errors });
+            return;
+        }
         const {model} = this.state;
-        const newModel = Object.assign({}, {...model, validDate: value});
-        this.setState({model: newModel});
-    }
-
-    onProcessAccount =() => {
-        const {onProcessConfirm} = this.props;
-        onProcessConfirm(this.state.mode, this.state.model);
+        const newModel = Object.assign({}, {...model, password: password});
+        const { onProcessConfirm } = this.props;
+        this.setState({model: newModel, errorMessages: null}, onProcessConfirm(this.state.mode, newModel));
     }
 
     shouldComponentUpdate = (nextProps) => {
         if (this.props.showModal != nextProps.showModal) {
-            this.setState({ showModal: nextProps.showModal});
+            this.setState({ showModal: nextProps.showModal });
         }
 
         if (this.props.mode != nextProps.mode) {
-            if(nextProps.mode === Mode.EDIT)
-            {
-                this.setState({mode: nextProps.mode , model: nextProps.model});
-            }  
+            this.setState({ mode: nextProps.mode });
+        }
+
+        if (this.props.model != nextProps.model) {
+            this.setState({ model: Object.keys(nextProps.model).length > 0 ? nextProps.model : this.initModel });
         }
         return true;
     }
-   
+
+    onPasswordCustomChange = (e) => {
+        const value = e.target.value;
+        this.setState({ cPassword: value });
+    }
+
+    onPassWordConfirmChange = (e) => {
+        const value = e.target.value;
+        this.setState({ confirmCPassword: value });
+    }
+
+    getPassword = () => {
+        const { cPassword, confirmCPassword, passwordType } = this.state;
+        if (passwordType === PasswordType.Default) {
+            return DefaultPassword.value;
+        }
+
+        if (cPassword === confirmCPassword) {
+            return cPassword;
+        }
+        return null;
+    }
+
     render = () => {
-        const { showModal, mode, passwordType, customPassword, passwordConfirm } = this.state;
-        const {code, userName, fullName, email, validDate, isActive, isAdmin, isDomain, isLock, isNeverLock, password, lockCount, avatar} = this.state.model;
+        const { showModal, mode, passwordType, customPassword, passwordConfirm, errorMessages } = this.state;
+        const { code, userName, fullName, email, validDate, isActive, isAdmin, isDomain, isLock, isNeverLock, password, lockAfter, avatar } = this.state.model;
         return (
             <Modal size="lg" centered backdrop="static" show={showModal} onHide={this.onHideModal}>
                 <Modal.Header>
@@ -119,11 +144,11 @@ export class AddEditAccountModal extends React.Component {
                         <div className="w-100 d-flex">
                             <div className="w-50 d-flex flex-column">
                                 <label>Mã tài khoản:
-                                    <input value={code} fieldName="code" className="form-control" placeholder="Mã tài khoản" onChange={this.onInputChange}></input>
+                                    <input disabled={mode === Mode.EDIT} value={code} fieldName="code" className="form-control" placeholder="Mã tài khoản" onChange={this.onInputChange}></input>
                                 </label>
 
                                 <label>Tài khoản đăng nhập:
-                                    <input value={userName} fieldName="userName" className="form-control" placeholder="Tài khoản" onChange={this.onInputChange}></input>
+                                    <input value={userName} disabled={mode === Mode.EDIT} fieldName="userName" className="form-control" placeholder="Tài khoản" onChange={this.onInputChange}></input>
                                 </label>
                                 <label>Tên hiển thị:
                                     <input value={fullName} fieldName="fullName" className="form-control" placeholder="Tên hiển thị" onChange={this.onInputChange}></input>
@@ -140,40 +165,47 @@ export class AddEditAccountModal extends React.Component {
                                     <input value={email} fieldName="email" className="form-control" placeholder="Email" onChange={this.onInputChange}></input>
                                 </label>
                                 <label> Ngày hiệu lực:
-                                    <CustomDatePicker value={validDate} onDateChange={this.onValidDateChange}/>
+                                    <CustomDatePicker value={validDate} onDateChange={this.onValidDateChange} />
                                 </label>
-                                <NavDropdown.Divider/>
-                                <div className="d-flex">
-                                <label>
-                                    <input type="radio" name="passType" checked={passwordType === PasswordType.Default} onChange={() =>this.onPasswordTypeChange(PasswordType.Default)} /> Mật khẩu mặc định
-                                </label>
-                                <label className="ml-auto">
-                                    <input type="radio" name="passType" checked={passwordType === PasswordType.Custom} onChange={() => this.onPasswordTypeChange(PasswordType.Custom)} /> Mật khẩu tùy chọn
-                                </label>
-                                </div>
-                                {
-                                    passwordType === PasswordType.Custom && 
+                                <NavDropdown.Divider />
+                                {mode === Mode.CREATE &&
                                     <>
-                                        <label>
-                                            Mật khẩu:
-                                            <input value={customPassword} fieldName="customPassword" className="form-control" placeholder="mật khẩu"/>
-                                        </label>
-                                        <label>
-                                            Xác nhận mật khẩu:
-                                            <input value={passwordConfirm} fieldName="passwordConfirm" className="form-control" placeholder="Xác nhận mật khẩu"/>
-                                        </label>
+                                        <div className="d-flex">
+                                            <label>
+                                                <input type="radio" name="passType" checked={passwordType === PasswordType.Default} onChange={() => this.onPasswordTypeChange(PasswordType.Default)} /> Mật khẩu mặc định
+                                            </label>
+                                            <label className="ml-auto">
+                                                <input type="radio" name="passType" checked={passwordType === PasswordType.Custom} onChange={() => this.onPasswordTypeChange(PasswordType.Custom)} /> Mật khẩu tùy chọn
+                                            </label>
+                                        </div>
+                                        {
+                                            passwordType === PasswordType.Custom &&
+                                            <>
+                                                <label>
+                                                    Mật khẩu:
+                                                    <input value={customPassword} type="password" fieldName="customPassword" className="form-control" placeholder="mật khẩu" onChange={this.onPasswordCustomChange} />
+                                                </label>
+                                                <label>
+                                                    Xác nhận mật khẩu:
+                                                    <input value={passwordConfirm} type="password" fieldName="passwordConfirm" className="form-control" placeholder="Xác nhận mật khẩu" onChange={this.onPassWordConfirmChange} />
+                                                </label>
+                                                {
+                                                    errorMessages && <span style={{ color: "red" }}><i>*{errorMessages}</i></span>
+                                                }
+                                            </>
+                                        }
                                     </>
                                 }
-                                 <label className="mt-4">
-                                  <span className="d-flex align-items-center">Khóa sau <input value={lockCount} onChange={this.onInputChange} fieldName="lockCount" className="form-control ml-1 mr-1" style={{width: '70px'}} type="number"/> lần đăng nhập thất bại.</span>
+                                <label className="mt-4">
+                                    <span className="d-flex align-items-center">Khóa sau <input value={lockAfter} onChange={this.onInputChange} fieldName="lockCount" className="form-control ml-1 mr-1" style={{ width: '70px' }} type="number" /> lần đăng nhập thất bại.</span>
                                 </label>
                             </div>
                             <div className="d-flex flex-column ml-5">
                                 <label>
-                                    <input type="checkbox" checked={isAdmin} fieldName="isAdmin" onChange={this.onCheckboxChange}/> Quản trị hệ thống
+                                    <input type="checkbox" checked={isAdmin} fieldName="isAdmin" onChange={this.onCheckboxChange} /> Quản trị hệ thống
                                 </label>
                                 <label>
-                                    <input type="checkbox" checked={isNeverLock} fieldName="isNeverLock" onChange={this.onCheckboxChange}/> Không bao giờ bị khóa
+                                    <input type="checkbox" checked={isNeverLock} fieldName="isNeverLock" onChange={this.onCheckboxChange} /> Không bao giờ bị khóa
                                 </label>
                                 <label>
                                     <input type="checkbox" checked={isDomain} fieldName="isDomain" onChange={this.onCheckboxChange} /> Là tài khoản Domain
@@ -189,6 +221,7 @@ export class AddEditAccountModal extends React.Component {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
+                    {mode === Mode.EDIT && <button className="btn btn-primary mr-auto"><FontAwesomeIcon icon={faKey} /><span> Đổi mật khẩu</span></button>}
                     <button className="btn btn-primary" onClick={this.onProcessAccount}><FontAwesomeIcon icon={faCheck} /> <span>Xác nhận</span></button>
                     <button className="btn btn-danger ml-2" onClick={this.onHideModal} ><FontAwesomeIcon icon={faTimes} /> <span>Hủy bỏ</span></button>
                 </Modal.Footer>

@@ -15,5 +15,6 @@ namespace Hr.Solution.Data.Responses
         public bool Edit { get; set; }
         public bool Import { get; set; }
         public bool Export { get; set; }
+        public bool Delete { get; set; }
     }
 }

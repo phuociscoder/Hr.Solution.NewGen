@@ -376,6 +376,10 @@ a , span, label, p {
   background-size: 200% auto; 
  }
 
+ .table td, .table thead th {
+  vertical-align: middle;
+ }
+
 
 .dropdown-menu {
   background-image: linear-gradient(to top, #48c6ef 0%, #6f86d6 100%);

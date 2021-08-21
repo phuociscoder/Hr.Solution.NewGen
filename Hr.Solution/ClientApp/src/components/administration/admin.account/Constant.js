@@ -7,3 +7,7 @@ export class PasswordType{
     static Default =1;
     static Custom =2;
 }
+
+export class DefaultPassword{
+    static value="Hr@123";
+}

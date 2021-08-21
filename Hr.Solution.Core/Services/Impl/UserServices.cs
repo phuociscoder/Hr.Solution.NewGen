@@ -18,9 +18,15 @@ namespace Hr.Solution.Core.Services.Impl
             this.repository = repository;
         }
 
+        public async Task<int> Delete(string id)
+        {
+            var result = await repository.ExecuteAsync<UserResponse>(ProcedureConstants.SP_USER_DELETE, new { userId = id });
+            return result;
+        }
+
         public async Task<List<UserResponse>> SearchUsers(UserRequest request)
         {
-            var result = await repository.QueryAsync<UserResponse>(ProcedureConstants.SP_USER_GET, request);
+            var result = await repository.QueryAsync<UserResponse>(ProcedureConstants.SP_USER_GET_LIST, request);
             return result.Data;
         }
     }

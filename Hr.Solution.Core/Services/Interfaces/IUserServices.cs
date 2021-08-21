@@ -11,5 +11,6 @@ namespace Hr.Solution.Core.Services.Interfaces
    public interface IUserServices
     {
         Task<List<UserResponse>> SearchUsers(UserRequest request);
+        Task<int> Delete(string id);
     }
 }

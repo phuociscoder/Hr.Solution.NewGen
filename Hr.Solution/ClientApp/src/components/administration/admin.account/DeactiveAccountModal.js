@@ -57,7 +57,7 @@ export class DeactiveAccountModal extends React.Component{
                     XÁC NHẬN
                 </Modal.Header>
                 <Modal.Body>
-                    Bạn chắc chắn muốn vô hiệu hóa tài khoản ?
+                    Bạn chắc chắn muốn vô xóa tài khoản ?
                 </Modal.Body>
                 <Modal.Footer>
                     <button onClick={this.onProcessConfirm} className="btn btn-primary"><FontAwesomeIcon icon={faCheck}/><span> Đồng ý</span></button>

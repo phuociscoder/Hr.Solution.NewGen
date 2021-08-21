@@ -1,5 +1,6 @@
 ﻿using Hr.Solution.Application.Authentication;
 using Hr.Solution.Application.Authentication.Models;
+using Hr.Solution.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -22,12 +23,14 @@ namespace Hr.Solution.Application.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration configuration;
+        private readonly IMediaServices mediaServices;
 
-        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMediaServices mediaServices)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.configuration = configuration;
+            this.mediaServices = mediaServices;
         }
 
         [HttpPost]
@@ -46,7 +49,7 @@ namespace Hr.Solution.Application.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "LOCKED", Message = "User has been locked" });
             }
 
-            if (!user.IsActive)
+            if (!user.IsActive || user.IsDeleted)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "DEACTIVATED", Message = "User has been Deactived" });
             }
@@ -87,19 +90,16 @@ namespace Hr.Solution.Application.Controllers
             return Unauthorized();
         }
 
-        [HttpPut]
-        [Route("/unlock/{id}")]
-        [Authorize]
-        public async Task<ActionResult> UnLock(string id)
-        {
-            var user = await userManager.FindByIdAsync(id);
-            if (user == null) return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "NOTFOUND", Message = "User Not Found" });
-            user.AccessFailedCount = 0;
-            user.IsLock = false;
-            var result = await userManager.UpdateAsync(user);
-            if (result.Succeeded) return Ok(user);
-            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "ERROR", Message = "Cannot unlock user" });
-        }
+        //private async void UnLock(string id)
+        //{
+        //    var user = await userManager.FindByIdAsync(id);
+        //    if (user == null) return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "NOTFOUND", Message = "User Not Found" });
+        //    user.AccessFailedCount = 0;
+        //    user.IsLock = false;
+        //    var result = await userManager.UpdateAsync(user);
+        //    if (result.Succeeded) return Ok(user);
+        //    return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "ERROR", Message = "Cannot unlock user" });
+        //}
 
         [HttpPost]
         [Route("")]
@@ -109,6 +109,11 @@ namespace Hr.Solution.Application.Controllers
             if (existsUser != null)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable, new Response { Status = "Error", Message = $"User create fail, user with email {model.Email} is existing !" });
+            }
+
+            if (!string.IsNullOrEmpty(model.Avatar))
+            {
+                model.Avatar = mediaServices.ResizeImage(model.Avatar);
             }
 
             ApplicationUser user = new ApplicationUser
@@ -145,8 +150,12 @@ namespace Hr.Solution.Application.Controllers
             var user = await userManager.FindByIdAsync(id);
             if (user == null) return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = $"Cannot found user." });
 
-            user.Avatar = model.Avatar ?? user.Avatar;
-            user.Email = model.Email ?? user.Email;
+            if (!string.IsNullOrEmpty(model.Avatar))
+            {
+                model.Avatar = mediaServices.ResizeImage(model.Avatar);
+            }
+            user.Avatar = model.Avatar;
+            user.Email = model.Email;
             user.IsActive = model.IsActive;
             user.IsAdmin = model.IsAdmin;
             user.IsDomain = model.IsDomain;
@@ -159,7 +168,7 @@ namespace Hr.Solution.Application.Controllers
             var result = await userManager.UpdateAsync(user);
             if (result.Succeeded) return Ok(user);
             return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Update User Fail" });
-        }
+        } 
 
         [HttpPut, Route("/changePassword/{id}")]
         [Authorize]

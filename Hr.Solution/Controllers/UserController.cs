@@ -23,5 +23,13 @@ namespace Hr.Solution.Application.Controllers
             var result = await userServices.SearchUsers(request);
             return Ok(result);
         }
+
+        [HttpPut, Route("delete/{id}")]
+        [Authorize]
+        public async Task<ActionResult> Delete(string id)
+        {
+            var result = await userServices.Delete(id);
+            return Ok(result);
+        }
     }
 }
