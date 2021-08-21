@@ -12,5 +12,6 @@ namespace Hr.Solution.Domain.Responses
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
         public bool HasMore { get; set; }
+        public int TotalItem { get; set; }
     }
 }
