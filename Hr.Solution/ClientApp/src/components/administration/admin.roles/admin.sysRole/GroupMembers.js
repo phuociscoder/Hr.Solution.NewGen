@@ -11,6 +11,7 @@ import { NotificationType } from "../../../Common/notification/Constants";
 import { MemberTable } from "./MemberTable";
 import _ from "lodash";
 import { Loading } from "../../../Common/loading/Loading";
+import { AuthenticationManager } from "../../../../AuthenticationManager";
 
 export class RoleGroupMembers extends React.Component {
     constructor(props) {
@@ -24,7 +25,11 @@ export class RoleGroupMembers extends React.Component {
         }
     }
     componentDidMount = () => {
-        const { selectedRoleId } = this.props;
+        const { selectedRoleId, prefix } = this.props;
+        if(prefix)
+        {
+            this.setState({prefix: prefix});
+        }
         this.setState({ selectedRoleId: selectedRoleId });
         if (selectedRoleId) {
             this.loadRoleUsers(selectedRoleId);
@@ -32,6 +37,10 @@ export class RoleGroupMembers extends React.Component {
     }
 
     shouldComponentUpdate = (nextProps) => {
+        if(this.props.prefix !== nextProps.prefix)
+        {
+            this.setState({prefix: nextProps.prefix});
+        }
         if (this.props.selectedRoleId !== nextProps.selectedRoleId) {
             this.loadRoleUsers(nextProps.selectedRoleId);
             this.setState({ selectedRoleId: nextProps.selectedRoleId });
@@ -131,16 +140,18 @@ export class RoleGroupMembers extends React.Component {
     onDeboundSearchRoleUser = debounce((value) => this.loadRoleUsers(this.state.selectedRoleId, value), 1000);
 
     render = () => {
-        const { users, selectedRoleId, onLoading } = this.state;
+        const { users, selectedRoleId, onLoading, prefix } = this.state;
         return (
             <div className="d-flex flex-column w-100 animate__animated animate__fadeIn">
                 <div className="w-100 d-flex justify-content-end">
                     <input disabled={selectedRoleId === null} className="w-40 form-control" onChange={this.onSearchRoleUserChange} placeholder="Tìm kiếm"></input>
+                    {AuthenticationManager.AllowEdit(prefix) && 
                     <button disabled={selectedRoleId === null} className="btn btn-primary ml-3" onClick={this.onShowAddUserModal}><FontAwesomeIcon icon={faUserPlus} /><span> Thêm tài khoản</span></button>
-                </div>
+                    }
+                    </div>
 
                 <div className="w-100 h-100 mt-2">
-                    <MemberTable data={users} onProcessRemoveUser={this.onProcessRemoveUser} onLoading={onLoading} />
+                    <MemberTable data={users} prefix={prefix} onProcessRemoveUser={this.onProcessRemoveUser} onLoading={onLoading} />
                 </div>
                 {this.generateAddUserModal()}
             </div>

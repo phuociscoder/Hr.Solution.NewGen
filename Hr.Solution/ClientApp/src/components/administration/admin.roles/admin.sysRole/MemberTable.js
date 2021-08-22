@@ -5,6 +5,7 @@ import { faCheck, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { NoDataTableContent } from "../../../Common/NoDataTableContent";
 import { Modal } from "react-bootstrap";
 import { Loading } from "../../../Common/loading/Loading";
+import { AuthenticationManager } from "../../../../AuthenticationManager";
 
 export class MemberTable extends BaseListing{
 
@@ -39,7 +40,7 @@ export class MemberTable extends BaseListing{
     }
 
     generateContent =() => {
-        const {data, onLoading} = this.state;
+        const {data, onLoading, prefix} = this.state;
         return(
             <>
                 <thead>
@@ -69,7 +70,8 @@ export class MemberTable extends BaseListing{
                                    <td>{item.email}</td>
                                    <td>{item.userName}</td>
                                    <td>
-                                       <button className="btn btn-danger" onClick={() => this.showRemoveUserModal(item.id)}><FontAwesomeIcon icon={faTrash}/></button>
+                                       {AuthenticationManager.AllowEdit(prefix) && <button className="btn btn-danger" onClick={() => this.showRemoveUserModal(item.id)}><FontAwesomeIcon icon={faTrash}/></button>}
+                                       
                                    </td>
                                </tr>
                            )

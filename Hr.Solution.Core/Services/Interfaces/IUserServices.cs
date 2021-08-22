@@ -12,5 +12,8 @@ namespace Hr.Solution.Core.Services.Interfaces
     {
         Task<List<UserResponse>> SearchUsers(UserRequest request);
         Task<int> Delete(string id);
+
+        Task<List<UserSysRoleResponse>> GetUserSystemRoles(string userId);
+        Task<List<UserFunctionPermissionResponse>> GetUserFunctionsPermissions(string userId);
     }
 }

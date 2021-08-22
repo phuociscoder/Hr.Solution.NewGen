@@ -19,6 +19,6 @@ namespace Hr.Solution.Application.Authentication
         public string Avatar { get; set; }
         public bool IsActive { get; set; }
         public bool IsLock { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } 
     }
 }

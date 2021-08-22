@@ -24,4 +24,25 @@ namespace Hr.Solution.Data.Responses
         public string SystemRoles { get; set; }
         public string DataDomains { get; set; }
     }
+
+    public class UserSysRoleResponse { 
+        public Guid Id { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public string SubName { get; set; }
+        public bool IsAdmin { get; set; }
+    }
+
+    public class UserFunctionPermissionResponse { 
+        public string FunctionId { get; set; }
+        public string FunctionType { get; set; }
+        public string ParentId { get; set; }
+        public bool Add { get; set; }
+        public bool Edit { get; set; }
+        public bool View { get; set; }
+        public bool Delete { get; set; }
+        public bool Import { get; set; }
+        public bool Export { get; set; }
+        public int Level { get; set; }
+    }
 }

@@ -9,6 +9,7 @@ import { DateTimeUltils } from "../../Utilities/DateTimeUltis";
 import {Loading} from '../../Common/loading/Loading';
 import { Image } from "react-bootstrap";
 import NoAvatar from '../../../assets/no-avatar.jpg';
+import { AuthenticationManager } from "../../../AuthenticationManager";
 
 export class AccountTable extends BaseListing {
     constructor(props) {
@@ -19,17 +20,26 @@ export class AccountTable extends BaseListing {
 
     }
     componentDidMount = () => {
-        const { data } = this.props;
+        const { data, prefix } = this.props;
         if (data) {
             this.setState({ data });
+        }
+        if(prefix)
+        {
+            this.setState({prefix: prefix});
         }
     }
 
     shouldComponentUpdate = (nextProps) => {
-        if (this.props.data != nextProps.data) {
+        if (this.props.data !== nextProps.data) {
             this.setState({ data: nextProps.data });
         }
-        if(this.props.loading != nextProps.loading)
+        if(this.props.prefix !== nextProps.prefix)
+        {
+            this.setState({prefix: nextProps.prefix});
+        }
+
+        if(this.props.loading !== nextProps.loading)
         {
             this.setState({loading: nextProps.loading});
         }
@@ -58,7 +68,7 @@ export class AccountTable extends BaseListing {
     }
 
     generateContent = () => {
-        const { data, loading } = this.state;
+        const { data, loading, prefix } = this.state;
         return (
             <>
                 <thead>
@@ -114,9 +124,9 @@ export class AccountTable extends BaseListing {
                                 </td>
                                 <td>{DateTimeUltils.toDateString(item.validDate)}</td>
                                 <td>
-                                    <div className="d-flex w-100 justify-content-center">
-                                        <button onClick={() => this.onShowEditModal(item)} className="btn btn-info"><FontAwesomeIcon icon={faEdit} /></button>
-                                        <button onClick={() => this.onShowDeactiveModal(item)} className="btn btn-danger ml-2"><FontAwesomeIcon icon={faTrash} /></button>
+                                    <div className="d-flex w-100 justify-content-center"> 
+                                    {AuthenticationManager.AllowEdit(prefix) &&<button onClick={() => this.onShowEditModal(item)} className="btn btn-info"><FontAwesomeIcon icon={faEdit} /></button>}
+                                    {AuthenticationManager.AllowDelete(prefix) &&<button onClick={() => this.onShowDeactiveModal(item)} className="btn btn-danger ml-2"><FontAwesomeIcon icon={faTrash} /></button>}
                                         <ReactTooltip />
                                     </div>
                                 </td>

@@ -24,7 +24,19 @@ export class RoleList extends React.Component {
     }
 
     componentDidMount = () => {
-        this.onLoadRoles(null);
+        const {prefix} = this.props;
+        if(prefix)
+        {
+        this.setState({prefix: prefix}, this.onLoadRoles(null));
+        }
+    }
+
+    shouldComponentUpdate =(nextProps) => {
+        if(this.props.prefix !== nextProps.prefix)
+        {
+            this.setState({prefix: nextProps.prefix},this.onLoadRoles());
+        }
+        return true;
     }
 
     defaultGroupModel = {
@@ -119,18 +131,18 @@ export class RoleList extends React.Component {
                 this.onHideModal();
                 ShowNotification(NotificationType.SUCCESS, "Chỉnh sửa phân quyền thành công!");
             }, error => {
-                debugger;
+                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể chỉnh sửa phân quyền");
             });
     }
 
     render = () => {
-        const { roles, selectedRole } = this.state;
+        const { roles, selectedRole, prefix } = this.state;
         return (
             <Card className="h-100 shadow">
                 <Card.Header>
                     <div className="d-flex">
                         <input onChange={this.onRoleSearchTextChange} className="form-control flex-fill" placeholder="Tìm kiếm"></input>
-                        <button data-tip="Thêm nhóm quyền mới" className="btn btn-primary ml-1" onClick={() =>this.onShowAddEditGroupModal()}><FontAwesomeIcon icon={faPlus} /></button>
+                        {AuthenticationManager.AllowAdd(prefix) &&<button data-tip="Thêm nhóm quyền mới" className="btn btn-primary ml-1" onClick={() =>this.onShowAddEditGroupModal()}><FontAwesomeIcon icon={faPlus} /></button>}
                     </div>
 
                 </Card.Header>
@@ -143,7 +155,7 @@ export class RoleList extends React.Component {
                                         <div className="d-flex">
                                             <span className="text-uppercase"><b>{item.roleName}</b>-{item.roleId}</span>
                                             <div className="ml-auto">
-                                                <FontAwesomeIcon className="mr-2" onClick={() => this.onShowAddEditGroupModal(item)} icon={faEdit} color="blue" />
+                                            {AuthenticationManager.AllowEdit(prefix) && <FontAwesomeIcon className="mr-2" onClick={() => this.onShowAddEditGroupModal(item)} icon={faEdit} color="blue" />}
                                                 {
                                                     item.lock && <FontAwesomeIcon icon={faLock} color="red" />
                                                 }

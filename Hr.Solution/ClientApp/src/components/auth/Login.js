@@ -35,7 +35,7 @@ export class Login extends React.Component {
         LoginServices.Login(userName, passWord).then(result => {
             if(result.data)
             {
-            const userInfo = Object.assign({}, {...result.data.userClaim, token: result.data.token});
+            const userInfo = Object.assign({}, {...result.data.userClaim, userSysRoles: result.data.userSysRoles, userPermissions: result.data.userPermissions, token: result.data.token});
             AuthenticationManager.SetUserInfo(userInfo);
             this.props.history.push("/");
             }

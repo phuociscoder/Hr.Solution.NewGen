@@ -8,6 +8,8 @@ import { DropdownButton } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { AppRoute } from "../../AppRoute";
 import { faBuffer } from "@fortawesome/free-brands-svg-icons";
+import { AuthenticationManager } from "../../../AuthenticationManager";
+import { Function } from "../Constants";
 
 export class OffcanvasNav extends React.Component {
     constructor(props) {
@@ -15,6 +17,10 @@ export class OffcanvasNav extends React.Component {
         this.state = {
             isToggle: false
         }
+    }
+
+    componentDidMount = () => {
+
     }
 
     toggleMenu = () => {
@@ -28,26 +34,24 @@ export class OffcanvasNav extends React.Component {
     renderCollapseMenu = () => {
         return (
             <>
-             <DropdownButton id="dropdown-basic-button" className="btn-item-collapse mt-3" drop="right" title={<FontAwesomeIcon icon={faBuffer} className="icon-toggle" size="2x" />}>
-                    <Link to={AppRoute.ADMIN_ACOUNT.path} className="dropdown-item">Quản Lý Tài Khoản</Link>
-                    <Link to={AppRoute.ADMIN_SYSTEM_ROLE.path} className="dropdown-item">Phân Quyền Chức Năng</Link>
-                    <Link to={AppRoute.ADMIN_DATA_ROLE.path} className="dropdown-item">Phân Quyền Vùng Dữ Liệu</Link>
-                    
-                </DropdownButton>
+                {AuthenticationManager.AllowView(Function.ADM000) &&
+                    <DropdownButton id="dropdown-basic-button" className="btn-item-collapse mt-3" drop="right" title={<FontAwesomeIcon icon={faBuffer} className="icon-toggle" size="2x" />}>
+                        {AuthenticationManager.AllowView(Function.ADM001) && <Link to={AppRoute.ADMIN_ACOUNT.path} className="dropdown-item">Quản Lý Tài Khoản</Link>}
+                        {AuthenticationManager.AllowView(Function.ADM002) && <Link to={AppRoute.ADMIN_SYSTEM_ROLE.path} className="dropdown-item">Phân Quyền Chức Năng</Link>}
+                        {AuthenticationManager.AllowView(Function.ADM003) && <Link to={AppRoute.ADMIN_DATA_ROLE.path} className="dropdown-item">Phân Quyền Vùng Dữ Liệu</Link>}
+                    </DropdownButton>
+                }
+                {AuthenticationManager.AllowView(Function.SYS000) &&
+                    <DropdownButton id="dropdown-basic-button" className="btn-item-collapse mt-3" drop="right" title={<FontAwesomeIcon className="icon-toggle" icon={faCogs} size="2x" />}>
+                        {AuthenticationManager.AllowView(Function.LS000) && <Link to={AppRoute.CATEGORY_LIST.path} className="dropdown-item">Quản Lý Danh Mục</Link>}
+                    </DropdownButton>
+                }
 
-                <DropdownButton id="dropdown-basic-button" className="btn-item-collapse mt-3" drop="right" title={<FontAwesomeIcon className="icon-toggle" icon={faCogs} size="2x" />}>
-                    <Link to={AppRoute.CATEGORY_LIST.path} className="dropdown-item">Quản Lý Danh Mục</Link>
-                    <Link to={AppRoute.MAINTAIN.path} className="dropdown-item">Danh Sách Người Dùng</Link>
-                    <Link to={AppRoute.MAINTAIN.path} className="dropdown-item">Danh Sách Phân Quyền</Link>
-                    <Link to={AppRoute.MAINTAIN.path} className="dropdown-item">Phân Quyền Hệ Thống</Link>
-                </DropdownButton>
-
-                <DropdownButton id="dropdown-basic-button" className="btn-item-collapse" drop="right" title={<FontAwesomeIcon className="icon-toggle" icon={faUsers} size="2x" />}>
-                    <Link to={AppRoute.EMPLOYEE_MANAGEMENT.path} className="dropdown-item">Danh Sách Nhân Viên</Link>
-                    <Link to={AppRoute.MAINTAIN.path} className="dropdown-item">Phân Ca Làm Việc</Link>
-                    <Link to={AppRoute.MAINTAIN.path} className="dropdown-item">Thời Gian Làm Việc</Link>
-                    <Link to={AppRoute.MAINTAIN.path} className="dropdown-item">Ngày Nghỉ /Ngày Lễ</Link>
-                </DropdownButton>
+                {AuthenticationManager.AllowView(Function.EMP000) &&
+                    <DropdownButton id="dropdown-basic-button" className="btn-item-collapse" drop="right" title={<FontAwesomeIcon className="icon-toggle" icon={faUsers} size="2x" />}>
+                        {AuthenticationManager.AllowView(Function.EMP001) && <Link to={AppRoute.EMPLOYEE_MANAGEMENT.path} className="dropdown-item">Quản Lý Nhân Viên</Link>}
+                    </DropdownButton>
+                }
                 <ReactTooltip />
             </>
         )
@@ -56,28 +60,28 @@ export class OffcanvasNav extends React.Component {
     renderExpandMenu = () => {
         return (
             <>
-                 <div className="w-100 d-flex flex-column mt-3 animate__animated animate__backInLeft">
-                    <span className="ml-2 white d-flex"><FontAwesomeIcon icon={faBuffer} color="white" /> <h5 className="ml-2"><b>THIẾT LẬP</b></h5></span>
-                    <Link to={AppRoute.ADMIN_ACOUNT.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Quản Lý Tài Khoản</Link>
-                    <Link to={AppRoute.ADMIN_SYSTEM_ROLE.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Phân Quyền Chức Năng</Link>
-                    <Link to={AppRoute.ADMIN_DATA_ROLE.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Phân Quyền Vùng Dữ Liệu</Link>
-                </div>
+                {AuthenticationManager.AllowView(Function.ADM000) &&
+                    <div className="w-100 d-flex flex-column mt-3 animate__animated animate__backInLeft">
+                        <span className="ml-2 white d-flex"><FontAwesomeIcon icon={faBuffer} color="white" /> <h5 className="ml-2"><b>HỆ THỐNG</b></h5></span>
+                        {AuthenticationManager.AllowView(Function.ADM001) && <Link to={AppRoute.ADMIN_ACOUNT.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Quản Lý Tài Khoản</Link>}
+                        {AuthenticationManager.AllowView(Function.ADM002) && <Link to={AppRoute.ADMIN_SYSTEM_ROLE.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Phân Quyền Chức Năng</Link>}
+                        {AuthenticationManager.AllowView(Function.ADM003) && <Link to={AppRoute.ADMIN_DATA_ROLE.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Phân Quyền Vùng Dữ Liệu</Link>}
+                    </div>
+                }
 
-                <div className="w-100 d-flex flex-column mt-3 animate__animated animate__backInLeft">
-                    <span className="ml-2 white d-flex"><FontAwesomeIcon icon={faCogs} color="white" /> <h5 className="ml-2"><b>THIẾT LẬP</b></h5></span>
-                    <Link to={AppRoute.CATEGORY_LIST.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Quản Lý Danh Mục</Link>
-                    <Link to={AppRoute.MAINTAIN.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Danh Sách Người Dùng</Link>
-                    <Link to={AppRoute.MAINTAIN.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Danh Sách Phân Quyền</Link>
-                    <Link to={AppRoute.MAINTAIN.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Phân Quyền Hệ Thống</Link>
-                </div>
+                {AuthenticationManager.AllowView(Function.SYS000) &&
+                    <div className="w-100 d-flex flex-column mt-3 animate__animated animate__backInLeft">
+                        <span className="ml-2 white d-flex"><FontAwesomeIcon icon={faCogs} color="white" /> <h5 className="ml-2"><b>THIẾT LẬP</b></h5></span>
+                        {AuthenticationManager.AllowView(Function.LS000) && <Link to={AppRoute.CATEGORY_LIST.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Quản Lý Danh Mục</Link>}
+                    </div>
+                }
+                {AuthenticationManager.AllowView(Function.EMP000) &&
+                    <div className="w-100 d-flex flex-column mt-3 animate__animated animate__backInLeft">
+                        <span className="ml-2 white d-flex"><FontAwesomeIcon icon={faUsers} color="white" /> <h5 className="ml-2"><b>NHÂN VIÊN</b></h5></span>
+                        {AuthenticationManager.AllowView(Function.EMP001) && <Link to={AppRoute.EMPLOYEE_MANAGEMENT.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Danh Sách Nhân Viên</Link>}
 
-                <div className="w-100 d-flex flex-column mt-3 animate__animated animate__backInLeft">
-                    <span className="ml-2 white d-flex"><FontAwesomeIcon icon={faUsers} color="white" /> <h5 className="ml-2"><b>NHÂN VIÊN</b></h5></span>
-                    <Link to={AppRoute.EMPLOYEE_MANAGEMENT.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Danh Sách Nhân Viên</Link>
-                    <Link to={AppRoute.MAINTAIN.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Phân Ca Làm Việc</Link>
-                    <Link to={AppRoute.MAINTAIN.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Thời Gian Làm Việc</Link>
-                    <Link to={AppRoute.MAINTAIN.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Ngày Nghỉ /Ngày Lễ</Link>
-                </div>
+                    </div>
+                }
             </>
         )
     }

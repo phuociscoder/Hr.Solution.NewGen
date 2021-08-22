@@ -46,7 +46,7 @@ export class AddEditAccountModal extends React.Component {
 
     onHideModal = () => {
         const { onCancelProcess } = this.props;
-        this.setState({ showModal: false, model: {} }, onCancelProcess());
+        this.setState({ showModal: false, model: this.initModel }, onCancelProcess());
     }
 
     onPasswordTypeChange = (type) => {

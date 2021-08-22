@@ -42,6 +42,8 @@ namespace Hr.Solution.Core.Constants
         public static string SP_USER_GET = "spUser_GetByName";
         public static string SP_USER_GET_LIST = "spUser_GetList";
         public static string SP_USER_DELETE = "spUser_Delete";
+        public static string SP_USER_GET_SYS_ROLES = "spUser_GetSysRoles";
+        public static string SP_USER_GET_SYS_FUNC_PERMISSIONS = "spUser_GetFuncPermissions";
 
 
         //department

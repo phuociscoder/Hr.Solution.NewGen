@@ -6,7 +6,7 @@ import noAvatar from '../assets/no-avatar.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCog, faEnvelopeOpenText, faIdCardAlt, faPowerOff, faTimes, faUnlockAlt } from '@fortawesome/free-solid-svg-icons'
 import { LanguageSelect } from './Common/language/LanguageSelect';
-import { AuthenInfo, AuthenticationManager } from '../AuthenticationManager';
+import { AuthenticationManager } from '../AuthenticationManager';
 
 
 export class NavMenu extends Component {
@@ -27,7 +27,25 @@ export class NavMenu extends Component {
   componentDidMount = () => {
     const userFullName = AuthenticationManager.FullName();
     const avatar = AuthenticationManager.Avatar();
-    this.setState({ fullName: userFullName, avatar: avatar });
+    const displaySysRole = this.getDisplaySysRole();
+    const displayAllSysRoleName = this.getDisplayRoleNames();
+    this.setState({ fullName: userFullName, avatar: avatar, displayRoleName : displaySysRole, roleTooltips: displayAllSysRoleName });
+  }
+
+  getDisplaySysRole =() => {
+    const sysRoles = AuthenticationManager.SysRoles();
+    if(!sysRoles) return null;
+
+    if(sysRoles.length === 1) return sysRoles[0].name;
+
+    return `${sysRoles[0].name} +${sysRoles.length -1}`;
+  }
+
+  getDisplayRoleNames =() => {
+    const sysRoles = AuthenticationManager.SysRoles();
+    if(!sysRoles) return null;
+
+    return sysRoles.map(x => x.name).toString();
   }
 
   toggleNavbar() {
@@ -64,7 +82,7 @@ export class NavMenu extends Component {
   }
 
   render() {
-    const { fullName, avatar } = this.state;
+    const { fullName, avatar, displayRoleName, roleTooltips } = this.state;
     return (
       <>
         <Navbar bg="dark" variant="dark" expand="lg" className="nav-top-bar">
@@ -82,7 +100,7 @@ export class NavMenu extends Component {
             <Form className="ml-auto animate__animated animate__fadeInRight" inline>
               <LanguageSelect />
               <Image className="ml-3" width={45} height={40} src={avatar || noAvatar} rounded />
-              <span className="ml-2 mr-2 text-uppercase" style={{ color: "whitesmoke" }}><b>{fullName}</b><br /><i>QUẢN TRỊ VIÊN</i></span>
+              <span data-tip={roleTooltips} className="ml-2 mr-2 text-uppercase" style={{ color: "whitesmoke" }}><b>{fullName}</b><br /><i>{displayRoleName}</i></span>
 
               <NavDropdown alignRight menu title={
                 <React.Fragment>

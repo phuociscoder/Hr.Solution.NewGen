@@ -11,13 +11,17 @@ export class BaseListing extends React.Component {
     }
 
     componentDidMount = () => {
-        const { data, onLoading } = this.props;
+        const { data, onLoading, prefix } = this.props;
         if (data) {
             this.setState({ data });
         }
         if(onLoading !== undefined)
         {
             this.setState({onLoading: onLoading});
+        }
+        if(prefix)
+        {
+            this.setState({prefix: prefix});
         }
     }
 
@@ -28,6 +32,10 @@ export class BaseListing extends React.Component {
         }
         if (this.props.data != nextProps.data) {
             this.setState({ data: nextProps.data });
+        }
+        if(this.props.prefix !== nextProps.prefix)
+        {
+            this.setState({prefix: nextProps.prefix});
         }
         return true;
     }
@@ -41,7 +49,7 @@ export class BaseListing extends React.Component {
                     <Table striped bordered hover size="lg" className="custom-table-data">
                         {this.generateContent()}
                     </Table>
-                    {
+                    {/* {
                         this.state.data && <Row style={{ width: '100%' }}>
                             <Col xs={3}>
                                 <Pagination style={{ width: '30%' }}>
@@ -72,7 +80,7 @@ export class BaseListing extends React.Component {
                                 </div>
                             </Col>
                         </Row>
-                    }
+                    } */}
                 </div>
             </>
         )

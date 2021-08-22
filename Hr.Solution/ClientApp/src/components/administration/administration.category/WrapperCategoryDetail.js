@@ -2,6 +2,7 @@ import React from "react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import { Breadcrumb } from "react-bootstrap";
 import { Link, Redirect } from "react-router-dom";
+import { AuthenticationManager } from "../../../AuthenticationManager";
 import { AppRoute } from "../../AppRoute";
 import { BreadcrumbCustom } from "../../BreadcrumbCustom";
 import { NotificationType } from "../../Common/notification/Constants";
@@ -21,6 +22,11 @@ const WrapperCategoryDetail = WrappedComponent => {
 
         componentDidMount = () => {
             const categoryId = this.props.match.params.id;
+            if(!AuthenticationManager.AllowView(categoryId)) 
+            {
+                this.props.history.push('/notFound');
+                return;
+            }
             this.getCategory(categoryId);
         }
 

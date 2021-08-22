@@ -5,6 +5,7 @@ import { ShowNotification } from "../../../Common/notification/Notification";
 import { AdminRoleServices } from "./admin.roles.services";
 import { FunctionType } from "./Constants";
 import { debounce } from "lodash";
+import { AuthenticationManager } from "../../../../AuthenticationManager";
 
 export class RoleGroupPermissions extends React.Component {
     constructor(props) {
@@ -17,7 +18,11 @@ export class RoleGroupPermissions extends React.Component {
     }
 
     componentDidMount = () => {
-        const { selectedRoleId, functions } = this.props;
+        const { selectedRoleId, functions, prefix } = this.props;
+        if(prefix)
+        {
+            this.setState({prefix: prefix});
+        }
         if (functions) {
             this.setState({ functions: functions });
         }
@@ -28,6 +33,10 @@ export class RoleGroupPermissions extends React.Component {
     }
 
     shouldComponentUpdate = (nextProps) => {
+        if(this.props.prefix !== nextProps.prefix)
+        {
+            this.setState({prefix: nextProps.prefix});
+        }
         if (this.props.functions !== nextProps.functions) {
             this.setState({ functions: nextProps.functions });
         }
@@ -76,7 +85,13 @@ export class RoleGroupPermissions extends React.Component {
     }
 
     onCheckboxChange = (e) => {
-        const { selectedRoleId, permissions } = this.state;
+        const { selectedRoleId, permissions, prefix } = this.state;
+        if(!AuthenticationManager.AllowEdit(prefix))
+        {
+            ShowNotification(NotificationType.ERROR, "Bạn không có quyền thay đổi thiết lập");
+            e.target.checked=false;
+            return;
+        }
         const fieldName = e.target.getAttribute("fieldname");
         const functionId = e.target.getAttribute("functionid");
         const value = e.target.checked;
@@ -157,7 +172,7 @@ export class RoleGroupPermissions extends React.Component {
     }
 
     render = () => {
-        const { permissions, notFoundPermission } = this.state;
+        const { permissions, notFoundPermission, prefix } = this.state;
         return (
             <div className="d-flex flex-column w-100 animate__animated animate__fadeIn">
                 <div className="w-100 d-flex justify-content-end mt-1">

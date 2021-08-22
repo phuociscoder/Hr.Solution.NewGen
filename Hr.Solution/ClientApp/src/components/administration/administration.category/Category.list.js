@@ -9,6 +9,7 @@ import { ShowNotification } from "../../Common/notification/Notification";
 import { CategoryServices } from "./Category.services";
 import './Category.css';
 import { debounce } from "lodash";
+import { AuthenticationManager } from "../../../AuthenticationManager";
 
 export class CategoryListing extends React.Component {
     constructor(props) {
@@ -28,7 +29,15 @@ export class CategoryListing extends React.Component {
     getCategories = () => {
         CategoryServices.getCategories()
             .then(response => {
-                this.setState({ categories: response.data, originCategories: response.data, loading: false });
+                let categories = [];
+                if (response.data) {
+                    response.data.forEach(item => {
+                        if (AuthenticationManager.AllowView(item.id)) {
+                            categories.push(item);
+                        }
+                    });
+                }
+                this.setState({ categories: categories, originCategories: categories, loading: false });
             }, error => {
                 ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập dữ liệu danh mục");
                 this.setState({ loading: false });
@@ -37,22 +46,21 @@ export class CategoryListing extends React.Component {
 
     onSearchTextChange = (e) => {
         const value = e.target.value;
-        const {originCategories} = this.state;
-        if(!value || value.trim() ==='')
-        {
-            this.setState({categories: originCategories });
+        const { originCategories } = this.state;
+        if (!value || value.trim() === '') {
+            this.setState({ categories: originCategories });
             return;
         }
-        this.setState({loading: true}, this.onDebounceSearch(value));
+        this.setState({ loading: true }, this.onDebounceSearch(value));
     }
 
-    onDebounceSearch =debounce((name) => this.SearchCategories(name), 1000);
+    onDebounceSearch = debounce((name) => this.SearchCategories(name), 1000);
 
-    SearchCategories =(name) => {
-        const {originCategories} = this.state;
-        const filteredCategories = originCategories.filter(x => x.id.toLowerCase().trim().includes(name.toLowerCase().trim()) 
-                                                             || x.name.toLowerCase().trim().includes(name.toLowerCase().trim()));
-        this.setState({loading: false, categories: filteredCategories});
+    SearchCategories = (name) => {
+        const { originCategories } = this.state;
+        const filteredCategories = originCategories.filter(x => x.id.toLowerCase().trim().includes(name.toLowerCase().trim())
+            || x.name.toLowerCase().trim().includes(name.toLowerCase().trim()));
+        this.setState({ loading: false, categories: filteredCategories });
     }
 
     onClickCategory = (code) => {

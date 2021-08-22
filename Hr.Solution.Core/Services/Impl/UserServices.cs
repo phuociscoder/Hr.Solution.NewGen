@@ -24,6 +24,37 @@ namespace Hr.Solution.Core.Services.Impl
             return result;
         }
 
+        public async Task<List<UserFunctionPermissionResponse>> GetUserFunctionsPermissions(string userId)
+        {
+            var response = await repository.QueryAsync<UserFunctionPermissionResponse>(ProcedureConstants.SP_USER_GET_SYS_FUNC_PERMISSIONS, new { userId = userId });
+            var permissions = response.Data;
+            var levels = permissions.OrderByDescending(x => x.Level).Select(x => x.Level).Distinct().ToList();
+            var results = new List<UserFunctionPermissionResponse>();
+            foreach (var level in levels)
+            {
+                var functions = permissions.Where(x => x.Level == level).ToList();
+                if (level == levels[0])
+                {
+                    results.AddRange(functions);
+                }
+                else
+                {
+                    functions.ForEach(func => {
+                       func.View = results.Any(x => x.ParentId == func.FunctionId && x.View == true);
+                        results.Add(func);
+                    });
+                }
+            }
+
+            return results;
+        }
+
+        public async Task<List<UserSysRoleResponse>> GetUserSystemRoles(string userId)
+        {
+            var results = await repository.QueryAsync<UserSysRoleResponse>(ProcedureConstants.SP_USER_GET_SYS_ROLES, new { userId = userId });
+            return results.Data;
+        }
+
         public async Task<List<UserResponse>> SearchUsers(UserRequest request)
         {
             var result = await repository.QueryAsync<UserResponse>(ProcedureConstants.SP_USER_GET_LIST, request);

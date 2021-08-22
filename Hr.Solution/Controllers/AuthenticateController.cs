@@ -24,13 +24,19 @@ namespace Hr.Solution.Application.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration configuration;
         private readonly IMediaServices mediaServices;
+        private readonly IUserServices userServices;
 
-        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMediaServices mediaServices)
+        public AuthenticateController(UserManager<ApplicationUser> userManager, 
+                                      RoleManager<IdentityRole> roleManager, 
+                                      IConfiguration configuration, 
+                                      IMediaServices mediaServices,
+                                      IUserServices userServices)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.configuration = configuration;
             this.mediaServices = mediaServices;
+            this.userServices = userServices;
         }
 
         [HttpPost]
@@ -54,10 +60,14 @@ namespace Hr.Solution.Application.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "DEACTIVATED", Message = "User has been Deactived" });
             }
 
+
             if (await userManager.CheckPasswordAsync(user, model.Password))
             {
                 await userManager.ResetAccessFailedCountAsync(user);
-               // var userRoles = await userManager.GetRolesAsync(user);
+                var userSysRoles = await userServices.GetUserSystemRoles(user.Id);
+                var userFunctionPermissions = await userServices.GetUserFunctionsPermissions(user.Id);
+
+
                 var authClaims = new List<Claim> {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
@@ -68,7 +78,7 @@ namespace Hr.Solution.Application.Controllers
                 var token = new JwtSecurityToken(
                             issuer: configuration["JWT:ValidIssuer"],
                             audience: configuration["JWT:ValidAudience"],
-                            expires: DateTime.Now.AddDays(10),
+                            expires: DateTime.Now.AddDays(1),
                             claims: authClaims,
                             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
@@ -77,7 +87,9 @@ namespace Hr.Solution.Application.Controllers
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo,
-                    userClaim = user
+                    userClaim = user,
+                    userSysRoles = userSysRoles,
+                    userPermissions = userFunctionPermissions
 
                 });
             }
@@ -89,17 +101,6 @@ namespace Hr.Solution.Application.Controllers
 
             return Unauthorized();
         }
-
-        //private async void UnLock(string id)
-        //{
-        //    var user = await userManager.FindByIdAsync(id);
-        //    if (user == null) return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "NOTFOUND", Message = "User Not Found" });
-        //    user.AccessFailedCount = 0;
-        //    user.IsLock = false;
-        //    var result = await userManager.UpdateAsync(user);
-        //    if (result.Succeeded) return Ok(user);
-        //    return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "ERROR", Message = "Cannot unlock user" });
-        //}
 
         [HttpPost]
         [Route("")]

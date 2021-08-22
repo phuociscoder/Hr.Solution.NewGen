@@ -1,10 +1,11 @@
 import React from "react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import { Redirect } from "react-router-dom";
+import { AuthenticationManager } from "../AuthenticationManager";
 import { AppRoute } from "./AppRoute";
 import { BreadcrumbCustom } from "./BreadcrumbCustom";
 
-const AuthorizationComponent = WrappedComponent => {
+const AuthorizationComponent = (WrappedComponent, FunctionPrefix) => {
     return class extends React.Component {
         constructor() {
             super();
@@ -15,6 +16,8 @@ const AuthorizationComponent = WrappedComponent => {
         }
 
         componentDidMount = () => {
+            if (!AuthenticationManager.IsAuthorized()) this.props.history.push('/login');
+            if (FunctionPrefix && !AuthenticationManager.AllowView(FunctionPrefix)) this.props.history.push('/notFound');
             this.setState({ path: window.location.pathname });
             this.getComponentName();
         }
@@ -38,7 +41,7 @@ const AuthorizationComponent = WrappedComponent => {
 
                     <ReactCSSTransitionGroup transitionName="example" transitionAppear={true}>
                         <div className="component-content d-flex flex-column w-100">
-                            {WrappedComponent ? <WrappedComponent {...this.props} /> : <Redirect to="/login" />}
+                            <WrappedComponent prefix={FunctionPrefix} {...this.props} />
                         </div>
                     </ReactCSSTransitionGroup>
                 </div>

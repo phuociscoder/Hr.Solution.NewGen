@@ -10,6 +10,8 @@ import { RoleList } from "./RoleList";
 import { RoleGroupMembers } from "./GroupMembers";
 import { RoleGroupPermissions } from "./GroupPermissions";
 import { AdminRoleServices } from "./admin.roles.services";
+import { ShowNotification } from "../../../Common/notification/Notification";
+import { NotificationType } from "../../../Common/notification/Constants";
 
 export class SystemRoleManagement extends React.Component {
     constructor(props) {
@@ -22,17 +24,20 @@ export class SystemRoleManagement extends React.Component {
 
     }
 
-    componentDidMount =() => {
-        this.loadSystemFunctions();
+    componentDidMount = () => {
+        const { prefix } = this.props;
+        if (prefix) {
+            this.setState({ prefix: prefix }, this.loadSystemFunctions());
+        }
     }
 
-    loadSystemFunctions =() => {
+    loadSystemFunctions = () => {
         AdminRoleServices.GetFunctions()
-        .then(response => {
-            this.setState({sysFunctions: response.data});
-        }, error => {
-
-        });
+            .then(response => {
+                this.setState({ sysFunctions: response.data });
+            }, error => {
+                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập danh sách phân quyền");
+            });
     }
 
     onChangeTab = (e) => {
@@ -44,16 +49,16 @@ export class SystemRoleManagement extends React.Component {
         this.setState({ tabSelect: TabType.ROLE });
     }
 
-    onRoleChange =(roleId) => {
-        this.setState({selectedRoleId: roleId});
+    onRoleChange = (roleId) => {
+        this.setState({ selectedRoleId: roleId });
     }
 
     render = () => {
-        const { tabSelect, selectedRoleId, sysFunctions} = this.state;
+        const { prefix, tabSelect, selectedRoleId, sysFunctions } = this.state;
         return (
             <div className="d-flex w-100 h-100">
                 <div className="w-20 h-100">
-                    <RoleList onChange={this.onRoleChange} />
+                    <RoleList prefix={prefix} onChange={this.onRoleChange} />
                 </div>
                 <div className="flex-fill ml-2 h-100">
                     <Card className="h-100">
@@ -69,8 +74,8 @@ export class SystemRoleManagement extends React.Component {
                         </Card.Header>
                         <Card.Body>
                             <div className="pt-2 pl-2 pr-2">
-                            {tabSelect === TabType.USER && <RoleGroupMembers selectedRoleId={selectedRoleId}/>}
-                            {tabSelect === TabType.ROLE && <RoleGroupPermissions selectedRoleId={selectedRoleId} functions={sysFunctions}/>}
+                                {tabSelect === TabType.USER && <RoleGroupMembers prefix={prefix} selectedRoleId={selectedRoleId} />}
+                                {tabSelect === TabType.ROLE && <RoleGroupPermissions prefix={prefix} selectedRoleId={selectedRoleId} functions={sysFunctions} />}
                             </div>
                         </Card.Body>
                     </Card>

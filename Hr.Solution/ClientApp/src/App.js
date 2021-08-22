@@ -23,6 +23,7 @@ import { AccountListing } from './components/administration/admin.account';
 import { SystemRoleManagement } from './components/administration/admin.roles/admin.sysRole';
 import { DataRoleManagement } from './components/administration/admin.roles/admin.dataRole';
 import { CategoryDetail } from './components/administration/administration.category/Category.detail';
+import { Function } from './components/Common/Constants';
 require('./custom.css');
 
 export default class App extends Component {
@@ -48,17 +49,17 @@ export default class App extends Component {
 
           <Layout>
             <Switch>
-              <Route exact path={[AppRoute.EMPLOYEE_MANAGEMENT.path]} component={AuthorizationComponent(EmployeeListing)} />
+              <Route exact path={[AppRoute.EMPLOYEE_MANAGEMENT.path]} component={AuthorizationComponent(EmployeeListing, Function.EMP000)} />
               <Route exact path={[AppRoute.EMPLOYEE_CREATE.path]} component={EmployeeCreate} />
               <Route exact path={[AppRoute.EMPLOYEE_CONTRACT.path]} component={EmployeeContract} />
-              <Route exact path={[AppRoute.CATEGORY_LIST.path]} component={AuthorizationComponent(CategoryListing)} />
+              <Route exact path={[AppRoute.CATEGORY_LIST.path]} component={AuthorizationComponent(CategoryListing, Function.LS000)} />
               <Route exact path={[AppRoute.CATEGORY_DETAIL.path]} component={WrapperCategoryDetail(CategoryDetail)}/>
               <Route exact path={[AppRoute.CONFIG_DEPARTMENT.path]} component={AuthorizationComponent(DepartmentConfig)} />
 
-              <Route exact path={[AppRoute.ADMIN_ACOUNT.path]} component={AuthorizationComponent(AccountListing)} />
-              <Route exact path={[AppRoute.ADMIN_SYSTEM_ROLE.path]} component={AuthorizationComponent(SystemRoleManagement)} />
-              <Route exact path={[AppRoute.ADMIN_DATA_ROLE.path]} component={AuthorizationComponent(DataRoleManagement)} />
-              <Route exact path={[AppRoute.HOME.path]} component={Home} />
+              <Route exact path={[AppRoute.ADMIN_ACOUNT.path]} component={AuthorizationComponent(AccountListing, Function.ADM001)} />
+              <Route exact path={[AppRoute.ADMIN_SYSTEM_ROLE.path]} component={AuthorizationComponent(SystemRoleManagement, Function.ADM002)} />
+              <Route exact path={[AppRoute.ADMIN_DATA_ROLE.path]} component={AuthorizationComponent(DataRoleManagement, Function.ADM003)} />
+              <Route exact path={[AppRoute.HOME.path]} component={AuthorizationComponent(Home)} />
               <Route component={NotFound404} />
             </Switch> 
           </Layout>
