@@ -75,7 +75,7 @@ export class CategoryCommonList extends React.Component {
     render = () => {
         const { categoryItems, loading, selectedItem } = this.state;
         return (
-            <Card className="h-100 shadow">
+            <Card className="h-100">
                 <Card.Header>
                     <input onChange={this.onSearchTextChange} className="form-control flex-fill" placeholder="Tìm kiếm"></input>
                 </Card.Header>

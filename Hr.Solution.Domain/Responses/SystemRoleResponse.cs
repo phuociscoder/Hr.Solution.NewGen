@@ -18,5 +18,6 @@ namespace Hr.Solution.Data.Responses
         public bool IsAdmin { get; set; }
         public string Note { get; set; }
         public bool IsEmpGroup { get; set; }
+        public int UserCount { get; set; }
     }
 }

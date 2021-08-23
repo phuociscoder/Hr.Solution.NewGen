@@ -1,7 +1,7 @@
 import React from "react";
 import { CategoryCommonDetail } from "./common";
 import { CategoryModule } from "./Constants";
-import { DepartmentConfig } from "./department/department.config";
+import { DepartmentConfig } from "./department";
 
 export class CategoryDetail extends React.Component{
     constructor(props)
@@ -17,6 +17,10 @@ export class CategoryDetail extends React.Component{
         {
             this.setState({category: nextProps.category});
         }
+        if(this.props.prefix !== nextProps.prefix)
+        {
+            this.setState({prefix: nextProps.prefix});
+        }
         return true;
     }
 
@@ -25,7 +29,7 @@ export class CategoryDetail extends React.Component{
         let result;
         switch (category.id) {
             case CategoryModule.Department:
-              result = <DepartmentConfig />;
+              result = <DepartmentConfig prefix={this.state.prefix} />;
                 break;
             default:
                result = <CategoryCommonDetail category={category} />;

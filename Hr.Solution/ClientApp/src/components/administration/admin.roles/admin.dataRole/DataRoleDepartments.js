@@ -1,7 +1,7 @@
 import React from "react";
 import { NotificationType } from "../../../Common/notification/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
-import { DepartmentList } from "../../admin.department";
+import { DepartmentList } from "../../admin.department/DepartmentList";
 import { AdminDataRoleServices } from "./admin.dataRoles.services";
 
 export class DataRoleDepartments extends React.Component{

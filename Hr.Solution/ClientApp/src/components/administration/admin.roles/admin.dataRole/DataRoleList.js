@@ -135,7 +135,7 @@ export class DataRoleList extends React.Component {
     render = () => {
         const { roles, selectedRole } = this.state;
         return (
-            <Card className="h-100 shadow">
+            <Card className="h-100">
                 <Card.Header>
                     <div className="d-flex">
                         <input onChange={this.onRoleSearchTextChange} className="form-control flex-fill" placeholder="Tìm kiếm"></input>

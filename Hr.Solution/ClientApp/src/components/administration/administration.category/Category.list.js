@@ -71,8 +71,8 @@ export class CategoryListing extends React.Component {
     render = () => {
         const { loading, categories } = this.state;
         return (
-            <Container>
-                <Card>
+            <Container className="h-100">
+                <Card className="h-100">
                     <Card.Header>
                         <div>
                             <input type="text" onChange={this.onSearchTextChange} className="form-control" placeholder="Tìm kiếm danh mục..."></input>

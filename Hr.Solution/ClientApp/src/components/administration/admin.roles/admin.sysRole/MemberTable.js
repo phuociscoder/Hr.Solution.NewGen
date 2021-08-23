@@ -3,9 +3,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { NoDataTableContent } from "../../../Common/NoDataTableContent";
-import { Modal } from "react-bootstrap";
+import { Image, Modal } from "react-bootstrap";
 import { Loading } from "../../../Common/loading/Loading";
 import { AuthenticationManager } from "../../../../AuthenticationManager";
+import {noAvatar} from '../../../../assets/no-avatar.jpg';
 
 export class MemberTable extends BaseListing{
 
@@ -45,7 +46,7 @@ export class MemberTable extends BaseListing{
             <>
                 <thead>
                     <tr>
-                        <th>Mã Tài Khoản</th>
+                        <th className="w-5">Mã Tài Khoản</th>
                         <th>Họ Tên</th>
                         <th>Email</th>
                         <th>Tên Đăng Nhập</th>
@@ -66,7 +67,7 @@ export class MemberTable extends BaseListing{
                            return (
                                <tr>
                                    <td>{item.userCode}</td>
-                                   <td>{item.fullName}</td>
+                                   <td><Image className="shadow mr-2" src={item.avatar ?? noAvatar} width={40} height={45}/> {item.fullName}</td>
                                    <td>{item.email}</td>
                                    <td>{item.userName}</td>
                                    <td>

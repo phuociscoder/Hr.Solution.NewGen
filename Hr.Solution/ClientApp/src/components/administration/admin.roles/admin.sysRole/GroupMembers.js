@@ -86,7 +86,7 @@ export class RoleGroupMembers extends React.Component {
 
     onProcessAddUser = (userId) => {
         const { selectedRoleId } = this.state;
-        AdminRoleServices.AddUser({ roleId: selectedRoleId, userId: userId, createdBy: 'PhuocNguyen' })
+        AdminRoleServices.AddUser({ roleId: selectedRoleId, userId: userId, createdBy: AuthenticationManager.UserName() })
             .then(response => {
                 if (!response.data) return;
                 const { users } = this.state;
@@ -96,7 +96,7 @@ export class RoleGroupMembers extends React.Component {
                     searchAddUsers = searchAddUsers.filter(x => !users.some(y => y.userId === x.id));
                     this.setState({ searchAddUsers: searchAddUsers });
                 }
-                this.setState({ users: users });
+                this.setState({ users: users }, this.props.onReloadSysRole());
                 ShowNotification(NotificationType.SUCCESS, "Thêm tài khoản vào phân quyền thành công !");
 
             }, error => {
@@ -115,7 +115,7 @@ export class RoleGroupMembers extends React.Component {
                 if (selectedIndex > -1) {
                     users.splice(selectedIndex, 1);
                 }
-                this.setState({ users: users });
+                this.setState({ users: users }, this.props.onReloadSysRole());
 
             }, error => {
                 ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! không thể xóa tài khoản");

@@ -20,9 +20,20 @@
 }
 
 .department-container{
-    height: 81vh;
-    overflow-y: auto;
+overflow-y: auto;
+height: 95%;
+}
 
+.department-selected{
+    background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%) !important;
+    color: whitesmoke;
+    text-shadow: 1px 1px 10px lightgrey;
+}
+
+.select-header{
+    background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+    color: whitesmoke;
+    text-shadow: 1px 1px 10px lightgrey;
 }
 
 .department:hover , .sub-deparment:hover, .company-container:hover{

@@ -1,4 +1,4 @@
-import { faCheck, faEdit, faLock, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faEdit, faLock, faPlus, faTimes, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Card, Modal } from "react-bootstrap";
@@ -24,10 +24,14 @@ export class RoleList extends React.Component {
     }
 
     componentDidMount = () => {
-        const {prefix} = this.props;
+        const {prefix, reload, reloaded} = this.props;
         if(prefix)
         {
         this.setState({prefix: prefix}, this.onLoadRoles(null));
+        }
+        if(reload)
+        {
+            this.onLoadRoles(this.state.searchText ?? '');
         }
     }
 
@@ -35,6 +39,10 @@ export class RoleList extends React.Component {
         if(this.props.prefix !== nextProps.prefix)
         {
             this.setState({prefix: nextProps.prefix},this.onLoadRoles());
+        }
+        if(nextProps.reload)
+        {
+            this.onLoadRoles(this.state.searchText ?? '');
         }
         return true;
     }
@@ -50,10 +58,11 @@ export class RoleList extends React.Component {
     }
 
     onLoadRoles = (name) => {
+        const {onReloaded} = this.props;
         AdminRoleServices.GetAllRolesByName({ name: name ?? '' })
             .then(result => {
                 if (result.data && result.data.length > 0) {
-                    this.setState({ roles: result.data });
+                    this.setState({ roles: result.data }, onReloaded());
                     return;
                 }
                 this.setState({ roles: [] });
@@ -65,8 +74,7 @@ export class RoleList extends React.Component {
 
     onRoleSearchTextChange = (e) => {
         const value = e.target.value;
-        this.searchRoles(value);
-
+        this.setState({searchText: value}, this.searchRoles(value));
     }
 
     onSelectRole = (id) => {
@@ -138,7 +146,7 @@ export class RoleList extends React.Component {
     render = () => {
         const { roles, selectedRole, prefix } = this.state;
         return (
-            <Card className="h-100 shadow">
+            <Card className="h-100">
                 <Card.Header>
                     <div className="d-flex">
                         <input onChange={this.onRoleSearchTextChange} className="form-control flex-fill" placeholder="Tìm kiếm"></input>
@@ -162,7 +170,7 @@ export class RoleList extends React.Component {
                                             </div>
                                         </div>
                                         <div className="d-flex">
-                                            <span><i>{item.roleSubName} (SL:{0})</i></span>
+                                            <span><i>{item.roleSubName} <FontAwesomeIcon className="ml-3 mr-1" icon={faUsers}/>:{item.userCount}</i></span>
                                             <span className="ml-auto mt-1"><i>{item.isAdmin ? 'Toàn quyền' : ''}</i></span>
                                         </div>
                                     </div>

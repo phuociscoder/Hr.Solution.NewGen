@@ -62,7 +62,7 @@ export class OffcanvasNav extends React.Component {
             <>
                 {AuthenticationManager.AllowView(Function.ADM000) &&
                     <div className="w-100 d-flex flex-column mt-3 animate__animated animate__backInLeft">
-                        <span className="ml-2 white d-flex"><FontAwesomeIcon icon={faBuffer} color="white" /> <h5 className="ml-2"><b>HỆ THỐNG</b></h5></span>
+                        <span className="ml-2 white d-flex"><FontAwesomeIcon className="sys-icon" icon={faBuffer} color="white" /> <h5 className="ml-2"><b>HỆ THỐNG</b></h5></span>
                         {AuthenticationManager.AllowView(Function.ADM001) && <Link to={AppRoute.ADMIN_ACOUNT.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Quản Lý Tài Khoản</Link>}
                         {AuthenticationManager.AllowView(Function.ADM002) && <Link to={AppRoute.ADMIN_SYSTEM_ROLE.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Phân Quyền Chức Năng</Link>}
                         {AuthenticationManager.AllowView(Function.ADM003) && <Link to={AppRoute.ADMIN_DATA_ROLE.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Phân Quyền Vùng Dữ Liệu</Link>}

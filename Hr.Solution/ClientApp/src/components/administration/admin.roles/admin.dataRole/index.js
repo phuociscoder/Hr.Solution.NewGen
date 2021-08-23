@@ -9,7 +9,7 @@ import './admin.roles.css';
 import { DataRoleList } from "./DataRoleList";
 import { DataRoleGroupMembers } from "./DataRoleGroupMembers";
 import { AdminDataRoleServices } from "./admin.dataRoles.services";
-import { DepartmentList } from "../../admin.department";
+import { DepartmentList } from "../../admin.department/DepartmentList";
 import { DataRoleDepartments } from "./DataRoleDepartments";
 
 export class DataRoleManagement extends React.Component {
@@ -73,7 +73,7 @@ export class DataRoleManagement extends React.Component {
                             </div>
                         </Card.Header>
                         <Card.Body>
-                            <div className="pt-2 pl-2 pr-2">
+                            <div className="pt-2 pl-2 pr-2 h-100">
                             {tabSelect === TabType.ROLE && <DataRoleGroupMembers selectedRoleId={selectedRoleId} onRefesh={this.onRefesh}/>}
                             {tabSelect === TabType.DEPARTMENT && <DataRoleDepartments selectedRoleId={selectedRoleId} />}
                             </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { Loading } from "../../Common/loading/Loading";
 import { NotificationType } from "../../Common/notification/Constants";
 import { ShowNotification } from "../../Common/notification/Notification";
-import { SelectMode } from "./Constants";
+import { SelectMode, Type } from "./Constants";
 import { DepartmentServices } from "./Department.services";
 import './department.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,11 +10,12 @@ import { faAngleDown, faAngleUp, faArrowRight } from "@fortawesome/free-solid-sv
 import _ from "lodash";
 import { debounce } from "lodash";
 
-
 //prop : onValueChange : []
 //values: []
-//Mode: SelectModeType Multiple/Single
+//isMultipleSelect: true/false
 //CRUD: true/false 
+//Type: Type.Select /Type.Module
+//fullLoad: true/false
 export class DepartmentList extends React.Component {
     constructor(props) {
         super(props);
@@ -24,26 +25,33 @@ export class DepartmentList extends React.Component {
             selectedIds: [],
             departments: [],
             originDepartments: [],
-            loading: false
+            loading: false,
+            type: Type.Module,
+            isMultipleSelect: true,
+            fullLoad: true
         }
     }
 
     componentDidMount = () => {
-        const {values} = this.props;
-        this.setState({selectedIds: values}, this.loadDepartment(null));
+        const { values, type, isMultipleSelect, fullLoad, prefix } = this.props;
+        const newType = type ?? this.state.type;
+        const newIsMultipleSelect = isMultipleSelect ?? false;
+        const newFullLoad = fullLoad ?? false;
+        this.setState({ selectedIds: values, type: newType, isMultipleSelect: newIsMultipleSelect, fullLoad: newFullLoad, prefix: prefix }, this.loadDepartment(null));
+
     }
 
-    shouldComponentUpdate =(nextProps) => {
-        if(this.props.values !== nextProps.values)
-        {
-            this.setState({selectedIds: nextProps.values}, this.loadDepartment(null));
+    shouldComponentUpdate = (nextProps) => {
+        if (this.props.values !== nextProps.values || this.props.prefix !== nextProps.prefix) {
+            this.setState({ selectedIds: nextProps.values, prefix: nextProps.prefix }, this.loadDepartment(null));
         }
+
         return true;
     }
 
 
     loadDepartment = (freeText) => {
-        this.setState({ loading: true });
+        // this.setState({ loading: true });
         DepartmentServices.GetByFreeText({ freeText: '' })
             .then(response => {
                 let departments = this.initDepartmentTree(null, response.data);
@@ -114,15 +122,15 @@ export class DepartmentList extends React.Component {
             return departments;
 
         let results = [];
-            let departmentsFiltered = departments.filter(x => x.departmentCode.toLowerCase().includes(freeText.toLowerCase()) || x.departmentName.toLowerCase().includes(freeText.toLowerCase()));
-            if(!departmentsFiltered && departmentsFiltered.length ===0) return [];
+        let departmentsFiltered = departments.filter(x => x.departmentCode.toLowerCase().includes(freeText.toLowerCase()) || x.departmentName.toLowerCase().includes(freeText.toLowerCase()));
+        if (!departmentsFiltered && departmentsFiltered.length === 0) return [];
 
-            departmentsFiltered.forEach(dept => {
-                this.retriveChilds(dept, departments, results);
-                this.retriveParents(dept, departments, results);
-            });
+        departmentsFiltered.forEach(dept => {
+            this.retriveChilds(dept, departments, results);
+            this.retriveParents(dept, departments, results);
+        });
 
-            return _.uniq(results);
+        return _.uniq(results);
     }
 
     retriveChilds = (dept, departments, results) => {
@@ -165,20 +173,26 @@ export class DepartmentList extends React.Component {
     }
 
     onDepartmentCheckChange = (e) => {
+        const { isMultipleSelect } = this.state;
         const id = parseInt(e.target.getAttribute("departmentid"));
         const isChecked = e.target.checked;
         let { selectedIds } = this.state;
         const { onValueChange } = this.props
 
-        if (isChecked) {
-            this.relativeChecked(id, selectedIds);
-            this.parentsChecked(id, selectedIds);
+        if (isMultipleSelect) {
+            if (isChecked) {
+                this.relativeChecked(id, selectedIds);
+                this.parentsChecked(id, selectedIds);
 
-        } else {
-            this.relativeUnChecked(id, selectedIds);
-            this.parentsUnChecked(id, selectedIds);
+            } else {
+                this.relativeUnChecked(id, selectedIds);
+                this.parentsUnChecked(id, selectedIds);
+            }
+        }else
+        {
+            selectedIds =[id];
         }
-        this.setState({ selectedIds: selectedIds }, onValueChange(selectedIds));
+        this.setState({ selectedIds: selectedIds }, onValueChange(selectedIds[0]));
     }
 
     relativeChecked = (id, selectedIds) => {
@@ -237,7 +251,7 @@ export class DepartmentList extends React.Component {
     debounceDepartmentSearch = debounce((value) => { this.loadDepartment(value) }, 1000);
 
     generateChilds = (dept) => {
-        const { departments, selectedIds } = this.state;
+        const { departments, selectedIds, type, isMultipleSelect } = this.state;
         const childs = departments.filter(x => x.parentId === dept.id);
         return (
             <div>
@@ -246,7 +260,8 @@ export class DepartmentList extends React.Component {
                     const deptClassName = isHasChild ? "w-100 sub-deparment cursor-pointer d-flex mt-1" : "w-100 department cursor-pointer d-flex mt-1 border-bottom"
                     return (
                         <>
-                            <div key={department.id} style={{ paddingLeft: `${department.level * 2}rem` }} className={deptClassName} hidden={!department.isShow}>
+                            <div key={department.id} style={{ paddingLeft: `${department.level * 2}rem` }} 
+                            className={`${type===Type.Select && !isMultipleSelect && selectedIds.includes(department.id) ?'department-selected': ''} ${deptClassName}`}>
                                 <input departmentid={department.id}
                                     onClick={this.onDepartmentCheckChange}
                                     className="department-checkbox"
@@ -264,7 +279,7 @@ export class DepartmentList extends React.Component {
     }
 
     render = () => {
-        const { departments, loading, selectedIds, searchText } = this.state;
+        const { departments, loading, selectedIds, searchText, type, isMultipleSelect } = this.state;
         if (loading) {
             return (
                 <div className="d-flex mt-5 justify-content-center">
@@ -274,14 +289,15 @@ export class DepartmentList extends React.Component {
         }
         else {
             return (
-                <div className="w-100 d-flex flex-column department-container">
-                    <div className="w-100 d-flex">
-                        <input className="w-40 ml-auto form-control mb-2 mt-1 mr-1" value={searchText} placeholder="Tìm kiếm" onChange={this.onDepartmentSearchChange}></input>
+                <div className={`${type === Type.Select ? 'shadow' : ''} w-100 h-100 d-flex flex-column `}>
+                    <div className={`${type === Type.Select ? 'card-header' : ''} h-5 w-100 d-flex `}>
+                        <input className={`${type === Type.Select ? 'w-100' : 'w-40 mb-2 mt-1 mr-1'} ml-auto form-control `} value={searchText} placeholder="Tìm kiếm" onChange={this.onDepartmentSearchChange}></input>
                     </div>
                     {departments && departments.length > 0 && departments.filter(x => x.isCompany).map((company, index) => {
                         return (
-                            <>
-                                <div key={company.id} className="w-100 company-container cursor-pointer d-flex" hidden={!company.isShow}>
+                            <div className="department-container">
+                                <div key={company.id} 
+                                className={`${type===Type.Select && !isMultipleSelect && selectedIds.includes(company.id) ?'department-selected': ''} w-100 company-container cursor-pointer d-flex`}> 
                                     <input
                                         departmentid={company.id}
                                         onClick={this.onDepartmentCheckChange}
@@ -292,7 +308,7 @@ export class DepartmentList extends React.Component {
                                     <span className="ml-auto w-50" onClick={() => this.onToggleClick(company.id)}>{this.renderToggle(company)}</span>
                                 </div>
                                 {company.isExpanded && this.generateChilds(company)}
-                            </>
+                            </div>
                         )
                     })}
                     {

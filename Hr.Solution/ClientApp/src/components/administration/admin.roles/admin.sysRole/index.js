@@ -19,7 +19,8 @@ export class SystemRoleManagement extends React.Component {
         this.state = {
             tabSelect: TabType.USER,
             selectedRoleId: null,
-            sysFunctions: []
+            sysFunctions: [],
+            reloadSysRoles: false,
         }
 
     }
@@ -53,12 +54,20 @@ export class SystemRoleManagement extends React.Component {
         this.setState({ selectedRoleId: roleId });
     }
 
+    onListRoleReloaded = () => {
+        this.setState({reloadSysRoles: false });
+    }
+
+    onReloadSysRole =() => {
+        this.setState({reloadSysRoles: true});
+    }
+
     render = () => {
-        const { prefix, tabSelect, selectedRoleId, sysFunctions } = this.state;
+        const { prefix, tabSelect, selectedRoleId, sysFunctions, reloadSysRoles } = this.state;
         return (
             <div className="d-flex w-100 h-100">
                 <div className="w-20 h-100">
-                    <RoleList prefix={prefix} onChange={this.onRoleChange} />
+                    <RoleList prefix={prefix} onChange={this.onRoleChange} reload={reloadSysRoles} onReloaded={this.onListRoleReloaded} />
                 </div>
                 <div className="flex-fill ml-2 h-100">
                     <Card className="h-100">
@@ -73,8 +82,8 @@ export class SystemRoleManagement extends React.Component {
                             </div>
                         </Card.Header>
                         <Card.Body>
-                            <div className="pt-2 pl-2 pr-2">
-                                {tabSelect === TabType.USER && <RoleGroupMembers prefix={prefix} selectedRoleId={selectedRoleId} />}
+                            <div className="pt-2 pl-2 pr-2 h-100">
+                                {tabSelect === TabType.USER && <RoleGroupMembers prefix={prefix} selectedRoleId={selectedRoleId} onReloadSysRole={this.onReloadSysRole} />}
                                 {tabSelect === TabType.ROLE && <RoleGroupPermissions prefix={prefix} selectedRoleId={selectedRoleId} functions={sysFunctions} />}
                             </div>
                         </Card.Body>

@@ -2,6 +2,8 @@
 
 #root{
   background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
+  position:relative; 
+  height: 100%;
 }
 
 .w-5{
@@ -23,6 +25,14 @@
   width: 40%;
 }
 
+.h-5{
+  height: 5%;
+}
+
+.h-95{
+  height: 95%;
+}
+
 a {
   color: #0366d6;
 }
@@ -35,9 +45,22 @@ code {
   color: #E01A76;
 }
 
+.svg-inline--fa.fa-w-20 {
+  width: 2rem;
+}
+
 body {
   font-family: 'Nunito Sans', Arial, Helvetica, sans-serif;
+  zoom: 80%;
+  position: absolute;
+  height: 100%;
+  width: 100%;
   
+}
+
+.modal-backdrop {
+  width: 100%;
+  height: 100%;
 }
 
 .row {
@@ -73,11 +96,12 @@ body {
 }
 
 .main-container{
-  height: 100vh;
+  position: relative;
+  height: 100%;
 }
 
 .content-container{
-  height: 95vh;
+  height: 95%;
 }
 
 .component-container{
@@ -91,13 +115,13 @@ body {
 }
 
 .component-content{
-  height: 89vh;
-  padding: 5px 10px 5px 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
 }
 
 .nav-top-bar{
-  padding-left: 5vh;
-  height: 5vh;
+  padding-left: 2.5%;
+  height: 5%;
   box-shadow: 2px 2px 5px grey;
 }
 

@@ -34,7 +34,7 @@ export class NavMenu extends Component {
 
   getDisplaySysRole =() => {
     const sysRoles = AuthenticationManager.SysRoles();
-    if(!sysRoles) return null;
+    if(!sysRoles || sysRoles.length === 0) return null;
 
     if(sysRoles.length === 1) return sysRoles[0].name;
 

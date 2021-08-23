@@ -12,7 +12,6 @@ export class CustomDatePicker extends React.Component {
     }
 
     onDateChange = (value) => {
-        console.log(value);
         const { onDateChange } = this.props;
         this.setState({ value }, onDateChange(value));
     }
@@ -23,7 +22,6 @@ export class CustomDatePicker extends React.Component {
 
     componentDidMount = () => {
         const { value } = this.props;
-        console.log(value);
         if (value) {
             this.setState({ value: new Date(value) });
         }
@@ -32,7 +30,6 @@ export class CustomDatePicker extends React.Component {
     shouldComponentUpdate = (nextProps) => {
         if (this.props.value != nextProps.value) {
             this.setState({ value: new Date(nextProps.value) });
-            console.log(nextProps.value);
         }
         return true;
     }

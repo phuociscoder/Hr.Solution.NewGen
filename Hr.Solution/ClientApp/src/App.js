@@ -8,7 +8,6 @@ import { EmployeeListing } from './components/employees/listing/EmployeeListing'
 import { EmployeeCreate } from './components/employees/Create/EmployeeCreate';
 import { EmployeeContract } from './components/employee.constract/EmployeeContract';
 import { CategoryListing } from './components/administration/administration.category/Category.list';
-import { DepartmentConfig } from './components/administration/administration.category/department/department.config';
 import { AppRoute } from './components/AppRoute';
 import AuthorizationComponent from './components/AuthorizationComponent';
 import WrapperCategoryDetail from './components/administration/administration.category/WrapperCategoryDetail';
@@ -24,6 +23,7 @@ import { SystemRoleManagement } from './components/administration/admin.roles/ad
 import { DataRoleManagement } from './components/administration/admin.roles/admin.dataRole';
 import { CategoryDetail } from './components/administration/administration.category/Category.detail';
 import { Function } from './components/Common/Constants';
+import { DepartmentConfig } from './components/administration/administration.category/department';
 require('./custom.css');
 
 export default class App extends Component {

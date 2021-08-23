@@ -1,42 +1,38 @@
 .offCanvas{
     position: relative;
-    top: 0;
-    left: 0;
-    width: 2.5vw;
+    width: 2.5%;
     box-shadow: 1px 1px 3px grey;
   }
    .offCanvas-content{
-    position: absolute;
-    top: 0;
     height: 100%;
-    width: 2.5vw;
     z-index: 3;
     background-image: linear-gradient(180deg, #2a2d81 0%, #66baf2 88%);
    }
   
    .offCanvas-backdrop{
      position: relative;
-     width: 100vw;
+     width: 125vw;
      height: 100%;
      z-index: 2;
      background-color: black;
-     opacity: 0.8;
+     opacity: 0.5;
    }
 
    .offCanvas-backdrop-none{
     position: relative;
-    width: 100vw;
+    width: 125vw;
     height: 100%;
     z-index: 2;
-    opacity: 0.8;
+    opacity: 0.5;
     display: none;
   }
   
    .offCanvas-toggle{
      position: absolute;
+     padding-left: 20px;
      top: 0;
      height: 100%;
-     width: 15vw;
+     width: 20vw;
      z-index: 3;
      box-shadow: 2px 2px 8px black;
      background-image: linear-gradient(180deg, #2a2d81 0%, #66baf2 88%);
@@ -80,12 +76,14 @@
     animation-duration: 2s;
   }
 
-
+.sys-icon{
+  width: 2rem !important;
+}
 
 
    
 .offCanvasTranOff-appear{
-    width: 15vw;
+    width: 20vw;
 }
 
 .offCanvasTranOff-appear.offCanvasTranOff-appear-active{
@@ -98,7 +96,7 @@
   }
   
   .offCanvasTran-appear.offCanvasTran-appear-active{
-    width: 15vw;
+    width: 20vw;
     transition: width 500ms;
   }
  
@@ -107,12 +105,12 @@
   }
   
   .offCanvasBackdrop-appear.offCanvasBackdrop-appear-active{
-    opacity: 0.8;
+    opacity: 0.5;
     transition: opacity 500ms ease;
   }
 
   .offCanvasBackdropOff-appear {
-    opacity: 0.8;
+    opacity: 0.5;
     background-color: black;
   }
   
