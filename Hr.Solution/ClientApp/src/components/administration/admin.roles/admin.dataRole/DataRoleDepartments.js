@@ -1,6 +1,7 @@
 import React from "react";
 import { NotificationType } from "../../../Common/notification/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
+import { Type } from "../../admin.department/Constants";
 import { DepartmentList } from "../../admin.department/DepartmentList";
 import { AdminDataRoleServices } from "./admin.dataRoles.services";
 
@@ -60,7 +61,7 @@ export class DataRoleDepartments extends React.Component{
     render=() => {
         const {selectedDepartments} = this.state;
         return (
-            <DepartmentList onValueChange={this.onValueChange} values={selectedDepartments} />
+            <DepartmentList onValueChange={this.onValueChange} values={selectedDepartments} isMultipleSelect={true} type={Type.Module}/>
         )
     }
 }

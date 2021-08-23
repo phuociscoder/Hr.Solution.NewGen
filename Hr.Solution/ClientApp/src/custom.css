@@ -95,6 +95,10 @@ body {
   animation-duration: 600ms;
 }
 
+.require{
+  color: red;
+}
+
 .main-container{
   position: relative;
   height: 100%;

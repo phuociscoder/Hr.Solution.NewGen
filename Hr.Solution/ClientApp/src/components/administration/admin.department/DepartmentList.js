@@ -51,7 +51,7 @@ export class DepartmentList extends React.Component {
 
 
     loadDepartment = (freeText) => {
-        // this.setState({ loading: true });
+        if(this.state.type === Type.Module) this.setState({ loading: true });
         DepartmentServices.GetByFreeText({ freeText: '' })
             .then(response => {
                 let departments = this.initDepartmentTree(null, response.data);

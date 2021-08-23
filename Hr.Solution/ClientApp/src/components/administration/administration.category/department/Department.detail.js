@@ -3,8 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Card, Modal } from "react-bootstrap";
 import { AuthenticationManager } from "../../../../AuthenticationManager";
+import { Amount } from "../../../Common/InputAmount";
 import { NotificationType } from "../../../Common/notification/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
+import { DepartmentServices } from "../../admin.department/Department.services";
 import { CategoryServices } from "../Category.services";
 import { Mode } from "./Constants";
 
@@ -20,12 +22,18 @@ export class DepartmentDetails extends React.Component {
     }
 
     componentDidMount = () => {
-        const { category, model } = this.props;
-        if (!category) return;
-        this.setState({ category: category });
-        if (Object.keys(model).length > 0) {
-            this.setState({ model: model, editModel: model, mode: Mode.EDIT });
-        }
+        const { prefix, departmentId } = this.props;
+        if (!prefix || !departmentId) return;
+        DepartmentServices.GetById(departmentId)
+        .then(response => {
+            debugger;
+        }, error => {
+            debugger;
+        });
+        // this.setState({ category: category });
+        // if (Object.keys(model).length > 0) {
+        //     this.setState({ model: model, editModel: model, mode: Mode.EDIT });
+        // }
     }
 
     shouldComponentUpdate = (nextProps) => {
@@ -75,6 +83,9 @@ export class DepartmentDetails extends React.Component {
         let newModel = Object.assign({}, { ...model, [fieldName]: value });
         this.setState({ model: newModel });
     }
+    onAmountChange =(value) => {
+        console.log(value);
+    }
 
     render = () => {
         const { category, mode, model } = this.state;
@@ -85,38 +96,31 @@ export class DepartmentDetails extends React.Component {
                         <button className="btn btn-primary" disabled={mode === Mode.CREATE} onClick={this.onAddItemClick}><FontAwesomeIcon icon={faPlus} /><span> Thêm mới</span></button>
                     </Card.Header>
                     <Card.Body>
-                        <div className="w-30 pl-4 pt-3">
-                            <label className="w-100">
-                                {`Mã ${category.name}:`}
-                                <input fieldname="code" value={model.code} onChange={this.onInputChange} disabled={mode === Mode.EDIT || mode === Mode.VIEW} className="form-control" placeholder={`Mã ${category.name}`}></input>
-                            </label>
-                            <label className="w-100 mt-2">
-                                {`Tên ${category.name}:`}
-                                <input fieldname="name" value={model.name} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" placeholder={`Tên ${category.name}`}></input>
-                            </label>
-                            <label className="w-100 mt-2 text-camelcase">
-                                {`Tên thay thế ${category.name}:`}
-                                <input fieldname="name2" value={model.name2} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" placeholder={`Tên thay thế ${category.name}`}></input>
-                            </label>
-                            <div className="w-100 d-flex align-items-center mt-2">
-                                <label className="w-50">
-                                    Thứ tự:
-                                    <input fieldname="ordinal" value={model.ordinal} onChange={this.onInputChange} disabled={mode === Mode.VIEW} type="number" className="form-control" placeholder="Thứ tự"></input>
-                                </label>
-                                <label className="ml-auto mt-4">
-                                    <input fieldname="isActive" onChange={this.onInputChange} disabled={mode === Mode.VIEW} type="checkbox" checked={model.isActive} /> Đang hoạt động
-                                </label>
-                            </div>
-                            <label className="w-100 mt-2">
-                                Ghi chú:
-                                <textarea fieldname="note" onChange={this.onInputChange} disabled={mode === Mode.VIEW} value={model.note} className="form-control" rows={5} placeholder="Ghi chú"></textarea>
-                            </label>
-                            <div className="w-100 d-flex justify-content-end mt-3">
-                                {mode !== Mode.VIEW && <button className="btn btn-primary" onClick={() => this.setState({showModalProcessConfirm: true})}><FontAwesomeIcon icon={faCheck} /> <span> Lưu thay đổi</span></button>}
-                                {mode === Mode.EDIT && <button className="btn btn-danger ml-2" onClick={()=> this.setState({showModalRemoveComfirm: true})}><FontAwesomeIcon icon={faTrash} /><span> Xóa</span></button>}
-                                {mode !== Mode.VIEW && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span> Hủy bỏ</span></button>}
-
-                            </div>
+                        <div className="w-50 pl-4 pt-3">
+                           <label className="w-100">
+                               Mã bộ phận:<span className="require"> *</span>
+                               <input className="form-control w-50" placeholder="Mã bộ phận" required></input>
+                           </label>
+                           <label className="w-100 mt-2">
+                               Tên bộ phận: <span className="require">*</span>
+                               <input className="form-control" placeholder="Tên bộ phận"/>
+                           </label>
+                           <label className="w-100 mt-2">
+                               Tên khác: 
+                               <input className="form-control" placeholder="Tên khác"/>
+                           </label>
+                           <label className="w-100 mt-2">
+                               Số điện thoại: 
+                               <input className="form-control" placeholder="Số điện thoại"/>
+                           </label>
+                           <label className="w-100 mt-2">
+                               Tên bộ phận: <span className="require">*</span>
+                               <input className="form-control" placeholder="Tên bộ phận"/>
+                           </label>
+                           <label className="w-100 mt-2">
+                               Tên bộ phận: <span className="require">*</span>
+                               <Amount amount={'445vsadsa'} className="form-control" placeholder="Nhập số tiền" onAmountChange={this.onAmountChange} />
+                           </label>
                         </div>
                     </Card.Body>
                 </Card>

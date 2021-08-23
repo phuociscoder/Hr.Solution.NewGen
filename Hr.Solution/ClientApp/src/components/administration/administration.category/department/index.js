@@ -11,21 +11,20 @@ export class DepartmentConfig extends React.Component{
         super(props);
         this.state={
             refesh: false,
-            category:{},
             selectedItem: {}
         }
     }
 
     componentDidMount =() => {
-        const {category} = this.props;
-        if(!category) return;
-        this.setState({category: category});
+        const {prefix} = this.props;
+        if(!prefix) return;
+        this.setState({prefix: prefix});
     }
 
     shouldComponentUpdate =(nextProps) => {
-        if(this.props.category !== nextProps.category)
+        if(this.props.prefix !== nextProps.prefix)
         {
-            this.setState({category: nextProps.category});
+            this.setState({prefix: nextProps.prefix});
         }
         return true;
     }
@@ -38,19 +37,18 @@ export class DepartmentConfig extends React.Component{
     }
 
     onCategoryItemChange =(item) => {
-        console.log(item);
         this.setState({selectedItem: item});
     }
 
     render =() => {
-        const {category, refresh, selectedItem} = this.state;
+        const {prefix, refresh, selectedItem} = this.state;
         return (
             <div className="d-flex w-100 h-100">
             <div className="w-30 h-100 card">
                 <DepartmentList isMutipleSelect={false} fullLoad={false} type={Type.Select} onValueChange={this.onCategoryItemChange} values={[selectedItem]}/>
             </div>
             <div className="flex-fill ml-2 h-100">
-               <DepartmentDetails category={category} onRefresh={this.onRefresh} model={selectedItem} />
+               <DepartmentDetails departmentId={selectedItem} prefix={prefix} onRefresh={this.onRefresh}/>
             </div>
             <ReactTooltip />
         </div>
