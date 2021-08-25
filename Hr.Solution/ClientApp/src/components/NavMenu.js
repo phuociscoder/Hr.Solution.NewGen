@@ -85,7 +85,7 @@ export class NavMenu extends Component {
     const { fullName, avatar, displayRoleName, roleTooltips } = this.state;
     return (
       <>
-        <Navbar bg="dark" variant="dark" expand="lg" className="nav-top-bar">
+        <Navbar bg="dark" variant="dark" expand="lg" className="nav-top-bar" style={{zIndex: 300}}>
           <Navbar.Brand className="animate__animated animate__fadeInLeft" href="#home">
             <img
               alt=""

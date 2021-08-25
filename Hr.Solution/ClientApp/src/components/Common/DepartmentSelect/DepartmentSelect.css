@@ -1,0 +1,16 @@
+.css-1uccc91-singleValue > :first-child{
+ padding-left: 0.5rem !important;
+ font-size: initial;
+ font-weight: initial;
+}
+
+.root-option{
+    font-size: large;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.sub-option{
+    font-weight: bold;
+    text-transform: uppercase;
+}

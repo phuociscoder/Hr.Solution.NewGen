@@ -48,7 +48,7 @@ const WrapperCategoryDetail = WrappedComponent => {
             const { categoryInfo } = this.state;
             return (
                 <div className="component-container">
-                    <div className="d-flex align-items-center h-5">
+                    <div className="d-flex align-items-center h-6">
                         <span className="component-title text-uppercase">{`Thiết lập ${categoryInfo.name}`}</span>
                         <div className="ml-auto">
                             <Breadcrumb>
@@ -60,7 +60,7 @@ const WrapperCategoryDetail = WrappedComponent => {
                     </div>
 
                     <ReactCSSTransitionGroup transitionName="example" transitionAppear={true}>
-                        <div className="component-content d-flex flex-column w-100 h-95">
+                        <div className="component-content d-flex flex-column w-100 h-94">
                             {WrappedComponent ? <WrappedComponent category={categoryInfo} {...this.props} /> : <Redirect to="/login" />}
                         </div>
                     </ReactCSSTransitionGroup>

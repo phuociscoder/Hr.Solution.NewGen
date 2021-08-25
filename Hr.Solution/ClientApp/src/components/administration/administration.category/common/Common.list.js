@@ -6,7 +6,7 @@ import { NotificationType } from "../../../Common/notification/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
 import { CategoryServices } from '../Category.services';
 import '../../admin.roles/admin.dataRole/admin.roles.css';
-import { debounce } from "lodash";
+import _, { debounce } from "lodash";
 
 export class CategoryCommonList extends React.Component {
     constructor(props) {
@@ -28,7 +28,8 @@ export class CategoryCommonList extends React.Component {
         if (!categoryId) return;
         CategoryServices.GetCategoryItems(categoryId)
             .then(response => {
-                this.setState({ categoryItems: response.data, originCategoryItems: response.data, loading: false }, this.props.onRefreshed());
+                let categoryItems = _.orderBy(response.data, x => x.ordinal, "asc");
+                this.setState({ categoryItems: categoryItems, originCategoryItems: categoryItems, loading: false }, this.props.onRefreshed());
             }, error => {
                 this.setState({ loading: false });
                 ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể đọc các chỉ mục của danh mục");

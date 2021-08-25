@@ -32,7 +32,7 @@ const AuthorizationComponent = (WrappedComponent, FunctionPrefix) => {
             const { path, title } = this.state;
             return (
                 <div className="component-container">
-                    <div className="d-flex align-items-center h-5">
+                    <div className="d-flex align-items-center h-6">
                         <span className="component-title uppercase">{title}</span>
                         <div className="ml-auto">
                             <BreadcrumbCustom path={path} />
@@ -40,7 +40,7 @@ const AuthorizationComponent = (WrappedComponent, FunctionPrefix) => {
                     </div>
 
                     <ReactCSSTransitionGroup transitionName="example" transitionAppear={true}>
-                        <div className="component-content d-flex flex-column w-100 h-95">
+                        <div className="component-content d-flex flex-column w-100 h-94">
                             <WrappedComponent prefix={FunctionPrefix} {...this.props} />
                         </div>
                     </ReactCSSTransitionGroup>

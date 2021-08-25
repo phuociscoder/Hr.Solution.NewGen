@@ -175,11 +175,11 @@ export class RoleGroupPermissions extends React.Component {
         const { permissions, notFoundPermission, prefix } = this.state;
         return (
             <div className="d-flex flex-column w-100 h-100 animate__animated animate__fadeIn">
-                <div className="w-100 h-5 d-flex justify-content-end mt-1">
+                <div className="w-100 h-6 d-flex justify-content-end mt-1">
                     <input className="form-control w-40" onChange={this.onSearchPermissionChange} placeholder="Tìm kiếm"></input>
                 </div>
-                <div className="w-100 h-95 mt-2 d-flex flex-column">
-                    <div className="h-5">
+                <div className="w-100 h-94 mt-2 d-flex flex-column">
+                    <div className="h-6">
                         <Row className="border h-100 pt-2 pb-2 permission-group-header">
                             <Col xs={1}>MÃ CN</Col>
                             <Col xs={5}>TÊN CHỨC NĂNG</Col>
