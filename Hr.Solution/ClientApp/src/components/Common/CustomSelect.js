@@ -52,8 +52,9 @@ export class CustomSelect extends React.Component{
                 noOptionsMessage={x => x.inputValue = "Không có dữ liệu"}
                 placeholder= {placeholder}
                 onChange ={this.onChange}
-                getOptionLabel={x=> x.name}
-                getOptionValue={x=> x.id}
+                // getOptionLabel={x=> x.name}
+                // getOptionValue={x=> x.id}
+                {...this.props}
             >
 
             </Select>

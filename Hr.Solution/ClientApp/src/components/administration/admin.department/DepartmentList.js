@@ -290,7 +290,7 @@ export class DepartmentList extends React.Component {
         else {
             return (
                 <div className={`${type === Type.Select ? 'shadow' : ''} w-100 h-100 d-flex flex-column `}>
-                    <div className={`${type === Type.Select ? 'card-header' : ''} h-5 w-100 d-flex `}>
+                    <div className={`${type === Type.Select ? 'card-header' : ''} h-6 w-100 d-flex `}>
                         <input className={`${type === Type.Select ? 'w-100' : 'w-40 mb-2 mt-1 mr-1'} ml-auto form-control `} value={searchText} placeholder="Tìm kiếm" onChange={this.onDepartmentSearchChange}></input>
                     </div>
                     {departments && departments.length > 0 && departments.filter(x => x.isCompany).map((company, index) => {

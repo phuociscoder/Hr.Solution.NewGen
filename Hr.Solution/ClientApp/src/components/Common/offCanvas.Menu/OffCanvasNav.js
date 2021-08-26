@@ -89,7 +89,7 @@ export class OffcanvasNav extends React.Component {
     render = () => {
         const { isToggle } = this.state;
         return (
-            <div className="offCanvas">
+            <div className="offCanvas" style={{zIndex: 400}}>
                 {!isToggle &&
                     <>
                         <ReactCSSTransitionGroup transitionName="offCanvasBackdropOff" transitionAppear={true} transitionLeave={true} transitionEnter={true}>

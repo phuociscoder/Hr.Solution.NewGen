@@ -25,12 +25,12 @@
   width: 40%;
 }
 
-.h-5{
-  height: 5%;
+.h-6{
+  height: 6%;
 }
 
-.h-95{
-  height: 95%;
+.h-94{
+  height: 94%;
 }
 
 a {
@@ -118,6 +118,13 @@ body {
   font-weight: bold;
 }
 
+input[type="radio"], input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+}
+
 .component-content{
   padding-right: 10px;
   padding-bottom: 10px;
@@ -154,7 +161,7 @@ body {
 }
 
 .container-login{
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: row;
   width: 100%;
