@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import Image from "react-bootstrap/Image";
 import noAvatar from "../assets/no-avatar.jpg";
 import { AuthenticationManager } from "../AuthenticationManager";
+import "./HomePage.css";
+
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -16,18 +17,36 @@ export class Home extends Component {
   componentDidMount = () => {
     const userFullName = AuthenticationManager.FullName();
     const avatar = AuthenticationManager.Avatar();
-    this.setState({ fullName: userFullName, avatar: avatar });
+    const displaySysRole = this.getDisplaySysRole();
+    this.setState({ fullName: userFullName, avatar: avatar, displayRoleName: displaySysRole });
+  }
+
+  getDisplaySysRole = () => {
+    const sysRoles = AuthenticationManager.SysRoles();
+    if (!sysRoles || sysRoles.length === 0) return null;
+
+    if (sysRoles.length === 1) return sysRoles[0].name;
+
+    return `${sysRoles[0].name} +${sysRoles.length - 1}`;
   }
 
   render() {
-    const { avatar, fullName } = this.state;
+    const { avatar, fullName, displayRoleName } = this.state;
     return (
-      <>
-        <div className="d-flex justify-content-center align-items-center container-content">
-          <Image src={avatar || noAvatar} rounded />
-          <div className="welcomeMsg ml-4"> <h1>Welcome To Hr Solution</h1><br /><h2>{fullName}</h2></div>
+      <div className="wrapper">
+        <div className="user-info-card card">
+          <div className="upper-container">
+            <div className="image-container">
+              <img src={avatar || noAvatar} alt="avatar" height="100px" width="100px" />
+            </div>
+          </div>
+          <div className="lower-container">
+            <h2>Welcome To Hr Solution</h2>
+            <h3>{fullName}</h3>
+            <h4>{displayRoleName}</h4>
+          </div>
         </div>
-      </>
+      </div>
     );
   }
 }

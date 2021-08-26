@@ -1,0 +1,68 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600;700;900&display=swap'); */
+
+.wrapper{
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-info-card{
+    width: 300px;
+    height: 480px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 10px black;
+    overflow: hidden;
+}
+
+.upper-container{
+    height: 100px;
+    background: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+}
+
+.image-container img{
+    background: white;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    padding: 5px;
+    transform: translate(95px, 45px);
+}
+
+img{
+    border: 2px solid #0050b9;
+}
+
+.lower-container{
+    margin-top: 60px;
+    height: 300px;
+    background: white;
+    text-align: center;
+    /* font-family: 'Source Sans Pro', sans-serif; */
+}
+
+.lower-container h2 h3 h4{
+    margin: 0;
+    padding: 0;
+}
+
+.lower-container h2{
+    color: #176abd;
+    font-weight: 900;
+    font-size: 1.6rem;
+}
+
+.lower-container h3{
+    margin: 1rem;
+    color: #2f2d2e;
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.lower-container h4{
+    color: #16abbe;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
