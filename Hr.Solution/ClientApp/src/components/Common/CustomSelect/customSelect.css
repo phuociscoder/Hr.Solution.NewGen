@@ -1,0 +1,67 @@
+.btn-expand-menu{
+    border: none;
+    margin-left: -30px;
+    background-color: transparent;
+    color: #cccccc;
+}
+
+.menu-options-container
+{
+    position: absolute;
+    overflow-y: auto;
+    height: fit-content;
+    min-height: 50px;
+    z-index: 600;
+}
+
+.select-option{
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.opt-root{
+    font-weight: bold;
+    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+}
+.opt-parent{
+    background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+}
+
+.opt-disabled{
+    color: grey;
+    font-style: italic;
+    cursor: auto; 
+}
+
+.opt-content{
+    border-left-width: 2px;
+    border-left-style: dotted;
+}
+
+.opt-select-image{
+    position: absolute;
+    margin: 5px 0px 5px 5px;
+}
+
+.opt-disabled:hover{
+    background-image: none !important;
+    color: grey !important;
+    font-style: italic;
+}
+
+.opt-active{
+    background-image: linear-gradient( 109.6deg,  rgb(32, 39, 131) 11.2%, rgb(129, 180, 238) 91.1% );
+    color: whitesmoke;
+    background-position: right center;
+    /* transition: 300ms; */
+    background-size: 200% auto; 
+}
+
+.select-option:hover {
+    background-image: linear-gradient( 109.6deg,  rgb(32, 39, 131) 11.2%, rgb(129, 180, 238) 91.1% );
+    color: whitesmoke;
+    background-position: right center;
+    transition: 300ms;
+    background-size: 200% auto; 
+}

@@ -10,6 +10,7 @@ import { ImageUploader } from '../../../Common/ImageUploader';
 import { CategoryServices } from "../Category.services";
 import { AuthenticationManager } from "../../../../AuthenticationManager";
 import { DepartmentSelect } from "../../../Common/DepartmentSelect/DepartmentSelect";
+import { CustomSelect } from "../../../Common/CustomSelect";
 
 
 
@@ -17,9 +18,8 @@ export class DepartmentDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            category: {},
+            departmentInfo: {},
             mode: Mode.VIEW,
-            model: {},
             departments: []
 
         }
@@ -33,39 +33,25 @@ export class DepartmentDetails extends React.Component {
         parentId: null
     }
 
-    test = [
-        {
-            value: 1, label: 'Company', options: [
-                {
-                    value: 2, label: 'Dept1', options: [
-                        { value: 5, label: 'Sub 1' }, { value: 6, label: 'Sub-2' }
-                    ]
-                },
-                {
-                    value: 3, label: 'Dept2', options: [
-                        { value: 7, label: 'Sub-3' }
-                    ]
-                },
-                { value: 4, label: 'Dept3' }
-            ]
-        }
-    ];
-
     componentDidMount = () => {
-        this.setState({departments: this.test});
         const { prefix, departmentId } = this.props;
         if (!prefix || !departmentId) return;
-        // DepartmentServices.GetById(departmentId)
-        //     .then(response => {
-        //         debugger;
-        //     }, error => {
-        //         debugger;
-        //     });
+        this.getDepartmentInfo(departmentId);
+    }
+
+    getDepartmentInfo = (id) => {
+        DepartmentServices.GetById(id)
+            .then(response => {
+                this.setState({ departmentInfo: response.data });
+            },
+                error => {
+                    ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể truy cập thông tin bộ phận");
+                })
     }
 
     shouldComponentUpdate = (nextProps) => {
-        if (this.props.category !== nextProps.category) {
-            this.setState({ category: nextProps.category });
+        if (this.props.departmentId !== nextProps.departmentId) {
+            this.setState({ departmentId: nextProps.departmentId }, this.getDepartmentInfo(nextProps.departmentId));
         }
         if (this.props.model !== nextProps.model && Object.keys(nextProps.model).length > 0) {
             this.setState({ model: nextProps.model, editModel: nextProps.model, mode: Mode.EDIT });
@@ -73,26 +59,25 @@ export class DepartmentDetails extends React.Component {
         return true;
     }
 
-    resetModel = () => {
-        const model = {
-            id: 0,
-            code: '',
-            name: '',
-            name2: '',
-            ordinal: 0,
-            note: '',
-            isActive: true
-        }
-        return model;
-    }
-
     onAddItemClick = () => {
         const newModel = this.resetModel();
         this.setState({ model: newModel, mode: Mode.CREATE });
     }
 
+    // getDepartments =() => {
+    //         const { dataUrl } = this.props;
+    //         RestClient.SendGetRequest(dataUrl)
+    //             .then(response => {
+    //                 const options = this.generateOptions(response.data);
+    //                 this.setState({ departments: options });
+    //             }, error => {
+    //                 debugger;
+    //             });
+        
+    // }
+
     onInputChange = (e) => {
-        const { model } = this.state;
+        const { departmentInfo } = this.state;
         const fieldName = e.target.getAttribute("fieldname");
         const type = e.target.type;
         let value;
@@ -106,15 +91,30 @@ export class DepartmentDetails extends React.Component {
             value = parseInt(e.target.value);
         }
 
-        let newModel = Object.assign({}, { ...model, [fieldName]: value });
-        this.setState({ model: newModel });
+        let newModel = Object.assign({}, { ...departmentInfo, [fieldName]: value });
+        this.setState({ departmentInfo: newModel });
     }
     onAmountChange = (value) => {
         console.log(value);
     }
 
+    onDepartmentLogoChange =(e) => {
+
+    }
+
+    onParentChange =(parentId) => {
+
+    }
+
+    onDepartmentChange =(id) => {
+        console.log(id);
+    }
+
     render = () => {
-        const { category, mode, model, departments } = this.state;
+        console.log(this.state.departmentInfo);
+        const { mode, model, departments } = this.state;
+        const { id, departmentCode, departmentName, departmentName2, departmentAddress, departmentEmail, departmentFax,
+            departmentTel, isCompany, note, lock, ordinal, taxCode, logoImage, managerId, active, parentID } = this.state.departmentInfo;
         return (
             <>
                 <Card className="h-100">
@@ -127,58 +127,66 @@ export class DepartmentDetails extends React.Component {
                                 <div className="w-50 d-flex flex-column">
                                     <label>
                                         Mã bộ phận:
-                                        <input className="w-50 form-control" placeholder="Mã bộ phận" />
+                                        <input disabled={mode === Mode.EDIT} fieldname="departmentCode" value={departmentCode} onChange={this.onInputChange} className="w-50 form-control" placeholder="Mã bộ phận" />
                                     </label>
                                     <label className="mt-2">
                                         Tên bộ phận:
-                                        <input className="w-100 form-control" placeholder="Tên bộ phận" />
+                                        <input fieldname="departmentName" value={departmentName} onChange={this.onInputChange} className="w-100 form-control" placeholder="Tên bộ phận" />
                                     </label>
                                 </div>
                                 <div className="w-25 ml-3">
                                     <label>Logo:
-                                        <ImageUploader width={80} height={80} />
+                                        <ImageUploader imageSrc={logoImage} onChangeImage={this.onDepartmentLogoChange} width={80} height={80} />
                                     </label>
                                 </div>
                             </div>
 
                             <label className="mt-2">
                                 Tên Thay thế:
-                                <input className="w-50 form-control" placeholder="Tên thay thế" />
+                                <input fieldname="departmentName2" value={departmentName2 ?? ''} onChange={this.onInputChange} className="w-50 form-control" placeholder="Tên thay thế" />
                             </label>
                             <label className="mt-2">
                                 Trưởng bộ phận:
-                                {/* <DepartmentSelect options={departments} className=" w-50" /> */}
+                              <CustomSelect dataUrl="/api/Department" className="w-50" 
+                              orderFieldName={["level"]} 
+                              orderBy="desc" 
+                              isHierachy={true}
+                              selectedValue={parentID}
+                              disabledValue={id} 
+                              valueField="id"
+                              labelField="departmentName"
+                              onValueChange={this.onDepartmentChange} />
                             </label>
                             <div className="w-50 d-flex mt-2">
                                 <label>
-                                    <input className="mr-1" type="checkbox" /> Công ty
+                                    <input fieldname="isCompany" checked={isCompany} onChange={this.onInputChange} className="mr-1" type="checkbox" /> Công ty
                                 </label>
                                 <label className="ml-auto">
-                                    <input type="checkbox" /> Đang hoạt động
+                                    <input fieldname="active" checked={active} onChange={this.onInputChange} type="checkbox" /> Đang hoạt động
                                 </label>
                             </div>
                             <label className="mt-2">
                                 Thuộc bộ phận:
-                                <DepartmentSelect isMulti={false} className="w-50" />
+                                {/* <DepartmentSelect onValueChange={this.onParentChange} isMulti={false} selectedValue={parentID} hideOptions={[id]} className="w-50" /> */}
                             </label>
                             <div className="w-100 d-flex mt-2">
                                 <label className="w-50">
                                     Điện thoại:
-                                    <input className="form-control " placeholder="Điện thoại" />
+                                    <input fieldname="departmentTel" value={departmentTel} onChange={this.onInputChange} className="form-control " placeholder="Điện thoại" />
                                 </label>
                                 <label className="w-50 ml-3">
                                     Email:
-                                    <input className="form-control  " placeholder="Email" />
+                                    <input fieldname="departmentEmail" value={departmentEmail} onChange={this.onInputChange} className="form-control" placeholder="Email" />
                                 </label>
                             </div>
                             <div className="w-100 d-flex mt-2">
                                 <label className="w-50">
                                     Fax:
-                                    <input className="form-control " placeholder="Fax" />
+                                    <input fieldname="departmentFax" value={departmentFax} onChange={this.onInputChange} className="form-control " placeholder="Fax" />
                                 </label>
                                 <label className="w-50 ml-3">
                                     Mã số thuế:
-                                    <input className="form-control  " placeholder="Mã số thuế" />
+                                    <input fieldname="taxCode" value={taxCode} onChange={this.onInputChange} className="form-control" placeholder="Mã số thuế" />
                                 </label>
                             </div>
                             <div className="w-100 border-bottom mt-2"></div>

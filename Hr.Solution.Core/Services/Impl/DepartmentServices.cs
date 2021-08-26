@@ -23,5 +23,11 @@ namespace Hr.Solution.Core.Services.Impl
             var response = await repository.QueryAsync<DepartmentGetByFreeTextResponse>(ProcedureConstants.SP_DEPARTMENT_GETALL, new { freeText = freeText });
             return response.Data;
         }
+
+        public async Task<DepartmentResponse> GetById(int id)
+        {
+            var response = await repository.ExecuteScalarAsync<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_GET_BY_ID, new { id = id });
+            return response;
+        }
     }
 }

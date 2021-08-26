@@ -48,6 +48,7 @@ namespace Hr.Solution.Core.Constants
 
         //department
         public static string SP_DEPARTMENT_GETALL = "spDepartment_GetbyFreetext";
+        public static string SP_DEPARTMENT_GET_BY_ID = "spDepartment_GetById";
 
         //Employees
         public static string spEmployees_spGetAll = "spEmployees_spGetAll";

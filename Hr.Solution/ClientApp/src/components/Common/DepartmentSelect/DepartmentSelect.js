@@ -16,23 +16,87 @@ export class DepartmentSelect extends React.Component {
     }
 
     componentDidMount = () => {
-        // this.loadDepartments().then(
-        //     response => {
-        //         console.log(response);
-        //     }, error => { }
-        // );
+        const { selectedValue, hideOptions } = this.props;
+        this.setState({ selectedValue: selectedValue, hideOptions: hideOptions });
+        
     }
 
+    
+
     loadDepartments = (freeText) => {
+        const { selectedValue } = this.state;
         return new Promise(resolve => {
             DepartmentServices.GetByFreeText({ freeText: freeText ?? '' })
                 .then(response => {
                     const options = this.generateDepartmentOptions(response.data);
-                    this.setState({ options: options });
+                    let selectedItem = null;
+                    if (selectedValue) {
+                        selectedItem = options.find(x => x.id === selectedValue);
+                    }
+                    console.log(options);
+                    this.setState({ options: options, selectItem: selectedItem });
                     resolve(options);
                 }, error => { });
         });
 
+    }
+
+    reloadDepartment =(freeText) => {
+        const { selectedValue } = this.state;
+        DepartmentServices.GetByFreeText({ freeText: '' })
+                .then(response => {
+                    const options = this.generateDepartmentOptions(response.data);
+                    let selectedItem = null;
+                    if (selectedValue) {
+                        selectedItem = options.find(x => x.id === selectedValue);
+                    }
+                    console.log(options);
+                    this.setState({ options: options, selectItem: selectedItem });
+                }, error => { });
+
+    }
+
+    shouldComponentUpdate = (nextProps) => {
+        console.log(nextProps);
+        if (this.props.selectedValue !== nextProps.selectedValue) {
+        //     const { options } = this.state;
+        //     let selectItem = options.find(x => x.id === nextProps.selectedValue);
+        //     this.setState({ selectItem: selectItem });
+        DepartmentServices.GetByFreeText({ freeText: '' })
+                .then(response => {
+                    const options = this.generateDepartmentOptions(response.data);
+                    let selectedItem = null;
+                    if (nextProps.selectedValue) {
+                        selectedItem = options.find(x => x.id === nextProps.selectedValue);
+                    }
+                    this.setState({ options: options, selectItem: selectedItem });
+                }, error => { });
+
+         }
+        if (this.props.hideOptions !== nextProps.hideOptions) {
+            let { options } = this.state;
+            if (nextProps.hideOptions) {        
+                nextProps.hideOptions.forEach(x => {
+                    if (x) {
+                        const index = options.findIndex(opt => opt.id === x);
+                        const preDisabledIndex = options.findIndex(opt => opt.isDisabled);
+                        if(index !== -1)
+                        {
+                        options[index].isDisabled = true;
+                        }
+                        if(preDisabledIndex !== -1)
+                        {
+                            options[preDisabledIndex].isDisabled = false;
+                        }
+                    }
+                });
+            }
+            console.log(options);
+            this.setState({ options: options, hideOptions: nextProps.hideOptions });
+        }
+
+        console.log(this.state.options);
+        return true;
     }
 
     generateDepartmentOptions = (departments) => {
@@ -44,6 +108,11 @@ export class DepartmentSelect extends React.Component {
                 depts = _.orderBy(depts, ["departmentCode"], ["desc"]);
             }
             depts.forEach(dept => {
+                const {hideOptions} = this.state;
+                if(hideOptions && hideOptions.some(x => x === dept.id))
+                {
+                    dept.isDisabled = true;
+                }
                 const parent = options.find(x => x.id === dept.parentId);
                 if (!parent) {
                     options.splice(0, 0, dept);
@@ -54,14 +123,14 @@ export class DepartmentSelect extends React.Component {
             });
 
         });
-
         return options;
     }
 
 
 
     onChange = (e) => {
-        this.setState({ selectItem: e });
+        const { onValueChange } = this.props;
+        this.setState({ selectItem: e }, onValueChange(e));
     }
 
     optionFormat = (opt) => {
@@ -80,12 +149,14 @@ export class DepartmentSelect extends React.Component {
     render = () => {
         const { options, selectItem } = this.state;
         const placeholder = "- Chọn bộ phận -";
+
         return (
             <AsyncSelect
                 loadOptions={this.loadDepartments}
                 defaultOptions
                 value={selectItem}
                 isClearable
+                controlShouldRenderValue
                 isMulti={false}
                 noOptionsMessage={x => x.inputValue = "Không có dữ liệu"}
                 placeholder={placeholder}

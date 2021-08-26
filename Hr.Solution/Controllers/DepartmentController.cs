@@ -22,5 +22,13 @@ namespace Hr.Solution.Application.Controllers
             var result = await departmentServices.GetByFreeText(freeText);
             return Ok(result);
         }
+
+        [HttpGet, Route("{id}")]
+        [Authorize]
+        public async Task<ActionResult> GetById(int id)
+        {
+            var result = await departmentServices.GetById(id);
+            return Ok(result);
+        }
     }
 }
