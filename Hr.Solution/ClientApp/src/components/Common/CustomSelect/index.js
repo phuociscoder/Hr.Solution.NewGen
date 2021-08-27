@@ -1,10 +1,12 @@
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import './customSelect.css';
 import RestClient from '../../../services/common/RestClient';
 import _ from "lodash";
 import { Image } from "react-bootstrap";
+import { ShowNotification } from "../notification/Notification";
+import { NotificationType } from "../notification/Constants";
 
 export class CustomSelect extends React.Component {
     constructor(props) {
@@ -13,6 +15,7 @@ export class CustomSelect extends React.Component {
             show: false,
             options: [],
             selectedOpt: {},
+            displayName: '',
             selectedValue: null,
             disabledValue: null
         }
@@ -26,7 +29,7 @@ export class CustomSelect extends React.Component {
     shouldComponentUpdate = (nextProps) => {
         if (this.props.selectedValue !== nextProps.selectedValue) {
             const optInfo = this.getSelectedOptInfo(nextProps.selectedValue);
-            this.setState({ selectedValue: nextProps.selectedValue, selectedOpt: optInfo ?? {} });
+            this.setState({ selectedValue: nextProps.selectedValue, selectedOpt: optInfo ?? {} , displayName: optInfo[this.props.labelField] });
         }
         if (this.props.disabledValue !== nextProps.disabledValue) {
             this.setState({ disabledValue: nextProps.disabledValue });
@@ -45,9 +48,9 @@ export class CustomSelect extends React.Component {
         RestClient.SendGetRequest(dataUrl)
             .then(response => {
                 const options = this.generateOptions(response.data);
-                this.setState({ options: options });
-            }, error => {
-                debugger;
+                this.setState({ options: options, originOptions: options });
+            }, () => {
+               ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể truy cập dữ liệu");
             });
     }
 
@@ -90,36 +93,58 @@ export class CustomSelect extends React.Component {
 
     }
 
-    onInputFocus = (e) => {
+    clearOpt =() => {
+        const {labelField, onValueChange, isClearable} = this.props;
+        if( !isClearable) return;
+        this.setState({selectedOpt: {}, displayName: '', selectedValue: null}, onValueChange(null));
+    }
+
+    onInputFocus = () => {
         this.setState({ show: true });
     }
-    onInputBlur = (e) => {
+    onInputBlur = () => {
         _.delay(() => {
             this.setState({ show: false });
         }, 300);
     }
 
     onOptClick = (opt) => {
+        const {originOptions} = this.state;
         const { onValueChange } = this.props;
-        this.setState({ selectedOpt: opt, selectedValue: opt.id, show: false }, onValueChange(opt.id));
+        this.setState({ selectedOpt: opt, options: originOptions, displayName: opt[this.props.labelField ?? 'id'], selectedValue: opt.id, show: false }, onValueChange(opt.id));
+    }
+
+    onInputChange =(e) => {
+        const {originOptions} = this.state;
+        const value = e.target.value;
+        const options = originOptions.filter(x => x[this.props.labelField].includes(value));
+        if(!value || value ==='') 
+        {
+            this.setState({options: this.state.originOptions, displayName: value, show: true});
+            return;
+        }
+        this.setState({options: options, displayName: value, show: true});
     }
 
 
     render = () => {
-        const { valueField, labelField } = this.props;
-        const { show, options, selectedOpt, disabledValue, selectedValue } = this.state;
+        const { labelField, isClearable } = this.props;
+        const { show, options, selectedOpt, disabledValue, selectedValue, displayName } = this.state;
+        console.log(displayName, show);
         return (
 
             <div style={{ position: 'relative' }} className={this.props.className}>
-                <div className="w-100 d-flex"  onClick={this.onInputFocus} onBlur={this.onInputBlur}>
+                <div className="w-100 d-flex"  onFocus={this.onInputFocus} onClick={this.onInputFocus} onBlur={this.onInputBlur}>
                     {selectedOpt.image && <Image className="opt-select-image" src={selectedOpt.image} width={25} height={25} />}
                     <input className="form-control"
                         style={{ paddingLeft: `${selectedOpt.image ? 35 : 10}px` }}
-                        value={selectedOpt[labelField]}
+                        value={displayName}
+                        onChange={this.onInputChange}
                         placeholder={this.props.placeHolder ?? "- Chọn chỉ mục -"}
                     ></input>
                     <button className="btn-expand-menu"><FontAwesomeIcon icon={faAngleDown} /></button>
                 </div>
+                {isClearable && <button onClick={this.clearOpt} className="btn-clear"><FontAwesomeIcon icon={faTimes} /></button>} 
 
                 {show &&
                     <div style={{ height: options.length > 0 ? '400px' : null, overflowY: 'auto' }} className="form-control d-flex flex-column w-100 menu-options-container shadow  mt-1"

@@ -155,6 +155,7 @@ export class DepartmentDetails extends React.Component {
                               disabledValue={id} 
                               valueField="id"
                               labelField="departmentName"
+                              isClearable={true}
                               onValueChange={this.onDepartmentChange} />
                             </label>
                             <div className="w-50 d-flex mt-2">

@@ -1,8 +1,18 @@
 .btn-expand-menu{
     border: none;
-    margin-left: -30px;
     background-color: transparent;
     color: #cccccc;
+    margin-left: -35px;
+
+}
+
+.btn-clear{
+    border: none;
+    background-color: transparent;
+    color: #cccccc;
+    position: absolute;
+    right: 40px;
+    top:7px
 }
 
 .menu-options-container
