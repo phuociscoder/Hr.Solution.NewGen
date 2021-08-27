@@ -10,5 +10,6 @@ namespace Hr.Solution.Core.Services.Interfaces
    public interface IDepartmentServices
     {
         Task<List<DepartmentGetByFreeTextResponse>> GetByFreeText(string freeText);
+        Task<DepartmentResponse> GetById(int id);
     }
 }
