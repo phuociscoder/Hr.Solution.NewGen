@@ -16,37 +16,48 @@ export class Home extends Component {
 
   componentDidMount = () => {
     const userFullName = AuthenticationManager.FullName();
+    const shortName = this.getDisplayShortName();
     const avatar = AuthenticationManager.Avatar();
-    const displaySysRole = this.getDisplaySysRole();
-    this.setState({ fullName: userFullName, avatar: avatar, displayRoleName: displaySysRole });
+    const displayAllSysRoleName = this.getDisplayRoleNames();
+    this.setState({ fullName: userFullName, avatar: avatar, displayAllSysRoleName: displayAllSysRoleName, shortName: shortName });
   }
 
-  getDisplaySysRole = () => {
+  getDisplayShortName = () => {
+    const userFullName = AuthenticationManager.FullName();
+
+    if (userFullName) {
+      const fullName = userFullName.split(" ");
+      const newName = fullName.slice(-2);
+      const initials = newName.shift().charAt(0) + newName.shift().charAt(0);
+      return initials.toUpperCase();
+    }
+    return null;
+  }
+
+
+  getDisplayRoleNames = () => {
     const sysRoles = AuthenticationManager.SysRoles();
-    if (!sysRoles || sysRoles.length === 0) return null;
+    if (!sysRoles) return null;
 
-    if (sysRoles.length === 1) return sysRoles[0].name;
-
-    return `${sysRoles[0].name} +${sysRoles.length - 1}`;
+    return sysRoles.map(x => <div className="roleName">{x.name}</div>);
   }
 
   render() {
-    const { avatar, fullName, displayRoleName } = this.state;
+    const { avatar, fullName, displayAllSysRoleName, shortName } = this.state;
+    console.log(avatar);
     return (
-      <div className="wrapper">
-        <div className="user-info-card card">
-          <div className="upper-container">
-            <div className="image-container">
-              <img src={avatar || noAvatar} alt="avatar" height="100px" width="100px" />
-            </div>
-          </div>
-          <div className="lower-container">
-            <h2>Welcome To Hr Solution</h2>
-            <h3>{fullName}</h3>
-            <h4>{displayRoleName}</h4>
+      <div className="wrapper d-flex w-100 h-100 justify-content-center align-items-center">
+        <div className=".user-info-card d-flex flex-row align-items-center bg-white">
+          {avatar && <div className="profileImage">{shortName}</div>}
+          <div className="lower-container d-flex flex-column justify-content-center align-items-end">
+            <h1 className="Message">Welcome To Hr Solution</h1>
+            <h2 className="fullName">{fullName}</h2>
+            <p className="roleNames">{displayAllSysRoleName}</p>
+            {/* <div className="profileImage">{shortName}</div> */}
+            {/* <img className="image-avatar" src={avatar} /> */}
           </div>
         </div>
-      </div>
+      </div >
     );
   }
 }
