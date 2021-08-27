@@ -16,6 +16,7 @@ export class CustomSelect extends React.Component {
             options: [],
             selectedOpt: {},
             displayName: '',
+            originDisplayName:'',
             selectedValue: null,
             disabledValue: null
         }
@@ -29,7 +30,11 @@ export class CustomSelect extends React.Component {
     shouldComponentUpdate = (nextProps) => {
         if (this.props.selectedValue !== nextProps.selectedValue) {
             const optInfo = this.getSelectedOptInfo(nextProps.selectedValue);
-            this.setState({ selectedValue: nextProps.selectedValue, selectedOpt: optInfo ?? {} , displayName: optInfo[this.props.labelField] });
+            this.setState({ selectedValue: nextProps.selectedValue, 
+                            options: this.state.originOptions, 
+                            selectedOpt: optInfo ?? {} , 
+                            displayName: optInfo[this.props.labelField],
+                            originDisplayName: optInfo[this.props.labelField] });
         }
         if (this.props.disabledValue !== nextProps.disabledValue) {
             this.setState({ disabledValue: nextProps.disabledValue });
@@ -38,9 +43,9 @@ export class CustomSelect extends React.Component {
     }
 
     getSelectedOptInfo = (id) => {
-        const { options } = this.state;
-        if (!options || options.length === 0) return {};
-        return options.find(x => x.id === id);
+        const { originOptions } = this.state;
+        if (!originOptions || originOptions.length === 0) return {};
+        return originOptions.find(x => x.id === id);
     }
 
     loadData = () => {
@@ -94,43 +99,61 @@ export class CustomSelect extends React.Component {
     }
 
     clearOpt =() => {
-        const {labelField, onValueChange, isClearable} = this.props;
+        const {onValueChange, isClearable} = this.props;
         if( !isClearable) return;
-        this.setState({selectedOpt: {}, displayName: '', selectedValue: null}, onValueChange(null));
+        this.setState({selectedOpt: {}, 
+                       displayName: '',
+                       originDisplayName:'',
+                       selectedValue: null}, onValueChange(null));
     }
 
     onInputFocus = () => {
-        this.setState({ show: true });
+        const {options, originOptions} = this.state;
+        this.setState({ show: true, options: originOptions });
     }
-    onInputBlur = () => {
+    onInputBlur = (e) => {
         _.delay(() => {
-            this.setState({ show: false });
-        }, 300);
+            this.setState({ show: false, onSearching: false});
+        }, 250);
+    }
+
+    componentDidUpdate =() => {
+        const {displayName, originDisplayName, onSearching} = this.state;
+        if(!onSearching && displayName !== originDisplayName)
+        {
+            this.setState({displayName: originDisplayName})
+        }
     }
 
     onOptClick = (opt) => {
         const {originOptions} = this.state;
         const { onValueChange } = this.props;
-        this.setState({ selectedOpt: opt, options: originOptions, displayName: opt[this.props.labelField ?? 'id'], selectedValue: opt.id, show: false }, onValueChange(opt.id));
+        this.setState({ selectedOpt: opt, 
+            options: originOptions, 
+            displayName: opt[this.props.labelField ?? 'name'],
+            originDisplayName: opt[this.props.labelField ?? 'name'], 
+            selectedValue: opt.id, 
+            show: false,
+            onSearching: false
+         }, onValueChange(opt.id));
     }
 
     onInputChange =(e) => {
         const {originOptions} = this.state;
         const value = e.target.value;
-        const options = originOptions.filter(x => x[this.props.labelField].includes(value));
-        if(!value || value ==='') 
-        {
-            this.setState({options: this.state.originOptions, displayName: value, show: true});
-            return;
-        }
-        this.setState({options: options, displayName: value, show: true});
+        const options = originOptions.filter(x => x[this.props.labelField].toLowerCase().includes(value.toLowerCase()));
+            this.setState({options: !value || value ==='' ? originOptions : options, 
+            displayName: value,
+            onSearching: true, 
+            show: true});
+        
     }
 
 
     render = () => {
         const { labelField, isClearable } = this.props;
         const { show, options, selectedOpt, disabledValue, selectedValue, displayName } = this.state;
-        console.log(displayName, show);
+
         return (
 
             <div style={{ position: 'relative' }} className={this.props.className}>
