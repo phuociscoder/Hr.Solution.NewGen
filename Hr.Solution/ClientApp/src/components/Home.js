@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import noAvatar from "../assets/no-avatar.jpg";
 import { AuthenticationManager } from "../AuthenticationManager";
 import "./HomePage.css";
+import _ from "lodash";
 
 
 export class Home extends Component {
@@ -18,6 +18,7 @@ export class Home extends Component {
     const userFullName = AuthenticationManager.FullName();
     const shortName = this.getDisplayShortName();
     const avatar = AuthenticationManager.Avatar();
+
     const displayAllSysRoleName = this.getDisplayRoleNames();
     this.setState({ fullName: userFullName, avatar: avatar, displayAllSysRoleName: displayAllSysRoleName, shortName: shortName });
   }
@@ -26,10 +27,12 @@ export class Home extends Component {
     const userFullName = AuthenticationManager.FullName();
 
     if (userFullName) {
-      const fullName = userFullName.split(" ");
-      const newName = fullName.slice(-2);
-      const initials = newName.shift().charAt(0) + newName.shift().charAt(0);
-      return initials.toUpperCase();
+      const fullNames = userFullName.split(" ");
+      let newNames = fullNames.map(name => {
+        return name[0].toUpperCase();
+      });
+      newNames = _.takeRight(newNames, 2);
+      return newNames;
     }
     return null;
   }
@@ -48,13 +51,11 @@ export class Home extends Component {
     return (
       <div className="wrapper d-flex w-100 h-100 justify-content-center align-items-center">
         <div className=".user-info-card d-flex flex-row align-items-center bg-white">
-          {avatar && <div className="profileImage">{shortName}</div>}
+          {avatar ? <img className="image-avatar" src={avatar} /> : <div className="profileImage">{shortName}</div>}
           <div className="lower-container d-flex flex-column justify-content-center align-items-end">
             <h1 className="Message">Welcome To Hr Solution</h1>
             <h2 className="fullName">{fullName}</h2>
             <p className="roleNames">{displayAllSysRoleName}</p>
-            {/* <div className="profileImage">{shortName}</div> */}
-            {/* <img className="image-avatar" src={avatar} /> */}
           </div>
         </div>
       </div >
