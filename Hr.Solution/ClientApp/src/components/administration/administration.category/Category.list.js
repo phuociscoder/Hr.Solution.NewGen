@@ -10,6 +10,7 @@ import { CategoryServices } from "./Category.services";
 import './Category.css';
 import { debounce } from "lodash";
 import { AuthenticationManager } from "../../../AuthenticationManager";
+import { StringUltis } from "../../Utilities/StringUltis";
 
 export class CategoryListing extends React.Component {
     constructor(props) {
@@ -58,8 +59,9 @@ export class CategoryListing extends React.Component {
 
     SearchCategories = (name) => {
         const { originCategories } = this.state;
-        const filteredCategories = originCategories.filter(x => x.id.toLowerCase().trim().includes(name.toLowerCase().trim())
-            || x.name.toLowerCase().trim().includes(name.toLowerCase().trim()));
+        // const filteredCategories = originCategories.filter(x => x.id.toLowerCase().trim().includes(name.toLowerCase().trim())
+        //     || x.name.toLowerCase().trim().includes(name.toLowerCase().trim()));
+        const filteredCategories = originCategories.filter(x => StringUltis.compareString(x.name, name) || StringUltis.compareString(x.id, name));
         this.setState({ loading: false, categories: filteredCategories });
     }
 

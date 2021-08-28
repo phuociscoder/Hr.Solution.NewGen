@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { StringUltis } from './Utilities/StringUltis';
 
 export class Home extends Component {
   static displayName = Home.name;
 
   render () {
+    console.log(StringUltis.compareString("Nguyễn/ Hữu Phước", "Nguyễn"));
+    console.log(StringUltis.compareString("Nguyễn/ Hữu Phước", " "));
     return (
       <div>
         <h1>Hello, world!</h1>
