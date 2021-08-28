@@ -7,6 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCog, faEnvelopeOpenText, faIdCardAlt, faPowerOff, faTimes, faUnlockAlt } from '@fortawesome/free-solid-svg-icons'
 import { LanguageSelect } from './Common/language/LanguageSelect';
 import { AuthenticationManager } from '../AuthenticationManager';
+import { ChangePasswordModal } from './Common/changpassword/ChangePasswordModal';
+import { AccountServices } from './administration/admin.account/Account.services';
+import { ShowNotification } from './Common/notification/Notification';
+import { NotificationType } from './Common/notification/Constants';
 
 
 export class NavMenu extends Component {
@@ -63,6 +67,14 @@ export class NavMenu extends Component {
     window.location.href = "/login";
   }
 
+  onChangePasswordClick = () => {
+    this.setState({ showChangePasswordModal: true });
+  }
+
+  onCancelProcessModal = () => {
+    this.setState({ showChangePasswordModal: false, errorMessages: '', oldPassword: '', newPassword: '', confirmPassword: '' })
+  }
+
   generateConfirmModalLogout = () => {
     const { showLogOutModal } = this.state;
     return (
@@ -82,7 +94,7 @@ export class NavMenu extends Component {
   }
 
   render() {
-    const { fullName, avatar, displayRoleName, roleTooltips } = this.state;
+    const { fullName, avatar, displayRoleName, roleTooltips, showChangePasswordModal } = this.state;
     return (
       <>
         <Navbar bg="dark" variant="dark" expand="lg" className="nav-top-bar" style={{ zIndex: 300 }}>
@@ -108,7 +120,7 @@ export class NavMenu extends Component {
                 </React.Fragment>
 
               } id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1"><FontAwesomeIcon icon={faUnlockAlt}></FontAwesomeIcon>  Đổi Mật Khẩu</NavDropdown.Item>
+                <NavDropdown.Item onClick={this.onChangePasswordClick}><FontAwesomeIcon icon={faUnlockAlt}></FontAwesomeIcon>  Đổi Mật Khẩu</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2"><FontAwesomeIcon icon={faEnvelopeOpenText} /> Thông Báo <Badge variant="danger">10</Badge></NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.3"><FontAwesomeIcon icon={faIdCardAlt} /> Thông Tin Cá Nhân</NavDropdown.Item>
                 <NavDropdown.Divider />
@@ -120,6 +132,7 @@ export class NavMenu extends Component {
           </Navbar.Collapse>
         </Navbar>
         {this.generateConfirmModalLogout()}
+        {<ChangePasswordModal showModal={showChangePasswordModal} onCancelProcess={this.onCancelProcessModal} userName={AuthenticationManager.UserName()}/>}
       </>
 
     );
