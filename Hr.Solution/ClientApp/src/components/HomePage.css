@@ -1,0 +1,54 @@
+
+.image-avatar{
+    background: white;
+    height: 300px;
+    padding: 5px;
+}
+
+.lower-container{
+    height: 300px;
+    background: white;
+    text-align: center;
+}
+
+.Message, .fullName, .roleNames{
+    margin: 0;
+    padding: 0;
+}
+
+.lower-container .Message{
+    margin: 0 2rem;
+    color: #176abd;
+    font-weight: 900;
+    font-size: 1.6rem;
+}
+
+.lower-container .fullName{
+    margin: 1rem;
+    color: #2f2d2e;
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.lower-container .roleNames{
+    margin: 1rem;
+    color: #16abbe;
+    font-weight: 700;
+    font-size: 1.2rem;
+   }
+
+.roleName{
+    text-align: end;
+}
+
+.profileImage {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background:linear-gradient( 270deg, #66baf2 0%, #2a2d81 88%);;
+    font-size: 35px;
+    color: #fff;
+    text-align: center;
+    line-height: 150px;
+    margin: 20px 12px;
+  }
