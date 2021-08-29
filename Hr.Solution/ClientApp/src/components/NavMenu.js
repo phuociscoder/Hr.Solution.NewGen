@@ -33,21 +33,21 @@ export class NavMenu extends Component {
     const avatar = AuthenticationManager.Avatar();
     const displaySysRole = this.getDisplaySysRole();
     const displayAllSysRoleName = this.getDisplayRoleNames();
-    this.setState({ fullName: userFullName, avatar: avatar, displayRoleName : displaySysRole, roleTooltips: displayAllSysRoleName });
+    this.setState({ fullName: userFullName, avatar: avatar, displayRoleName: displaySysRole, roleTooltips: displayAllSysRoleName });
   }
 
-  getDisplaySysRole =() => {
+  getDisplaySysRole = () => {
     const sysRoles = AuthenticationManager.SysRoles();
-    if(!sysRoles || sysRoles.length === 0) return null;
+    if (!sysRoles || sysRoles.length === 0) return null;
 
-    if(sysRoles.length === 1) return sysRoles[0].name;
+    if (sysRoles.length === 1) return sysRoles[0].name;
 
-    return `${sysRoles[0].name} +${sysRoles.length -1}`;
+    return `${sysRoles[0].name} +${sysRoles.length - 1}`;
   }
 
-  getDisplayRoleNames =() => {
+  getDisplayRoleNames = () => {
     const sysRoles = AuthenticationManager.SysRoles();
-    if(!sysRoles) return null;
+    if (!sysRoles) return null;
 
     return sysRoles.map(x => x.name).toString();
   }
@@ -97,7 +97,7 @@ export class NavMenu extends Component {
     const { fullName, avatar, displayRoleName, roleTooltips, showChangePasswordModal } = this.state;
     return (
       <>
-        <Navbar bg="dark" variant="dark" expand="lg" className="nav-top-bar" style={{zIndex: 300}}>
+        <Navbar bg="dark" variant="dark" expand="lg" className="nav-top-bar" style={{ zIndex: 300 }}>
           <Navbar.Brand className="animate__animated animate__fadeInLeft" href="#home">
             <img
               alt=""

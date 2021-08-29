@@ -22,70 +22,70 @@ export class AuthenticationManager {
         });
     }
 
-    static SysRoles =() => {
-        if(!this.IsAuthorized()) return null;
+    static SysRoles = () => {
+        if (!this.IsAuthorized()) return null;
         var userInfo = JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO));
         return userInfo.sysRoles;
     }
 
-    static Permissions =() => {
-        if(!this.IsAuthorized()) return null;
+    static Permissions = () => {
+        if (!this.IsAuthorized()) return null;
         var userInfo = JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO));
         return userInfo.permissions;
     }
 
     static AllowView = (functionId) => {
-        if(!this.IsAuthorized() || !functionId) return false;
+        if (!this.IsAuthorized() || !functionId) return false;
         var userInfo = JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO));
-        if(userInfo.isAdmin) return true;
+        if (userInfo.isAdmin) return true;
         var permissions = userInfo.permissions;
-        if(!permissions || permissions.length === 0) return false;
+        if (!permissions || permissions.length === 0) return false;
         var funcPermission = permissions.find(x => x.functionId === functionId);
         return funcPermission ? funcPermission.view : false;
     }
 
     static AllowAdd = (functionId) => {
-        if(!this.IsAuthorized() || !functionId) return false;
+        if (!this.IsAuthorized() || !functionId) return false;
         var userInfo = JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO));
-        if(userInfo.isAdmin) return true;
+        if (userInfo.isAdmin) return true;
         var permissions = userInfo.permissions;
-        if(!permissions || permissions.length === 0) return false;
+        if (!permissions || permissions.length === 0) return false;
         return permissions.find(x => x.functionId === functionId).add;
     }
 
     static AllowEdit = (functionId) => {
-        if(!this.IsAuthorized() || !functionId) return false;
+        if (!this.IsAuthorized() || !functionId) return false;
         var userInfo = JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO));
-        if(userInfo.isAdmin) return true;
+        if (userInfo.isAdmin) return true;
         var permissions = userInfo.permissions;
-        if(!permissions || permissions.length === 0) return false;
+        if (!permissions || permissions.length === 0) return false;
         return permissions.find(x => x.functionId === functionId).edit;
     }
 
     static AllowDelete = (functionId) => {
-        if(!this.IsAuthorized() || !functionId) return false;
+        if (!this.IsAuthorized() || !functionId) return false;
         var userInfo = JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO));
-        if(userInfo.isAdmin) return true;
+        if (userInfo.isAdmin) return true;
         var permissions = userInfo.permissions;
-        if(!permissions || permissions.length === 0) return false;
+        if (!permissions || permissions.length === 0) return false;
         return permissions.find(x => x.functionId === functionId).delete;
     }
 
     static AllowImport = (functionId) => {
-        if(!this.IsAuthorized() || !functionId) return false;
+        if (!this.IsAuthorized() || !functionId) return false;
         var userInfo = JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO));
-        if(userInfo.isAdmin) return true;
+        if (userInfo.isAdmin) return true;
         var permissions = userInfo.permissions;
-        if(!permissions || permissions.length === 0) return false;
+        if (!permissions || permissions.length === 0) return false;
         return permissions.find(x => x.functionId === functionId).import;
     }
 
     static AllowExport = (functionId) => {
-        if(!this.IsAuthorized() || !functionId) return false;
+        if (!this.IsAuthorized() || !functionId) return false;
         var userInfo = JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO));
-        if(userInfo.isAdmin) return true;
+        if (userInfo.isAdmin) return true;
         var permissions = userInfo.permissions;
-        if(!permissions || permissions.length === 0) return false;
+        if (!permissions || permissions.length === 0) return false;
         return permissions.find(x => x.functionId === functionId).export;
     }
 
@@ -96,22 +96,23 @@ export class AuthenticationManager {
     static UserName = () => {
         var userInfo = JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO));
         return userInfo ? userInfo["userName"] : "administrator";
-        
+
     }
 
     static FullName = () => {
         return JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO))?.fullName;
     }
 
-    static Avatar =() => {
-        return localStorage.getItem(AuthenInfo.AVATAR);
+    static Avatar = () => {
+        const avatar = localStorage.getItem(AuthenInfo.AVATAR);
+        return avatar;
     }
 
-    static Token =() => {
+    static Token = () => {
         return localStorage.getItem(AuthenInfo.TOKEN);
     }
 
-    static Language =() => {
+    static Language = () => {
         return localStorage.getItem(AuthenInfo.LANGUAGE);
     }
 
@@ -121,7 +122,7 @@ export class AuthenticationManager {
         return false;
     }
 
-    static IsHasPermission =(prefix, permission) => {
+    static IsHasPermission = (prefix, permission) => {
 
     }
 
