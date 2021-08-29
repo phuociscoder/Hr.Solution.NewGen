@@ -51,7 +51,7 @@ export class Home extends Component {
     return (
       <div className="wrapper d-flex w-100 h-100 justify-content-center align-items-center">
         <div className=".user-info-card d-flex flex-row align-items-center bg-white">
-          {avatar !== 'null' ? <img className="image-avatar" src={avatar} /> : <div className="profileImage">{shortName}</div>}
+          {avatar ? <img className="image-avatar" src={avatar} /> : <div className="profileImage">{shortName}</div>}
           <div className="lower-container d-flex flex-column justify-content-center align-items-end">
             <h1 className="Message">Welcome To Hr Solution</h1>
             <h2 className="fullName">{fullName}</h2>
