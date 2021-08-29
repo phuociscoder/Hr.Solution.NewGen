@@ -1,4 +1,5 @@
-﻿using Hr.Solution.Data.Responses;
+﻿using Hr.Solution.Data.Requests;
+using Hr.Solution.Data.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Hr.Solution.Core.Services.Interfaces
     {
         Task<List<DepartmentGetByFreeTextResponse>> GetByFreeText(string freeText);
         Task<DepartmentResponse> GetById(int id);
+        Task<int> Create(DepartmentCreateRequest request);
     }
 }

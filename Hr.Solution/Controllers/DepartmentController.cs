@@ -1,4 +1,5 @@
 ﻿using Hr.Solution.Core.Services.Interfaces;
+using Hr.Solution.Data.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -29,6 +30,14 @@ namespace Hr.Solution.Application.Controllers
         {
             var result = await departmentServices.GetById(id);
             return Ok(result);
+        }
+
+        [HttpPost, Route("")]
+        [Authorize]
+        public async Task<ActionResult> Create([FromBody] DepartmentCreateRequest request)
+        {
+            var result = await departmentServices.Create(request);
+            return Created(string.Empty, result);
         }
     }
 }

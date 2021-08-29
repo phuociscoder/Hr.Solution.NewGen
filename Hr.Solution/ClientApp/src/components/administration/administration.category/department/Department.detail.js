@@ -9,7 +9,6 @@ import { Mode } from "./Constants";
 import { ImageUploader } from '../../../Common/ImageUploader';
 import { CategoryServices } from "../Category.services";
 import { AuthenticationManager } from "../../../../AuthenticationManager";
-import { DepartmentSelect } from "../../../Common/DepartmentSelect/DepartmentSelect";
 import { CustomSelect } from "../../../Common/CustomSelect";
 
 
@@ -27,9 +26,9 @@ export class DepartmentDetails extends React.Component {
 
     initModel = {
         id: null,
-        departmentCode: null,
-        departmentName: null,
-        departmentName2: null,
+        departmentCode: '',
+        departmentName: '',
+        departmentName2: '',
         parentId: null
     }
 
@@ -42,7 +41,7 @@ export class DepartmentDetails extends React.Component {
     getDepartmentInfo = (id) => {
         DepartmentServices.GetById(id)
             .then(response => {
-                this.setState({ departmentInfo: response.data });
+                this.setState({ departmentInfo: response.data, originDepartmentInfo: response.data, mode: Mode.EDIT });
             },
                 error => {
                     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể truy cập thông tin bộ phận");
@@ -60,8 +59,8 @@ export class DepartmentDetails extends React.Component {
     }
 
     onAddItemClick = () => {
-        const newModel = this.resetModel();
-        this.setState({ model: newModel, mode: Mode.CREATE });
+        const newModel = this.initModel;
+        this.setState({ departmentInfo: newModel, mode: Mode.CREATE });
     }
 
     onInputChange = (e) => {
@@ -83,22 +82,28 @@ export class DepartmentDetails extends React.Component {
         this.setState({ departmentInfo: newModel });
     }
 
-    onDepartmentLogoChange = (e) => {
-
+    onDepartmentLogoChange = (value) => {
+        const {departmentInfo} = this.state;
+        const newModel = Object.assign({}, {...departmentInfo, logoImage: value});
+        this.setState({departmentInfo: newModel});
     }
 
-    onParentChange = (parentId) => {
-
+    onManagerChange =(id) => {
+        const {departmentInfo} = this.state;
+        const newModel = Object.assign({}, {...departmentInfo, managerId: id});
+        this.setState({departmentInfo: newModel});
     }
 
     onDepartmentChange = (id) => {
-        // console.log('selectedDepartment' , value);
+        const {departmentInfo} = this.state;
+        const newModel = Object.assign({}, {...departmentInfo, parentID: id});
+        this.setState({departmentInfo: newModel});
     }
 
     render = () => {
-        const { mode, model, departments } = this.state;
+        const { mode} = this.state;
         const { id, departmentCode, departmentName, departmentName2, departmentAddress, departmentEmail, departmentFax,
-            departmentTel, isCompany, note, lock, ordinal, taxCode, logoImage, managerId, active, parentID } = this.state.departmentInfo;
+            departmentTel, isCompany, note, ordinal, taxCode, logoImage, managerId, active, parentID } = this.state.departmentInfo;
         return (
             <>
                 <Card className="h-100">
@@ -126,11 +131,12 @@ export class DepartmentDetails extends React.Component {
                                         orderFieldName={["level"]}
                                         orderBy="desc"
                                         disabled={mode === Mode.VIEW}
+                                        selectedValue={managerId}
                                         isHierachy={false}
                                         valueField="id"
                                         labelField="fullName"
                                         isClearable={true}
-                                        onValueChange={this.onDepartmentChange} />
+                                        onValueChange={this.onManagerChange} />
                                 </label>
                                 <div className="w-50 d-flex mt-2">
                                     <label>
@@ -157,6 +163,10 @@ export class DepartmentDetails extends React.Component {
                                 <label className="mt-2">
                                     Điện thoại:
                                     <input disabled={mode === Mode.VIEW} fieldname="departmentTel" value={departmentTel} onChange={this.onInputChange} className="form-control " placeholder="Điện thoại" />
+                                </label>
+                                <label className="mt-2">
+                                   Địa chỉ:
+                                    <input disabled={mode === Mode.VIEW} fieldname="departmentAddress" value={departmentAddress} onChange={this.onInputChange} className="form-control " placeholder="Điện thoại" />
                                 </label>
                             </div>
                             <div className="w-25 ml-5">
@@ -208,10 +218,10 @@ export class DepartmentDetails extends React.Component {
                             {mode !== Mode.VIEW &&
                                 <>
 
-                                    <button className="btn btn-primary mr-2 ">
+                                    <button className="btn btn-primary mr-2 " onClick={this.onShowProcessConfirmModal}>
                                         <FontAwesomeIcon icon={faCheck} /> <span className="ml-1"> Lưu thay đổi</span>
                                     </button>
-                                    <button className="btn btn-danger ">
+                                    <button className="btn btn-danger " onClick={this.onShowCancelConfirmModal}>
                                         <FontAwesomeIcon icon={faTimes} /> <span className="ml-1"> Hủy bỏ</span>
                                     </button>
                                 </>
@@ -296,30 +306,31 @@ export class DepartmentDetails extends React.Component {
     }
 
     onProcessConfirm = () => {
-        const { model, mode, category } = this.state;
+        const { departmentInfo, mode} = this.state;
+        console.log(departmentInfo);
         if (mode === Mode.CREATE) {
-            const newModel = Object.assign({}, { ...model, functionId: category.id, createdBy: AuthenticationManager.UserName() });
-            CategoryServices.AddCategoryItem(newModel)
+            const newModel = Object.assign({}, { ...departmentInfo, createdBy: AuthenticationManager.UserName() });
+            DepartmentServices.Add(newModel)
                 .then(response => {
-                    const newModel = response.data;
-                    ShowNotification(NotificationType.SUCCESS, "Thêm chỉ mục vào danh sách thành công");
-                    this.setState({ model: this.resetModel(), showModalProcessConfirm: false }, this.onRefresh(true));
+                    ShowNotification(NotificationType.SUCCESS, "Thêm bộ phận/phòng ban thành công");
+                    this.setState({ model: this.initModel, showModalProcessConfirm: false }, this.onRefresh(true));
                 }, error => {
                     this.setState({ showModalProcessConfirm: false });
-                    ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thêm chỉ mục vào danh sách");
+                    ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thêm bộ phận/phòng ban vào hệ thống");
                 })
-        } else if (mode === Mode.EDIT) {
-            const editModel = Object.assign({}, { ...model, modifiedBy: AuthenticationManager.UserName() });
-            CategoryServices.UpdateCategoryItem(editModel.id, editModel)
-                .then(response => {
-                    const editModel = response.data;
-                    ShowNotification(NotificationType.SUCCESS, "Cập nhật chỉ mục thành công");
-                    this.setState({ model: editModel, editModel: editModel, showModalProcessConfirm: false }, this.onRefresh(true));
-                }, error => {
-                    this.setState({ showModalProcessConfirm: false });
-                    ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể cập nhật chỉ mục ");
-                });
-        }
+            }
+        // } else if (mode === Mode.EDIT) {
+        //     const editModel = Object.assign({}, { ...model, modifiedBy: AuthenticationManager.UserName() });
+        //     CategoryServices.UpdateCategoryItem(editModel.id, editModel)
+        //         .then(response => {
+        //             const editModel = response.data;
+        //             ShowNotification(NotificationType.SUCCESS, "Cập nhật chỉ mục thành công");
+        //             this.setState({ model: editModel, editModel: editModel, showModalProcessConfirm: false }, this.onRefresh(true));
+        //         }, error => {
+        //             this.setState({ showModalProcessConfirm: false });
+        //             ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể cập nhật chỉ mục ");
+        //         });
+        // }
     }
 
     onRefresh = (value) => {
@@ -328,17 +339,25 @@ export class DepartmentDetails extends React.Component {
 
     }
 
+    onShowCancelConfirmModal =() => {
+        this.setState({showCancelConfirmModal: true});
+    }
+
+    onShowProcessConfirmModal =() => {
+        this.setState({showModalProcessConfirm: true});
+    }
+
     onCancelProcessConfirm = () => {
-        const { mode, editModel } = this.state;
+        const { mode, originDepartmentInfo } = this.state;
         if (mode === Mode.CREATE) {
-            const model = editModel ?? this.resetModel();
-            const newMode = editModel ? Mode.EDIT : Mode.VIEW;
-            this.setState({ model: model, mode: newMode, showCancelConfirmModal: false });
+            const model = originDepartmentInfo ?? this.initModel;
+            const newMode = originDepartmentInfo ? Mode.EDIT : Mode.VIEW;
+            this.setState({ departmentInfo: model, mode: newMode, showCancelConfirmModal: false });
             return;
         }
         if (mode === Mode.EDIT) {
-            const model = editModel;
-            this.setState({ model: model, showCancelConfirmModal: false });
+            const model = originDepartmentInfo;
+            this.setState({ departmentInfo: model, showCancelConfirmModal: false });
             return;
         }
     }
