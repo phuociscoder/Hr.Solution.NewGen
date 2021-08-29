@@ -64,18 +64,6 @@ export class DepartmentDetails extends React.Component {
         this.setState({ model: newModel, mode: Mode.CREATE });
     }
 
-    // getDepartments =() => {
-    //         const { dataUrl } = this.props;
-    //         RestClient.SendGetRequest(dataUrl)
-    //             .then(response => {
-    //                 const options = this.generateOptions(response.data);
-    //                 this.setState({ departments: options });
-    //             }, error => {
-    //                 debugger;
-    //             });
-
-    // }
-
     onInputChange = (e) => {
         const { departmentInfo } = this.state;
         const fieldName = e.target.getAttribute("fieldname");
@@ -93,9 +81,6 @@ export class DepartmentDetails extends React.Component {
 
         let newModel = Object.assign({}, { ...departmentInfo, [fieldName]: value });
         this.setState({ departmentInfo: newModel });
-    }
-    onAmountChange = (value) => {
-        // console.log('selectedDepartment' , value);
     }
 
     onDepartmentLogoChange = (e) => {
@@ -125,24 +110,23 @@ export class DepartmentDetails extends React.Component {
                             <div className="w-50 d-flex flex-column">
                                 <label>
                                     Mã bộ phận:
-                                    <input disabled={mode === Mode.EDIT} fieldname="departmentCode" value={departmentCode} onChange={this.onInputChange} className="w-50 form-control" placeholder="Mã bộ phận" />
+                                    <input disabled={mode !== Mode.CREATE} fieldname="departmentCode" value={departmentCode} onChange={this.onInputChange} className="w-50 form-control" placeholder="Mã bộ phận" />
                                 </label>
                                 <label className="mt-2">
                                     Tên bộ phận:
-                                    <input fieldname="departmentName" value={departmentName} onChange={this.onInputChange} className="form-control" placeholder="Tên bộ phận" />
+                                    <input disabled={mode === Mode.VIEW} fieldname="departmentName" value={departmentName} onChange={this.onInputChange} className="form-control" placeholder="Tên bộ phận" />
                                 </label>
                                 <label className="mt-2">
                                     Tên Thay thế:
-                                    <input fieldname="departmentName2" value={departmentName2 ?? ''} onChange={this.onInputChange} className=" form-control" placeholder="Tên thay thế" />
+                                    <input disabled={mode === Mode.VIEW} fieldname="departmentName2" value={departmentName2 ?? ''} onChange={this.onInputChange} className=" form-control" placeholder="Tên thay thế" />
                                 </label>
                                 <label className="mt-2">
                                     Trưởng bộ phận:
                                     <CustomSelect dataUrl="/api/Employee/Managers" className="w-100"
                                         orderFieldName={["level"]}
                                         orderBy="desc"
+                                        disabled={mode === Mode.VIEW}
                                         isHierachy={false}
-                                        //   selectedValue={parentID}
-                                        //   disabledValue={id} 
                                         valueField="id"
                                         labelField="fullName"
                                         isClearable={true}
@@ -150,10 +134,10 @@ export class DepartmentDetails extends React.Component {
                                 </label>
                                 <div className="w-50 d-flex mt-2">
                                     <label>
-                                        <input fieldname="isCompany" checked={isCompany} onChange={this.onInputChange} className="mr-1" type="checkbox" /> Công ty
+                                        <input disabled={mode === Mode.VIEW} fieldname="isCompany" checked={isCompany} onChange={this.onInputChange} className="mr-1" type="checkbox" /> Công ty
                                     </label>
                                     <label className="ml-auto">
-                                        <input fieldname="active" checked={active} onChange={this.onInputChange} type="checkbox" /> Đang hoạt động
+                                        <input disabled={mode === Mode.VIEW} fieldname="active" checked={active} onChange={this.onInputChange} type="checkbox" /> Đang hoạt động
                                     </label>
                                 </div>
                                 <label className="mt-2">
@@ -161,6 +145,7 @@ export class DepartmentDetails extends React.Component {
                                     <CustomSelect dataUrl="/api/Department" className="w-100"
                                         orderFieldName={["level"]}
                                         orderBy="desc"
+                                        disabled={mode === Mode.VIEW}
                                         isHierachy={true}
                                         selectedValue={parentID}
                                         disabledValue={id}
@@ -171,38 +156,66 @@ export class DepartmentDetails extends React.Component {
                                 </label>
                                 <label className="mt-2">
                                     Điện thoại:
-                                    <input fieldname="departmentTel" value={departmentTel} onChange={this.onInputChange} className="form-control " placeholder="Điện thoại" />
+                                    <input disabled={mode === Mode.VIEW} fieldname="departmentTel" value={departmentTel} onChange={this.onInputChange} className="form-control " placeholder="Điện thoại" />
                                 </label>
-                                <label className="mt-2">
+                            </div>
+                            <div className="w-25 ml-5">
+                                <label className="mb-0">Logo:</label>
+                                <ImageUploader disabled={mode === Mode.VIEW} imageSrc={logoImage} onChangeImage={this.onDepartmentLogoChange} width={115} height={115} />
+                            </div>
+
+                        </div>
+                        <div className="w-75 p-3 d-flex flex-column">
+                            <div className="w-100 d-flex">
+                                <label className="mt-2 w-50">
                                     Email:
-                                    <input fieldname="departmentEmail" value={departmentEmail} onChange={this.onInputChange} className="form-control" placeholder="Email" />
+                                    <input disabled={mode === Mode.VIEW} fieldname="departmentEmail" value={departmentEmail} onChange={this.onInputChange} className="form-control" placeholder="Email" />
                                 </label>
-                                <label className="mt-2">
-                                    Fax:
-                                    <input fieldname="departmentFax" value={departmentFax} onChange={this.onInputChange} className="form-control " placeholder="Fax" />
-                                </label>
-                                <label className="mt-2">
-                                    Mã số thuế:
-                                    <input fieldname="taxCode" value={taxCode} onChange={this.onInputChange} className="form-control" placeholder="Mã số thuế" />
+                                <label className="mt-2 pl-5 ml-0 w-50">
+                                    Thứ tự:
+                                    <input disabled={mode === Mode.VIEW} fieldname="ordinal" type="number" value={ordinal} onChange={this.onInputChange} className="form-control w-50" placeholder="Thứ tự" />
                                 </label>
                             </div>
 
-                            <div className="w-25 ml-5">
-                                <label className="mb-0">Logo:</label>
-                                <ImageUploader imageSrc={logoImage} onChangeImage={this.onDepartmentLogoChange} width={115} height={115} />
+                            <div className="w-100 d-flex">
+                                <div className="w-50">
+                                    <label className="w-100 mt-2">
+                                        Fax:
+                                        <input disabled={mode === Mode.VIEW} fieldname="departmentFax" value={departmentFax} onChange={this.onInputChange} className="form-control " placeholder="Fax" />
+                                    </label>
+                                    <label className="w-100 mt-2">
+                                        Mã số thuế:
+                                        <input disabled={mode === Mode.VIEW} fieldname="taxCode" value={taxCode} onChange={this.onInputChange} className="form-control" placeholder="Mã số thuế" />
+                                    </label>
+                                </div>
+                                <div className="w-50 pl-5 mt-2">
+                                    <label className="w-100">
+                                        Ghi chú:
+                                        <textarea disabled={mode === Mode.VIEW} rows={4} style={{ height: '115px' }} placeholder="Ghi chú" fieldName="note" value={note} onChange={this.onInputChange} className="form-control" />
+                                    </label>
+                                </div>
                             </div>
+
                         </div>
                         <div className="w-75 border-bottom mt-2"></div>
                         <div className="w-75 mt-2 d-flex">
-                            <button className="btn btn-danger mr-auto">
-                                <FontAwesomeIcon icon={faTrash} /> <span className="ml-1"> Xóa bộ phận</span>
-                            </button>
-                            <button className="btn btn-primary mr-2 ">
-                                <FontAwesomeIcon icon={faCheck} /> <span className="ml-1"> Lưu thay đổi</span>
-                            </button>
-                            <button className="btn btn-danger ">
-                                <FontAwesomeIcon icon={faTimes} /> <span className="ml-1"> Hủy bỏ</span>
-                            </button>
+                            {mode === Mode.EDIT &&
+                                <button className="btn btn-danger mr-auto">
+                                    <FontAwesomeIcon icon={faTrash} /> <span className="ml-1"> Xóa bộ phận</span>
+                                </button>
+                            }
+
+                            {mode !== Mode.VIEW &&
+                                <>
+
+                                    <button className="btn btn-primary mr-2 ">
+                                        <FontAwesomeIcon icon={faCheck} /> <span className="ml-1"> Lưu thay đổi</span>
+                                    </button>
+                                    <button className="btn btn-danger ">
+                                        <FontAwesomeIcon icon={faTimes} /> <span className="ml-1"> Hủy bỏ</span>
+                                    </button>
+                                </>
+                            }
                         </div>
 
                     </Card.Body>
