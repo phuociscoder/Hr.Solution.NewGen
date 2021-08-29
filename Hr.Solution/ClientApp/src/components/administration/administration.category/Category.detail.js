@@ -30,7 +30,7 @@ export class CategoryDetail extends React.Component{
         switch (category.id) {
             case CategoryModule.Department:
               result = <DepartmentConfig prefix={this.state.prefix} />;
-                break;
+                break;     
             default:
                result = <CategoryCommonDetail category={category} />;
                 break;

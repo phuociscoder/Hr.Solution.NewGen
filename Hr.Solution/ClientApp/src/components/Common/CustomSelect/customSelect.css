@@ -19,7 +19,7 @@
 {
     position: absolute;
     overflow-y: auto;
-    height: fit-content;
+   
     min-height: 50px;
     z-index: 600;
 }

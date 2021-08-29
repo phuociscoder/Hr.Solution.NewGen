@@ -20,4 +20,15 @@ namespace Hr.Solution.Data.Responses
         public string PhotoID { get; set; }
         public int TotalRow { get; set; }
     }
+
+    public class EmployeeManagersResponse { 
+        public int Id { get; set; }
+        public string Code { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName { get; set; }
+        public string DepartmentCode { get; set; }
+        public string Image { get; set; }
+        public string Email { get; set; }
+    }
 }

@@ -73,7 +73,7 @@ export class DepartmentDetails extends React.Component {
     //             }, error => {
     //                 debugger;
     //             });
-        
+
     // }
 
     onInputChange = (e) => {
@@ -95,23 +95,22 @@ export class DepartmentDetails extends React.Component {
         this.setState({ departmentInfo: newModel });
     }
     onAmountChange = (value) => {
-        console.log(value);
+        // console.log('selectedDepartment' , value);
     }
 
-    onDepartmentLogoChange =(e) => {
-
-    }
-
-    onParentChange =(parentId) => {
+    onDepartmentLogoChange = (e) => {
 
     }
 
-    onDepartmentChange =(id) => {
-        console.log(id);
+    onParentChange = (parentId) => {
+
+    }
+
+    onDepartmentChange = (id) => {
+        // console.log('selectedDepartment' , value);
     }
 
     render = () => {
-        console.log(this.state.departmentInfo);
         const { mode, model, departments } = this.state;
         const { id, departmentCode, departmentName, departmentName2, departmentAddress, departmentEmail, departmentFax,
             departmentTel, isCompany, note, lock, ordinal, taxCode, logoImage, managerId, active, parentID } = this.state.departmentInfo;
@@ -121,87 +120,89 @@ export class DepartmentDetails extends React.Component {
                     <Card.Header>
                         <button className="btn btn-primary" disabled={mode === Mode.CREATE} onClick={this.onAddItemClick}><FontAwesomeIcon icon={faPlus} /><span> Thêm mới</span></button>
                     </Card.Header>
-                    <Card.Body>
-                        <div className="d-flex flex-column w-75 p-3">
-                            <div className="w-100 d-flex">
-                                <div className="w-50 d-flex flex-column">
-                                    <label>
-                                        Mã bộ phận:
-                                        <input disabled={mode === Mode.EDIT} fieldname="departmentCode" value={departmentCode} onChange={this.onInputChange} className="w-50 form-control" placeholder="Mã bộ phận" />
-                                    </label>
-                                    <label className="mt-2">
-                                        Tên bộ phận:
-                                        <input fieldname="departmentName" value={departmentName} onChange={this.onInputChange} className="w-100 form-control" placeholder="Tên bộ phận" />
-                                    </label>
-                                </div>
-                                <div className="w-25 ml-3">
-                                    <label>Logo:
-                                        <ImageUploader imageSrc={logoImage} onChangeImage={this.onDepartmentLogoChange} width={80} height={80} />
-                                    </label>
-                                </div>
-                            </div>
-
-                            <label className="mt-2">
-                                Tên Thay thế:
-                                <input fieldname="departmentName2" value={departmentName2 ?? ''} onChange={this.onInputChange} className="w-50 form-control" placeholder="Tên thay thế" />
-                            </label>
-                            <label className="mt-2">
-                                Trưởng bộ phận:
-                              <CustomSelect dataUrl="/api/Department" className="w-50" 
-                              orderFieldName={["level"]} 
-                              orderBy="desc" 
-                              isHierachy={true}
-                              selectedValue={parentID}
-                              disabledValue={id} 
-                              valueField="id"
-                              labelField="departmentName"
-                              isClearable={true}
-                              onValueChange={this.onDepartmentChange} />
-                            </label>
-                            <div className="w-50 d-flex mt-2">
+                    <Card.Body className="flex-column">
+                        <div className="d-flex w-75 p-3">
+                            <div className="w-50 d-flex flex-column">
                                 <label>
-                                    <input fieldname="isCompany" checked={isCompany} onChange={this.onInputChange} className="mr-1" type="checkbox" /> Công ty
+                                    Mã bộ phận:
+                                    <input disabled={mode === Mode.EDIT} fieldname="departmentCode" value={departmentCode} onChange={this.onInputChange} className="w-50 form-control" placeholder="Mã bộ phận" />
                                 </label>
-                                <label className="ml-auto">
-                                    <input fieldname="active" checked={active} onChange={this.onInputChange} type="checkbox" /> Đang hoạt động
+                                <label className="mt-2">
+                                    Tên bộ phận:
+                                    <input fieldname="departmentName" value={departmentName} onChange={this.onInputChange} className="form-control" placeholder="Tên bộ phận" />
                                 </label>
-                            </div>
-                            <label className="mt-2">
-                                Thuộc bộ phận:
-                                {/* <DepartmentSelect onValueChange={this.onParentChange} isMulti={false} selectedValue={parentID} hideOptions={[id]} className="w-50" /> */}
-                            </label>
-                            <div className="w-100 d-flex mt-2">
-                                <label className="w-50">
+                                <label className="mt-2">
+                                    Tên Thay thế:
+                                    <input fieldname="departmentName2" value={departmentName2 ?? ''} onChange={this.onInputChange} className=" form-control" placeholder="Tên thay thế" />
+                                </label>
+                                <label className="mt-2">
+                                    Trưởng bộ phận:
+                                    <CustomSelect dataUrl="/api/Employee/Managers" className="w-100"
+                                        orderFieldName={["level"]}
+                                        orderBy="desc"
+                                        isHierachy={false}
+                                        //   selectedValue={parentID}
+                                        //   disabledValue={id} 
+                                        valueField="id"
+                                        labelField="fullName"
+                                        isClearable={true}
+                                        onValueChange={this.onDepartmentChange} />
+                                </label>
+                                <div className="w-50 d-flex mt-2">
+                                    <label>
+                                        <input fieldname="isCompany" checked={isCompany} onChange={this.onInputChange} className="mr-1" type="checkbox" /> Công ty
+                                    </label>
+                                    <label className="ml-auto">
+                                        <input fieldname="active" checked={active} onChange={this.onInputChange} type="checkbox" /> Đang hoạt động
+                                    </label>
+                                </div>
+                                <label className="mt-2">
+                                    Thuộc bộ phận:
+                                    <CustomSelect dataUrl="/api/Department" className="w-100"
+                                        orderFieldName={["level"]}
+                                        orderBy="desc"
+                                        isHierachy={true}
+                                        selectedValue={parentID}
+                                        disabledValue={id}
+                                        valueField="id"
+                                        labelField="departmentName"
+                                        isClearable={true}
+                                        onValueChange={this.onDepartmentChange} />
+                                </label>
+                                <label className="mt-2">
                                     Điện thoại:
                                     <input fieldname="departmentTel" value={departmentTel} onChange={this.onInputChange} className="form-control " placeholder="Điện thoại" />
                                 </label>
-                                <label className="w-50 ml-3">
+                                <label className="mt-2">
                                     Email:
                                     <input fieldname="departmentEmail" value={departmentEmail} onChange={this.onInputChange} className="form-control" placeholder="Email" />
                                 </label>
-                            </div>
-                            <div className="w-100 d-flex mt-2">
-                                <label className="w-50">
+                                <label className="mt-2">
                                     Fax:
                                     <input fieldname="departmentFax" value={departmentFax} onChange={this.onInputChange} className="form-control " placeholder="Fax" />
                                 </label>
-                                <label className="w-50 ml-3">
+                                <label className="mt-2">
                                     Mã số thuế:
                                     <input fieldname="taxCode" value={taxCode} onChange={this.onInputChange} className="form-control" placeholder="Mã số thuế" />
                                 </label>
                             </div>
-                            <div className="w-100 border-bottom mt-2"></div>
-                            <div className="w-100 mt-2 d-flex">
-                                <button className="btn btn-danger mr-auto">
-                                    <FontAwesomeIcon icon={faTrash} /> <span className="ml-1"> Xóa bộ phận</span>
-                                </button>
-                                <button className="btn btn-primary mr-2 ">
-                                    <FontAwesomeIcon icon={faTrash} /> <span className="ml-1"> Lưu thay đổi</span>
-                                </button>
-                                <button className="btn btn-danger ">
-                                    <FontAwesomeIcon icon={faTrash} /> <span className="ml-1"> Hủy bỏ</span>
-                                </button>
+
+                            <div className="w-25 ml-5">
+                                <label className="mb-0">Logo:</label>
+                                <ImageUploader imageSrc={logoImage} onChangeImage={this.onDepartmentLogoChange} width={115} height={115} />
                             </div>
+                        </div>
+                        <div className="w-75 border-bottom mt-2"></div>
+                        <div className="w-75 mt-2 d-flex">
+                            <button className="btn btn-danger mr-auto">
+                                <FontAwesomeIcon icon={faTrash} /> <span className="ml-1"> Xóa bộ phận</span>
+                            </button>
+                            <button className="btn btn-primary mr-2 ">
+                                <FontAwesomeIcon icon={faCheck} /> <span className="ml-1"> Lưu thay đổi</span>
+                            </button>
+                            <button className="btn btn-danger ">
+                                <FontAwesomeIcon icon={faTimes} /> <span className="ml-1"> Hủy bỏ</span>
+                            </button>
                         </div>
 
                     </Card.Body>

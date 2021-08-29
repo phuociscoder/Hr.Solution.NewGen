@@ -170,7 +170,7 @@ export class CustomSelect extends React.Component {
                 {isClearable && <button onClick={this.clearOpt} className="btn-clear"><FontAwesomeIcon icon={faTimes} /></button>} 
 
                 {show &&
-                    <div style={{ height: options.length > 0 ? '400px' : null, overflowY: 'auto' }} className="form-control d-flex flex-column w-100 menu-options-container shadow  mt-1"
+                    <div style={{ height: options.length *65 < 400 ? `${options.length *65}px` : '400px', overflowY: 'auto' }} className="form-control d-flex flex-column w-100 menu-options-container shadow  mt-1"
                     >
                         {!options || options.length === 0 &&
                             <div className="select-option p-2 w-100 text-center">
