@@ -88,10 +88,10 @@ export class AddEditAccountModal extends React.Component {
             this.setState({ errorMessages: errors });
             return;
         }
-        const {model} = this.state;
-        const newModel = Object.assign({}, {...model, password: password});
+        const { model } = this.state;
+        const newModel = Object.assign({}, { ...model, password: password });
         const { onProcessConfirm } = this.props;
-        this.setState({model: newModel, errorMessages: null}, onProcessConfirm(this.state.mode, newModel));
+        this.setState({ model: newModel, errorMessages: null }, onProcessConfirm(this.state.mode, newModel));
     }
 
     shouldComponentUpdate = (nextProps) => {
@@ -146,7 +146,6 @@ export class AddEditAccountModal extends React.Component {
                                 <label>Mã tài khoản:
                                     <input disabled={mode === Mode.EDIT} value={code} fieldName="code" className="form-control" placeholder="Mã tài khoản" onChange={this.onInputChange}></input>
                                 </label>
-
                                 <label>Tài khoản đăng nhập:
                                     <input value={userName} disabled={mode === Mode.EDIT} fieldName="userName" className="form-control" placeholder="Tài khoản" onChange={this.onInputChange}></input>
                                 </label>
