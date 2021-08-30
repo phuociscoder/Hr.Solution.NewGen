@@ -103,9 +103,13 @@ export class AuthenticationManager {
         return JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO))?.fullName;
     }
 
+    static Email = () => {
+        return JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO))?.email;
+    }
+
     static Avatar = () => {
         const avatar = localStorage.getItem(AuthenInfo.AVATAR);
-        return avatar;
+        return avatar && avatar !== "null" ? avatar : null;
     }
 
     static Token = () => {
@@ -125,7 +129,6 @@ export class AuthenticationManager {
     static IsHasPermission = (prefix, permission) => {
 
     }
-
 }
 
 export class AuthenInfo {
