@@ -82,7 +82,7 @@ export class NavMenu extends Component {
   }
 
   onCancelChangeUserInfoModal = () => {
-    this.setState({ showChangeUserInfoModal: false, fullName: '', avatar: null, email: '' })
+    this.setState({ showChangeUserInfoModal: false })
   }
 
   generateConfirmModalLogout = () => {

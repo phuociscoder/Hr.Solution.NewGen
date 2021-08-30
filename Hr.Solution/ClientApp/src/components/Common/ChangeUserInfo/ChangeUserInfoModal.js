@@ -24,15 +24,12 @@ export class ChangeUserInfoModal extends React.Component {
         const avatar = AuthenticationManager.Avatar();
         const fullName = AuthenticationManager.FullName();
         const email = AuthenticationManager.Email();
-        this.setState({ avatar: avatar, fullName: fullName, email: email });
-        if (showModal) {
-            this.setState({ showModal });
-        }
+        this.setState({ avatar: avatar, fullName: fullName, email: email, showModal: showModal });
     }
 
     onHideModal = () => {
         const { onCancelProcess } = this.props;
-        this.setState({ showModal: false, fullName: '', avatar: null, email: '' }, onCancelProcess());
+        this.setState({ showModal: false }, onCancelProcess());
     }
 
     onInputChange = (e) => {
@@ -41,24 +38,28 @@ export class ChangeUserInfoModal extends React.Component {
         this.setState({ [fieldName]: value });
     }
 
+    onAvatarChange = (image) => {
+        console.log(image);
+        this.setState({ avatar: image });
+    }
+
     onProcessAccount = () => {
-        const userId = AuthenticationManager.UserId;
+        const userName = AuthenticationManager.UserName();
         const { fullName, avatar, email } = this.state;
         const model = Object.assign({}, { fullName: fullName, email: email, avatar: avatar });
-        AccountServices.Update(userId, model).then(
+        console.log(model);
+        console.log(userName);
+        AccountServices.UpdateUserNavMenu(userName, model).then(
             response => {
-                debugger;
                 if (response.data) {
                     ShowNotification(NotificationType.SUCCESS, "Thay đổi tên người dùng thành công");
-                    this.setState({ avatar: model.avatar, fullName: model.fullName, email: model.email, showModal: false })
+                    this.setState({ avatar: model.avatar, fullName: model.fullName, email: model.email, showModal: false }, this.onHideModal())
                 }
             },
             error => {
-                debugger;
                 ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể cập nhật thông tin người dùng");
             }
         );
-
     }
 
     shouldComponentUpdate = (nextProps) => {
