@@ -18,6 +18,17 @@ export class DepartmentServices {
 
     static CheckExisting(departmentCode)
     {
-        return RestClient.SendGetRequest(`${this.baseUrl}/${departmentCode}`);
+        return RestClient.SendGetRequest(`${this.baseUrl}/existing/${departmentCode}`);
     }
+
+    static Delete(id)
+    {
+        return RestClient.SendDeleteRequest(`${this.baseUrl}/${id}`);
+    }
+
+    static Update = (id, params) => {
+        return RestClient.SendPutRequest(`${this.baseUrl}/${id}`, params);    
+    }
+
+    
 }

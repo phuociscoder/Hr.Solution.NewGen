@@ -293,9 +293,10 @@ export class DepartmentList extends React.Component {
                     <div className={`${type === Type.Select ? 'card-header' : ''} h-6 w-100 d-flex `}>
                         <input className={`${type === Type.Select ? 'w-100' : 'w-40 mb-2 mt-1 mr-1'} ml-auto form-control `} value={searchText} placeholder="Tìm kiếm" onChange={this.onDepartmentSearchChange}></input>
                     </div>
+                    <div className="w-100 h-94 department-container">
                     {departments && departments.length > 0 && departments.filter(x => x.isCompany).map((company, index) => {
                         return (
-                            <div className="department-container">
+                            <div>
                                 <div key={company.id} 
                                 className={`${type===Type.Select && !isMultipleSelect && selectedIds.includes(company.id) ?'department-selected': ''} w-100 company-container cursor-pointer d-flex`}> 
                                     <input
@@ -317,6 +318,7 @@ export class DepartmentList extends React.Component {
                             <span><b>Không tìm thấy bộ phận.</b></span>
                         </div>
                     }
+                    </div>
                 </div>
             )
         }

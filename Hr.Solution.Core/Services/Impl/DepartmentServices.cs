@@ -31,6 +31,12 @@ namespace Hr.Solution.Core.Services.Impl
             return response;
         }
 
+        public async Task<string> Delete(int id)
+        {
+            var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_DEPARTMENT_DELETE, new { id = id });
+            return (string)response;
+        }
+
         public async Task<List<DepartmentGetByFreeTextResponse>> GetByFreeText(string freeText)
         {
             var response = await repository.QueryAsync<DepartmentGetByFreeTextResponse>(ProcedureConstants.SP_DEPARTMENT_GETALL, new { freeText = freeText });
@@ -42,5 +48,12 @@ namespace Hr.Solution.Core.Services.Impl
             var response = await repository.ExecuteScalarAsync<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_GET_BY_ID, new { id = id });
             return response;
         }
+
+        public async Task<int> Update(DepartmentUpdateRequest request)
+        {
+            var response = await repository.ExecuteAsync<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_UPDATE, request);
+            return response;
+        }
+
     }
 }

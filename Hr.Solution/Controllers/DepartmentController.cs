@@ -40,7 +40,7 @@ namespace Hr.Solution.Application.Controllers
             return Created(string.Empty, result);
         }
 
-        [HttpGet, Route("{departmentCode}")]
+        [HttpGet, Route("existing/{departmentCode}")]
         [Authorize]
         public async Task<ActionResult> CheckExisting(string departmentCode)
         {
@@ -53,6 +53,23 @@ namespace Hr.Solution.Application.Controllers
 
             return Ok(isExisting);
 
+        }
+
+        [HttpDelete, Route("{id}")]
+        [Authorize]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var result = await departmentServices.Delete(id);
+            return Ok(result);
+        }
+
+        [HttpPut, Route("{id}")]
+        [Authorize]
+        public async Task<ActionResult> Update(int id, [FromBody] DepartmentUpdateRequest request)
+        {
+            request.Id = id;
+            var result = await departmentServices.Update(request);
+            return Ok(result);
         }
     }
 }

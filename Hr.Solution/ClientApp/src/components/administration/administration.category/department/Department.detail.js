@@ -10,6 +10,7 @@ import { ImageUploader } from '../../../Common/ImageUploader';
 import { CategoryServices } from "../Category.services";
 import { AuthenticationManager } from "../../../../AuthenticationManager";
 import { CustomSelect } from "../../../Common/CustomSelect";
+import { result } from "lodash";
 
 
 
@@ -19,7 +20,8 @@ export class DepartmentDetails extends React.Component {
         this.state = {
             departmentInfo: {},
             mode: Mode.VIEW,
-            departments: []
+            departments: [],
+            reload: false
 
         }
     }
@@ -29,7 +31,18 @@ export class DepartmentDetails extends React.Component {
         departmentCode: '',
         departmentName: '',
         departmentName2: '',
-        parentId: null
+        parentId: null,
+        active: true,
+        isCompany: false,
+        departmentTel: '',
+        departmentEmail: '',
+        departmentAddress: '',
+        taxCode: '',
+        note: '',
+        ordinal: 0,
+        departmentFax: '',
+        logoImage: null
+
     }
 
     componentDidMount = () => {
@@ -41,7 +54,26 @@ export class DepartmentDetails extends React.Component {
     getDepartmentInfo = (id) => {
         DepartmentServices.GetById(id)
             .then(response => {
-                this.setState({ departmentInfo: response.data, originDepartmentInfo: response.data, mode: Mode.EDIT });
+                const resultModel = response.data;
+                const model = Object.assign({}, {
+                    id: resultModel.id,
+                    departmentCode: resultModel.departmentCode ?? '',
+                    departmentName: resultModel.departmentName ?? '',
+                    departmentName2: resultModel.departmentName2 ?? '',
+                    parentID: resultModel.parentID,
+                    active: resultModel.active,
+                    managerId: resultModel.managerId,
+                    isCompany: resultModel.isCompany,
+                    departmentTel: resultModel.departmentTel ?? '',
+                    departmentEmail: resultModel.departmentEmail ?? '',
+                    departmentAddress: resultModel.departmentAddress ?? '',
+                    taxCode: resultModel.taxCode ?? '',
+                    note: resultModel.note ?? '',
+                    ordinal: resultModel.ordinal ?? 0,
+                    departmentFax: resultModel.departmentFax ?? '',
+                    logoImage: resultModel.logoImage
+                });
+                this.setState({ departmentInfo: model, originDepartmentInfo: model, mode: Mode.EDIT });
             },
                 error => {
                     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể truy cập thông tin bộ phận");
@@ -56,6 +88,13 @@ export class DepartmentDetails extends React.Component {
             this.setState({ model: nextProps.model, editModel: nextProps.model, mode: Mode.EDIT });
         }
         return true;
+    }
+
+    componentDidUpdate = () => {
+        const { reload } = this.state;
+        if (reload) {
+            this.setState({ reload: false });
+        }
     }
 
     onAddItemClick = () => {
@@ -83,25 +122,25 @@ export class DepartmentDetails extends React.Component {
     }
 
     onDepartmentLogoChange = (value) => {
-        const {departmentInfo} = this.state;
-        const newModel = Object.assign({}, {...departmentInfo, logoImage: value});
-        this.setState({departmentInfo: newModel});
+        const { departmentInfo } = this.state;
+        const newModel = Object.assign({}, { ...departmentInfo, logoImage: value });
+        this.setState({ departmentInfo: newModel });
     }
 
-    onManagerChange =(id) => {
-        const {departmentInfo} = this.state;
-        const newModel = Object.assign({}, {...departmentInfo, managerId: id});
-        this.setState({departmentInfo: newModel});
+    onManagerChange = (id) => {
+        const { departmentInfo } = this.state;
+        const newModel = Object.assign({}, { ...departmentInfo, managerId: id });
+        this.setState({ departmentInfo: newModel });
     }
 
     onDepartmentChange = (id) => {
-        const {departmentInfo} = this.state;
-        const newModel = Object.assign({}, {...departmentInfo, parentId: id});
-        this.setState({departmentInfo: newModel});
+        const { departmentInfo } = this.state;
+        const newModel = Object.assign({}, { ...departmentInfo, parentId: id });
+        this.setState({ departmentInfo: newModel });
     }
 
     render = () => {
-        const { mode} = this.state;
+        const { mode, reload } = this.state;
         const { id, departmentCode, departmentName, departmentName2, departmentAddress, departmentEmail, departmentFax,
             departmentTel, isCompany, note, ordinal, taxCode, logoImage, managerId, active, parentID } = this.state.departmentInfo;
         return (
@@ -123,7 +162,7 @@ export class DepartmentDetails extends React.Component {
                                 </label>
                                 <label className="mt-2">
                                     Tên Thay thế:
-                                    <input disabled={mode === Mode.VIEW} fieldname="departmentName2" value={departmentName2 ?? ''} onChange={this.onInputChange} className=" form-control" placeholder="Tên thay thế" />
+                                    <input disabled={mode === Mode.VIEW} fieldname="departmentName2" value={departmentName2} onChange={this.onInputChange} className=" form-control" placeholder="Tên thay thế" />
                                 </label>
                                 <label className="mt-2">
                                     Trưởng bộ phận:
@@ -158,6 +197,7 @@ export class DepartmentDetails extends React.Component {
                                         valueField="id"
                                         labelField="departmentName"
                                         isClearable={true}
+                                        reload={reload}
                                         onValueChange={this.onDepartmentChange} />
                                 </label>
                                 <label className="mt-2">
@@ -165,7 +205,7 @@ export class DepartmentDetails extends React.Component {
                                     <input disabled={mode === Mode.VIEW} fieldname="departmentTel" value={departmentTel} onChange={this.onInputChange} className="form-control " placeholder="Điện thoại" />
                                 </label>
                                 <label className="mt-2">
-                                   Địa chỉ:
+                                    Địa chỉ:
                                     <input disabled={mode === Mode.VIEW} fieldname="departmentAddress" value={departmentAddress} onChange={this.onInputChange} className="form-control " placeholder="Điện thoại" />
                                 </label>
                             </div>
@@ -208,9 +248,9 @@ export class DepartmentDetails extends React.Component {
 
                         </div>
                         <div className="w-75 border-bottom mt-2"></div>
-                        <div className="w-75 mt-2 d-flex">
+                        <div className="w-75 mt-2 ml-3 d-flex">
                             {mode === Mode.EDIT &&
-                                <button className="btn btn-danger mr-auto">
+                                <button className="btn btn-danger mr-auto" onClick={this.onShowRemoveModalConfirm}>
                                     <FontAwesomeIcon icon={faTrash} /> <span className="ml-1"> Xóa bộ phận</span>
                                 </button>
                             }
@@ -237,6 +277,10 @@ export class DepartmentDetails extends React.Component {
         )
     }
 
+    onShowRemoveModalConfirm = () => {
+        this.setState({ showModalRemoveComfirm: true });
+    }
+
     generateRemoveModalConfirm = () => {
         const { showModalRemoveComfirm } = this.state;
         return (
@@ -245,7 +289,7 @@ export class DepartmentDetails extends React.Component {
                     XÁC NHẬN XÓA
                 </Modal.Header>
                 <Modal.Body>
-                    Chắc chắn xóa chỉ mục khỏi danh mục ?
+                    Chắc chắn xóa phòng ban/ bộ phận ?
                 </Modal.Body>
                 <Modal.Footer>
                     <button className="btn btn-primary" onClick={this.onProcessRemoveConfirm}><FontAwesomeIcon icon={faCheck} /> <span>Đồng ý</span></button>
@@ -293,11 +337,18 @@ export class DepartmentDetails extends React.Component {
     }
 
     onProcessRemoveConfirm = () => {
-        const { model } = this.state;
-        CategoryServices.DeleteCategoryItem(model.id)
+        const { departmentInfo } = this.state;
+        DepartmentServices.Delete(departmentInfo.id)
             .then(response => {
-                ShowNotification(NotificationType.SUCCESS, "Xóa chỉ mục khỏi danh mục thành công");
-                this.setState({ showModalRemoveComfirm: false, model: this.resetModel(), editModel: null, mode: Mode.VIEW }, this.onRefresh(true));
+                if (response.data === "SUCCESS") {
+                    ShowNotification(NotificationType.SUCCESS, "Xóa phòng ban/bộ phận thành công");
+                    this.setState({ showModalRemoveComfirm: false, departmentInfo: this.initModel, originDepartmentInfo: this.initModel, mode: Mode.VIEW }, this.onRefresh(true));
+                }
+                else {
+                    this.setState({ showModalRemoveComfirm: false });
+                    ShowNotification(NotificationType.ERROR, "Không thể xóa phòng ban/bộ phận vì có các đơn vị trực thuộc");
+                }
+
             }, error => {
                 ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể xóa chỉ mục khỏi danh mục");
                 this.setState({ showModalRemoveComfirm: false });
@@ -306,7 +357,7 @@ export class DepartmentDetails extends React.Component {
     }
 
     onProcessConfirm = () => {
-        const { departmentInfo, mode} = this.state;
+        const { departmentInfo, mode } = this.state;
         console.log(departmentInfo);
         if (mode === Mode.CREATE) {
             const newModel = Object.assign({}, { ...departmentInfo, createdBy: AuthenticationManager.UserName() });
@@ -318,33 +369,32 @@ export class DepartmentDetails extends React.Component {
                     this.setState({ showModalProcessConfirm: false });
                     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thêm bộ phận/phòng ban vào hệ thống");
                 })
-            }
-        // } else if (mode === Mode.EDIT) {
-        //     const editModel = Object.assign({}, { ...model, modifiedBy: AuthenticationManager.UserName() });
-        //     CategoryServices.UpdateCategoryItem(editModel.id, editModel)
-        //         .then(response => {
-        //             const editModel = response.data;
-        //             ShowNotification(NotificationType.SUCCESS, "Cập nhật chỉ mục thành công");
-        //             this.setState({ model: editModel, editModel: editModel, showModalProcessConfirm: false }, this.onRefresh(true));
-        //         }, error => {
-        //             this.setState({ showModalProcessConfirm: false });
-        //             ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể cập nhật chỉ mục ");
-        //         });
-        // }
+
+        } else if (mode === Mode.EDIT) {
+            const editModel = Object.assign({}, { ...departmentInfo, modifiedBy: AuthenticationManager.UserName() });
+            DepartmentServices.Update(editModel.id, editModel)
+                .then(response => {
+                    ShowNotification(NotificationType.SUCCESS, "Cập nhật phòng ban/bộ phận thành công");
+                    this.setState({ departmentInfo: editModel, originDepartmentInfo: editModel, showModalProcessConfirm: false }, this.onRefresh(true));
+                }, error => {
+                    this.setState({ showModalProcessConfirm: false });
+                    ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể cập nhật chỉ mục ");
+                });
+        }
     }
 
     onRefresh = (value) => {
         const { onRefresh } = this.props;
-        if (onRefresh) onRefresh(true);
+        this.setState({ reload: true }, onRefresh(true));
 
     }
 
-    onShowCancelConfirmModal =() => {
-        this.setState({showCancelConfirmModal: true});
+    onShowCancelConfirmModal = () => {
+        this.setState({ showCancelConfirmModal: true });
     }
 
-    onShowProcessConfirmModal =() => {
-        this.setState({showModalProcessConfirm: true});
+    onShowProcessConfirmModal = () => {
+        this.setState({ showModalProcessConfirm: true });
     }
 
     onCancelProcessConfirm = () => {
