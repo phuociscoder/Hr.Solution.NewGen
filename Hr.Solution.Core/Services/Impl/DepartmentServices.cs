@@ -19,6 +19,12 @@ namespace Hr.Solution.Core.Services.Impl
             this.repository = repository;
         }
 
+        public async Task<DepartmentResponse> CheckExisting(string departmentCode)
+        {
+            var response = await repository.SingleOrDefault<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_CHECKEXISTING, new { departmentCode = departmentCode });
+            return response;
+        }
+
         public async Task<int> Create(DepartmentCreateRequest request)
         {
             var response = await repository.ExecuteAsync<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_CREATE, request);

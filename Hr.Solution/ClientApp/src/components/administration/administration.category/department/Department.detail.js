@@ -96,7 +96,7 @@ export class DepartmentDetails extends React.Component {
 
     onDepartmentChange = (id) => {
         const {departmentInfo} = this.state;
-        const newModel = Object.assign({}, {...departmentInfo, parentID: id});
+        const newModel = Object.assign({}, {...departmentInfo, parentId: id});
         this.setState({departmentInfo: newModel});
     }
 

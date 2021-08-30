@@ -11,7 +11,7 @@ namespace Hr.Solution.Data.Requests
         public string DepartmentCode { get; set; }
         public string DepartmentName { get; set; }
         public string DepartmentName2 { get; set; }
-        public int ParentID { get; set; }
+        public int ParentId { get; set; }
         public string DepartmentTel { get; set; }
         public string DepartmentFax { get; set; }
         public string DepartmentEmail { get; set; }
@@ -23,6 +23,6 @@ namespace Hr.Solution.Data.Requests
         public int Ordinal { get; set; }
         public string Note { get; set; }
         public string CreatedBy { get; set; }
-        public string Active { get; set; }
+        public bool Active { get; set; }
     }
 }

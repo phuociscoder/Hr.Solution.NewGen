@@ -15,4 +15,9 @@ export class DepartmentServices {
     static Add =(params) => {
         return RestClient.SendPostRequest(this.baseUrl, params);
     }
+
+    static CheckExisting(departmentCode)
+    {
+        return RestClient.SendGetRequest(`${this.baseUrl}/${departmentCode}`);
+    }
 }

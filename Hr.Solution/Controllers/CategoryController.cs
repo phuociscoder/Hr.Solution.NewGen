@@ -63,11 +63,19 @@ namespace Hr.Solution.Application.Controllers
 
         [HttpPut, Route("item/delete/{id}")]
         [Authorize]
-        public async Task<ActionResult> DeleteCategoryItem(int id, [FromBody]DeleteCategoryItemRequest request)
+        public async Task<ActionResult> DeleteCategoryItem(int id, [FromBody] DeleteCategoryItemRequest request)
         {
             request.Id = id;
             var result = await categoryServices.DeleteCategoryItem(request);
             return Ok(result);
+        }
+
+        [HttpGet, Route("nations/{prefix}")]
+        [Authorize]
+        public async Task<ActionResult> GetNations(string prefix, [FromQuery]string parentCode)
+        {
+            var results = await categoryServices.GetNations(prefix, parentCode);
+            return Ok(results);
         }
     }
 }

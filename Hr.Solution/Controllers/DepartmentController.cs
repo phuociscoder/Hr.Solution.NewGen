@@ -39,5 +39,20 @@ namespace Hr.Solution.Application.Controllers
             var result = await departmentServices.Create(request);
             return Created(string.Empty, result);
         }
+
+        [HttpGet, Route("{departmentCode}")]
+        [Authorize]
+        public async Task<ActionResult> CheckExisting(string departmentCode)
+        {
+            var result = await departmentServices.CheckExisting(departmentCode);
+            var isExisting = false;
+            if (result != null)
+            {
+                isExisting = true;
+            }
+
+            return Ok(isExisting);
+
+        }
     }
 }
