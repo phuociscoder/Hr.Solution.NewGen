@@ -129,6 +129,7 @@ namespace Hr.Solution
             services.AddScoped<IDataRoleServices, DataRoleServices>();
             services.AddScoped<ICategoryServices, CategoryServices>();
             services.AddScoped<IMediaServices, MediaServices>();
+            services.AddScoped<IEmployeeServices, EmployeeServices>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Hr.Solution.Core.Constants;
 using Hr.Solution.Core.Services.Interfaces;
+using Hr.Solution.Data.Requests;
 using Hr.Solution.Data.Responses;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,12 @@ namespace Hr.Solution.Core.Services.Impl
         public DepartmentServices(IRepository repository)
         {
             this.repository = repository;
+        }
+
+        public async Task<int> Create(DepartmentCreateRequest request)
+        {
+            var response = await repository.ExecuteAsync<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_CREATE, request);
+            return response;
         }
 
         public async Task<List<DepartmentGetByFreeTextResponse>> GetByFreeText(string freeText)

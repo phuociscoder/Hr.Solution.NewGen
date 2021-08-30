@@ -18,5 +18,12 @@ namespace Hr.Solution.Application.Controllers
             this.employeeServices = employeeServices;
         }
 
+        [HttpGet, Route("managers")]
+        public async Task<ActionResult> GetManagers()
+        {
+            var result = await employeeServices.Employee_GetManagers();
+            return Ok(result);
+        }
+
     }
 }

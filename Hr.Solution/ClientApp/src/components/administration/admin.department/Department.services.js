@@ -11,4 +11,8 @@ export class DepartmentServices {
     static GetById=(id) => {
         return RestClient.SendGetRequest(this.baseUrlById.replace("{0}", id));
     }
+
+    static Add =(params) => {
+        return RestClient.SendPostRequest(this.baseUrl, params);
+    }
 }
