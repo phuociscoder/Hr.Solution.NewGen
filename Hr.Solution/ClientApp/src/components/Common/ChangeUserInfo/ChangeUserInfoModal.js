@@ -40,9 +40,6 @@ export class ChangeUserInfoModal extends React.Component {
 
     }
 
-    processConfirmChange = (id, newPassword) => {
-
-    }
 
     shouldComponentUpdate = (nextProps) => {
         if (this.props.showModal != nextProps.showModal) {
