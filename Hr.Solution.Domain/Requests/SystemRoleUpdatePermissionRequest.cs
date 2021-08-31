@@ -16,6 +16,6 @@ namespace Hr.Solution.Data.Requests
         public bool Delete { get; set; }
         public bool Import { get; set; }
         public bool Export { get; set; }
-        public string User { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

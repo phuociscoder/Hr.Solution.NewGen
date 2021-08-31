@@ -20,7 +20,7 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<int> RemoveUser(Guid userRoleId);
         Task<List<SystemRoleGetFunctionsReponse>> GetFunctions();
         Task<List<SystemRolePermissionResponse>> GetRolePermissions(Guid roleId);
-        Task<int> UpdatePermission(SystemRoleUpdatePermissionRequest request);
+        Task<int> UpdatePermission(IEnumerable<SystemRoleUpdatePermissionRequest> request);
 
     }
 }

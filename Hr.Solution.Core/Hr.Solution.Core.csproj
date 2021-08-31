@@ -14,8 +14,4 @@
     <ProjectReference Include="..\Hr.Solution.Domain\Hr.Solution.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utilities\" />
-  </ItemGroup>
-
 </Project>
