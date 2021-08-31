@@ -62,6 +62,7 @@ export class CustomSelect extends React.Component {
         const { dataUrl } = this.props;
         RestClient.SendGetRequest(dataUrl)
             .then(response => {
+                debugger
                 const options = this.generateOptions(response.data);
                 this.setState({ options: options, originOptions: options });
             }, () => {
@@ -161,8 +162,9 @@ export class CustomSelect extends React.Component {
 
 
     render = () => {
-        const { labelField, isClearable } = this.props;
+        const { labelField, isClearable, dataUrl } = this.props;
         const { show, options, selectedOpt, disabledValue, selectedValue, displayName, disabled } = this.state;
+        console.log(options);
 
         return (
 
