@@ -18,6 +18,10 @@ export class ChangePasswordModal extends React.Component {
             currentPassword: null,
             newPassword: null,
             confirmPassword: null,
+            invalidError: {
+                invalid: false,
+                message: ""
+            }
         }
     }
 
@@ -42,19 +46,8 @@ export class ChangePasswordModal extends React.Component {
     onProcessAccount = () => {
         const password = this.getPassword();
         const { currentPassword, newPassword } = this.state;
-        if (password === ErrorCase.fieldNull){
-            let errors = "Vui lòng điền đầy đủ các trường!";
-            this.setState({ errorMessages: errors });
-            return;
-        }
-        if (password === ErrorCase.oldPassMatchNewPass) {
-            let errors = "Mật khẩu mới không được trùng mật khẩu cũ";
-            this.setState({ errorMessages: errors });
-            return;
-        }
-        if (password === ErrorCase.confirmNotMatchNewPass) {
-            let errors = "Mật khẩu xác nhận không trùng khớp";
-            this.setState({ errorMessages: errors });
+        if (password.invalid){
+            this.setState({ errorMessages: password.message });
             return;
         }
         const { userName } = this.props;
@@ -66,7 +59,7 @@ export class ChangePasswordModal extends React.Component {
               .then(response => {
                 if(response.data) {
                   ShowNotification(NotificationType.SUCCESS, "Đổi mật khẩu thành công!");
-                  this.setState({ showModal: false, currentPassword: '', newPassword: '' }, this.onHideModal);
+                  this.setState({ showModal: false }, this.onHideModal);
                 }
               }, error => {
                 const errors = error.response.data.errors;
@@ -92,20 +85,16 @@ export class ChangePasswordModal extends React.Component {
 
     getPassword = () => {
         const { currentPassword, newPassword, confirmPassword } = this.state;
-        if (currentPassword && newPassword && confirmPassword){            
-            if (currentPassword !== newPassword) {
-                if (newPassword === confirmPassword) {
-                    return newPassword;
-                } else {
-                    return ErrorCase.confirmNotMatchNewPass;
-                }
-            } else {
-                return ErrorCase.oldPassMatchNewPass;
-            }
-        } else {
-            return ErrorCase.fieldNull;
+        if (!currentPassword || !newPassword || !confirmPassword){
+            return { invalid: true, message: ErrorCase.fieldNull };
         }
-        return null;
+        if (currentPassword === newPassword){
+            return { invalid: true, message: ErrorCase.oldPassMatchNewPass };
+        }
+        if (newPassword !== confirmPassword){
+            return { invalid: true, message: ErrorCase.confirmNotMatchNewPass };
+        }
+        return newPassword;
     }
 
     render = () => {
