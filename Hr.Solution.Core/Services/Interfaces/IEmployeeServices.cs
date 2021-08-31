@@ -11,5 +11,6 @@ namespace Hr.Solution.Core.Services.Interfaces
    public interface IEmployeeServices
     {
         Task<List<EmployeeResponse>> Employees_GetData(bool Active, string strDeptCode, string strValueSearch, ParramsRequest Request);
+        Task<List<EmployeeManagersResponse>> Employee_GetManagers();
     }
 }

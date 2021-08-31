@@ -48,6 +48,12 @@ namespace Hr.Solution.Core.Services.Impl
             return response.Data;
         }
 
+        public async Task<List<NationResponse>> GetNations(string prefix, string parentCode)
+        {
+            var response = await repository.QueryAsync<NationResponse>(ProcedureConstants.SP_CATEGORY_NATION_GETALL, new { prefix = prefix, parentCode });
+            return response.Data;
+        }
+
         public async Task<CategoryKeyValueResponse> UpdateCategoryItem(UpdateCategoryItemRequest request)
         {
             var response = await repository.ExecuteScalarAsync<CategoryKeyValueResponse>(ProcedureConstants.SP_CATEGORY_UPDATE_ITEM, request);

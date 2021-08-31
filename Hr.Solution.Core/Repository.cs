@@ -43,6 +43,15 @@ namespace Hr.Solution.Core
             }
         }
 
+        public async Task<object> ExecuteScalarAsync(string procedureName, object args)
+        {
+            using (var connection = dbContext.GetDBConnection())
+            {
+                var result = await connection.ExecuteScalarAsync(procedureName, ConvertToParams(args), commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+                return result;
+            }
+        }
+
         public async Task<SearchPagedResults<T>> QueryAsync<T>(string procedureName, object filters) where T : class
         {
             var generalFilters = filters as BaseSearchQuery;

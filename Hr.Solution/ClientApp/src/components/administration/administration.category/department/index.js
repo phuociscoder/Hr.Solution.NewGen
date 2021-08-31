@@ -41,7 +41,7 @@ export class DepartmentConfig extends React.Component{
     }
 
     render =() => {
-        const {prefix, refresh, selectedItem} = this.state;
+        const {prefix, refresh, selectedItem, mode} = this.state;
         return (
             <div className="d-flex w-100 h-100">
             <div className="w-30 h-100 card">

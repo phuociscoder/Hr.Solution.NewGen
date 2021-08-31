@@ -7,7 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCog, faEnvelopeOpenText, faIdCardAlt, faPowerOff, faTimes, faUnlockAlt } from '@fortawesome/free-solid-svg-icons'
 import { LanguageSelect } from './Common/language/LanguageSelect';
 import { AuthenticationManager } from '../AuthenticationManager';
-import { ChangePasswordModal } from './Common/changpassword/ChangePasswordModal';
+import { ChangePasswordModal } from "./Common/changpassword/ChangePasswordModal";
+import { ChangeUserInfoModal } from "./Common/ChangeUserInfo/ChangeUserInfoModal";
 import { AccountServices } from './administration/admin.account/Account.services';
 import { ShowNotification } from './Common/notification/Notification';
 import { NotificationType } from './Common/notification/Constants';
@@ -24,7 +25,8 @@ export class NavMenu extends Component {
       collapsed: true,
       showLogOutModal: false,
       fullName: "Anonymous",
-      avatar: null
+      avatar: null,
+      showChangeUserInfoModal: false
     };
   }
 
@@ -33,21 +35,21 @@ export class NavMenu extends Component {
     const avatar = AuthenticationManager.Avatar();
     const displaySysRole = this.getDisplaySysRole();
     const displayAllSysRoleName = this.getDisplayRoleNames();
-    this.setState({ fullName: userFullName, avatar: avatar, displayRoleName : displaySysRole, roleTooltips: displayAllSysRoleName });
+    this.setState({ fullName: userFullName, avatar: avatar, displayRoleName: displaySysRole, roleTooltips: displayAllSysRoleName });
   }
 
-  getDisplaySysRole =() => {
+  getDisplaySysRole = () => {
     const sysRoles = AuthenticationManager.SysRoles();
-    if(!sysRoles || sysRoles.length === 0) return null;
+    if (!sysRoles || sysRoles.length === 0) return null;
 
-    if(sysRoles.length === 1) return sysRoles[0].name;
+    if (sysRoles.length === 1) return sysRoles[0].name;
 
-    return `${sysRoles[0].name} +${sysRoles.length -1}`;
+    return `${sysRoles[0].name} +${sysRoles.length - 1}`;
   }
 
-  getDisplayRoleNames =() => {
+  getDisplayRoleNames = () => {
     const sysRoles = AuthenticationManager.SysRoles();
-    if(!sysRoles) return null;
+    if (!sysRoles) return null;
 
     return sysRoles.map(x => x.name).toString();
   }
@@ -75,6 +77,14 @@ export class NavMenu extends Component {
     this.setState({ showChangePasswordModal: false, errorMessages: '', oldPassword: '', newPassword: '', confirmPassword: '' })
   }
 
+  onChangeUserInfo = () => {
+    this.setState({ showChangeUserInfoModal: true });
+  }
+
+  onCancelChangeUserInfoModal = () => {
+    this.setState({ showChangeUserInfoModal: false, fullName: '', avatar: null, email: '' })
+  }
+
   generateConfirmModalLogout = () => {
     const { showLogOutModal } = this.state;
     return (
@@ -94,10 +104,10 @@ export class NavMenu extends Component {
   }
 
   render() {
-    const { fullName, avatar, displayRoleName, roleTooltips, showChangePasswordModal } = this.state;
+    const { fullName, avatar, displayRoleName, roleTooltips, showChangePasswordModal, showChangeUserInfoModal } = this.state;
     return (
       <>
-        <Navbar bg="dark" variant="dark" expand="lg" className="nav-top-bar" style={{zIndex: 300}}>
+        <Navbar bg="dark" variant="dark" expand="lg" className="nav-top-bar" style={{ zIndex: 300 }}>
           <Navbar.Brand className="animate__animated animate__fadeInLeft" href="#home">
             <img
               alt=""
@@ -122,19 +132,17 @@ export class NavMenu extends Component {
               } id="basic-nav-dropdown">
                 <NavDropdown.Item onClick={this.onChangePasswordClick}><FontAwesomeIcon icon={faUnlockAlt}></FontAwesomeIcon>  Đổi Mật Khẩu</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2"><FontAwesomeIcon icon={faEnvelopeOpenText} /> Thông Báo <Badge variant="danger">10</Badge></NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3"><FontAwesomeIcon icon={faIdCardAlt} /> Thông Tin Cá Nhân</NavDropdown.Item>
+                <NavDropdown.Item onClick={this.onChangeUserInfo}><FontAwesomeIcon icon={faIdCardAlt} /> Thông Tin Cá Nhân</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={this.onLogOutClick}><span><FontAwesomeIcon color="red" icon={faPowerOff} /> Đăng Xuất </span></NavDropdown.Item>
               </NavDropdown>
-
-
             </Form>
           </Navbar.Collapse>
         </Navbar>
         {this.generateConfirmModalLogout()}
-        {<ChangePasswordModal showModal={showChangePasswordModal} onCancelProcess={this.onCancelProcessModal} userName={AuthenticationManager.UserName()}/>}
+        {<ChangePasswordModal showModal={showChangePasswordModal} onCancelProcess={this.onCancelProcessModal} userName={AuthenticationManager.UserName()} />}
+        {<ChangeUserInfoModal showModal={showChangeUserInfoModal} onCancelProcess={this.onCancelChangeUserInfoModal} userName={AuthenticationManager.UserName()} />}
       </>
-
     );
   }
 }

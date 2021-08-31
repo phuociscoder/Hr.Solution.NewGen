@@ -11,4 +11,24 @@ export class DepartmentServices {
     static GetById=(id) => {
         return RestClient.SendGetRequest(this.baseUrlById.replace("{0}", id));
     }
+
+    static Add =(params) => {
+        return RestClient.SendPostRequest(this.baseUrl, params);
+    }
+
+    static CheckExisting(departmentCode)
+    {
+        return RestClient.SendGetRequest(`${this.baseUrl}/existing/${departmentCode}`);
+    }
+
+    static Delete(id)
+    {
+        return RestClient.SendDeleteRequest(`${this.baseUrl}/${id}`);
+    }
+
+    static Update = (id, params) => {
+        return RestClient.SendPutRequest(`${this.baseUrl}/${id}`, params);    
+    }
+
+    
 }

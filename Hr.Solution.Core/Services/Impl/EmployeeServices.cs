@@ -35,5 +35,12 @@ namespace Hr.Solution.Core.Services.Impl
                             });
             return response.Data;
         }
+
+        public async Task<List<EmployeeManagersResponse>> Employee_GetManagers()
+        {
+            var response = await repository.QueryAsync<EmployeeManagersResponse>(ProcedureConstants.SP_EMPLOYEE_GET_MANAGERS, null);
+            return response.Data;
+        }
+
     }
 }

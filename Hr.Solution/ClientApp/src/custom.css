@@ -152,6 +152,26 @@ input[type="radio"], input[type="checkbox"] {
   cursor: pointer;
 }
 
+.image-container{
+      /* background-color: whitesmoke; */
+      opacity: 0.8;
+      border-radius: 5px;
+      /* padding: 10px; */
+      border-width: 1px;
+      border-color: lightgrey;
+      border-style: solid;
+}
+
+.image-alt{
+  border-style: dashed;
+  border-color: lightgray;
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  background-color: white;
+}
+
 
 
 .container-main{

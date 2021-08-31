@@ -18,13 +18,14 @@ export class CustomSelect extends React.Component {
             displayName: '',
             originDisplayName:'',
             selectedValue: null,
-            disabledValue: null
+            disabledValue: null,
+            reload: false
         }
     }
 
     componentDidMount = () => {
-        const { disabledValue, selectedValue } = this.props;
-        this.setState({ disabledValue, selectedValue }, this.loadData());
+        const { disabledValue, selectedValue, disabled } = this.props;
+        this.setState({ disabledValue, selectedValue, disabled }, this.loadData());
     }
 
     shouldComponentUpdate = (nextProps) => {
@@ -33,11 +34,20 @@ export class CustomSelect extends React.Component {
             this.setState({ selectedValue: nextProps.selectedValue, 
                             options: this.state.originOptions, 
                             selectedOpt: optInfo ?? {} , 
-                            displayName: optInfo[this.props.labelField],
-                            originDisplayName: optInfo[this.props.labelField] });
+                            displayName: optInfo ?optInfo[this.props.labelField] : '',
+                            originDisplayName: optInfo ?optInfo[this.props.labelField] : '' });
         }
         if (this.props.disabledValue !== nextProps.disabledValue) {
             this.setState({ disabledValue: nextProps.disabledValue });
+        }
+        if(this.props.disabled !== nextProps.disabled)
+        {
+            this.setState({disabled: nextProps.disabled});
+        }
+
+        if(nextProps.reload)
+        {
+            this.loadData();
         }
         return true;
     }
@@ -152,17 +162,18 @@ export class CustomSelect extends React.Component {
 
     render = () => {
         const { labelField, isClearable } = this.props;
-        const { show, options, selectedOpt, disabledValue, selectedValue, displayName } = this.state;
+        const { show, options, selectedOpt, disabledValue, selectedValue, displayName, disabled } = this.state;
 
         return (
 
             <div style={{ position: 'relative' }} className={this.props.className}>
-                <div className="w-100 d-flex"  onFocus={this.onInputFocus} onClick={this.onInputFocus} onBlur={this.onInputBlur}>
+                <div className="w-100 d-flex"  onFocus={() => !disabled ? this.onInputFocus : {}} onClick={!disabled ? this.onInputFocus : {}} onBlur={this.onInputBlur}>
                     {selectedOpt.image && <Image className="opt-select-image" src={selectedOpt.image} width={25} height={25} />}
                     <input className="form-control"
                         style={{ paddingLeft: `${selectedOpt.image ? 35 : 10}px` }}
                         value={displayName}
                         onChange={this.onInputChange}
+                        disabled={disabled}
                         placeholder={this.props.placeHolder ?? "- Chọn chỉ mục -"}
                     ></input>
                     <button className="btn-expand-menu"><FontAwesomeIcon icon={faAngleDown} /></button>
@@ -170,7 +181,7 @@ export class CustomSelect extends React.Component {
                 {isClearable && <button onClick={this.clearOpt} className="btn-clear"><FontAwesomeIcon icon={faTimes} /></button>} 
 
                 {show &&
-                    <div style={{ height: options.length > 0 ? '400px' : null, overflowY: 'auto' }} className="form-control d-flex flex-column w-100 menu-options-container shadow  mt-1"
+                    <div style={{ height: options.length *65 < 400 ? `${options.length *65}px` : '400px', overflowY: 'auto' }} className="form-control d-flex flex-column w-100 menu-options-container shadow  mt-1"
                     >
                         {!options || options.length === 0 &&
                             <div className="select-option p-2 w-100 text-center">
