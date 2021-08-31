@@ -19,9 +19,8 @@ export class RoleGroupPermissions extends React.Component {
 
     componentDidMount = () => {
         const { selectedRoleId, functions, prefix } = this.props;
-        if(prefix)
-        {
-            this.setState({prefix: prefix});
+        if (prefix) {
+            this.setState({ prefix: prefix });
         }
         if (functions) {
             this.setState({ functions: functions });
@@ -33,9 +32,8 @@ export class RoleGroupPermissions extends React.Component {
     }
 
     shouldComponentUpdate = (nextProps) => {
-        if(this.props.prefix !== nextProps.prefix)
-        {
-            this.setState({prefix: nextProps.prefix});
+        if (this.props.prefix !== nextProps.prefix) {
+            this.setState({ prefix: nextProps.prefix });
         }
         if (this.props.functions !== nextProps.functions) {
             this.setState({ functions: nextProps.functions });
@@ -86,10 +84,9 @@ export class RoleGroupPermissions extends React.Component {
 
     onCheckboxChange = (e) => {
         const { selectedRoleId, permissions, prefix } = this.state;
-        if(!AuthenticationManager.AllowEdit(prefix))
-        {
+        if (!AuthenticationManager.AllowEdit(prefix)) {
             ShowNotification(NotificationType.ERROR, "Bạn không có quyền thay đổi thiết lập");
-            e.target.checked=false;
+            e.target.checked = false;
             return;
         }
         const fieldName = e.target.getAttribute("fieldname");
@@ -125,17 +122,16 @@ export class RoleGroupPermissions extends React.Component {
 
     onDebounceSearch = debounce((value) => {
         const { functions } = this.props;
-        if(value === '' || !value || value.length ===0)
-        {
-            this.setState({functions: functions, notFoundPermission: false}, this.loadPermissions(this.state.selectedRoleId));
+        if (value === '' || !value || value.length === 0) {
+            this.setState({ functions: functions, notFoundPermission: false }, this.loadPermissions(this.state.selectedRoleId));
             return;
         }
         const { notFoundPermission } = this.state;
         let searchFunctions = Object.assign([], functions).filter(x => x.functionId
-                                                                        .toLowerCase()
-                                                                        .trim()
-                                                                        .includes(value.toLowerCase().trim()) 
-                                                                        || x.functionName.toLowerCase().trim().includes(value.toLowerCase().trim()));
+            .toLowerCase()
+            .trim()
+            .includes(value.toLowerCase().trim())
+            || x.functionName.toLowerCase().trim().includes(value.toLowerCase().trim()));
         if (searchFunctions.length === 0) {
             this.setState({ notFoundPermission: true });
             return;
@@ -204,7 +200,25 @@ export class RoleGroupPermissions extends React.Component {
                                                 return (
                                                     <>
                                                         <Row className="border permission-submodule-title pl-4 pt-2 pb-2">
-                                                            <Col xs={12}><span><b>{func.functionName}</b></span></Col>
+                                                            <Col xs={6}><span><b>{func.functionName}</b></span></Col>
+                                                            <Col className="text-center border-right border-left" xs={1}>
+                                                                <input className="permission-checkbox shadow" checked={func.view} fieldName="view" functionId={func.functionId} onClick={this.onCheckboxChange} type="checkbox" />
+                                                            </Col>
+                                                            <Col className="text-center border-right border-left" xs={1}>
+                                                                <input className="permission-checkbox shadow" checked={func.add} fieldName="add" functionId={func.functionId} onClick={this.onCheckboxChange} type="checkbox" />
+                                                            </Col>
+                                                            <Col className="text-center border-right border-left" xs={1}>
+                                                                <input className="permission-checkbox shadow" checked={func.edit} fieldName="edit" functionId={func.functionId} onClick={this.onCheckboxChange} type="checkbox" />
+                                                            </Col>
+                                                            <Col className="text-center border-right border-left" xs={1}>
+                                                                <input className="permission-checkbox shadow" checked={func.delete} fieldName="delete" functionId={func.functionId} onClick={this.onCheckboxChange} type="checkbox" />
+                                                            </Col>
+                                                            <Col className="text-center border-right border-left" xs={1}>
+                                                                <input className="permission-checkbox shadow" checked={func.import} fieldName="import" functionId={func.functionId} onClick={this.onCheckboxChange} type="checkbox" />
+                                                            </Col>
+                                                            <Col className="text-center border-right border-left" xs={1}>
+                                                                <input className="permission-checkbox shadow" checked={func.export} fieldName="export" functionId={func.functionId} onClick={this.onCheckboxChange} type="checkbox" />
+                                                            </Col>
                                                         </Row>
                                                         {
                                                             permissions.filter(x => x.parentId === func.functionId).map((child, item) => {
