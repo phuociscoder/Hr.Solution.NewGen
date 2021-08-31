@@ -169,7 +169,30 @@ namespace Hr.Solution.Application.Controllers
             var result = await userManager.UpdateAsync(user);
             if (result.Succeeded) return Ok(user);
             return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Update User Fail" });
-        } 
+        }
+        
+        [HttpPut]
+        [Route("info/{userName}")]
+        [Authorize]
+        public async Task<ActionResult> UpdateUserInfo(string userName, [FromBody] UpdateUserModel model)
+        {
+            var user = await userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "NOT_FOUND_USER", Message = "Cannot found user." });
+            }
+
+            user.Avatar = model.Avatar;
+            user.Email = model.Email;
+            user.FullName = model.FullName;
+
+            var result = await userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok(user);
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status= StatusCodes.Status500InternalServerError.ToString(), Message="Cannot found user."});
+        }
 
         [HttpPut, Route("changePassword/{userName}")]
         [Authorize]
