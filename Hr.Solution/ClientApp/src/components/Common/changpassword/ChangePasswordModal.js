@@ -24,7 +24,7 @@ export class ChangePasswordModal extends React.Component {
     componentDidMount = () => {
         const { showModal } = this.props;
         if (showModal) {
-            this.setState({ showModal });
+            this.setState({ showModal: showModal });
         }
     }
 
@@ -66,7 +66,7 @@ export class ChangePasswordModal extends React.Component {
               .then(response => {
                 if(response.data) {
                   ShowNotification(NotificationType.SUCCESS, "Đổi mật khẩu thành công!");
-                  this.setState({ showModal: false, currentPassword: '', newPassword: '' });
+                  this.setState({ showModal: false, currentPassword: '', newPassword: '' }, this.onHideModal);
                 }
               }, error => {
                 const errors = error.response.data.errors;
