@@ -97,14 +97,27 @@ export class RoleGroupPermissions extends React.Component {
         const functionId = e.target.getAttribute("functionid");
         const value = e.target.checked;
 
+        let results = permissions;
+
         let func = permissions.find(x => x.functionId === functionId);
         if (!func) {
             ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể thao tác");
             return;
         }
 
-        //PHUOC TODO HERE
+        let childs = permissions.filter(x => x.parentId === func.functionId);
+        childs.forEach(child => {
+            child[fieldName] = value;
+            child['roleId'] = selectedRoleId;
 
+            let subChilds = permissions.filter(x => x.parentId === child.functionId);
+            if (subChilds && subChilds.length > 0) {
+                subChilds.forEach(sChild => {
+                    sChild[fieldName] = value;
+                    sChild['roleId'] = selectedRoleId;
+                });
+            }
+        });
 
         func[fieldName] = value;
         func['roleId'] = selectedRoleId;
@@ -312,16 +325,15 @@ export class RoleGroupPermissions extends React.Component {
             return permissionParam;
         });
         AdminRoleServices.UpdateRolePermissions(selectedRoleId, params)
-        .then(response => {
-            if(response.data)
-            {
-                ShowNotification(NotificationType.SUCCESS, "Lưu thay đổi thành công ");
-                this.setState({showConfirmModal: false});
-            }
-        }, error => {
-            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể lưu thay đổi");
-            this.setState({showConfirmModal: false});
-        });
+            .then(response => {
+                if (response.data) {
+                    ShowNotification(NotificationType.SUCCESS, "Lưu thay đổi thành công ");
+                    this.setState({ showConfirmModal: false });
+                }
+            }, error => {
+                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể lưu thay đổi");
+                this.setState({ showConfirmModal: false });
+            });
 
     }
 }
