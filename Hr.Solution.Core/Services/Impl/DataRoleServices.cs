@@ -29,6 +29,12 @@ namespace Hr.Solution.Core.Services.Impl
             return await repository.ExecuteScalarAsync<DataDomain_SysRoleResponse>(ProcedureConstants.SP_DATA_ROLE_ADD_SYS_ROLE, new {domainId= domainId, roleId =request.RoleId, createdBy= request.CreatedBy });
         }
 
+        public async Task<string> Delete(int id)
+        {
+            var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_DATA_ROLE_DELETE, new { id = id });
+            return (string)response;
+        }
+
         public async Task<List<DataDomain_DepartmentResponse>> GetDomainDepartments(int domainId)
         {
             var response = await repository.QueryAsync<DataDomain_DepartmentResponse>(ProcedureConstants.SP_DATA_ROLE_GET_DEPARTMENTS, new { domainId = domainId });

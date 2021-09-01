@@ -24,6 +24,7 @@ namespace Hr.Solution.Core.Constants
         public static string SP_DATA_ROLE_GETS = "spSysDataRole_GetList";
         public static string SP_DATA_ROLE_ADD = "spSysDataRole_Add";
         public static string SP_DATA_ROLE_UPDATE = "spSysDataRole_Update";
+        public static string SP_DATA_ROLE_DELETE = "spSysDataRole_Delete";
         public static string SP_DATA_ROLE_GET_SYS_ROLES = "spSysDataRole_GetSysRoleMembers";
         public static string SP_DATA_ROLE_REMOVE_SYS_ROLE = "spSysDataRole_RemoveSysRoleMember";
         public static string SP_DATA_ROLE_ADD_SYS_ROLE = "spSysDataRole_AddSysRoleMember";
