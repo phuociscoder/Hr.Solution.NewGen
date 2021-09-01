@@ -93,13 +93,13 @@ namespace Hr.Solution.Application.Controllers
             return Ok(result);
         }
 
-        //[HttpPost, Route("permissions/{roleId}")]
-        //[Authorize]
-        //public async Task<ActionResult> UpdatePermission(Guid roleId, [FromBody] IEnumerable<SystemRoleUpdatePermissionRequest> requests)
-        //{
-        //    var result = await systemRoleServices.UpdatePermission(request);
-        //    return Ok(result);
-        //}
+        [HttpPost, Route("permissions/{roleId}")]
+        [Authorize]
+        public async Task<ActionResult> UpdatePermission(Guid roleId, [FromBody] IEnumerable<SystemRoleUpdatePermissionRequest> requests)
+        {
+            var result = await systemRoleServices.UpdatePermission(request);
+            return Ok(result);
+        }
 
     }
 }
