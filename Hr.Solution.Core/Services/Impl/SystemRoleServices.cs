@@ -32,6 +32,12 @@ namespace Hr.Solution.Core.Services.Impl
             return await repository.ExecuteScalarAsync<SystemRoleResponse>(ProcedureConstants.SP_SYSTEM_ROLE_INSERT, request);
         }
 
+        public async Task<string> Delete(Guid id)
+        {
+            var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_SYSTEM_ROLE_DELETE, new { id = id });
+            return (string)response;
+        }
+
         public async Task<List<SystemRoleResponse>> GetAll(SystemRoleRequest request)
         {
             var systemRoles = await repository.QueryAsync<SystemRoleResponse>(ProcedureConstants.SP_SYSTEM_ROLE_GET_ALL, request);

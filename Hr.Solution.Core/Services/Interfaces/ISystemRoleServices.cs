@@ -15,6 +15,7 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<SystemRoleResponse> GetById(Guid id);
         Task<SystemRoleResponse> Create(CreateSystemRoleRequest request);
         Task<SystemRoleResponse> Update(UpdateSystemRoleRequest request);
+        Task<string> Delete(Guid id);
         Task<SystemRoleUserReponse> AddUser(SystemRoleAddUserRequest request);
         Task<SearchPagedResults<SystemRoleUserReponse>> GetUsers(string roleId, string freeText);
         Task<int> RemoveUser(Guid userRoleId);

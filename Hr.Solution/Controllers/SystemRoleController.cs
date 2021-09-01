@@ -53,6 +53,14 @@ namespace Hr.Solution.Application.Controllers
             return Ok(result);
         }
 
+        [HttpDelete, Route("{id}")]
+        [Authorize]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            var result = await systemRoleServices.Delete(id);
+            return Ok(result);
+        }
+
         [HttpPost, Route("add-user")]
         [Authorize]
         public async Task<ActionResult> AddUser([FromBody] SystemRoleAddUserRequest request)

@@ -102,20 +102,13 @@ export class RoleGroupPermissions extends React.Component {
             ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể thao tác");
             return;
         }
+
+        //PHUOC TODO HERE
+
+
         func[fieldName] = value;
         func['roleId'] = selectedRoleId;
         this.setState({ permissions: permissions });
-        // AdminRoleServices.UpdateRolePermission(selectedRoleId, func)
-        //     .then(response => {
-        //         if (response.data === 0) {
-        //             ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể thao tác");
-        //             return;
-        //         }
-        //         ShowNotification(NotificationType.SUCCESS, "Cập nhật phân quyền thành công!");
-        //         this.setState({ permissions: permissions });
-        //     }, error => {
-        //         debugger;
-        //     })
     }
 
     onSearchPermissionChange = (e) => {

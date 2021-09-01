@@ -13,6 +13,7 @@ namespace Hr.Solution.Core.Constants
         public static string SP_SYSTEM_ROLE_INSERT = "spSysRole_Insert";
         public static string SP_SYSTEM_ROLE_UPDATE = "spSysRole_Update";
         public static string SP_SYSTEM_ROLE_ADD_USER = "spSysRole_AddUser";
+        public static string SP_SYSTEM_ROLE_DELETE = "spSysRole_Delete";
         public static string SP_SYSTEM_ROLE_GET_USERS = "spSysRole_GetUsers";
         public static string SP_SYSTEM_ROLE_REMOVE_USER = "spSysRole_RemoveUser";
         public static string SP_SYSTEM_ROLE_GET_FUNCTIONS = "spSysRole_GetFunctions";
