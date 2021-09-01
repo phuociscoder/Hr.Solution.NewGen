@@ -1,7 +1,9 @@
 import React from "react";
+import { AllowanceTypeConfig } from "./allowancetype";
 import { CategoryCommonDetail } from "./common";
 import { CategoryModule } from "./Constants";
 import { DepartmentConfig } from "./department";
+import { EmployeeTypeConfig } from "./employeetype";
 
 export class CategoryDetail extends React.Component{
     constructor(props)
@@ -30,6 +32,12 @@ export class CategoryDetail extends React.Component{
         switch (category.id) {
             case CategoryModule.Department:
               result = <DepartmentConfig prefix={this.state.prefix} />;
+                break;     
+            case CategoryModule.EmployeeType:
+              result = <EmployeeTypeConfig prefix={this.state.prefix} category={category} />;
+                break;     
+            case CategoryModule.AllowanceType:
+              result = <AllowanceTypeConfig />; // category={category}
                 break;     
             default:
                result = <CategoryCommonDetail category={category} />;
