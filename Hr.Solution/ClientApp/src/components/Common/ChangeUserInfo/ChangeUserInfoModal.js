@@ -39,7 +39,6 @@ export class ChangeUserInfoModal extends React.Component {
     }
 
     onAvatarChange = (image) => {
-        console.log(image);
         this.setState({ avatar: image });
     }
 
@@ -47,8 +46,6 @@ export class ChangeUserInfoModal extends React.Component {
         const userName = AuthenticationManager.UserName();
         const { fullName, avatar, email } = this.state;
         const model = Object.assign({}, { fullName: fullName, email: email, avatar: avatar });
-        console.log(model);
-        console.log(userName);
         AccountServices.UpdateUserNavMenu(userName, model).then(
             response => {
                 if (response.data) {
