@@ -320,9 +320,14 @@ export class RoleGroupPermissions extends React.Component {
         });
         AdminRoleServices.UpdateRolePermissions(selectedRoleId, params)
         .then(response => {
-            debugger;
+            if(response.data)
+            {
+                ShowNotification(NotificationType.SUCCESS, "Lưu thay đổi thành công ");
+                this.setState({showConfirmModal: false});
+            }
         }, error => {
-            debugger;
+            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể lưu thay đổi");
+            this.setState({showConfirmModal: false});
         });
 
     }

@@ -97,7 +97,7 @@ namespace Hr.Solution.Application.Controllers
         [Authorize]
         public async Task<ActionResult> UpdatePermission(Guid roleId, [FromBody] IEnumerable<SystemRoleUpdatePermissionRequest> requests)
         {
-            var result = await systemRoleServices.UpdatePermission(request);
+            var result = await systemRoleServices.UpdatePermission(requests);
             return Ok(result);
         }
 
