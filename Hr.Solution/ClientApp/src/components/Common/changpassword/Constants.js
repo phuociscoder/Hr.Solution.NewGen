@@ -1,5 +1,6 @@
 export class ErrorCase{
-    static oldPassMatchNewPass = 1;
-    static confirmNotMatchNewPass =2;
-    static fieldNull = 3;
+    static oldPassMatchNewPass = "Mật khẩu mới không được trùng mật khẩu cũ!";
+    static confirmNotMatchNewPass = "Mật khẩu xác nhận không trùng khớp!";
+    static fieldNull = "Vui lòng điền đầy đủ các trường!";
+    static 
 }

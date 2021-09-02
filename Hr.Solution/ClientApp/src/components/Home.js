@@ -47,7 +47,6 @@ export class Home extends Component {
 
   render() {
     const { avatar, fullName, displayAllSysRoleName, shortName } = this.state;
-    console.log(avatar);
     return (
       <div className="wrapper d-flex w-100 h-100 justify-content-center align-items-center">
         <div className=".user-info-card d-flex flex-row align-items-center bg-white">

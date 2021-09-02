@@ -176,13 +176,21 @@ namespace Hr.Solution.Application.Controllers
         public async Task<ActionResult> ChangePassword(string userName, [FromBody] ChangePasswordModel model)
         {
             var user = await userManager.FindByNameAsync(userName);
-            if (user == null) return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "NOT_FOUND_USER", Message = "User Not Found" });
+            if (user == null)
+            {
+                var error = new[] { new { code = "NOT_FOUND_USER", description = "User Not Found" } };
+                return StatusCode(StatusCodes.Status404NotFound, new { errors = error });
+            }
             var isValidPassword = await userManager.CheckPasswordAsync(user, model.CurrentPassword);
             if (!isValidPassword)
-                return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "INVALID_PASSWORD", Message = string.Empty });
+            {
+                var error = new[] { new { code = "INVALID_PASSWORD", description = string.Empty } };
+                return StatusCode(StatusCodes.Status404NotFound, new { errors = error });
+            }
             var result = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
             if (result.Succeeded) return Ok(user);
-            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = StatusCodes.Status500InternalServerError.ToString(), Message = "Cannot change password" });
+            var errors = result.Errors;
+            return StatusCode(StatusCodes.Status500InternalServerError, new { errors = errors });
         }
 
 
