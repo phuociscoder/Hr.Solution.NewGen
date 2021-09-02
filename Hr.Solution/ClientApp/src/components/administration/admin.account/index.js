@@ -11,6 +11,7 @@ import { ShowNotification } from "../../Common/notification/Notification";
 import { NotificationType } from "../../Common/notification/Constants";
 import { debounce } from "lodash";
 import { AuthenticationManager } from "../../../AuthenticationManager";
+import { CustomTable, HTable } from "../../Common/CustomTable";
 
 export class AccountListing extends React.Component {
     constructor(props) {
@@ -55,20 +56,21 @@ export class AccountListing extends React.Component {
     render = () => {
         const { prefix, accounts, mode, showUnlockModal, showDeactiveModal, showAddEditModal, selectedAccount, loading } = this.state;
         return (
-            <>
-                <div className="w-100 d-flex justify-content-end">
+            <div className="h-100">
+                <div className="w-100 h-4 d-flex align-items-center justify-content-end">
                     <input type="text" className="w-30 form-control" onChange={this.onSearchTextChange} placeholder="Tìm kiếm..." />
                     {AuthenticationManager.AllowAdd(prefix) &&
                         <button onClick={this.onShowCreateModal} className="btn btn-primary ml-2"><FontAwesomeIcon icon={faPlus} /> <span> Thêm mới</span></button>
                     }
                 </div>
-                <div className="w-100 mt-1">
-                    <AccountTable prefix={prefix} loading={loading} data={accounts} onShowDeactiveModal={this.onShowDeactiveModal} onShowUnlockModal={this.onShowUnlockModal} onShowEditModal={this.onShowEditModal} />
+                <div className="w-100 mt-1 h-96">
+                    {/* <AccountTable prefix={prefix} loading={loading} data={accounts} onShowDeactiveModal={this.onShowDeactiveModal} onShowUnlockModal={this.onShowUnlockModal} onShowEditModal={this.onShowEditModal} /> */}
+                    <HTable/>
                 </div>
                 {<DeactiveAccountModal model={selectedAccount} showModal={showDeactiveModal} onCancelProcess={this.onCancelProcessModal} onProcessConfirm={this.processDeactiveAccount} />}
                 {<UnlockAccountModal model={selectedAccount} showModal={showUnlockModal} onCancelProcess={this.onCancelProcessModal} onProcessConfirm={this.processUnlockAccount} />}
                 {<AddEditAccountModal mode={mode} model={selectedAccount} showModal={showAddEditModal} onCancelProcess={this.onCancelProcessModal} onProcessConfirm={this.processAddEditModal} />}
-            </>
+            </div>
         )
     }
 

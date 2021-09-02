@@ -29,8 +29,27 @@
   height: 6%;
 }
 
+.h-3 {
+  height: 3%;
+}
+
+.h-4{
+  height: 4%;
+}
+
+.h-97{
+  height: 97%;
+}
+
+.h-96{
+  height: 96%;
+}
+
 .h-94{
   height: 94%;
+}
+.h-90{
+  height: 90%;
 }
 
 a {
