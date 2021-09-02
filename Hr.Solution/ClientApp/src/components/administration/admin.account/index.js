@@ -1,4 +1,4 @@
-import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPlus, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { AccountTable } from "./AccountTable";
@@ -22,12 +22,14 @@ export class AccountListing extends React.Component {
             showDeactiveModal: false,
             showUnlockModal: false,
             mode: Mode.CREATE,
-            selectedAccount: {}
+            selectedAccount: {},
+            columns: []
         }
     }
 
     componentDidMount = () => {
         const { prefix } = this.props;
+        this.generateColumns();
         this.setState({ prefix: prefix }, this.loadUsers());
     }
 
@@ -51,10 +53,34 @@ export class AccountListing extends React.Component {
         this.setState({ searchText: value }, this.onDebouceSearchUsers(value));
     }
 
+    generateColumns = () => {
+        const columns = [
+            { field: 'code', title: 'Mã Người Dùng', type: 'text', width: 10, order: 1 },
+            { field: 'userName', title: 'Tên Đăng Nhập', type: 'text', width: 15, order: 2 },
+            { field: 'userName', title: 'Tên Hiển Thị', type: 'combine', width: 20, parts: [{ field: 'avatar', type: 'image' }, { field: 'fullName', type: 'text' }], order: 3 },
+            { field: 'email', title: 'Email', type: 'text', width: 15, order: 4 },
+            { field: 'isActive', title: 'Hoạt Động', type: 'boolean', width: 8, order: 5 },
+            { field: 'isAdmin', title: 'Admin', type: 'boolean', width: 8, order: 6 },
+            { field: 'isLock', title: 'Khóa', type: 'boolean', width: 8, order: 7 },
+            { field: 'systemRoles', title: 'Phân Quyền', type: 'text', width: 8, order: 8 },
+            { field: 'validDate', title: 'Ngày Hiệu Lực', type: 'date', width: 10, order: 9 }
+        ];
+        this.setState({columns});
+    }
+
+    generateActionField =(item) => {
+        return (
+            <div className="w-100 d-flex">
+                <button className="btn btn-primary" onClick={() => {console.log(item)}}> <FontAwesomeIcon icon={faEdit}/> </button>
+                <button className="btn btn-danger ml-2" onClick={() => {console.log(item)}}> <FontAwesomeIcon icon={faTrash}/> </button>
+            </div>
+        )
+    }
+
     onDebouceSearchUsers = debounce((value) => this.loadUsers(value), 1000);
 
     render = () => {
-        const { prefix, accounts, mode, showUnlockModal, showDeactiveModal, showAddEditModal, selectedAccount, loading } = this.state;
+        const { prefix, accounts, mode, showUnlockModal, showDeactiveModal, showAddEditModal, selectedAccount, loading, columns } = this.state;
         return (
             <div className="h-100">
                 <div className="w-100 h-4 d-flex align-items-center justify-content-end">
@@ -65,7 +91,7 @@ export class AccountListing extends React.Component {
                 </div>
                 <div className="w-100 mt-1 h-96">
                     {/* <AccountTable prefix={prefix} loading={loading} data={accounts} onShowDeactiveModal={this.onShowDeactiveModal} onShowUnlockModal={this.onShowUnlockModal} onShowEditModal={this.onShowEditModal} /> */}
-                    <HTable/>
+                    <HTable columns={columns} data={accounts} actions={this.generateActionField} />
                 </div>
                 {<DeactiveAccountModal model={selectedAccount} showModal={showDeactiveModal} onCancelProcess={this.onCancelProcessModal} onProcessConfirm={this.processDeactiveAccount} />}
                 {<UnlockAccountModal model={selectedAccount} showModal={showUnlockModal} onCancelProcess={this.onCancelProcessModal} onProcessConfirm={this.processUnlockAccount} />}

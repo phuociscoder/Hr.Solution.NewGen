@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
 import './customTable.css';
@@ -14,6 +15,19 @@ export class HTable extends React.Component {
         }
     }
 
+    componentDidMount =() => {
+        const {data, columns, actions} = this.props;
+        this.setState({data, columns, actions});
+    }
+
+    shouldComponentUpdate =(nextProps) => {
+        if(this.props.data !== nextProps.data || this.props.columns !== nextProps.columns || this.props.actions !== nextProps.actions)
+        {
+            this.setState({data: nextProps.data, columns: nextProps.columns, actions: nextProps.actions});
+        }
+        return true;
+    }
+
     onPageIndexChange =(pageIndex) => {
         console.log(pageIndex);
     }
@@ -23,15 +37,38 @@ export class HTable extends React.Component {
         this.setState({pageSize: value});
     }
 
+
+
+    
+
+    generateHeader =() => {
+        const {columns, actions} = this.state;
+        const colOrder = _.orderBy(columns, ["order"], ["asc"]);
+        console.log(actions);
+
+        return (
+            <>
+                {
+                    colOrder && colOrder.length > 0 && colOrder.map(col => {
+                        return (
+                            <div className="htable-header-col d-flex align-items-center border-left p-2" style={{width: `${col.width}%`}}><span className="mt-2"><h6>{col.title}</h6></span></div>
+                        )
+                    })
+                }
+                {
+                    actions && <div className="htable-header-col d-flex align-items-center border-left p-2 w-10"></div>
+                }
+            </>
+        );
+    }
+
     render = () => {
         const {pageSize, pageIndex} = this.state;
         return (
             <div className="w-100 h-100">
                 <div className="w-100 htable-container border shadow">
-                    <div className="htable-header h-5 p-3">
-                        <Row>
-                            dsadsads
-                        </Row>
+                    <div className="htable-header w-100 d-flex h-5">
+                            {this.generateHeader()}
                     </div>
                     <div className="htable-body p-1">
                             
