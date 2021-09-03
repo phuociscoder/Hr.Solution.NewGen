@@ -7,6 +7,7 @@ import { NotificationType } from "../../../Common/notification/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
 import { CategoryServices } from "../Category.services";
 
+
 export class CurrencyList extends React.Component {
     constructor(props) {
         super(props);
@@ -40,22 +41,24 @@ export class CurrencyList extends React.Component {
 
     onSearchTextChange = (event) => {
         const value = event.target.value;
-        const { category } = this.state;
-        if (!value || value.trim() === "") {
-            this.loadCategoryItems(category.id);
-            return;
-        }
+        // const { category } = this.state;
+        // if (!value || value.trim() === "") {
+        //     this.loadCategoryItems(category.id);
+        //     return;
+        // }
+        console.log("call debounce here");
         this.onDebounceSearch(value);
     }
 
     onDebounceSearch = debounce(value => this.searchCategoryItems(value), 1000);
 
     searchCategoryItems = (value) => {
-        const { originCategoryItems } = this.state;
-        const filteredItems = originCategoryItems.filter(x => x.name.toLowerCase().trim().includes(value.toLowerCase().trim())
-            || x.name2.toLowerCase().trim().includes(value.toLowerCase().trim())
-            || x.code.toLowerCase().trim().includes(value.toLowerCase().trim()));
-        this.setState({ categoryItems: filteredItems });
+        // const { originCategoryItems } = this.state;
+        // const filteredItems = originCategoryItems.filter(x => x.name.toLowerCase().trim().includes(value.toLowerCase().trim())
+        //     || x.name2.toLowerCase().trim().includes(value.toLowerCase().trim())
+        //     || x.code.toLowerCase().trim().includes(value.toLowerCase().trim()));
+        // this.setState({ categoryItems: filteredItems });
+        console.log(value);
     }
 
     onSelectItem = (item) => {
@@ -70,7 +73,7 @@ export class CurrencyList extends React.Component {
         return (
             <Card className="h-100">
                 <Card.Header>
-                    <input onChange={this.onSearchTextChange} className="form flex-fill" placeholder="Tìm kiếm"></input>
+                    <input onChange={this.onSearchTextChange} className="form-control flex-fill" placeholder="Tìm kiếm"></input>
                 </Card.Header>
                 <Card.Body>
                     <div className="w-100 d-flex flex-column group-role-container">

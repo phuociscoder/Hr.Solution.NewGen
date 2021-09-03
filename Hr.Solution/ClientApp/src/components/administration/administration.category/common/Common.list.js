@@ -58,16 +58,6 @@ export class CategoryCommonList extends React.Component {
 
     onDebounceSearch = debounce(value => this.searchCategoryItems(value), 1000);
 
-
-    // Vantt12-toDo
-    // searchCategoryItems = (value) => {
-    //     const { originCategoryItems } = this.state;
-    //     const filteredItems = originCategoryItems.filter(x => x.name.toLowerCase().trim().includes(value.toLowerCase().trim())
-    //         || x.name2.toLowerCase().trim().includes(value.toLowerCase().trim())
-    //         || x.code.toLowerCase().trim().includes(value.toLowerCase().trim()));
-    //     this.setState({ categoryItems: filteredItems });
-    // }
-
     searchCategoryItems = (value) => {
         const { originCategoryItems } = this.state;
         const filteredItems = originCategoryItems.filter(x => x.name.toLowerCase().trim().includes(value.toLowerCase().trim())

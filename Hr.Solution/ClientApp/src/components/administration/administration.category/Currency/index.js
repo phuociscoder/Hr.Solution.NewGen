@@ -1,4 +1,6 @@
 import React from "react";
+import ReactTooltip from "react-tooltip";
+import { CurrencyDetails } from "./currency.details";
 import { CurrencyList } from "./currency.lists";
 
 export class CurrencyConfig extends React.Component {
@@ -13,9 +15,7 @@ export class CurrencyConfig extends React.Component {
 
     componentDidMount = () => {
         const { category } = this.props;
-        if (!category) {
-            return;
-        }
+        if (!category) return;
         this.setState({ category: category });
     }
 
@@ -34,17 +34,22 @@ export class CurrencyConfig extends React.Component {
         this.setState({ selectedItem: item });
     }
 
+    onRefresh = (value) => {
+        this.setState({ refresh: value });
+    }
+
     render = () => {
         const { category, refresh, selectedItem } = this.state;
+        console.log(category);
         return (
             <div className="d-flex w-100 h-100">
                 <div className="w-20 h-100">
                     <CurrencyList onRefreshed={this.onRefreshed} refresh={refresh} onChange={this.onCategoryItemChange} category={category} />
                 </div>
                 <div className="flex-fill ml-2 h-100">
-                    {/* <CategoryCommonDetailItem category={category} onRefresh={this.onRefresh} model={selectedItem} /> */}
+                    <CurrencyDetails category={category} onRefresh={this.onRefresh} model={selectedItem} />
                 </div>
-                {/* <ReactTooltip /> */}
+                <ReactTooltip />
             </div>);
     }
 }
