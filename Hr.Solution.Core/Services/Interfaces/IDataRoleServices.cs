@@ -13,6 +13,7 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<List<DataRoleGetListResponse>> GetList(string freeText);
         Task<Sys_DataDomain> Add(DataRoleAddRequest request);
         Task<Sys_DataDomain> Update(DataRoleUpdateRequest request);
+        Task<string> Delete(int id);
         Task<List<DataDomain_SysRoleResponse>> GetDomainSysRoles(int domainId, string freeText);
         Task<int> RemoveSysRole(int id);
         Task<DataDomain_SysRoleResponse> AddSysRole(int domainId, DataRoleAddSysRoleRequest request);

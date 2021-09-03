@@ -45,6 +45,14 @@ namespace Hr.Solution.Application.Controllers
             return Ok(result);
         }
 
+        [HttpDelete, Route("{id}")]
+        [Authorize]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var result = await dataRoleServices.Delete(id);
+            return Ok(result);
+        }
+
         [HttpGet, Route("sysrole/{domainId}")]
         [Authorize]
         public async Task<ActionResult> GetSysRoles(int domainId, [FromQuery] string freeText)

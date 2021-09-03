@@ -2,10 +2,12 @@ import { faCheck, faKey, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Modal } from "react-bootstrap";
-import { AccountServices } from '../../administration/admin.account/Account.services';
 import { ShowNotification } from '../notification/Notification';
 import { NotificationType } from '../notification/Constants';
 import { ErrorCase } from "./Constants";
+import ChangePasswordServices from "./ChangePassword.services";
+import { Error } from "../Constants";
+import { result } from "lodash";
 
 
 export class ChangePasswordModal extends React.Component {
@@ -13,22 +15,26 @@ export class ChangePasswordModal extends React.Component {
         super(props);
         this.state = {
             showModal: false,
-            oldPassword: null,
+            currentPassword: null,
             newPassword: null,
             confirmPassword: null,
+            invalidError: {
+                invalid: false,
+                message: ""
+            }
         }
     }
 
     componentDidMount = () => {
         const { showModal } = this.props;
         if (showModal) {
-            this.setState({ showModal });
+            this.setState({ showModal: showModal });
         }
     }
 
     onHideModal = () => {
         const { onCancelProcess } = this.props;
-        this.setState({ showModal: false, errorMessages: '', oldPassword: null, newPassword: null, confirmPassword: null }, onCancelProcess());
+        this.setState({ showModal: false, errorMessages: '', currentPassword: null, newPassword: null, confirmPassword: null }, onCancelProcess());
     }
 
     onInputChange = (e) => {
@@ -39,35 +45,34 @@ export class ChangePasswordModal extends React.Component {
 
     onProcessAccount = () => {
         const password = this.getPassword();
-        const { oldPassword, newPassword, confirmPassword } = this.state;
-        if (password === ErrorCase.fieldNull){
-            let errors = "Vui lòng điền đầy đủ các trường!";
-            this.setState({ errorMessages: errors });
-            return;
-        }
-        if (password === ErrorCase.oldPassMatchNewPass) {
-            let errors = "Mật khẩu mới không được trùng mật khẩu cũ";
-            this.setState({ errorMessages: errors });
-            return;
-        }
-        if (password === ErrorCase.confirmNotMatchNewPass) {
-            let errors = "Mật khẩu xác nhận không trùng khớp";
-            this.setState({ errorMessages: errors });
+        const { currentPassword, newPassword } = this.state;
+        if (password.invalid){
+            this.setState({ errorMessages: password.message });
             return;
         }
         const { userName } = this.props;
-        this.setState({newPassword: password, errorMessages: null}, this.processConfirmChange(userName, newPassword));
+        this.setState({newPassword: password, errorMessages: null}, this.processConfirmChange(userName, currentPassword, newPassword));
     }
 
-    processConfirmChange = (id, newPassword) => {
-        AccountServices.Update(id, newPassword)
+    processConfirmChange = (userName, currentPassword, newPassword) => {
+        ChangePasswordServices.UpdatePassword(userName, currentPassword, newPassword)
               .then(response => {
                 if(response.data) {
                   ShowNotification(NotificationType.SUCCESS, "Đổi mật khẩu thành công!");
-                  this.setState({ showChangePasswordModal: false });
+                  this.setState({ showModal: false }, this.onHideModal);
                 }
               }, error => {
-                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể thay đổi mật khẩu!");
+                const errors = error.response.data.errors;
+                let results = [];
+                errors.forEach(e => {
+                    const error = Error.All.find(x => x.code === e.code);
+                    if (error) {
+                        results.push(error.message);
+                    }
+                });
+                results.forEach(r => {
+                    ShowNotification(NotificationType.ERROR, r);
+                })
               })
     }
 
@@ -75,26 +80,21 @@ export class ChangePasswordModal extends React.Component {
         if (this.props.showModal != nextProps.showModal) {
             this.setState({ showModal: nextProps.showModal });
         }
-
         return true;
     }
 
     getPassword = () => {
-        const { oldPassword, newPassword, confirmPassword } = this.state;
-        if (oldPassword && newPassword && confirmPassword){            
-            if (oldPassword !== newPassword) {
-                if (newPassword === confirmPassword) {
-                    return newPassword;
-                } else {
-                    return ErrorCase.confirmNotMatchNewPass;
-                }
-            } else {
-                return ErrorCase.oldPassMatchNewPass;
-            }
-        } else {
-            return ErrorCase.fieldNull;
+        const { currentPassword, newPassword, confirmPassword } = this.state;
+        if (!currentPassword || !newPassword || !confirmPassword){
+            return { invalid: true, message: ErrorCase.fieldNull };
         }
-        return null;
+        if (currentPassword === newPassword){
+            return { invalid: true, message: ErrorCase.oldPassMatchNewPass };
+        }
+        if (newPassword !== confirmPassword){
+            return { invalid: true, message: ErrorCase.confirmNotMatchNewPass };
+        }
+        return newPassword;
     }
 
     render = () => {
@@ -108,7 +108,7 @@ export class ChangePasswordModal extends React.Component {
                     <div className="d-flex flex-column mt-1 ml-2 mr-2 mb-1">
                         <label>
                             Mật khẩu hiện tại:
-                            <input type="password" fieldName="oldPassword" className="form-control" placeholder="Mật khẩu hiện tại" onChange={this.onInputChange}/>
+                            <input type="password" fieldName="currentPassword" className="form-control" placeholder="Mật khẩu hiện tại" onChange={this.onInputChange}/>
                         </label>
                         <label>
                             Mật khẩu mới:

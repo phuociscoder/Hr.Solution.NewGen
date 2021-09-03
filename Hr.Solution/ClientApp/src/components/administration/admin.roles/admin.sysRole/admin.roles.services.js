@@ -22,6 +22,10 @@ export class AdminRoleServices {
         return RestClient.SendPutRequest(`${this.baseUrl}/${id}`, params);
     }
 
+    static Delete=(id) => {
+        return RestClient.SendDeleteRequest(`${this.baseUrl}/${id}`);
+    }
+
     static SystemRoleLoadSearchUser =(params) => {
         return RestClient.SendGetRequestWithParameters(this.sysrolSearchUserUrl, params);
     }
@@ -46,8 +50,7 @@ export class AdminRoleServices {
         return RestClient.SendGetRequest(this.getRolePermissionsUrl.replace("{0}", roleId));
     }
 
-    static UpdateRolePermission =(roleId, params) => {
-        params["user"] =AuthenticationManager.UserName();
+    static UpdateRolePermissions =(roleId, params) => {
         return RestClient.SendPostRequest(this.updateRolePermissionUrl.replace("{0}", roleId), params);
     }
 }

@@ -162,6 +162,10 @@ input[type="radio"], input[type="checkbox"] {
       border-style: solid;
 }
 
+.circle {
+  border-radius: 50%;
+}
+
 .image-alt{
   border-style: dashed;
   border-color: lightgray;

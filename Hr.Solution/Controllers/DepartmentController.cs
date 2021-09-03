@@ -11,9 +11,11 @@ namespace Hr.Solution.Application.Controllers
     public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentServices departmentServices;
-        public DepartmentController(IDepartmentServices departmentServices)
+        private readonly IMediaServices mediaServices;
+        public DepartmentController(IDepartmentServices departmentServices, IMediaServices mediaServices)
         {
             this.departmentServices = departmentServices;
+            this.mediaServices = mediaServices;
         }
 
         [HttpGet, Route("")]
@@ -36,6 +38,10 @@ namespace Hr.Solution.Application.Controllers
         [Authorize]
         public async Task<ActionResult> Create([FromBody] DepartmentCreateRequest request)
         {
+            if (string.IsNullOrEmpty(request.LogoImage))
+            {
+                request.LogoImage = mediaServices.ResizeImage(request.LogoImage);
+            }
             var result = await departmentServices.Create(request);
             return Created(string.Empty, result);
         }
@@ -68,6 +74,11 @@ namespace Hr.Solution.Application.Controllers
         public async Task<ActionResult> Update(int id, [FromBody] DepartmentUpdateRequest request)
         {
             request.Id = id;
+            
+            if (!string.IsNullOrEmpty(request.LogoImage))
+            {
+                request.LogoImage = mediaServices.ResizeImage(request.LogoImage);    
+            }
             var result = await departmentServices.Update(request);
             return Ok(result);
         }

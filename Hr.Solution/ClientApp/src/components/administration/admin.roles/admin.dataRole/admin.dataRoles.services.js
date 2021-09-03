@@ -18,6 +18,10 @@ export class AdminDataRoleServices {
         return RestClient.SendPutRequest(`${this.baseUrl}/${id}`, params);
     }
 
+    static Delete =(id) => {
+        return RestClient.SendDeleteRequest(`${this.baseUrl}/${id}`);
+    }
+
     static SystemRoleLoadSearchUser =(params) => {
         return RestClient.SendGetRequestWithParameters(this.sysrolSearchUserUrl, params);
     }
