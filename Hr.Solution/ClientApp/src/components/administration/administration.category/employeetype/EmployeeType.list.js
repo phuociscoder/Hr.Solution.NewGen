@@ -12,32 +12,7 @@ export class EmployeeTypeList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            categoryItems: [
-                {
-                    id: '1',
-                    code: 't1',
-                    name: 'test1',
-                    name2: 'test 1',
-                    isActive: true,
-                    type: [],
-                    ordinal: 1,
-                    note: 'test 111111',
-                    percentSalary: 100,
-                    percentSoftSalary: 50
-                },
-                {
-                    id: '2',
-                    code: 't2',
-                    name: 'test2',
-                    name2: 'test 2',
-                    isActive: false,
-                    type: [],
-                    ordinal: 2,
-                    note: 'test 222222',
-                    percentSalary: 50,
-                    percentSoftSalary: 20
-                },
-            ],
+            categoryItems: [],
             loading: false,
             selectedItem: {}
         }
@@ -50,15 +25,16 @@ export class EmployeeTypeList extends React.Component {
     }
 
     loadCategoryItems = (categoryId) => {
-        if (!categoryId) return;
-        CategoryServices.GetCategoryItems(categoryId)
-            .then(response => {
-                let categoryItems = _.orderBy(response.data, x => x.ordinal, "asc");
-                this.setState({ categoryItems: categoryItems, originCategoryItems: categoryItems, loading: false }, this.props.onRefreshed());
-            }, error => {
-                this.setState({ loading: false });
-                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể đọc các chỉ mục của danh mục");
-            })
+        // CALL_API get loại nhân viên
+        // if (!categoryId) return;
+        // CategoryServices.GetCategoryItems(categoryId)
+        //     .then(response => {
+        //         let categoryItems = _.orderBy(response.data, x => x.ordinal, "asc");
+        //         this.setState({ categoryItems: categoryItems, originCategoryItems: categoryItems, loading: false }, this.props.onRefreshed());
+        //     }, error => {
+        //         this.setState({ loading: false });
+        //         ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể đọc các chỉ mục của danh mục");
+        //     })
     }
 
     shouldComponentUpdate = (nextProps) => {
@@ -102,7 +78,7 @@ export class EmployeeTypeList extends React.Component {
         const { categoryItems, loading, selectedItem } = this.state;
         return (
             <Card className="h-100">
-                <Card.Header>
+                <Card.Header className="h-8">
                     <input onChange={this.onSearchTextChange} className="form-control flex-fill" placeholder="Tìm kiếm"></input>
                 </Card.Header>
                 <Card.Body>

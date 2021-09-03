@@ -12,40 +12,7 @@ export class AllowanceTypeList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            categoryItems: [
-                {
-                    id: '3',
-                    code: 't3',
-                    name: 'test3',
-                    name2: 'test 3',
-                    isActive: true,
-                    type: [],
-                    parentID: [],
-                    ordinal: 3,
-                    note: 'test 333',
-                    isAllowanceMonth: false,
-                    isAddSalary: true,
-                    isSocialInsurance: true,
-                    isHealthInsurance: true,
-                    isUnemploymentInsurance: false
-                },
-                {
-                    id: '4',
-                    code: 't4',
-                    name: 'test4',
-                    name2: 'test 4',
-                    isActive: false,
-                    type: [],
-                    parentID: [],
-                    ordinal: 4,
-                    note: 'test 4444',
-                    isAllowanceMonth: true,
-                    isAddSalary: false,
-                    isSocialInsurance: false,
-                    isHealthInsurance: false,
-                    isUnemploymentInsurance: true
-                },
-            ],
+            categoryItems: [],
             loading: false,
             selectedItem: {}
         }
@@ -58,15 +25,16 @@ export class AllowanceTypeList extends React.Component {
     }
 
     loadCategoryItems = (categoryId) => {
-        if (!categoryId) return;
-        CategoryServices.GetCategoryItems(categoryId)
-            .then(response => {
-                let categoryItems = _.orderBy(response.data, x => x.ordinal, "asc");
-                this.setState({ categoryItems: categoryItems, originCategoryItems: categoryItems, loading: false }, this.props.onRefreshed());
-            }, error => {
-                this.setState({ loading: false });
-                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể đọc các chỉ mục của danh mục");
-            })
+        // CALL_API get Loại phụ cấp
+        // if (!categoryId) return;
+        // CategoryServices.GetCategoryItems(categoryId)
+        //     .then(response => {
+        //         let categoryItems = _.orderBy(response.data, x => x.ordinal, "asc");
+        //         this.setState({ categoryItems: categoryItems, originCategoryItems: categoryItems, loading: false }, this.props.onRefreshed());
+        //     }, error => {
+        //         this.setState({ loading: false });
+        //         ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể đọc các chỉ mục của danh mục");
+        //     })
     }
 
     shouldComponentUpdate = (nextProps) => {
@@ -110,7 +78,7 @@ export class AllowanceTypeList extends React.Component {
         const { categoryItems, loading, selectedItem } = this.state;
         return (
             <Card className="h-100">
-                <Card.Header>
+                <Card.Header className="h-8">
                     <input onChange={this.onSearchTextChange} className="form-control flex-fill" placeholder="Tìm kiếm"></input>
                 </Card.Header>
                 <Card.Body>

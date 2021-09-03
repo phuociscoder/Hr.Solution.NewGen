@@ -93,7 +93,7 @@ export class AllowanceTypeDetailItem extends React.Component {
         return (
             <>
                 <Card className="h-100">
-                    <Card.Header>
+                    <Card.Header className="h-8">
                     { AuthenticationManager.AllowAdd(category.id) && <button className="btn btn-primary" disabled={mode === Mode.CREATE} onClick={this.onAddItemClick}><FontAwesomeIcon icon={faPlus} /><span> Thêm mới</span></button>}
                     </Card.Header>
                     <Card.Body>
@@ -113,6 +113,7 @@ export class AllowanceTypeDetailItem extends React.Component {
                                 </label>
                                 <label className="w-100 mt-2 text-camelcase">
                                     Phân loại phụ cấp:
+                                    {/* CALL_API phân loại phụ cấp */}
                                     <CustomSelect dataUrl="/api/Employee/Managers" className="w-100"
                                         orderFieldName={["level"]}
                                         orderBy="desc"
@@ -126,6 +127,7 @@ export class AllowanceTypeDetailItem extends React.Component {
                                 </label>
                                 <label className="w-100 mt-2 text-camelcase">
                                     Thuộc nhóm phụ cấp:
+                                    {/* CALL_API get thuộc nhóm phụ cấp */}
                                     <CustomSelect dataUrl="/api/Employee/Managers" className="w-100"
                                         orderFieldName={["level"]}
                                         orderBy="desc"
@@ -170,12 +172,12 @@ export class AllowanceTypeDetailItem extends React.Component {
                             </div>
                         </div>
                         <div className="w-40 d-flex justify-content-end mt-5">
-                            { (AuthenticationManager.AllowEdit(category.id) || AuthenticationManager.AllowAdd(category.id)) && (mode !== Mode.VIEW)
-                                && <button className="btn btn-primary" onClick={() => this.setState({showModalProcessConfirm: true})}><FontAwesomeIcon icon={faCheck} /> <span> Lưu thay đổi</span></button>}
-                            { AuthenticationManager.AllowDelete(category.id) && (mode === Mode.EDIT)
-                                && <button className="btn btn-danger ml-2" onClick={()=> this.setState({showModalRemoveComfirm: true})}><FontAwesomeIcon icon={faTrash} /><span> Xóa</span></button>}
-                            { (AuthenticationManager.AllowEdit(category.id) || AuthenticationManager.AllowAdd(category.id)) && (mode !== Mode.VIEW)
-                                && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span> Hủy bỏ</span></button>}
+                        { ((AuthenticationManager.AllowEdit(category.id) && (mode === Mode.EDIT)) || (AuthenticationManager.AllowAdd(category.id) && (mode === Mode.CREATE)))
+                            && <button className="btn btn-primary" onClick={() => this.setState({showModalProcessConfirm: true})}><FontAwesomeIcon icon={faCheck} /> <span> Lưu thay đổi</span></button>}
+                        { AuthenticationManager.AllowDelete(category.id) && (mode === Mode.EDIT)
+                            && <button className="btn btn-danger ml-2" onClick={()=> this.setState({showModalRemoveComfirm: true})}><FontAwesomeIcon icon={faTrash} /><span> Xóa</span></button>}
+                        { ((AuthenticationManager.AllowEdit(category.id) && (mode === Mode.EDIT)) || (AuthenticationManager.AllowAdd(category.id) && (mode === Mode.CREATE)))
+                            && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span> Hủy bỏ</span></button>}
                         </div>
                     </Card.Body>
                 </Card>
@@ -243,14 +245,15 @@ export class AllowanceTypeDetailItem extends React.Component {
 
     onProcessRemoveConfirm =() => {
         const {model} = this.state;
-        CategoryServices.DeleteCategoryItem(model.id)
-        .then(response => {
-            ShowNotification(NotificationType.SUCCESS, "Xóa chỉ mục khỏi danh mục thành công");
-            this.setState({showModalRemoveComfirm: false, model: this.resetModel(), editModel: null, mode: Mode.VIEW}, this.onRefresh(true));
-        }, error => {
-            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể xóa chỉ mục khỏi danh mục");
-            this.setState({showModalRemoveComfirm: false});
-        })
+        // CALL_API delete loại phụ cấp
+        // CategoryServices.DeleteCategoryItem(model.id)
+        // .then(response => {
+        //     ShowNotification(NotificationType.SUCCESS, "Xóa chỉ mục khỏi danh mục thành công");
+        //     this.setState({showModalRemoveComfirm: false, model: this.resetModel(), editModel: null, mode: Mode.VIEW}, this.onRefresh(true));
+        // }, error => {
+        //     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể xóa chỉ mục khỏi danh mục");
+        //     this.setState({showModalRemoveComfirm: false});
+        // })
 
     }
 
@@ -259,27 +262,29 @@ export class AllowanceTypeDetailItem extends React.Component {
         if(mode === Mode.CREATE)
         {
             const newModel = Object.assign({},{...model, functionId: category.id , createdBy: AuthenticationManager.UserName()});
-            CategoryServices.AddCategoryItem(newModel)
-            .then(response => {
-                const newModel = response.data;
-                ShowNotification(NotificationType.SUCCESS, "Thêm chỉ mục vào danh sách thành công");
-                this.setState({ model: this.resetModel(), showModalProcessConfirm: false}, this.onRefresh(true));
-            }, error => {
-                this.setState({showModalProcessConfirm: false});
-                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thêm chỉ mục vào danh sách");
-            })
+            // CALL_API add loại phụ cấp
+            // CategoryServices.AddCategoryItem(newModel)
+            // .then(response => {
+            //     const newModel = response.data;
+            //     ShowNotification(NotificationType.SUCCESS, "Thêm chỉ mục vào danh sách thành công");
+            //     this.setState({ model: this.resetModel(), showModalProcessConfirm: false}, this.onRefresh(true));
+            // }, error => {
+            //     this.setState({showModalProcessConfirm: false});
+            //     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thêm chỉ mục vào danh sách");
+            // })
         }else if(mode === Mode.EDIT)
         {
             const editModel = Object.assign({},{...model, modifiedBy: AuthenticationManager.UserName()});
-            CategoryServices.UpdateCategoryItem(editModel.id, editModel)
-            .then(response =>{
-                const editModel = response.data;
-                ShowNotification(NotificationType.SUCCESS, "Cập nhật chỉ mục thành công");
-                this.setState({model: editModel, editModel: editModel, showModalProcessConfirm: false}, this.onRefresh(true));
-            }, error=> {
-                this.setState({showModalProcessConfirm: false});
-                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể cập nhật chỉ mục ");
-            });
+            // CALL_API update loại phụ cấp
+            // CategoryServices.UpdateCategoryItem(editModel.id, editModel)
+            // .then(response =>{
+            //     const editModel = response.data;
+            //     ShowNotification(NotificationType.SUCCESS, "Cập nhật chỉ mục thành công");
+            //     this.setState({model: editModel, editModel: editModel, showModalProcessConfirm: false}, this.onRefresh(true));
+            // }, error=> {
+            //     this.setState({showModalProcessConfirm: false});
+            //     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể cập nhật chỉ mục ");
+            // });
         }
     }
 
