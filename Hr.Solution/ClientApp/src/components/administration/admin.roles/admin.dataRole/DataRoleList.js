@@ -1,7 +1,7 @@
-import { faCheck, faEdit, faLock, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faEdit, faLock, faPlus, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Card, Modal } from "react-bootstrap";
+import { Card, Modal, ModalBody } from "react-bootstrap";
 import './admin.roles.css';
 import { AdminDataRoleServices } from "./admin.dataRoles.services";
 import { debounce } from "lodash";
@@ -132,6 +132,32 @@ export class DataRoleList extends React.Component {
             });
     }
 
+    onRefesh =() => {
+        const {onRefesh} = this.props;
+        if(onRefesh) onRefesh();
+    }
+
+    onRemoveConfirm =() => {
+        const {removeItemId} = this.state;
+        AdminDataRoleServices.Delete(removeItemId).then(response => {
+            if(response.data ==="SYSROLE_EXIST")
+            {
+                ShowNotification(NotificationType.ERROR, "Đang tồn tại phân quyền thuộc vùng dữ liệu");
+                this.setState({showRemoveModal: false, removeItemId: null});
+                return;
+            }
+
+            ShowNotification(NotificationType.SUCCESS, "Xóa vùng dữ liệu thành công");
+            this.setState({showRemoveModal: false, removeItemId: null}, this.onLoadRoles())
+        }, error => {
+            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể xóa vùng dữ liệu");
+        });
+    }
+
+    onshowRemoveModal =(item) => {
+        this.setState({showRemoveModal: true, removeItemId: item.id});
+    }
+
     render = () => {
         const { roles, selectedRole } = this.state;
         return (
@@ -152,7 +178,9 @@ export class DataRoleList extends React.Component {
                                         <div className="d-flex">
                                             <span className="text-uppercase"><b>{item.name}</b>-{item.code}</span>
                                             <div className="ml-auto">
+                                                
                                                 <FontAwesomeIcon className="mr-2" onClick={() => this.onShowAddEditGroupModal(item)} icon={faEdit} color="blue" />
+                                                <FontAwesomeIcon className=" mr-2" onClick={() => this.onshowRemoveModal(item)} icon={faTrash} color="red"/>
                                                 {
                                                     item.lock && <FontAwesomeIcon icon={faLock} color="red" />
                                                 }
@@ -160,7 +188,6 @@ export class DataRoleList extends React.Component {
                                         </div>
                                         <div className="d-flex">
                                             <span><i>{item.name2} (SL:{item.roleCount})</i></span>
-                                            {/* <span className="ml-auto mt-1"><i>{item.isAdmin ? 'Toàn quyền' : ''}</i></span> */}
                                         </div>
                                     </div>
                                 )
@@ -177,7 +204,26 @@ export class DataRoleList extends React.Component {
                     </div>
                 </Card.Body>
                 {this.generateAddGroupModal()}
+                {this.generateRemoveModal()}
             </Card>
+        )
+    }
+
+    generateRemoveModal =() => {
+        const {showRemoveModal} = this.state;
+        return (
+            <Modal show={showRemoveModal} centered backdrop="static">
+                <Modal.Header>
+                    XÁC NHẬN
+                </Modal.Header>
+                <Modal.Body>
+                    Chắc chắn muốn xóa vùng dữ liệu ?
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-primary" onClick={this.onRemoveConfirm} ><span className="ml-1">Đồng ý</span></button>
+                    <button className="btn btn-danger ml-2" onClick={() => {this.setState({showRemoveModal: false, removeItemId: null})}} ><span className="ml-1">Hủy bỏ</span></button>
+                </Modal.Footer>
+            </Modal>
         )
     }
 

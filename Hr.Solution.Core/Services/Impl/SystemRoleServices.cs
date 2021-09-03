@@ -1,10 +1,12 @@
-﻿using Hr.Solution.Core.Constants;
+﻿using Dapper;
+using Hr.Solution.Core.Constants;
 using Hr.Solution.Core.Services.Interfaces;
 using Hr.Solution.Data.Requests;
 using Hr.Solution.Data.Responses;
 using Hr.Solution.Domain.Responses;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +30,12 @@ namespace Hr.Solution.Core.Services.Impl
         public async Task<SystemRoleResponse> Create(CreateSystemRoleRequest request)
         {
             return await repository.ExecuteScalarAsync<SystemRoleResponse>(ProcedureConstants.SP_SYSTEM_ROLE_INSERT, request);
+        }
+
+        public async Task<string> Delete(Guid id)
+        {
+            var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_SYSTEM_ROLE_DELETE, new { id = id });
+            return (string)response;
         }
 
         public async Task<List<SystemRoleResponse>> GetAll(SystemRoleRequest request)
@@ -68,9 +76,27 @@ namespace Hr.Solution.Core.Services.Impl
             return await repository.ExecuteScalarAsync<SystemRoleResponse>(ProcedureConstants.SP_SYSTEM_ROLE_UPDATE, request);
         }
 
-        public async Task<int> UpdatePermission(SystemRoleUpdatePermissionRequest request)
+        public async Task<int> UpdatePermission(IEnumerable<SystemRoleUpdatePermissionRequest> request)
         {
-            return await repository.ExecuteAsync<SystemRolePermissionResponse>(ProcedureConstants.SP_SYSTEM_ROLE_UPDATE_PERMISSION, request);
+            var roleId = request.First().RoleId;
+            var tblParams = new DataTable();
+            tblParams.Columns.Add("RoleID");
+            tblParams.Columns.Add("FunctionID");
+            tblParams.Columns.Add("View");
+            tblParams.Columns.Add("Add");
+            tblParams.Columns.Add("Edit");
+            tblParams.Columns.Add("Delete");
+            tblParams.Columns.Add("Import");
+            tblParams.Columns.Add("Export");
+            tblParams.Columns.Add("CreatedBy");
+
+            foreach (var rolePermission in request)
+            {
+                tblParams.Rows.Add(rolePermission.RoleId, rolePermission.FunctionId, rolePermission.View, rolePermission.Add, rolePermission.Edit, rolePermission.Delete, rolePermission.Import, rolePermission.Export, rolePermission.CreatedBy);
+            }
+
+
+            return await repository.ExecuteAsync<SystemRolePermissionResponse>(ProcedureConstants.SP_SYSTEM_ROLE_UPDATE_PERMISSION, new {roleId =roleId, rolePermissions= tblParams.AsTableValuedParameter("TVP_SysRolePermission")}, false);
         }
     }
 }

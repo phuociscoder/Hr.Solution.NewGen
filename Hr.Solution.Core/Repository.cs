@@ -26,20 +26,29 @@ namespace Hr.Solution.Core
         /// <param name="procedureName">Name of Procedure</param>
         /// <param name="args">Parameters of Procedure</param>
         /// <returns></returns>
-        public async Task<int> ExecuteAsync<T>(string procedureName, object args) where T : class
+        public async Task<int> ExecuteAsync<T>(string procedureName, object args, bool convertToDynamicParams = true) where T : class
         {
             using (var connection = dbContext.GetDBConnection())
             {
-                return await connection.ExecuteAsync(procedureName, ConvertToParams(args), commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+                return await connection.ExecuteAsync(procedureName, convertToDynamicParams ? ConvertToParams(args): args , commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
             }
         }
 
-        public async Task<T> ExecuteScalarAsync<T>(string procedureName, object args) where T : class
+        public async Task<T> ExecuteScalarAsync<T>(string procedureName, object args, bool convertToDynamicParams = true) where T : class
         {
             using (var connection = dbContext.GetDBConnection())
             {
-                var result = await connection.ExecuteReaderAsync(procedureName, ConvertToParams(args), commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+                var result = await connection.ExecuteReaderAsync(procedureName, convertToDynamicParams ? ConvertToParams(args) : args, commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
                 return result.Parse<T>().First();
+            }
+        }
+
+        public async Task<object> ExecuteScalarAsync(string procedureName, object args, bool convertToDynamicParams = true)
+        {
+            using (var connection = dbContext.GetDBConnection())
+            {
+                var result = await connection.ExecuteScalarAsync(procedureName, convertToDynamicParams ? ConvertToParams(args) : args, commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+                return result;
             }
         }
 

@@ -12,6 +12,25 @@ export class Currency {
     ];
 }
 
+export class Error {
+    static PasswordRequiresNonAlphanumeric = 'PasswordRequiresNonAlphanumeric';
+    static PasswordTooShort = 'PasswordTooShort';
+    static PasswordRequiresDigit = 'PasswordRequiresDigit';
+    static PasswordRequiresLower = 'PasswordRequiresLower';
+    static PasswordRequiresUpper = 'PasswordRequiresUpper';
+    static NOT_FOUND_USER = 'NOT_FOUND_USER';
+    static INVALID_PASSWORD = 'INVALID_PASSWORD';
+    static All = [
+        { code: this.PasswordRequiresNonAlphanumeric, message: "Mật khẩu phải chứa 1 ký tự đặc biệt!" },
+        { code: this.PasswordTooShort, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
+        { code: this.PasswordRequiresDigit, message: "Mật khẩu phải có ít nhất một chữ số ('0' - '9')!" },
+        { code: this.PasswordRequiresLower, message: "Mật khẩu phải có ít nhất một chữ thường ('a' - 'z')!" },
+        { code: this.PasswordRequiresUpper, message: "Mật khẩu phải có ít nhất một chữ hoa ('A' - 'Z')!" },
+        { code: this.NOT_FOUND_USER, message: "Không tìm thấy người dùng!" },
+        { code: this.INVALID_PASSWORD, message: "Mật khẩu hiện tại không đúng!" },
+    ]
+}
+
 export class Function {
     static ADM000 = "ADM000";
     static ADM001 = "ADM001";

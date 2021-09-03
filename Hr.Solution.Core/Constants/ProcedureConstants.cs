@@ -13,6 +13,7 @@ namespace Hr.Solution.Core.Constants
         public static string SP_SYSTEM_ROLE_INSERT = "spSysRole_Insert";
         public static string SP_SYSTEM_ROLE_UPDATE = "spSysRole_Update";
         public static string SP_SYSTEM_ROLE_ADD_USER = "spSysRole_AddUser";
+        public static string SP_SYSTEM_ROLE_DELETE = "spSysRole_Delete";
         public static string SP_SYSTEM_ROLE_GET_USERS = "spSysRole_GetUsers";
         public static string SP_SYSTEM_ROLE_REMOVE_USER = "spSysRole_RemoveUser";
         public static string SP_SYSTEM_ROLE_GET_FUNCTIONS = "spSysRole_GetFunctions";
@@ -23,6 +24,7 @@ namespace Hr.Solution.Core.Constants
         public static string SP_DATA_ROLE_GETS = "spSysDataRole_GetList";
         public static string SP_DATA_ROLE_ADD = "spSysDataRole_Add";
         public static string SP_DATA_ROLE_UPDATE = "spSysDataRole_Update";
+        public static string SP_DATA_ROLE_DELETE = "spSysDataRole_Delete";
         public static string SP_DATA_ROLE_GET_SYS_ROLES = "spSysDataRole_GetSysRoleMembers";
         public static string SP_DATA_ROLE_REMOVE_SYS_ROLE = "spSysDataRole_RemoveSysRoleMember";
         public static string SP_DATA_ROLE_ADD_SYS_ROLE = "spSysDataRole_AddSysRoleMember";
@@ -38,6 +40,8 @@ namespace Hr.Solution.Core.Constants
         public static string SP_CATEGORY_UPDATE_ITEM = "spCategory_UpdateItem";
         public static string SP_CATEGORY_DELETE_ITEM = "spCategory_DeleteItem";
 
+        public static string SP_CATEGORY_NATION_GETALL = "spCategoryNation_GetAll";
+
         //User
         public static string SP_USER_GET = "spUser_GetByName";
         public static string SP_USER_GET_LIST = "spUser_GetList";
@@ -50,6 +54,9 @@ namespace Hr.Solution.Core.Constants
         public static string SP_DEPARTMENT_GETALL = "spDepartment_GetbyFreetext";
         public static string SP_DEPARTMENT_GET_BY_ID = "spDepartment_GetById";
         public static string SP_DEPARTMENT_CREATE = "spDepartment_Create";
+        public static string SP_DEPARTMENT_CHECKEXISTING = "sp_Department_CheckExisting";
+        public static string SP_DEPARTMENT_DELETE = "spDepartment_Delete";
+        public static string SP_DEPARTMENT_UPDATE = "spDepartment_Edit";
 
         //Employees
         public static string spEmployees_spGetAll = "spEmployees_spGetAll";

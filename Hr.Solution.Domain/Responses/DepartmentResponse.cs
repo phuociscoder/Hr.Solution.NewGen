@@ -49,7 +49,7 @@ namespace Hr.Solution.Data.Responses
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
         public string RegionCode { get; set; }
-        public string Active { get; set; }
+        public bool Active { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

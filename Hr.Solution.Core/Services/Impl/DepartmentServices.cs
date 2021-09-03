@@ -19,10 +19,22 @@ namespace Hr.Solution.Core.Services.Impl
             this.repository = repository;
         }
 
+        public async Task<DepartmentResponse> CheckExisting(string departmentCode)
+        {
+            var response = await repository.SingleOrDefault<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_CHECKEXISTING, new { departmentCode = departmentCode });
+            return response;
+        }
+
         public async Task<int> Create(DepartmentCreateRequest request)
         {
             var response = await repository.ExecuteAsync<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_CREATE, request);
             return response;
+        }
+
+        public async Task<string> Delete(int id)
+        {
+            var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_DEPARTMENT_DELETE, new { id = id });
+            return (string)response;
         }
 
         public async Task<List<DepartmentGetByFreeTextResponse>> GetByFreeText(string freeText)
@@ -36,5 +48,12 @@ namespace Hr.Solution.Core.Services.Impl
             var response = await repository.ExecuteScalarAsync<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_GET_BY_ID, new { id = id });
             return response;
         }
+
+        public async Task<int> Update(DepartmentUpdateRequest request)
+        {
+            var response = await repository.ExecuteAsync<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_UPDATE, request);
+            return response;
+        }
+
     }
 }

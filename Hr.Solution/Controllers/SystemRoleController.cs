@@ -3,6 +3,7 @@ using Hr.Solution.Data.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Hr.Solution.Application.Controllers
@@ -52,6 +53,14 @@ namespace Hr.Solution.Application.Controllers
             return Ok(result);
         }
 
+        [HttpDelete, Route("{id}")]
+        [Authorize]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            var result = await systemRoleServices.Delete(id);
+            return Ok(result);
+        }
+
         [HttpPost, Route("add-user")]
         [Authorize]
         public async Task<ActionResult> AddUser([FromBody] SystemRoleAddUserRequest request)
@@ -94,10 +103,9 @@ namespace Hr.Solution.Application.Controllers
 
         [HttpPost, Route("permissions/{roleId}")]
         [Authorize]
-        public async Task<ActionResult> UpdatePermission(Guid roleId, [FromBody] SystemRoleUpdatePermissionRequest request)
+        public async Task<ActionResult> UpdatePermission(Guid roleId, [FromBody] IEnumerable<SystemRoleUpdatePermissionRequest> requests)
         {
-            request.RoleId = roleId;
-            var result = await systemRoleServices.UpdatePermission(request);
+            var result = await systemRoleServices.UpdatePermission(requests);
             return Ok(result);
         }
 

@@ -1,4 +1,4 @@
-import { faCheck, faEdit, faLock, faPlus, faTimes, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faEdit, faLock, faPlus, faTimes, faTrash, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Card, Modal } from "react-bootstrap";
@@ -17,7 +17,8 @@ export class RoleList extends React.Component {
             roles: [],
             selectedRole: null,
             mode: Action.CREATE,
-            groupModel: this.defaultGroupModel
+            groupModel: this.defaultGroupModel,
+            showRemoveModal: false
                 
             
         }
@@ -92,6 +93,10 @@ export class RoleList extends React.Component {
         this.setState({ showAddEditGroupModal: true, groupModel: this.defaultGroupModel, mode: Action.CREATE});
     }
 
+    onShowRemoveModal =(item) => {
+        this.setState({showRemoveModal: true, removeItemId: item.recID});
+    }
+
     onHideModal = () => {
         this.setState({ showAddEditGroupModal: false, mode: Action.EDIT }, this.resetGroupModel);
     }
@@ -143,6 +148,31 @@ export class RoleList extends React.Component {
             });
     }
 
+    processRemoveRole =() => {
+        const {removeItemId} = this.state;
+        AdminRoleServices.Delete(removeItemId).then(response => {
+            if(response.data === "USER_EXIST")
+            {
+                ShowNotification(NotificationType.ERROR, "Đang có người dùng thuộc phân quyền này");
+                this.setState({showRemoveModal: false, removeItemId: null});
+                return;
+            }
+
+            if(response.data === "DATAROLE_EXIST")
+            {
+                ShowNotification(NotificationType.ERROR, "Phân quyền này đang thuộc các vùng dữ liệu");
+                this.setState({showRemoveModal: false, removeItemId: null});
+                return;
+            }
+
+            ShowNotification(NotificationType.SUCCESS, "Xóa Phân quyền thành công");
+                this.setState({showRemoveModal: false, removeItemId: null}, this.onLoadRoles());
+        }, error => {
+            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! không thể xóa phân quyền");
+            this.setState({showRemoveModal: false, removeItemId: null});
+        });
+    }
+
     render = () => {
         const { roles, selectedRole, prefix } = this.state;
         return (
@@ -164,6 +194,7 @@ export class RoleList extends React.Component {
                                             <span className="text-uppercase"><b>{item.roleName}</b>-{item.roleId}</span>
                                             <div className="ml-auto">
                                             {AuthenticationManager.AllowEdit(prefix) && <FontAwesomeIcon className="mr-2" onClick={() => this.onShowAddEditGroupModal(item)} icon={faEdit} color="blue" />}
+                                            {AuthenticationManager.AllowDelete(prefix) && <FontAwesomeIcon className="mr-2" onClick={() => this.onShowRemoveModal(item)} icon={faTrash} color="red" />}
                                                 {
                                                     item.lock && <FontAwesomeIcon icon={faLock} color="red" />
                                                 }
@@ -188,7 +219,24 @@ export class RoleList extends React.Component {
                     </div>
                 </Card.Body>
                 {this.generateAddGroupModal()}
+                {this.generateRemoveModal()}
             </Card>
+        )
+    }
+
+    generateRemoveModal =() => {
+        const {showRemoveModal} = this.state;
+        return (
+            <Modal show={showRemoveModal} centered backdrop="static">
+                <Modal.Header>XÁC NHẬN</Modal.Header>
+                <Modal.Body>
+                    Bạn chắc chắn muốn xóa phân quyền ?
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-primary" onClick={this.processRemoveRole}><FontAwesomeIcon icon={faCheck}/><span className="ml-1"> Đồng ý</span> </button>
+                    <button className="btn btn-danger" onClick={() => this.setState({showRemoveModal: false, removeItemId: null})}><FontAwesomeIcon icon={faTimes}/><span className="ml-1"> Hủy bỏ</span> </button>
+                </Modal.Footer>
+            </Modal>
         )
     }
 

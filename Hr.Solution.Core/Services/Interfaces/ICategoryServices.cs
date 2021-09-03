@@ -16,5 +16,7 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<CategoryKeyValueResponse> AddCategoryItem(AddCategoryItemRequest request);
         Task<CategoryKeyValueResponse> UpdateCategoryItem(UpdateCategoryItemRequest request);
         Task<int> DeleteCategoryItem(DeleteCategoryItemRequest request);
+
+        Task<List<NationResponse>> GetNations(string prefix, string parentCode);
     }
 }

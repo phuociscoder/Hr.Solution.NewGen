@@ -18,7 +18,8 @@ export class CustomSelect extends React.Component {
             displayName: '',
             originDisplayName:'',
             selectedValue: null,
-            disabledValue: null
+            disabledValue: null,
+            reload: false
         }
     }
 
@@ -42,6 +43,11 @@ export class CustomSelect extends React.Component {
         if(this.props.disabled !== nextProps.disabled)
         {
             this.setState({disabled: nextProps.disabled});
+        }
+
+        if(nextProps.reload)
+        {
+            this.loadData();
         }
         return true;
     }
