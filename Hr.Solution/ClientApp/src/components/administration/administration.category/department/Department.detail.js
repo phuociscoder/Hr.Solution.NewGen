@@ -83,25 +83,25 @@ export class DepartmentDetails extends React.Component {
     }
 
     onDepartmentLogoChange = (value) => {
-        const {departmentInfo} = this.state;
-        const newModel = Object.assign({}, {...departmentInfo, logoImage: value});
-        this.setState({departmentInfo: newModel});
+        const { departmentInfo } = this.state;
+        const newModel = Object.assign({}, { ...departmentInfo, logoImage: value });
+        this.setState({ departmentInfo: newModel });
     }
 
-    onManagerChange =(id) => {
-        const {departmentInfo} = this.state;
-        const newModel = Object.assign({}, {...departmentInfo, managerId: id});
-        this.setState({departmentInfo: newModel});
+    onManagerChange = (id) => {
+        const { departmentInfo } = this.state;
+        const newModel = Object.assign({}, { ...departmentInfo, managerId: id });
+        this.setState({ departmentInfo: newModel });
     }
 
     onDepartmentChange = (id) => {
-        const {departmentInfo} = this.state;
-        const newModel = Object.assign({}, {...departmentInfo, parentID: id});
-        this.setState({departmentInfo: newModel});
+        const { departmentInfo } = this.state;
+        const newModel = Object.assign({}, { ...departmentInfo, parentID: id });
+        this.setState({ departmentInfo: newModel });
     }
 
     render = () => {
-        const { mode} = this.state;
+        const { mode } = this.state;
         const { id, departmentCode, departmentName, departmentName2, departmentAddress, departmentEmail, departmentFax,
             departmentTel, isCompany, note, ordinal, taxCode, logoImage, managerId, active, parentID } = this.state.departmentInfo;
         return (
@@ -165,7 +165,7 @@ export class DepartmentDetails extends React.Component {
                                     <input disabled={mode === Mode.VIEW} fieldname="departmentTel" value={departmentTel} onChange={this.onInputChange} className="form-control " placeholder="Điện thoại" />
                                 </label>
                                 <label className="mt-2">
-                                   Địa chỉ:
+                                    Địa chỉ:
                                     <input disabled={mode === Mode.VIEW} fieldname="departmentAddress" value={departmentAddress} onChange={this.onInputChange} className="form-control " placeholder="Điện thoại" />
                                 </label>
                             </div>
@@ -306,8 +306,7 @@ export class DepartmentDetails extends React.Component {
     }
 
     onProcessConfirm = () => {
-        const { departmentInfo, mode} = this.state;
-        console.log(departmentInfo);
+        const { departmentInfo, mode } = this.state;
         if (mode === Mode.CREATE) {
             const newModel = Object.assign({}, { ...departmentInfo, createdBy: AuthenticationManager.UserName() });
             DepartmentServices.Add(newModel)
@@ -318,7 +317,7 @@ export class DepartmentDetails extends React.Component {
                     this.setState({ showModalProcessConfirm: false });
                     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thêm bộ phận/phòng ban vào hệ thống");
                 })
-            }
+        }
         // } else if (mode === Mode.EDIT) {
         //     const editModel = Object.assign({}, { ...model, modifiedBy: AuthenticationManager.UserName() });
         //     CategoryServices.UpdateCategoryItem(editModel.id, editModel)
@@ -339,12 +338,12 @@ export class DepartmentDetails extends React.Component {
 
     }
 
-    onShowCancelConfirmModal =() => {
-        this.setState({showCancelConfirmModal: true});
+    onShowCancelConfirmModal = () => {
+        this.setState({ showCancelConfirmModal: true });
     }
 
-    onShowProcessConfirmModal =() => {
-        this.setState({showModalProcessConfirm: true});
+    onShowProcessConfirmModal = () => {
+        this.setState({ showModalProcessConfirm: true });
     }
 
     onCancelProcessConfirm = () => {
