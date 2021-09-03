@@ -147,9 +147,12 @@ export class EmployeeTypeDetailItem extends React.Component {
                             </div>
                         </div>
                         <div className="w-40 d-flex justify-content-end mt-5">
-                            { AuthenticationManager.AllowEdit(category.id) && (mode !== Mode.VIEW) && <button className="btn btn-primary" onClick={() => this.setState({showModalProcessConfirm: true})}><FontAwesomeIcon icon={faCheck} /> <span> Lưu thay đổi</span></button>}
-                            { AuthenticationManager.AllowDelete(category.id) && (mode === Mode.EDIT) && <button className="btn btn-danger ml-2" onClick={()=> this.setState({showModalRemoveComfirm: true})}><FontAwesomeIcon icon={faTrash} /><span> Xóa</span></button>}
-                            { AuthenticationManager.AllowEdit(category.id) && (mode !== Mode.VIEW) && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span> Hủy bỏ</span></button>}
+                        { (AuthenticationManager.AllowEdit(category.id) || AuthenticationManager.AllowAdd(category.id)) && (mode !== Mode.VIEW)
+                                && <button className="btn btn-primary" onClick={() => this.setState({showModalProcessConfirm: true})}><FontAwesomeIcon icon={faCheck} /> <span> Lưu thay đổi</span></button>}
+                            { AuthenticationManager.AllowDelete(category.id) && (mode === Mode.EDIT)
+                                && <button className="btn btn-danger ml-2" onClick={()=> this.setState({showModalRemoveComfirm: true})}><FontAwesomeIcon icon={faTrash} /><span> Xóa</span></button>}
+                            { (AuthenticationManager.AllowEdit(category.id) || AuthenticationManager.AllowAdd(category.id)) && (mode !== Mode.VIEW)
+                                && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span> Hủy bỏ</span></button>}
                         </div>
                     </Card.Body>
                 </Card>
