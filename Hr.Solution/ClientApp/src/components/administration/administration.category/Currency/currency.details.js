@@ -1,21 +1,22 @@
 import { faCheck, faPlus, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Card, Modal } from "react-bootstrap";
-import { AuthenticationManager } from "../../../../AuthenticationManager";
-import { NotificationType } from "../../../Common/notification/Constants";
-import { ShowNotification } from "../../../Common/notification/Notification";
+import { Card } from "react-bootstrap";
+import { Mode } from "../common/Constants";
+import { Modal } from "react-bootstrap";
 import { CategoryServices } from "../Category.services";
-import { Mode } from "./Constants";
+import { ShowNotification } from "../../../Common/notification/Notification";
+import { NotificationType } from "../../../Common/notification/Constants";
+import { AuthenticationManager } from "../../../../AuthenticationManager";
 
-export class CategoryCommonDetailItem extends React.Component {
+export class CurrencyDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             category: {},
-            mode: Mode.VIEW,
+            model: Mode.VIEW,
             model: {}
-        }
+        };
     }
 
     componentDidMount = () => {
@@ -45,7 +46,10 @@ export class CategoryCommonDetailItem extends React.Component {
             name2: '',
             ordinal: 0,
             note: '',
-            isActive: true
+            isActive: true,
+            isMultiple: false,
+            tempRate: 0,
+            decPlace: 0,
         }
         return model;
     }
@@ -56,23 +60,22 @@ export class CategoryCommonDetailItem extends React.Component {
         this.setState({ model: newModel, mode: Mode.CREATE });
     }
 
-
     onInputChange = (e) => {
         const { model } = this.state;
-        const fieldName = e.target.getAttribute("fieldname");
+        const fieldname = e.target.getAttribute("fieldname");
         const type = e.target.type;
         let value;
-        if (type === 'text' || type === 'textarea') {
-            value = e.target.value;
-        }
-        if (type === 'checkbox') {
+        if (type === "checkbox") {
             value = e.target.checked;
         }
-        if (type === 'number') {
+        if (type === "number") {
             value = parseInt(e.target.value);
         }
+        if (type === "text" || type === "textarea") {
+            value = e.target.value;
+        }
 
-        let newModel = Object.assign({}, { ...model, [fieldName]: value });
+        let newModel = Object.assign({}, { ...model, [fieldname]: value });
         this.setState({ model: newModel });
     }
 
@@ -81,52 +84,67 @@ export class CategoryCommonDetailItem extends React.Component {
         return (
             <>
                 <Card className="h-100">
-                    <Card.Header>
-                        <button className="btn btn-primary" disabled={mode === Mode.CREATE} onClick={this.onAddItemClick}><FontAwesomeIcon icon={faPlus} /><span> Thêm mới</span></button>
+                    <Card.Header className="h-3">
+                        <button className="btn btn-primary" disabled={mode === Mode.CREATE} onClick={this.onAddItemClick}><FontAwesomeIcon icon={faPlus} /><span>Thêm mới</span></button>
                     </Card.Header>
                     <Card.Body>
-                        <div className="w-30 pl-4 pt-3">
-                            <label className="w-100">
-                                {`Mã ${category.name}:`}
-                                <input fieldname="code" value={model.code} onChange={this.onInputChange} disabled={mode === Mode.EDIT || mode === Mode.VIEW} className="form-control" placeholder={`Mã ${category.name}`}></input>
-                            </label>
-                            <label className="w-100 mt-2">
-                                {`Tên ${category.name}:`}
-                                <input fieldname="name" value={model.name} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" placeholder={`Tên ${category.name}`}></input>
-                            </label>
-                            <label className="w-100 mt-2 text-camelcase">
-                                {`Tên thay thế ${category.name}:`}
-                                <input fieldname="name2" value={model.name2} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" placeholder={`Tên thay thế ${category.name}`}></input>
-                            </label>
-                            <div className="w-100 d-flex align-items-center mt-2">
-                                <label className="w-50">
+                        <div className="d-flex">
+                            <div className="w-30 pl-4 pt-3">
+                                <label className="w-100">
+                                    Mã nguyên tệ:
+                                    <input fieldname="code" value={model.code} onChange={this.onInputChange} disabled={mode === Mode.EDIT || mode === Mode.VIEW} className="form-control" placeholder="Mã nguyên tệ"></input>
+                                </label>
+                                <label className="w-100 mt-2">
+                                    Tên nguyên tệ:
+                                    <input fieldname="name" value={model.name} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" placeholder="Tên nguyên tệ"></input>
+                                </label>
+                                <label className="w-100 mt-2 text-camelcase">
+                                    Tên khác:
+                                    <input fieldname="name2" value={model.name2} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" placeholder="Tên khác"></input>
+                                </label>
+                                <label className="w-100">
+                                    Tỷ lệ mẫu:
+                                    <input fieldname="tempRate" value={model.tempRate} onChange={this.onInputChange} disabled={mode === Mode.VIEW} type="number" className="form-control" placeholder="Tỷ lệ mẫu"></input>
+                                </label>
+                                <div className="w-100 mt-2">
+                                    <label className="d-flex align-items-center">
+                                        <div className="mr-2">Nhân hệ số</div> <input fieldname="isMultiple" onChange={this.onInputChange} disabled={mode === Mode.VIEW} type="checkbox" checked={model.isMultiple} />
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="w-30 pl-4 pt-3">
+                                <label className="w-100">
+                                    Số lẻ làm tròn:
+                                    <input fieldname="decPlace" value={model.decPlace} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" type="number" placeholder="Số lẻ làm tròn"></input>
+                                </label>
+                                <label className="w-100 mt-2">
                                     Thứ tự:
                                     <input fieldname="ordinal" value={model.ordinal} onChange={this.onInputChange} disabled={mode === Mode.VIEW} type="number" className="form-control" placeholder="Thứ tự"></input>
                                 </label>
-                                <label className="ml-auto mt-4">
-                                    <input fieldname="isActive" onChange={this.onInputChange} disabled={mode === Mode.VIEW} type="checkbox" checked={model.isActive} /> Đang hoạt động
+                                <div className="w-100 mt-2">
+                                    <label className="d-flex align-items-center">
+                                        <div className="mr-2">Đang Hoạt Động</div> <input fieldname="isActive" onChange={this.onInputChange} disabled={mode === Mode.VIEW} type="checkbox" checked={model.isActive} />
+                                    </label>
+                                </div>
+                                <label className="w-100 mt-3">
+                                    Ghi chú:
+                                    <textarea fieldname="note" onChange={this.onInputChange} disabled={mode === Mode.VIEW} value={model.note} className="form-control" rows={4} placeholder="Ghi chú"></textarea>
                                 </label>
-                            </div>
-                            <label className="w-100 mt-2">
-                                Ghi chú:
-                                <textarea fieldname="note" onChange={this.onInputChange} disabled={mode === Mode.VIEW} value={model.note} className="form-control" rows={5} placeholder="Ghi chú"></textarea>
-                            </label>
-                            <div className="w-100 d-flex justify-content-end mt-3">
-                                {mode !== Mode.VIEW && <button className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faCheck} /> <span> Lưu thay đổi</span></button>}
-                                {mode === Mode.EDIT && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showModalRemoveComfirm: true })}><FontAwesomeIcon icon={faTrash} /><span> Xóa</span></button>}
-                                {mode !== Mode.VIEW && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span> Hủy bỏ</span></button>}
-
+                                <div className="w-100 d-flex justify-content-end mt-3">
+                                    {mode !== Mode.VIEW && <button className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faCheck} /> <span> Lưu thay đổi</span></button>}
+                                    {mode === Mode.EDIT && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showModalRemoveComfirm: true })}><FontAwesomeIcon icon={faTrash} /><span> Xóa</span></button>}
+                                    {mode !== Mode.VIEW && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span> Hủy bỏ</span></button>}
+                                </div>
                             </div>
                         </div>
                     </Card.Body>
-                </Card>
+                </Card >
                 {this.generateCancelModalConfirm()}
                 {this.generateProcessModalConfirm()}
                 {this.generateRemoveModalConfirm()}
             </>
         )
     }
-
     generateRemoveModalConfirm = () => {
         const { showModalRemoveComfirm } = this.state;
         return (
@@ -183,6 +201,7 @@ export class CategoryCommonDetailItem extends React.Component {
     }
 
     onProcessRemoveConfirm = () => {
+        //CALL_API
         const { model } = this.state;
         CategoryServices.DeleteCategoryItem(model.id)
             .then(response => {
@@ -196,6 +215,7 @@ export class CategoryCommonDetailItem extends React.Component {
     }
 
     onProcessConfirm = () => {
+        //CALL_API
         const { model, mode, category } = this.state;
         if (mode === Mode.CREATE) {
             const newModel = Object.assign({}, { ...model, functionId: category.id, createdBy: AuthenticationManager.UserName() });

@@ -358,7 +358,6 @@ export class DepartmentDetails extends React.Component {
 
     onProcessConfirm = () => {
         const { departmentInfo, mode } = this.state;
-        console.log(departmentInfo);
         if (mode === Mode.CREATE) {
             const newModel = Object.assign({}, { ...departmentInfo, createdBy: AuthenticationManager.UserName() });
             DepartmentServices.Add(newModel)
@@ -369,7 +368,6 @@ export class DepartmentDetails extends React.Component {
                     this.setState({ showModalProcessConfirm: false });
                     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thêm bộ phận/phòng ban vào hệ thống");
                 })
-
         } else if (mode === Mode.EDIT) {
             const editModel = Object.assign({}, { ...departmentInfo, modifiedBy: AuthenticationManager.UserName() });
             DepartmentServices.Update(editModel.id, editModel)

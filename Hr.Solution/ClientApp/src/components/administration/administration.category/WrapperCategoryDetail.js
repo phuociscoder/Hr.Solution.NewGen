@@ -22,8 +22,7 @@ const WrapperCategoryDetail = WrappedComponent => {
 
         componentDidMount = () => {
             const categoryId = this.props.match.params.id;
-            if(!AuthenticationManager.AllowView(categoryId)) 
-            {
+            if (!AuthenticationManager.AllowView(categoryId)) {
                 this.props.history.push('/notFound');
                 return;
             }
@@ -32,16 +31,17 @@ const WrapperCategoryDetail = WrappedComponent => {
 
         getCategory = (id) => {
             CategoryServices.GetCategoryById(id)
-                .then(response => {
-                    if (response.data) {
-                        let categoryInfo = response.data;
-                        this.setState({ categoryInfo: categoryInfo });
-                    }
-                }, error => {
-                    ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể đi đến trang thiết lập");
-                    const categoryPath = AppRoute.CATEGORY_LIST.path;
-                    this.props.history.push(categoryPath);
-                });
+                .then(
+                    response => {
+                        if (response.data) {
+                            let categoryInfo = response.data;
+                            this.setState({ categoryInfo: categoryInfo });
+                        }
+                    }, error => {
+                        ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể đi đến trang thiết lập");
+                        const categoryPath = AppRoute.CATEGORY_LIST.path;
+                        this.props.history.push(categoryPath);
+                    });
         }
 
         render = () => {
@@ -58,6 +58,7 @@ const WrapperCategoryDetail = WrappedComponent => {
                             </Breadcrumb>
                         </div>
                     </div>
+
 
                     <ReactCSSTransitionGroup transitionName="example" transitionAppear={true}>
                         <div className="component-content d-flex flex-column w-100 h-94">

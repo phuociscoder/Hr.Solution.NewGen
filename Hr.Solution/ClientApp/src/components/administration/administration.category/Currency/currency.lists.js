@@ -1,21 +1,21 @@
-import { faAngleRight, faBan, faEdit, faLock, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faBan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { _, debounce } from "lodash";
 import React from "react";
 import { Card } from "react-bootstrap";
 import { NotificationType } from "../../../Common/notification/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
-import { CategoryServices } from '../Category.services';
-import '../../admin.roles/admin.dataRole/admin.roles.css';
-import _, { debounce } from "lodash";
+import { CategoryServices } from "../Category.services";
 
-export class CategoryCommonList extends React.Component {
+
+export class CurrencyList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             categoryItems: [],
-            loading: false,
-            selectedItem: {}
-        }
+            selectedItem: {},
+            loading: false
+        };
     }
 
     componentDidMount = () => {
@@ -25,31 +25,25 @@ export class CategoryCommonList extends React.Component {
     }
 
     loadCategoryItems = (categoryId) => {
+        //CALL_API (có thể sử dụng lại vì chỉ gọi  sắp xếp list)
         if (!categoryId) return;
         CategoryServices.GetCategoryItems(categoryId)
-            .then(response => {
-                let categoryItems = _.orderBy(response.data, x => x.ordinal, "asc");
-                this.setState({ categoryItems: categoryItems, originCategoryItems: categoryItems, loading: false }, this.props.onRefreshed());
-            }, error => {
-                this.setState({ loading: false });
-                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể đọc các chỉ mục của danh mục");
-            })
+            .then(
+                response => {
+                    let categoryItems = _.orderBy(response.data, x => x.oridinal, "asc");
+                    this.setState({ categoryItems: categoryItems, originCategoryItems: categoryItems, loading: false }, this.props.onRefreshed());
+                },
+                error => {
+                    this.setState({ loading: false });
+                    ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể đọc các chỉ mục của danh mục");
+                }
+            );
     }
 
-    shouldComponentUpdate = (nextProps) => {
-        if (this.props.category !== nextProps.category) {
-            this.setState({ category: nextProps.category }, this.loadCategoryItems(nextProps.category.id));
-        }
-        if (nextProps.refresh) {
-            this.loadCategoryItems(nextProps.category.id);
-        }
-        return true;
-    }
-
-    onSearchTextChange = (e) => {
-        const value = e.target.value;
+    onSearchTextChange = (event) => {
+        const value = event.target.value;
         const { category } = this.state;
-        if (!value || value.trim() === '') {
+        if (!value || value.trim() === "") {
             this.loadCategoryItems(category.id);
             return;
         }
@@ -74,16 +68,16 @@ export class CategoryCommonList extends React.Component {
     }
 
     render = () => {
-        const { categoryItems, loading, selectedItem } = this.state;
+        const { selectedItem, categoryItems, loading } = this.state;
         return (
             <Card className="h-100">
-                <Card.Header>
+                <Card.Header className="h-3">
                     <input onChange={this.onSearchTextChange} className="form-control flex-fill" placeholder="Tìm kiếm"></input>
                 </Card.Header>
                 <Card.Body>
                     <div className="w-100 d-flex flex-column group-role-container">
                         {
-                            categoryItems && categoryItems.length > 0 && categoryItems.map((item, index) => {
+                            categoryItems && categoryItems.length > 0 && categoryItems.map((item) => {
                                 return (
                                     <div key={item.id} fieldName={item.id} className={selectedItem.id === item.id ? "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown active" : "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown"}
                                         onClick={() => this.onSelectItem(item)}>
@@ -102,7 +96,6 @@ export class CategoryCommonList extends React.Component {
                                     </div>
                                 )
                             })
-
                         }
                         {
                             !categoryItems || categoryItems.length === 0 &&
@@ -110,10 +103,9 @@ export class CategoryCommonList extends React.Component {
                                 Không có dữ liệu.
                             </div>
                         }
-
                     </div>
                 </Card.Body>
             </Card>
-        )
+        );
     }
 }

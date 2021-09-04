@@ -42,7 +42,7 @@ export class Home extends Component {
     const sysRoles = AuthenticationManager.SysRoles();
     if (!sysRoles) return null;
 
-    return sysRoles.map(x => <div className="roleName">{x.name}</div>);
+    return sysRoles.map(x => <p>{x.name}</p>);
   }
 
   render() {
@@ -54,7 +54,7 @@ export class Home extends Component {
           <div className="lower-container d-flex flex-column justify-content-center align-items-end">
             <h1 className="Message">Welcome To Hr Solution</h1>
             <h2 className="fullName">{fullName}</h2>
-            <p className="roleNames">{displayAllSysRoleName}</p>
+            <div className="roleNames text-right font-italic font-weight-light">{displayAllSysRoleName}</div>
           </div>
         </div>
       </div >

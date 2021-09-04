@@ -82,7 +82,7 @@ export class NavMenu extends Component {
   }
 
   onCancelChangeUserInfoModal = () => {
-    this.setState({ showChangeUserInfoModal: false, fullName: '', avatar: null, email: '' })
+    this.setState({ showChangeUserInfoModal: false })
   }
 
   generateConfirmModalLogout = () => {
@@ -141,7 +141,7 @@ export class NavMenu extends Component {
         </Navbar>
         {this.generateConfirmModalLogout()}
         {<ChangePasswordModal showModal={showChangePasswordModal} onCancelProcess={this.onCancelProcessModal} userName={AuthenticationManager.UserName()} />}
-        {<ChangeUserInfoModal showModal={showChangeUserInfoModal} onCancelProcess={this.onCancelChangeUserInfoModal} userName={AuthenticationManager.UserName()} />}
+        {<ChangeUserInfoModal showModal={showChangeUserInfoModal} onCancelProcess={this.onCancelChangeUserInfoModal} />}
       </>
     );
   }

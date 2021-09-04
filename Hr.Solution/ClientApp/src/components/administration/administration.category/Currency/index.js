@@ -1,17 +1,16 @@
 import React from "react";
-import { Card } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
-import { CategoryCommonDetailItem } from "./Common.detail";
-import { CategoryCommonList } from "./Common.list";
+import { CurrencyDetails } from "./currency.details";
+import { CurrencyList } from "./currency.lists";
 
-export class CategoryCommonDetail extends React.Component {
+export class CurrencyConfig extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            refesh: false,
             category: {},
+            refresh: false,
             selectedItem: {}
-        }
+        };
     }
 
     componentDidMount = () => {
@@ -27,9 +26,6 @@ export class CategoryCommonDetail extends React.Component {
         return true;
     }
 
-    onRefresh = (value) => {
-        this.setState({ refresh: value });
-    }
     onRefreshed = () => {
         this.setState({ refresh: false });
     }
@@ -38,18 +34,21 @@ export class CategoryCommonDetail extends React.Component {
         this.setState({ selectedItem: item });
     }
 
+    onRefresh = (value) => {
+        this.setState({ refresh: value });
+    }
+
     render = () => {
         const { category, refresh, selectedItem } = this.state;
         return (
             <div className="d-flex w-100 h-100">
                 <div className="w-20 h-100">
-                    <CategoryCommonList onRefreshed={this.onRefreshed} refresh={refresh} onChange={this.onCategoryItemChange} category={category} />
+                    <CurrencyList onRefreshed={this.onRefreshed} refresh={refresh} onChange={this.onCategoryItemChange} category={category} />
                 </div>
                 <div className="flex-fill ml-2 h-100">
-                    <CategoryCommonDetailItem category={category} onRefresh={this.onRefresh} model={selectedItem} />
+                    <CurrencyDetails category={category} onRefresh={this.onRefresh} model={selectedItem} />
                 </div>
                 <ReactTooltip />
-            </div>
-        )
+            </div>);
     }
 }
