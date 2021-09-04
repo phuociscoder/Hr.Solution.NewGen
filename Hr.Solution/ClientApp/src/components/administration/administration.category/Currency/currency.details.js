@@ -51,6 +51,7 @@ export class CurrencyDetails extends React.Component {
             tempRate: 0,
             decPlace: 0,
         }
+        return model;
     }
 
 
