@@ -40,7 +40,6 @@ export class CurrencyConfig extends React.Component {
 
     render = () => {
         const { category, refresh, selectedItem } = this.state;
-        console.log(category);
         return (
             <div className="d-flex w-100 h-100">
                 <div className="w-20 h-100">

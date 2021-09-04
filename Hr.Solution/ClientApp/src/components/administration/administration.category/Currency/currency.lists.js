@@ -25,6 +25,7 @@ export class CurrencyList extends React.Component {
     }
 
     loadCategoryItems = (categoryId) => {
+        //CALL_API (có thể sử dụng lại vì chỉ gọi  sắp xếp list)
         if (!categoryId) return;
         CategoryServices.GetCategoryItems(categoryId)
             .then(
@@ -41,24 +42,22 @@ export class CurrencyList extends React.Component {
 
     onSearchTextChange = (event) => {
         const value = event.target.value;
-        // const { category } = this.state;
-        // if (!value || value.trim() === "") {
-        //     this.loadCategoryItems(category.id);
-        //     return;
-        // }
-        console.log("call debounce here");
+        const { category } = this.state;
+        if (!value || value.trim() === "") {
+            this.loadCategoryItems(category.id);
+            return;
+        }
         this.onDebounceSearch(value);
     }
 
     onDebounceSearch = debounce(value => this.searchCategoryItems(value), 1000);
 
     searchCategoryItems = (value) => {
-        // const { originCategoryItems } = this.state;
-        // const filteredItems = originCategoryItems.filter(x => x.name.toLowerCase().trim().includes(value.toLowerCase().trim())
-        //     || x.name2.toLowerCase().trim().includes(value.toLowerCase().trim())
-        //     || x.code.toLowerCase().trim().includes(value.toLowerCase().trim()));
-        // this.setState({ categoryItems: filteredItems });
-        console.log(value);
+        const { originCategoryItems } = this.state;
+        const filteredItems = originCategoryItems.filter(x => x.name.toLowerCase().trim().includes(value.toLowerCase().trim())
+            || x.name2.toLowerCase().trim().includes(value.toLowerCase().trim())
+            || x.code.toLowerCase().trim().includes(value.toLowerCase().trim()));
+        this.setState({ categoryItems: filteredItems });
     }
 
     onSelectItem = (item) => {
@@ -72,7 +71,7 @@ export class CurrencyList extends React.Component {
         const { selectedItem, categoryItems, loading } = this.state;
         return (
             <Card className="h-100">
-                <Card.Header>
+                <Card.Header className="h-3">
                     <input onChange={this.onSearchTextChange} className="form-control flex-fill" placeholder="Tìm kiếm"></input>
                 </Card.Header>
                 <Card.Body>

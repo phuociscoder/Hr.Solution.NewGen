@@ -21,7 +21,6 @@ export class CurrencyDetails extends React.Component {
 
     componentDidMount = () => {
         const { category, model } = this.props;
-        const test = this.resetModel();
         if (!category) return;
         this.setState({ category: category });
         if (Object.keys(model).length > 0) {
@@ -49,12 +48,9 @@ export class CurrencyDetails extends React.Component {
             note: '',
             isActive: true,
             isMultiple: false,
-            standardRatio: '',
-            roundedNumber: 0,
-            complexCode: ''
+            tempRate: 0,
+            decPlace: 0,
         }
-        console.log(Object.keys(model));
-        return model;
     }
 
 
@@ -84,11 +80,10 @@ export class CurrencyDetails extends React.Component {
 
     render = () => {
         const { category, mode, model } = this.state;
-        console.log(category);
         return (
             <>
                 <Card className="h-100">
-                    <Card.Header>
+                    <Card.Header className="h-3">
                         <button className="btn btn-primary" disabled={mode === Mode.CREATE} onClick={this.onAddItemClick}><FontAwesomeIcon icon={faPlus} /><span>Thêm mới</span></button>
                     </Card.Header>
                     <Card.Body>
@@ -108,26 +103,18 @@ export class CurrencyDetails extends React.Component {
                                 </label>
                                 <label className="w-100">
                                     Tỷ lệ mẫu:
-                                    <input fieldname="standardRatio" value={model.standardRatio} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" placeholder="Tỷ lệ mẫu"></input>
+                                    <input fieldname="tempRate" value={model.tempRate} onChange={this.onInputChange} disabled={mode === Mode.VIEW} type="number" className="form-control" placeholder="Tỷ lệ mẫu"></input>
                                 </label>
                                 <div className="w-100 mt-2">
                                     <label className="d-flex align-items-center">
                                         <div className="mr-2">Nhân hệ số</div> <input fieldname="isMultiple" onChange={this.onInputChange} disabled={mode === Mode.VIEW} type="checkbox" checked={model.isMultiple} />
                                     </label>
                                 </div>
-                                <label className="w-100">
-                                    Áp dụng cho:
-                                    <input fieldname="applyFor" value={model.applyFor} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" placeholder="Áp dụng cho"></input>
-                                </label>
                             </div>
                             <div className="w-30 pl-4 pt-3">
                                 <label className="w-100">
                                     Số lẻ làm tròn:
-                                    <input fieldname="roundedNumber" value={model.roundedNumber} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" type="number" placeholder="Số lẻ làm tròn"></input>
-                                </label>
-                                <label className="w-100 mt-2">
-                                    Mã tổng hợp:
-                                    <input fieldname="complexCode" value={model.complexCode} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" placeholder="Mã tổng hợp"></input>
+                                    <input fieldname="decPlace" value={model.decPlace} onChange={this.onInputChange} disabled={mode === Mode.VIEW} className="form-control" type="number" placeholder="Số lẻ làm tròn"></input>
                                 </label>
                                 <label className="w-100 mt-2">
                                     Thứ tự:
@@ -213,6 +200,7 @@ export class CurrencyDetails extends React.Component {
     }
 
     onProcessRemoveConfirm = () => {
+        //CALL_API
         const { model } = this.state;
         CategoryServices.DeleteCategoryItem(model.id)
             .then(response => {
@@ -226,6 +214,7 @@ export class CurrencyDetails extends React.Component {
     }
 
     onProcessConfirm = () => {
+        //CALL_API
         const { model, mode, category } = this.state;
         if (mode === Mode.CREATE) {
             const newModel = Object.assign({}, { ...model, functionId: category.id, createdBy: AuthenticationManager.UserName() });

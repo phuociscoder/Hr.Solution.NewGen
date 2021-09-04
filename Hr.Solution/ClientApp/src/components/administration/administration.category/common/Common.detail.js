@@ -15,7 +15,6 @@ export class CategoryCommonDetailItem extends React.Component {
             category: {},
             mode: Mode.VIEW,
             model: {}
-
         }
     }
 
