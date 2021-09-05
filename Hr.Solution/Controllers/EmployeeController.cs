@@ -30,9 +30,8 @@ namespace Hr.Solution.Application.Controllers
 
         [HttpPost, Route("getByDepts")]
         [Authorize]
-        public async Task<ActionResult> GetByDepts([FromBody] IEnumerable<int> depts, string freeText)
+        public async Task<ActionResult> GetByDepts([FromBody]GetEmployeeByDeptsRequest request)
         {
-            var request = new GetEmployeeByDeptsRequest { DepartmentIds = depts, FreeText = freeText };
             var results = await employeeServices.GetByDepts(request);
             return Ok(results);
         }

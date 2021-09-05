@@ -1,11 +1,13 @@
 import { faSearch, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import _ from "lodash";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Type } from "../../administration/admin.department/Constants";
 import { DepartmentServices } from "../../administration/admin.department/Department.services";
 import { DepartmentList } from "../../administration/admin.department/DepartmentList";
 import { AppRoute } from "../../AppRoute";
+import { EmployeeServices } from "../employee.Services";
 import { EmployeeTable } from "./EmployeeTable";
 
 export class EmployeeListing extends React.Component {
@@ -18,17 +20,28 @@ export class EmployeeListing extends React.Component {
     }
 
     componentDidMount = () => {
-        this.getEmployees();
-        this.getUserDepts();
+        this.getDeptsInUserRoles();
     }
 
-    getUserDepts =() => {
-        DepartmentServices.GetByDomains({ freeText: '', fullLoad: false }).then(response => {
-            debugger;
+    getDeptsInUserRoles =() => {
+        DepartmentServices.GetByCurrentUser().then(response => {
+            this.setState({departmentsInUserRoles: response.data});
+            this.loadEmployees(response.data);
         }, error => {
             debugger;
         });
     }
+
+    loadEmployees =(deptIds) => {
+        EmployeeServices.GetByDepartments({departmentIds: deptIds, freeText: ''}).then(response => {
+            this.setState({employees: response.data.data});
+            console.log(response.data.data);
+        }, error => {
+            debugger;
+        });
+    }
+
+    
 
     getEmployees = () => {
         const employees = [
@@ -44,7 +57,10 @@ export class EmployeeListing extends React.Component {
     }
 
     onDepartmentSelectedChange = (ids) => {
-        this.setState({ selectedDepartments: ids });
+        const {departmentsInUserRoles} = this.state;
+        const validDepts = _.intersection(ids, departmentsInUserRoles);
+        this.loadEmployees(validDepts);
+
     }
 
     render = () => {
@@ -57,10 +73,10 @@ export class EmployeeListing extends React.Component {
                     <Link to={AppRoute.EMPLOYEE_CREATE.path} className="btn btn-primary ml-1"><span><FontAwesomeIcon icon={faUserPlus} /> Thêm nhân viên</span></Link>
                 </div>
                 <div className="w-100 h-100 d-flex">
-                    <div className="w-30 mr-1 shadow">
-                    <DepartmentList isMutipleSelect={true} fullLoad={false} type={Type.Select} onValueChange={() => {}} values={selectedDepartments}/>
+                    <div className="w-25 mr-1 ">
+                    <DepartmentList isMultipleSelect={true} fullLoad={false} type={Type.Select} onValueChange={this.onDepartmentSelectedChange} values={selectedDepartments}/>
                     </div>
-                    <div className="w-100 h-100 shadow">
+                    <div className="w-100 h-100 ml-2 shadow">
                     <EmployeeTable data={employees}></EmployeeTable>
                     </div>
                 </div>

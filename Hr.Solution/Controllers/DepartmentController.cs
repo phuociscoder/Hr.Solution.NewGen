@@ -71,6 +71,21 @@ namespace Hr.Solution.Application.Controllers
 
         }
 
+        [HttpGet, Route("userDepartments")]
+        [Authorize]
+        public async Task<ActionResult> GetDepartmentInRoles()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await userManager.FindByIdAsync(userId);
+            if (user.IsAdmin)
+            {
+                var depts = await departmentServices.GetByFreeText(freeText: null);
+                return Ok(depts.Select(x => x.Id));
+            }
+            var results = await departmentServices.GetDepartmentIdsByRoles(new Guid(userId));
+            return Ok(results);
+        }
+
         [HttpGet, Route("roles")]
         [Authorize]
         public async Task<ActionResult> GetByRoles([FromQuery] SearchDepartmentQuery query)
@@ -86,19 +101,10 @@ namespace Hr.Solution.Application.Controllers
             var deptIdsInRoles = await departmentServices.GetDepartmentIdsByRoles(new System.Guid(userId));
             var departments = allDepts.Where(x => deptIdsInRoles.Contains(x.Id)).OrderByDescending(x => x.Level).ToList();
             results.AddRange(departments);
-            try
-            {
                 foreach (var dept in departments)
                 {
                     RetriveParent(dept, allDepts, results);
                 }
-
-            }
-            catch (Exception ex)
-            {
-                var a = ex;
-            }
-
             return Ok(results);
 
 

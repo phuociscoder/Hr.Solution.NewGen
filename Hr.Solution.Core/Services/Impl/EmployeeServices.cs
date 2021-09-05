@@ -48,7 +48,7 @@ namespace Hr.Solution.Core.Services.Impl
         public async Task<SearchPagedResults<EmployeeResponse>> GetByDepts(GetEmployeeByDeptsRequest request)
         {
             DataTable tblDeptIds = new DataTable();
-            tblDeptIds.Columns.Add("Id");
+            tblDeptIds.Columns.Add("Id", typeof(int));
             foreach (var deptId in request.DepartmentIds)
             {
                 tblDeptIds.Rows.Add(deptId);

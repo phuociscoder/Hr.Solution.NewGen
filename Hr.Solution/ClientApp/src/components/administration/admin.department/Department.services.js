@@ -2,6 +2,7 @@ import RestClient from "../../../services/common/RestClient";
 
 export class DepartmentServices {
     static baseUrl = "/api/Department";
+    static baseUrlByUser ="/api/Department/userDepartments";
     static baseUrlByDomain = "/api/Department/roles";
     static baseUrlById = "/api/Department/{0}";
 
@@ -19,6 +20,10 @@ export class DepartmentServices {
 
     static GetByDomains =(params) => {
         return RestClient.SendGetRequestWithParameters(this.baseUrlByDomain, params);
+    }
+
+    static GetByCurrentUser =() => {
+        return RestClient.SendGetRequest(this.baseUrlByUser);
     }
 
     static CheckExisting(departmentCode)
