@@ -63,7 +63,7 @@ export class AccountListing extends React.Component {
             { field: 'isAdmin', title: 'Admin', type: 'boolean', width: 8, order: 6 },
             { field: 'isLock', title: 'Khóa', type: 'boolean', width: 8, order: 7 },
             { field: 'systemRoles', title: 'Phân Quyền', type: 'text', width: 8, order: 8 },
-            { field: 'validDate', title: 'Ngày Hiệu Lực', type: 'date', width: 10, order: 9 }
+            { field: 'validDate', title: 'Ngày Hiệu Lực', type: 'date', width: 1, order: 9 }
         ];
         this.setState({columns});
     }
@@ -90,8 +90,8 @@ export class AccountListing extends React.Component {
                     }
                 </div>
                 <div className="w-100 mt-1 h-96">
-                    {/* <AccountTable prefix={prefix} loading={loading} data={accounts} onShowDeactiveModal={this.onShowDeactiveModal} onShowUnlockModal={this.onShowUnlockModal} onShowEditModal={this.onShowEditModal} /> */}
-                    <HTable columns={columns} data={accounts} actions={this.generateActionField} />
+                    <AccountTable prefix={prefix} loading={loading} data={accounts} onShowDeactiveModal={this.onShowDeactiveModal} onShowUnlockModal={this.onShowUnlockModal} onShowEditModal={this.onShowEditModal} />
+                    {/* <HTable columns={columns} data={accounts} actions={this.generateActionField} /> */}
                 </div>
                 {<DeactiveAccountModal model={selectedAccount} showModal={showDeactiveModal} onCancelProcess={this.onCancelProcessModal} onProcessConfirm={this.processDeactiveAccount} />}
                 {<UnlockAccountModal model={selectedAccount} showModal={showUnlockModal} onCancelProcess={this.onCancelProcessModal} onProcessConfirm={this.processUnlockAccount} />}

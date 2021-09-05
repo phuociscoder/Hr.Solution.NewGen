@@ -52,13 +52,13 @@ namespace Hr.Solution.Core
             }
         }
 
-        public async Task<SearchPagedResults<T>> QueryAsync<T>(string procedureName, object filters) where T : class
+        public async Task<SearchPagedResults<T>> QueryAsync<T>(string procedureName, object filters, bool convertToDynamicParams = true) where T : class
         {
             var generalFilters = filters as BaseSearchQuery;
             using (var connection = dbContext.GetDBConnection())
             {
                 var parameters = ConvertToParams(filters);
-                var results = await connection.QueryMultipleAsync(procedureName, ConvertToParams(filters), commandType: System.Data.CommandType.StoredProcedure)
+                var results = await connection.QueryMultipleAsync(procedureName, convertToDynamicParams ? ConvertToParams(filters) : filters, commandType: System.Data.CommandType.StoredProcedure)
                      .ConfigureAwait(false);
 
                 var data = results.Read<T>().ToList();

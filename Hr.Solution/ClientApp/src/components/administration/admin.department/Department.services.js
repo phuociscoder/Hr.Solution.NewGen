@@ -2,6 +2,7 @@ import RestClient from "../../../services/common/RestClient";
 
 export class DepartmentServices {
     static baseUrl = "/api/Department";
+    static baseUrlByDomain = "/api/Department/roles";
     static baseUrlById = "/api/Department/{0}";
 
     static GetByFreeText =(params) => {
@@ -14,6 +15,10 @@ export class DepartmentServices {
 
     static Add =(params) => {
         return RestClient.SendPostRequest(this.baseUrl, params);
+    }
+
+    static GetByDomains =(params) => {
+        return RestClient.SendGetRequestWithParameters(this.baseUrlByDomain, params);
     }
 
     static CheckExisting(departmentCode)

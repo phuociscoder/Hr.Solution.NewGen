@@ -1,4 +1,6 @@
 ﻿using Hr.Solution.Core.Services.Interfaces;
+using Hr.Solution.Data.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,10 +21,20 @@ namespace Hr.Solution.Application.Controllers
         }
 
         [HttpGet, Route("managers")]
+        [Authorize]
         public async Task<ActionResult> GetManagers()
         {
             var result = await employeeServices.Employee_GetManagers();
             return Ok(result);
+        }
+
+        [HttpPost, Route("getByDepts")]
+        [Authorize]
+        public async Task<ActionResult> GetByDepts([FromBody] IEnumerable<int> depts, string freeText)
+        {
+            var request = new GetEmployeeByDeptsRequest { DepartmentIds = depts, FreeText = freeText };
+            var results = await employeeServices.GetByDepts(request);
+            return Ok(results);
         }
 
     }

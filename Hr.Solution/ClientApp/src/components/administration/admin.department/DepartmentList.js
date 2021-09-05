@@ -37,9 +37,9 @@ export class DepartmentList extends React.Component {
         const { values, type, isMultipleSelect, fullLoad, prefix } = this.props;
         const newType = type ?? this.state.type;
         const newIsMultipleSelect = isMultipleSelect ?? false;
-        const newFullLoad = fullLoad ?? false;
-        this.setState({ selectedIds: values, type: newType, isMultipleSelect: newIsMultipleSelect, fullLoad: newFullLoad, prefix: prefix }, this.loadDepartment(null));
-
+        const newFullLoad = fullLoad;
+        this.setState({ selectedIds: values, type: newType, isMultipleSelect: newIsMultipleSelect, fullLoad: newFullLoad, prefix: prefix });
+        this.loadDepartment(null);
     }
 
     shouldComponentUpdate = (nextProps) => {
@@ -50,19 +50,41 @@ export class DepartmentList extends React.Component {
         return true;
     }
 
-
     loadDepartment = (freeText) => {
         if (this.state.type === Type.Module) this.setState({ loading: true });
-        DepartmentServices.GetByFreeText({ freeText: '' })
-            .then(response => {
-                let departments = this.initDepartmentTree(null, response.data);
-                departments = this.filterBySearchText(freeText, departments);
-                this.setState({ departments: departments, originDepartments: response.data, loading: false });
-            }, error => {
-                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thao tác");
-                this.setState({ loading: false });
-            })
+        DepartmentServices.GetByDomains({ freeText: '', fullLoad: false }).then(response => {
+            let departments = this.initDepartmentTree(null, response.data);
+            departments = this.filterBySearchText(freeText, departments);
+            this.setState({ departments: departments, originDepartments: response.data, loading: false });
+        }, error => {
+            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thao tác");
+            this.setState({ loading: false });
+        });
     }
+
+    // getAllDepartments =(freeText, fullLoad) => {
+    //     DepartmentServices.GetByFreeText({ freeText: '' })
+    //         .then(response => {
+    //             let departments = this.initDepartmentTree(null, response.data);
+    //             departments = this.filterBySearchText(freeText, departments);
+    //             this.setState({ departments: departments, originDepartments: response.data, loading: false });
+    //         }, error => {
+    //             ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thao tác");
+    //             this.setState({ loading: false });
+    //         })
+    // }
+
+    // getDepartmentByRoles =(freeText, fullLoad) => {
+    //     DepartmentServices.GetByDomains({ freeText: '', fullLoad: fullLoad })
+    //         .then(response => {
+    //             // let departments = this.initDepartmentTree(null, response.data);
+    //             // departments = this.filterBySearchText(freeText, departments);
+    //             // this.setState({ departments: departments, originDepartments: response.data, loading: false });
+    //         }, error => {
+    //             ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thao tác");
+    //             this.setState({ loading: false });
+    //         })
+    // }
 
     initDepartmentTree = (root, departments) => {
         const { selectedIds } = this.state;
@@ -93,7 +115,7 @@ export class DepartmentList extends React.Component {
             }
             levelDepts.forEach(parent => {
                 const childs = departments.filter(x => x.parentId === parent.id);
-                const isHasChildSelected = childs.some(x => selectedIds.includes(x.id));
+                const isHasChildSelected = childs.some(x => selectedIds?.includes(x.id));
                 const isHasChildExpanded = childs.some(x => x.isExpanded === true);
                 if (isHasChildSelected || isHasChildExpanded) {
                     parent.isExpanded = true
@@ -192,7 +214,7 @@ export class DepartmentList extends React.Component {
         } else {
             selectedIds = [id];
         }
-        this.setState({ selectedIds: selectedIds }, onValueChange(selectedIds[0]));
+        this.setState({ selectedIds: selectedIds }, onValueChange(selectedIds));
     }
 
     onSelectDepartment =(id) => {

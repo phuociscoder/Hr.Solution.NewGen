@@ -1,10 +1,11 @@
 import { faSearch, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { Type } from "../../administration/admin.department/Constants";
+import { DepartmentServices } from "../../administration/admin.department/Department.services";
+import { DepartmentList } from "../../administration/admin.department/DepartmentList";
 import { AppRoute } from "../../AppRoute";
-import { DepartmentFilter } from "../parts/DepartmentFilter";
 import { EmployeeTable } from "./EmployeeTable";
 
 export class EmployeeListing extends React.Component {
@@ -18,6 +19,15 @@ export class EmployeeListing extends React.Component {
 
     componentDidMount = () => {
         this.getEmployees();
+        this.getUserDepts();
+    }
+
+    getUserDepts =() => {
+        DepartmentServices.GetByDomains({ freeText: '', fullLoad: false }).then(response => {
+            debugger;
+        }, error => {
+            debugger;
+        });
     }
 
     getEmployees = () => {
@@ -38,7 +48,7 @@ export class EmployeeListing extends React.Component {
     }
 
     render = () => {
-        const { employees } = this.state;
+        const { employees, selectedDepartments } = this.state;
         return (
             <>
                 <div className="w-100 d-flex justify-content-end mb-2">
@@ -47,8 +57,8 @@ export class EmployeeListing extends React.Component {
                     <Link to={AppRoute.EMPLOYEE_CREATE.path} className="btn btn-primary ml-1"><span><FontAwesomeIcon icon={faUserPlus} /> Thêm nhân viên</span></Link>
                 </div>
                 <div className="w-100 h-100 d-flex">
-                    <div className="w-20 mr-1 shadow">
-                        <DepartmentFilter onDepartmentSelectedChange={this.onDepartmentSelectedChange} />
+                    <div className="w-30 mr-1 shadow">
+                    <DepartmentList isMutipleSelect={true} fullLoad={false} type={Type.Select} onValueChange={() => {}} values={selectedDepartments}/>
                     </div>
                     <div className="w-100 h-100 shadow">
                     <EmployeeTable data={employees}></EmployeeTable>
