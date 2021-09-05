@@ -69,7 +69,7 @@ namespace Hr.Solution
             services.AddScoped<IRepository, Repository>();
 
             AddDependency(services);
-
+            services.AddSwaggerGen();
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -119,6 +119,8 @@ namespace Hr.Solution
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HR Solution V1"));
         }
 
         private void AddDependency(IServiceCollection services)
