@@ -49,6 +49,12 @@ namespace Hr.Solution.Core.Services.Impl
             return response;
         }
 
+        public async Task<List<int>> GetDepartmentIdsByRoles(Guid UserId)
+        {
+            var result = await repository.QueryAsync<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_GET_BY_USER_ROLES, new { userId = UserId });
+            return result.Data.Select(t => t.ID).ToList();
+        }
+
         public async Task<int> Update(DepartmentUpdateRequest request)
         {
             var response = await repository.ExecuteAsync<DepartmentResponse>(ProcedureConstants.SP_DEPARTMENT_UPDATE, request);

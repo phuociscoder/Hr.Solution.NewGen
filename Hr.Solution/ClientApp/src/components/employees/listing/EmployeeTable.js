@@ -30,9 +30,9 @@ export class EmployeeTable extends BaseListing {
                             return (
                                 <tr>
                                     <td>{item.code}</td>
-                                    <td><Image width={40} height={40} roundedCircle src={item.avatar} /> {item.fullName}</td>
-                                    <td style={{ alignContent: "center" }}>{item.gender === 1 ? <span color="darkblue">Nam</span> : <span color="pink">Nữ</span>}</td>
-                                    <td>{item.department}</td>
+                                    <td><Image width={40} height={40} roundedCircle src={item.avatar} /> {item.lastName} {item.firstName}</td>
+                                    <td style={{ alignContent: "center" }}>{item.isMale ? <span color="darkblue">Nam</span> : <span color="pink">Nữ</span>}</td>
+                                    <td>{item.departmentName}</td>
                                     <td>{item.role}</td>
                                     <td>{item.doB}</td>
                                     <td>{item.contractType}</td>

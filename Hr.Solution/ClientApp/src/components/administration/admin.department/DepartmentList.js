@@ -14,7 +14,6 @@ import { Image } from "react-bootstrap";
 //prop : onValueChange : []
 //values: []
 //isMultipleSelect: true/false
-//CRUD: true/false 
 //Type: Type.Select /Type.Module
 //fullLoad: true/false
 export class DepartmentList extends React.Component {
@@ -37,42 +36,34 @@ export class DepartmentList extends React.Component {
         const { values, type, isMultipleSelect, fullLoad, prefix } = this.props;
         const newType = type ?? this.state.type;
         const newIsMultipleSelect = isMultipleSelect ?? false;
-        const newFullLoad = fullLoad ?? false;
-        this.setState({ selectedIds: values, type: newType, isMultipleSelect: newIsMultipleSelect, fullLoad: newFullLoad, prefix: prefix }, this.loadDepartment(null));
-
+        const newFullLoad = fullLoad;
+        this.setState({ selectedIds: values, type: newType, isMultipleSelect: newIsMultipleSelect, fullLoad: newFullLoad, prefix: prefix });
+        this.loadDepartment(null);
     }
 
     shouldComponentUpdate = (nextProps) => {
-        if (this.props.values !== nextProps.values || this.props.prefix !== nextProps.prefix) {
-            this.setState({ selectedIds: nextProps.values, prefix: nextProps.prefix }, this.loadDepartment(null));
+        if (this.props.values !== nextProps.values || this.props.prefix !== nextProps.prefix || this.props.fullLoad !== nextProps.fullLoad) {
+            this.setState({ selectedIds: nextProps.values, prefix: nextProps.prefix, fullLoad: nextProps.fullLoad }, this.loadDepartment(null));
         }
-
         return true;
     }
 
-
     loadDepartment = (freeText) => {
         if (this.state.type === Type.Module) this.setState({ loading: true });
-        DepartmentServices.GetByFreeText({ freeText: '' })
-            .then(response => {
-                let departments = this.initDepartmentTree(null, response.data);
-                departments = this.filterBySearchText(freeText, departments);
-                this.setState({ departments: departments, originDepartments: response.data, loading: false });
-            }, error => {
-                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thao tác");
-                this.setState({ loading: false });
-            })
+        DepartmentServices.GetByDomains({ freeText: '', fullLoad: this.props.fullLoad ?? false }).then(response => {
+            let departments = this.initDepartmentTree(null, response.data);
+            departments = this.filterBySearchText(freeText, departments);
+            this.setState({ departments: departments, originDepartments: response.data, loading: false });
+        }, error => {
+            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thao tác");
+            this.setState({ loading: false });
+        });
     }
 
     initDepartmentTree = (root, departments) => {
-        const { selectedIds } = this.state;
         this.setChildCounts(root, departments);
         this.setExpanded(departments);
-
-
-
         return departments;
-
     }
 
     getDepartmentLevels = (departments) => {
@@ -93,7 +84,7 @@ export class DepartmentList extends React.Component {
             }
             levelDepts.forEach(parent => {
                 const childs = departments.filter(x => x.parentId === parent.id);
-                const isHasChildSelected = childs.some(x => selectedIds.includes(x.id));
+                const isHasChildSelected = childs.some(x => selectedIds?.includes(x.id));
                 const isHasChildExpanded = childs.some(x => x.isExpanded === true);
                 if (isHasChildSelected || isHasChildExpanded) {
                     parent.isExpanded = true
@@ -185,17 +176,19 @@ export class DepartmentList extends React.Component {
                 this.relativeChecked(id, selectedIds);
                 this.parentsChecked(id, selectedIds);
 
-            } else {
-                this.relativeUnChecked(id, selectedIds);
-                this.parentsUnChecked(id, selectedIds);
+            } 
+            else {
+                selectedIds = _.pull(selectedIds, id);
+                // this.relativeUnChecked(id, selectedIds);
+                // this.parentsUnChecked(id, selectedIds);
             }
         } else {
             selectedIds = [id];
         }
-        this.setState({ selectedIds: selectedIds }, onValueChange(selectedIds[0]));
+        this.setState({ selectedIds: selectedIds }, onValueChange(selectedIds));
     }
 
-    onSelectDepartment =(id) => {
+    onSelectDepartment = (id) => {
         const { isMultipleSelect } = this.state;
         let { selectedIds } = this.state;
         const { onValueChange } = this.props
@@ -282,19 +275,19 @@ export class DepartmentList extends React.Component {
                         <>
                             <div key={department.id} style={{ paddingLeft: `${department.level * 2}rem` }}
                                 className={`${type === Type.Select && !isMultipleSelect && selectedIds.includes(department.id) ? 'department-selected' : ''} ${deptClassName}`}>
-                                <div  onClick={() => !isMultipleSelect ? this.onSelectDepartment(department.id) : {}}>  
-                                {
-                                    isMultipleSelect &&
-                                    <input departmentid={department.id}
-                                        onClick={this.onDepartmentCheckChange}
-                                        className="department-checkbox"
-                                        type="checkbox"
-                                        checked={selectedIds.includes(department.id)} />
-                                }
-                                {department.image && <Image className="circle ml-2" src={department.image} width={25} height={25} />}
-                                <span className={isHasChild ? "text-uppercase ml-2" : "ml-2"}>{department.departmentName} - <i>{department.departmentCode}</i></span>
+                                <div onClick={() => !isMultipleSelect ? this.onSelectDepartment(department.id) : {}}>
+                                    {
+                                        isMultipleSelect &&
+                                        <input departmentid={department.id}
+                                            onClick={this.onDepartmentCheckChange}
+                                            className="department-checkbox"
+                                            type="checkbox"
+                                            checked={selectedIds.includes(department.id)} />
+                                    }
+                                    {department.image && <Image className="circle ml-2" src={department.image} width={25} height={25} />}
+                                    <span className={isHasChild ? "text-uppercase ml-2" : "ml-2"}>{department.departmentName} - <i>{department.departmentCode}</i></span>
                                 </div>
-                                <span className="ml-auto w-50" onClick={() => this.onToggleClick(department.id)}>{this.renderToggle(department)}</span>
+                                <span className="ml-auto" onClick={() => this.onToggleClick(department.id)}>{this.renderToggle(department)}</span>
                             </div>
                             {department.isExpanded && this.generateChilds(department)}
                         </>
@@ -325,20 +318,20 @@ export class DepartmentList extends React.Component {
                                 <div>
                                     <div key={company.id}
                                         className={`${type === Type.Select && !isMultipleSelect && selectedIds.includes(company.id) ? 'department-selected' : ''} w-100 company-container cursor-pointer d-flex align-items-center`}>
-                                        <div onClick={() => !isMultipleSelect ? this.onSelectDepartment(company.id) : {}}> 
-                                        {
-                                            isMultipleSelect &&
-                                            <input
-                                                departmentid={company.id}
-                                                onClick={this.onDepartmentCheckChange}
-                                                className="department-checkbox"
-                                                type="checkbox"
-                                                checked={selectedIds.includes(company.id)} />
-                                        }
-                                        {company.image && <Image className="circle ml-2" src={company.image} width={25} height={25} />}
-                                        <span className="text-uppercase ml-1"> <b>{company.departmentName}</b></span>
+                                        <div onClick={() => !isMultipleSelect ? this.onSelectDepartment(company.id) : {}}>
+                                            {
+                                                isMultipleSelect &&
+                                                <input
+                                                    departmentid={company.id}
+                                                    onClick={this.onDepartmentCheckChange}
+                                                    className="department-checkbox"
+                                                    type="checkbox"
+                                                    checked={selectedIds.includes(company.id)} />
+                                            }
+                                            {company.image && <Image className="circle ml-2" src={company.image} width={25} height={25} />}
+                                            <span className="text-uppercase ml-1"> <b>{company.departmentName}</b></span>
                                         </div>
-                                        <span className="ml-auto w-10" onClick={() => this.onToggleClick(company.id)}>{this.renderToggle(company)}</span>
+                                        <span className="ml-auto" onClick={() => this.onToggleClick(company.id)}>{this.renderToggle(company)}</span>
                                     </div>
                                     {company.isExpanded && this.generateChilds(company)}
                                 </div>

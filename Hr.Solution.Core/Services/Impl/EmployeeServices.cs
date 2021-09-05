@@ -1,9 +1,12 @@
-﻿using Hr.Solution.Core.Constants;
+﻿using Dapper;
+using Hr.Solution.Core.Constants;
 using Hr.Solution.Core.Services.Interfaces;
 using Hr.Solution.Data.Requests;
 using Hr.Solution.Data.Responses;
+using Hr.Solution.Domain.Responses;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,5 +45,18 @@ namespace Hr.Solution.Core.Services.Impl
             return response.Data;
         }
 
+        public async Task<SearchPagedResults<EmployeeResponse>> GetByDepts(GetEmployeeByDeptsRequest request)
+        {
+            DataTable tblDeptIds = new DataTable();
+            tblDeptIds.Columns.Add("Id", typeof(int));
+            foreach (var deptId in request.DepartmentIds)
+            {
+                tblDeptIds.Rows.Add(deptId);
+            }
+
+            var response = await repository.QueryAsync<EmployeeResponse>(ProcedureConstants.SP_EMPLOYEE_GET_BY_DEPTS, new { departmentIds = tblDeptIds.AsTableValuedParameter("TVP_DepartmentIds"), freeText = request.FreeText }, false);
+
+            return response;
+        }
     }
 }

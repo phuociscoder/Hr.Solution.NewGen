@@ -57,9 +57,11 @@ namespace Hr.Solution.Core.Constants
         public static string SP_DEPARTMENT_CHECKEXISTING = "sp_Department_CheckExisting";
         public static string SP_DEPARTMENT_DELETE = "spDepartment_Delete";
         public static string SP_DEPARTMENT_UPDATE = "spDepartment_Edit";
+        public static string SP_DEPARTMENT_GET_BY_USER_ROLES = "spDepartment_GetByUserRoles";
 
         //Employees
         public static string spEmployees_spGetAll = "spEmployees_spGetAll";
         public static string SP_EMPLOYEE_GET_MANAGERS = "spEmployee_GetManagers";
+        public static string SP_EMPLOYEE_GET_BY_DEPTS = "spEmployee_GetByDepts";
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Hr.Solution.Data.Requests;
 using Hr.Solution.Data.Responses;
+using Hr.Solution.Domain.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace Hr.Solution.Core.Services.Interfaces
     {
         Task<List<EmployeeResponse>> Employees_GetData(bool Active, string strDeptCode, string strValueSearch, ParramsRequest Request);
         Task<List<EmployeeManagersResponse>> Employee_GetManagers();
+        Task<SearchPagedResults<EmployeeResponse>> GetByDepts(GetEmployeeByDeptsRequest request);
     }
 }
