@@ -9,6 +9,8 @@ export class AppRoute {
 
     static EMPLOYEE_CONTRACT = { path: "/employees/contract/:id", alias: "/employees/contract/", name: "HỢP ĐỒNG LAO ĐỘNG", parent: [this.HOME, this.EMPLOYEE_MANAGEMENT] };
 
+    static DAY_LEAVE = { path: "/employees/dayleave", name: "QUẢN LÝ NGÀY NGHỈ PHÉP", parent: [this.HOME] };
+
     //Config
     static CONFIG = "/config/"
     static CATEGORY_LIST = { path: "/category", name: "THIẾT LẬP DANH MỤC", parent: [this.HOME] };
@@ -32,6 +34,7 @@ export class AppRoute {
     this.ADMIN_ACOUNT,
     this.ADMIN_SYSTEM_ROLE,
     this.ADMIN_DATA_ROLE,
-    this.CATEGORY_DETAIL
+    this.CATEGORY_DETAIL,
+    this.DAY_LEAVE
     ];
 }

@@ -1,4 +1,4 @@
-import { faAlignJustify, faCogs, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faAlignJustify, faCogs, faUsers, faLeaf } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
@@ -52,6 +52,13 @@ export class OffcanvasNav extends React.Component {
                         {AuthenticationManager.AllowView(Function.EMP001) && <Link to={AppRoute.EMPLOYEE_MANAGEMENT.path} className="dropdown-item">Quản Lý Nhân Viên</Link>}
                     </DropdownButton>
                 }
+
+                {AuthenticationManager.AllowView(Function.EMP001) &&
+                    <DropdownButton id="dropdown-basic-button" className="btn-item-collapse" drop="right" title={<FontAwesomeIcon className="icon-toggle fa-w-20" icon={faLeaf} size="2x" />}>
+                        {AuthenticationManager.AllowView(Function.EMP001) && <Link to={AppRoute.DAY_LEAVE.path} className="dropdown-item">Quản Lý Ngày Nghỉ Phép</Link>}
+                    </DropdownButton>
+                }
+
                 <ReactTooltip />
             </>
         )
@@ -79,6 +86,14 @@ export class OffcanvasNav extends React.Component {
                     <div className="w-100 d-flex flex-column mt-3 animate__animated animate__backInLeft">
                         <span className="ml-2 white d-flex"><FontAwesomeIcon icon={faUsers} color="white" /> <h5 className="ml-2"><b>NHÂN VIÊN</b></h5></span>
                         {AuthenticationManager.AllowView(Function.EMP001) && <Link to={AppRoute.EMPLOYEE_MANAGEMENT.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Danh Sách Nhân Viên</Link>}
+
+                    </div>
+                }
+
+                {AuthenticationManager.AllowView(Function.EMP001) &&
+                    <div className="w-100 d-flex flex-column mt-3 animate__animated animate__backInLeft">
+                        <span className="ml-2 white d-flex"><FontAwesomeIcon className="fa-w-20 " icon={faLeaf} color="white" /> <h5 className="ml-2"><b>NGÀY NGHỈ PHÉP</b></h5></span>
+                        {AuthenticationManager.AllowView(Function.EMP001) && <Link to={AppRoute.DAY_LEAVE.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Quản Lý Ngày Nghỉ Phép</Link>}
 
                     </div>
                 }
