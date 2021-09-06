@@ -6,7 +6,7 @@ import { faBan, faCheck, faCheckCircle, faEdit, faLock, faLockOpen, faTrash } fr
 import ReactTooltip from "react-tooltip";
 import { NoDataTableContent } from "../../Common/NoDataTableContent";
 import { DateTimeUltils } from "../../Utilities/DateTimeUltis";
-import {Loading} from '../../Common/loading/Loading';
+import { Loading } from '../../Common/loading/Loading';
 import { Image } from "react-bootstrap";
 import NoAvatar from '../../../assets/no-avatar.jpg';
 import { AuthenticationManager } from "../../../AuthenticationManager";
@@ -24,9 +24,8 @@ export class AccountTable extends BaseListing {
         if (data) {
             this.setState({ data });
         }
-        if(prefix)
-        {
-            this.setState({prefix: prefix});
+        if (prefix) {
+            this.setState({ prefix: prefix });
         }
     }
 
@@ -34,14 +33,12 @@ export class AccountTable extends BaseListing {
         if (this.props.data !== nextProps.data) {
             this.setState({ data: nextProps.data });
         }
-        if(this.props.prefix !== nextProps.prefix)
-        {
-            this.setState({prefix: nextProps.prefix});
+        if (this.props.prefix !== nextProps.prefix) {
+            this.setState({ prefix: nextProps.prefix });
         }
 
-        if(this.props.loading !== nextProps.loading)
-        {
-            this.setState({loading: nextProps.loading});
+        if (this.props.loading !== nextProps.loading) {
+            this.setState({ loading: nextProps.loading });
         }
         return true;
     }
@@ -88,7 +85,7 @@ export class AccountTable extends BaseListing {
                 </thead>
                 <tbody>
                     {
-                        loading && 
+                        loading &&
                         <tr>
                             <td colSpan={11}>
                                 <div className="w-100 d-flex justify-content-center">
@@ -102,7 +99,7 @@ export class AccountTable extends BaseListing {
                             <tr>
                                 <td>{item.code}</td>
                                 <td><div className="w-100 d-flex align-items-center">
-                                    <Image src={item.avatar ?? NoAvatar} width={45} height={50} className="shadow"/>
+                                    <Image src={item.avatar ?? NoAvatar} width={45} height={50} className="shadow" />
                                     <span className="ml-2">{item.fullName}</span>
                                 </div>
                                 </td>
@@ -115,8 +112,8 @@ export class AccountTable extends BaseListing {
                                         <FontAwesomeIcon icon={faCheckCircle} color={item.isActive ? 'green' : 'lightgrey'} /></div>
                                 </td>
                                 <td style={{ alignContent: "center" }}>
-                                        <div className="w-100 d-flex justify-content-center">
-                                            <FontAwesomeIcon icon={faCheckCircle} color={item.isAdmin ? 'green' : 'lightgrey'} /></div> 
+                                    <div className="w-100 d-flex justify-content-center">
+                                        <FontAwesomeIcon icon={faCheckCircle} color={item.isAdmin ? 'green' : 'lightgrey'} /></div>
                                 </td>
                                 <td style={{ alignContent: "center" }}>
                                     <div className="w-100 d-flex justify-content-center">
@@ -124,9 +121,9 @@ export class AccountTable extends BaseListing {
                                 </td>
                                 <td>{DateTimeUltils.toDateString(item.validDate)}</td>
                                 <td>
-                                    <div className="d-flex w-100 justify-content-center"> 
-                                    {AuthenticationManager.AllowEdit(prefix) &&<button onClick={() => this.onShowEditModal(item)} className="btn btn-info"><FontAwesomeIcon icon={faEdit} /></button>}
-                                    {AuthenticationManager.AllowDelete(prefix) &&<button onClick={() => this.onShowDeactiveModal(item)} className="btn btn-danger ml-2"><FontAwesomeIcon icon={faTrash} /></button>}
+                                    <div className="d-flex w-100 justify-content-center">
+                                        {AuthenticationManager.AllowEdit(prefix) && <button onClick={() => this.onShowEditModal(item)} className="btn btn-info"><FontAwesomeIcon icon={faEdit} /></button>}
+                                        {AuthenticationManager.AllowDelete(prefix) && <button onClick={() => this.onShowDeactiveModal(item)} className="btn btn-danger ml-2"><FontAwesomeIcon icon={faTrash} /></button>}
                                         <ReactTooltip />
                                     </div>
                                 </td>

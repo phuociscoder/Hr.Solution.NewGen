@@ -7,7 +7,8 @@ export class CustomDatePicker extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: null
+            value: null,
+            disabled: false
         }
     }
 
@@ -21,9 +22,13 @@ export class CustomDatePicker extends React.Component {
     }
 
     componentDidMount = () => {
-        const { value } = this.props;
+        const { value, disabled } = this.props;
         if (value) {
             this.setState({ value: new Date(value) });
+        }
+        //Vantt12_TODO
+        if (disabled) {
+            this.setState({ disabled: disabled });
         }
     }
 
@@ -31,14 +36,20 @@ export class CustomDatePicker extends React.Component {
         if (this.props.value != nextProps.value) {
             this.setState({ value: new Date(nextProps.value) });
         }
+
+        if (this.props.disabled != nextProps.disabled) {
+            this.setState({ disabled: nextProps.disabled });
+        }
         return true;
     }
 
     render = () => {
-        const { value } = this.state;
+        const { value, disabled } = this.state;
         return (
             <DatePicker
-                disabled={true}
+                //Vantt12_TODO
+                // disabled={true}
+                disabled={disabled}
                 className="form-control"
                 dayPlaceholder="Ngày"
                 monthPlaceholder="Tháng"

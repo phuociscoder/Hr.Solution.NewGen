@@ -6,7 +6,7 @@ import "../../admin.roles/admin.dataRole/admin.roles.css";
 import { CategoryServices } from "../Category.services";
 import { NotificationType } from "../../../Common/notification/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
-import _, { debounce, values } from "lodash";
+import _, { debounce } from "lodash";
 
 export class WorkDayList extends React.Component {
     constructor(props) {
