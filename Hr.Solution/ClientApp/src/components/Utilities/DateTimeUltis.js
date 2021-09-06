@@ -13,17 +13,15 @@ const getYears = () => {
 const getMonthYears = () => {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
-    console.log(currentMonth);
     const startPreviousYear = currentYear - 5;
-
     let monthYears = [];
+
     for (let year = startPreviousYear; year <= currentYear; year++) {
         for (let month = 1; month <= 12; month++) {
-            const displayMonth = month + 1 < 10 ? `0${month}` : month;
+            const displayMonth = month + 1 < 11 ? `0${month}` : month;
             monthYears.unshift({ year: year, month: month, name: `${displayMonth}/${year}` });
         }
     }
-
     return monthYears;
 }
 

@@ -49,7 +49,7 @@ export class WorkDayDetails extends React.Component {
             code: '',
             month: 0,
             year: 0,
-            startDate: new Date(),
+            startDate: null,
             endDate: null,
             expireApproveDate: null,
             numWorkDay: 0,
@@ -65,7 +65,7 @@ export class WorkDayDetails extends React.Component {
         const monthYears = DateTimeUltils.getMonthYears();
         if (!monthYears) return;
         const currentYear = new Date().getFullYear();
-        const currentMonth = new Date().getMonth() + 1 < 10 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1;
+        const currentMonth = new Date().getMonth() + 1 < 11 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1;
         const selectedYearMonth = `${currentMonth}/${currentYear}`;
         this.setState({ monthYears: monthYears, selectedYearMonth: selectedYearMonth });
     }
@@ -111,7 +111,8 @@ export class WorkDayDetails extends React.Component {
     }
 
     render = () => {
-        const { category, mode, model, selectedYearMonth, monthYears } = this.state;
+        const { mode, model, selectedYearMonth, monthYears } = this.state;
+        console.log(mode);
         return (
             <>
                 <Card>
@@ -123,11 +124,17 @@ export class WorkDayDetails extends React.Component {
                             <div className="w-30 pl-4 pt-3">
                                 <label className="w-100">
                                     Năm, tháng chấm công:
-                                    <select value={selectedYearMonth} className="form-control" onChange={this.onYearMonthChange}>
+                                    <select
+                                        disabled={mode === Mode.VIEW || mode === Mode.EDIT}
+                                        value={selectedYearMonth}
+                                        className="form-control"
+                                        onChange={this.onYearMonthChange}>
                                         {
                                             monthYears && monthYears.length > 0 && monthYears.map((item) => {
                                                 return (
+
                                                     <option key={item.name} value={item.name}>{item.name}</option>
+
                                                 )
                                             }
                                             )
@@ -137,12 +144,12 @@ export class WorkDayDetails extends React.Component {
                                 <label className="w-100 mt-2">
                                     Ngày bắt đầu:
                                     {/* Vantt12_TODO Mode ? */}
-                                    <CustomDatePicker fieldname="startDate" value={model.startDate} onDateChange={this.onValidDateChange} />
+                                    <CustomDatePicker fieldname="startDate" disabled={mode === Mode.VIEW} value={model.startDate} onDateChange={this.onValidDateChange} />
                                 </label>
                                 <label className="w-100 mt-2">
                                     Ngày kết thúc:
                                     {/* Vantt12_TODO Mode ? */}
-                                    <CustomDatePicker fieldname="endDate" value={model.endDate} onDateChange={this.onValidDateChange} />
+                                    <CustomDatePicker fieldname="endDate" disabled={mode === Mode.VIEW} value={model.endDate} onDateChange={this.onValidDateChange} />
                                 </label>
                                 <label className="w-100 mt-2">
                                     {/* Vantt12_TODO valid NumWorkDay in month < 24 ? */}
@@ -151,8 +158,7 @@ export class WorkDayDetails extends React.Component {
                                 </label>
                                 <label className="w-100 mt-2">
                                     Ngày chốt công tính lương:
-                                    {/* Vantt12_TODO Mode ? */}
-                                    <CustomDatePicker fieldname="expireApproveDate" value={model.expireApproveDate} onDateChange={this.onValidDateChange} />
+                                    <CustomDatePicker fieldname="expireApproveDate" disabled={mode === Mode.VIEW} value={model.expireApproveDate} onDateChange={this.onValidDateChange} />
                                 </label>
                             </div>
                             <div className="w-30 pl-4 pt-3">
