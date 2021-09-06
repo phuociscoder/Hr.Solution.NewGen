@@ -112,7 +112,6 @@ export class WorkDayDetails extends React.Component {
 
     render = () => {
         const { mode, model, selectedYearMonth, monthYears } = this.state;
-        console.log(mode);
         return (
             <>
                 <Card>
@@ -143,12 +142,10 @@ export class WorkDayDetails extends React.Component {
                                 </label>
                                 <label className="w-100 mt-2">
                                     Ngày bắt đầu:
-                                    {/* Vantt12_TODO Mode ? */}
                                     <CustomDatePicker fieldname="startDate" disabled={mode === Mode.VIEW} value={model.startDate} onDateChange={this.onValidDateChange} />
                                 </label>
                                 <label className="w-100 mt-2">
                                     Ngày kết thúc:
-                                    {/* Vantt12_TODO Mode ? */}
                                     <CustomDatePicker fieldname="endDate" disabled={mode === Mode.VIEW} value={model.endDate} onDateChange={this.onValidDateChange} />
                                 </label>
                                 <label className="w-100 mt-2">

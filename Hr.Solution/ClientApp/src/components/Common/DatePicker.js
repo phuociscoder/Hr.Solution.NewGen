@@ -45,7 +45,6 @@ export class CustomDatePicker extends React.Component {
 
     render = () => {
         const { value, disabled } = this.state;
-        console.log("disable: ", disabled);
         return (
             <DatePicker
                 //Vantt12_TODO
