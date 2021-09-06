@@ -223,7 +223,6 @@ export class CurrencyDetails extends React.Component {
             CategoryServices.AddCategoryItem(newModel)
                 .then(response => {
                     const newModel = response.data;
-                    console.log(newModel)
                     ShowNotification(NotificationType.SUCCESS, "Thêm chỉ mục vào danh sách thành công");
                     this.setState({ model: this.resetModel(), showModalProcessConfirm: false }, this.onRefresh(true));
                 }, error => {
