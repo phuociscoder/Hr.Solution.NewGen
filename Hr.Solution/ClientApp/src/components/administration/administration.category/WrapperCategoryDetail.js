@@ -22,7 +22,7 @@ const WrapperCategoryDetail = WrappedComponent => {
 
         componentDidMount = () => {
             const categoryId = this.props.match.params.id;
-            if(!AuthenticationManager.AllowView(categoryId)) 
+            if (!AuthenticationManager.AllowView(categoryId))
             {
                 this.props.history.push('/notFound');
                 return;

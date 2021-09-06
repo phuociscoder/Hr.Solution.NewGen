@@ -38,6 +38,7 @@ export class CustomDatePicker extends React.Component {
         const { value } = this.state;
         return (
             <DatePicker
+                disabled={true}
                 className="form-control"
                 dayPlaceholder="Ngày"
                 monthPlaceholder="Tháng"
