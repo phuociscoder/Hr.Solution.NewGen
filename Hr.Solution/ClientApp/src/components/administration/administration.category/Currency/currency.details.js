@@ -14,7 +14,7 @@ export class CurrencyDetails extends React.Component {
         super(props);
         this.state = {
             category: {},
-            model: Mode.VIEW,
+            mode: Mode.VIEW,
             model: {}
         };
     }
@@ -217,11 +217,13 @@ export class CurrencyDetails extends React.Component {
     onProcessConfirm = () => {
         //CALL_API
         const { model, mode, category } = this.state;
+
         if (mode === Mode.CREATE) {
             const newModel = Object.assign({}, { ...model, functionId: category.id, createdBy: AuthenticationManager.UserName() });
             CategoryServices.AddCategoryItem(newModel)
                 .then(response => {
                     const newModel = response.data;
+                    console.log(newModel)
                     ShowNotification(NotificationType.SUCCESS, "Thêm chỉ mục vào danh sách thành công");
                     this.setState({ model: this.resetModel(), showModalProcessConfirm: false }, this.onRefresh(true));
                 }, error => {
