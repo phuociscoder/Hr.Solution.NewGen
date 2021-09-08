@@ -24,6 +24,7 @@ import { DataRoleManagement } from './components/administration/admin.roles/admi
 import { CategoryDetail } from './components/administration/administration.category/Category.detail';
 import { Function } from './components/Common/Constants';
 import { DepartmentConfig } from './components/administration/administration.category/department';
+import { DayLeave } from './components/employee.dayleave';
 require('./custom.css');
 
 export default class App extends Component {
@@ -52,6 +53,7 @@ export default class App extends Component {
               <Route exact path={[AppRoute.EMPLOYEE_MANAGEMENT.path]} component={AuthorizationComponent(EmployeeListing, Function.EMP000)} />
               <Route exact path={[AppRoute.EMPLOYEE_CREATE.path]} component={EmployeeCreate} />
               <Route exact path={[AppRoute.EMPLOYEE_CONTRACT.path]} component={EmployeeContract} />
+              <Route exact path={[AppRoute.DAY_LEAVE.path]} component={AuthorizationComponent(DayLeave, Function.EMP001)} />
               <Route exact path={[AppRoute.CATEGORY_LIST.path]} component={AuthorizationComponent(CategoryListing, Function.LS000)} />
               <Route exact path={[AppRoute.CATEGORY_DETAIL.path]} component={WrapperCategoryDetail(CategoryDetail)}/>
               <Route exact path={[AppRoute.CONFIG_DEPARTMENT.path]} component={AuthorizationComponent(DepartmentConfig)} />
