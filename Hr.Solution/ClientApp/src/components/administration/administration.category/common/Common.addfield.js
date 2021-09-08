@@ -3,17 +3,6 @@ import React from "react";
 export class AddCreatedModifiedField extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-            createdBy: '',
-            createdOn: null,
-            modifiedBy: '',
-            modifiedOn: null
-        };
-    }
-
-    componentDidMount = () => {
-        // const { modifiedBy, modifiedOn, createdBy, createdOn } = this.props;
-        // this.setState({ createdBy: createdBy, createdOn: createdOn, modifiedBy: modifiedBy, modifiedOn: modifiedOn });
     }
 
     render = () => {
