@@ -6,26 +6,17 @@ import { AuthenticationManager } from "../../AuthenticationManager";
 import { NoDataTableContent } from "../Common/NoDataTableContent";
 import ReactTooltip from "react-tooltip";
 import { debounce } from "lodash";
+import { CustomDatePicker } from "../Common/DatePicker";
 
 export class DayLeaveTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataTable: [
-                { code: 'test1', type: 'Nghỉ bệnh', startDate : '09-03-2021', endDate : '09-03-2021', partialDay : 'Cả ngày', reason: 'Covid', isApproved: false, employeeCode: 'EMP001' },
-                { code: 'test2', type: 'Nghỉ mát', startDate : '09-04-2021', endDate : '09-05-2021', partialDay : 'Cả ngày', reason: 'Thích', isApproved: true, employeeCode: 'EMP002' },
-                { code: 'test3', type: 'Nghỉ không lương', startDate : '08-01-2021', endDate : '08-30-2021', partialDay : 'Cả ngày',  reason: 'Không thích làm nữa', isApproved: true, employeeCode: 'EMP003' },
-                { code: 'test4', type: 'Nghỉ bù', startDate : '08-30-2021', endDate : '09-01-2021', partialDay : 'Cả ngày', reason: 'Mệt', isApproved: false, employeeCode: 'EMP005' },
-                { code: 'test5', type: 'Nghỉ phép', startDate : '09-05-2021', endDate : '09-05-2021', partialDay : 'Cả ngày', reason: 'Du lịch', isApproved: false, employeeCode: 'EMP006' },
-            ],
-            typeDropdown: [
-                { code: 'type1', name: 'Nghỉ bệnh' },
-                { code: 'type2', name: 'Nghỉ mát' },
-                { code: 'type3', name: 'Nghỉ không lương' },
-                { code: 'type4', name: 'Nghỉ bù' },
-                { code: 'type5', name: 'Nghỉ phép' },
-            ],
-            selectedTypeDropdown: {}
+            dataTable: [],
+            typeDropdown: [],
+            selectedTypeDropdown: {},
+            endDate: null,
+            startDate: null
         }
     }
 
@@ -33,6 +24,7 @@ export class DayLeaveTable extends React.Component {
         const { employee } = this.props;
         if (!employee) return;
         this.setState({ employee: employee });
+        this.loadTypeDropdown();
         this.loadDataTable(employee.code);
     }
 
@@ -51,7 +43,7 @@ export class DayLeaveTable extends React.Component {
         const { originDataTable, typeDropdown } = this.state;
         this.setState({ selectedTypeDropdown: valueSelected });
         if (!valueSelected) {
-            // this.loadDataTable();
+            this.loadDataTable();
             this.setState({ dataTable: originDataTable });
             return;
         };
@@ -69,19 +61,42 @@ export class DayLeaveTable extends React.Component {
 
     loadTypeDropdown = () => {
         // CALL_API get dropdowm loại ngày nghỉ phép
+        this.setState({ typeDropdown: this.loadDraftDropdown() })
+    }
 
+    // CALL_DRAFT
+    loadDraftDropdown = () => {
+        const draftDropdown = [
+            { code: 'type1', name: 'Nghỉ bệnh' },
+            { code: 'type2', name: 'Nghỉ mát' },
+            { code: 'type3', name: 'Nghỉ không lương' },
+            { code: 'type4', name: 'Nghỉ bù' },
+            { code: 'type5', name: 'Nghỉ phép' },
+        ];
+        return draftDropdown;
     }
 
     loadDataTable = (code) => {
         // CALL_API get date leave theo employee code
-        const { dataTable } = this.state;
-        this.setState({ originDataTable: dataTable });
+        this.setState({ dataTable: this.loadDraftDataTable(), originDataTable: this.loadDraftDataTable() });
+    }
+
+    // CALL_DRAFT
+    loadDraftDataTable = () => {
+        const draft = [
+            { code: 'test1', type: 'Nghỉ bệnh', startDate : '09-03-2021', endDate : '09-03-2021', partialDay : 'Cả ngày', reason: 'Covid', isApproved: false, employeeCode: 'EMP001' },
+            { code: 'test2', type: 'Nghỉ mát', startDate : '09-04-2021', endDate : '09-05-2021', partialDay : 'Cả ngày', reason: 'Thích', isApproved: true, employeeCode: 'EMP002' },
+            { code: 'test3', type: 'Nghỉ không lương', startDate : '08-01-2021', endDate : '08-30-2021', partialDay : 'Cả ngày',  reason: 'Không thích làm nữa', isApproved: true, employeeCode: 'EMP003' },
+            { code: 'test4', type: 'Nghỉ bù', startDate : '08-30-2021', endDate : '09-01-2021', partialDay : 'Cả ngày', reason: 'Mệt', isApproved: false, employeeCode: 'EMP005' },
+            { code: 'test5', type: 'Nghỉ phép', startDate : '09-05-2021', endDate : '09-05-2021', partialDay : 'Cả ngày', reason: 'Du lịch', isApproved: false, employeeCode: 'EMP006' },
+        ];
+        return draft;
     }
 
     onSearchTextChange = (e) => {
         const value = e.target.value;
         if(!value || value.trim() === ""){
-            // this.loadDataTable();
+            this.loadDataTable();
             const { originDataTable } = this.state;
             this.setState({ dataTable: originDataTable });
             return;
@@ -98,13 +113,50 @@ export class DayLeaveTable extends React.Component {
         this.setState({ dataTable: filteredItems });
     }
 
-    onChangeDate = (e) => {
-        const fieldName = e.target.getAttribute("fieldname");
-        const value = e.target.value;
-        // console.log(value);
-        this.setState({ [fieldName]: value });
-        this.filterBaseOnDate(fieldName, value);
+    onChangeStartDate = (value) => {
+        this.setState({ startDate: value });
+        const { originDataTable } = this.state;
+        let filterItemsDate = [];
+        if(!this.state.endDate){
+            if (!value) {
+                this.setState({ dataTable: originDataTable });
+                return;
+            }
+            filterItemsDate = originDataTable.filter(x => (new Date(x.startDate) > new Date(value)) || (this.compareEqualTime(x.startDate, value)));
+            this.setState({ dataTable: filterItemsDate });
+            return;
+        }
+        if (!value) {
+            filterItemsDate = originDataTable.filter(x => (new Date(x.startDate) < new Date(this.state.endDate)) || (this.compareEqualTime(x.startDate, this.state.endDate)));
+            this.setState({ dataTable: filterItemsDate });
+            return;
+        }
+        filterItemsDate = originDataTable.filter(x => ((new Date(x.startDate) > new Date(value)) || (this.compareEqualTime(x.startDate, value)))
+                                                && ((new Date(x.startDate) < new Date(this.state.endDate)) || (this.compareEqualTime(x.startDate, this.state.endDate))));
+        this.setState({ dataTable: filterItemsDate });
+    }
 
+    onChangeEndDate = (value) => {
+        this.setState({ endDate: value });
+        const { originDataTable } = this.state;
+        let filterItemsDate = [];
+        if(!this.state.startDate){
+            if (!value) {
+                this.setState({ dataTable: originDataTable });
+                return;
+            }
+            filterItemsDate = originDataTable.filter(x => (new Date(x.endDate) < new Date(value)) || (this.compareEqualTime(x.endDate, value)));
+            this.setState({ dataTable: filterItemsDate });
+            return;
+        }
+        if (!value) {
+            filterItemsDate = originDataTable.filter(x => (new Date(x.startDate) > new Date(this.state.startDate)) || (this.compareEqualTime(x.startDate, this.state.startDate)));
+            this.setState({ dataTable: filterItemsDate });
+            return;
+        }
+        filterItemsDate = originDataTable.filter(x => ((new Date(x.startDate) > new Date(this.state.startDate)) || (this.compareEqualTime(x.startDate, this.state.startDate)))
+                                                && ((new Date(x.startDate) < new Date(value)) || (this.compareEqualTime(x.startDate, value))));
+        this.setState({ dataTable: filterItemsDate });
     }
 
     compareEqualTime = (date1, date2) => {
@@ -115,46 +167,17 @@ export class DayLeaveTable extends React.Component {
                && d1.getDate() === d2.getDate()
     }
 
-    filterBaseOnDate = (fieldName, value) => {
-        const { originDataTable } = this.state;
-        let filterItemsDate = [];
-        if (fieldName === "startDate"){
-            if(!this.state.endDate){
-                filterItemsDate = originDataTable.filter(x => (new Date(x.startDate) > new Date(value)) || (this.compareEqualTime(x.startDate, value)));
-                this.setState({ dataTable: filterItemsDate });
-                return;
-            }
-            filterItemsDate = originDataTable.filter(x => ((new Date(x.startDate) > new Date(value)) || (this.compareEqualTime(x.startDate, value)))
-                                                    && ((new Date(x.startDate) < new Date(this.state.endDate)) || (this.compareEqualTime(x.startDate, this.state.endDate))));
-            this.setState({ dataTable: filterItemsDate });
-            return;
-        }
-        if (fieldName === "endDate"){
-            if(!this.state.startDate){
-                filterItemsDate = originDataTable.filter(x => (new Date(x.endDate) < new Date(value)) || (this.compareEqualTime(x.endDate, value)));
-                this.setState({ dataTable: filterItemsDate });
-                return;
-            }
-            filterItemsDate = originDataTable.filter(x => ((new Date(x.startDate) > new Date(this.state.startDate)) || (this.compareEqualTime(x.startDate, this.state.startDate)))
-                                                    && ((new Date(x.startDate) < new Date(value)) || (this.compareEqualTime(x.startDate, value))));
-            this.setState({ dataTable: filterItemsDate });
-            return;
-        }
-        
-    }
-
     render = () => {
-        const { employee, typeDropdown, selectedTypeDropdown } = this.state;
-        // console.log(employee);
+        const { employee, typeDropdown, selectedTypeDropdown, endDate, startDate } = this.state;
         return (
             <div>
                 <div className="d-flex">
                     <div className="w-50">
-                        <label className="mr-3">
-                            Từ ngày: <input type="date" fieldname="startDate" className="form-control" onChange={this.onChangeDate} placeholder="Từ ngày"/>
+                        <label className="mr-3 w-30">
+                            Từ ngày: <CustomDatePicker value={startDate} onDateChange={this.onChangeStartDate} />
                         </label>
-                        <label className="mr-3">
-                            Đến ngày: <input type="date" fieldname="endDate" className="form-control" onChange={this.onChangeDate} placeholder="Đến ngày"/>
+                        <label className="mr-3 w-30">
+                            Đến ngày: <CustomDatePicker value={endDate} onDateChange={this.onChangeEndDate} />
                         </label>
                         <label className="mr-3">
                             Loại nghỉ phép:
