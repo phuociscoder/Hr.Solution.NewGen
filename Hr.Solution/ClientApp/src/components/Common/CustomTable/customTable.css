@@ -6,23 +6,23 @@
 }
 
 .htable-body{
-    max-height: 90vh;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
-.htable-body > .row:nth-child(even){
+.htable-body > .table-row:nth-child(even){
     background-color: #eceef0;
 
 }
 
-.htable-body > .row {
-    padding: 10px;
-    height: 50px;
-    
+.table-row:hover{
+    width: 100%;
+    cursor: pointer;
+    background-color: #8BC6EC;
+    background-image: linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%);
+
 }
 
 .htable-footer{
-    padding: 10px 10px 10px 10px;
     background-color: #c4d0e2;
 }
 

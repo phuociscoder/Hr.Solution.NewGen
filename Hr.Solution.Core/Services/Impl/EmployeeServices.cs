@@ -25,7 +25,8 @@ namespace Hr.Solution.Core.Services.Impl
         public async Task<List<EmployeeResponse>> Employees_GetData(bool Active, string strDeptCode, string strValueSearch, ParramsRequest Request)
         {
             var response = await repository.QueryAsync<EmployeeResponse>(ProcedureConstants.spEmployees_spGetAll,
-                            new {
+                            new
+                            {
                                 UserID = Request.UserID,
                                 FunctionID = Request.FunctionID,
                                 Lang = Request.Lang,
@@ -49,13 +50,16 @@ namespace Hr.Solution.Core.Services.Impl
         {
             DataTable tblDeptIds = new DataTable();
             tblDeptIds.Columns.Add("Id", typeof(int));
-            foreach (var deptId in request.DepartmentIds)
+            foreach (var deptId in request.DepartmentIds.ToList().OrderBy(x => x))
             {
                 tblDeptIds.Rows.Add(deptId);
             }
 
-            var response = await repository.QueryAsync<EmployeeResponse>(ProcedureConstants.SP_EMPLOYEE_GET_BY_DEPTS, new { departmentIds = tblDeptIds.AsTableValuedParameter("TVP_DepartmentIds"), freeText = request.FreeText }, false);
+            var response = await repository.QueryAsync<EmployeeResponse>(ProcedureConstants.SP_EMPLOYEE_GET_BY_DEPTS, new { departmentIds = tblDeptIds.AsTableValuedParameter("TVP_DepartmentIds"), freeText = request.FreeText, pageSize = request.PageSize, pageIndex = request.PageIndex }, false);
 
+            var total = await repository.QueryTotal(ProcedureConstants.SP_EMPLOYEE_GET_BY_DEPTS, new { departmentIds = tblDeptIds.AsTableValuedParameter("TVP_DepartmentIds"), freeText = request.FreeText }, false);
+
+            response.Total = total;
             return response;
         }
     }

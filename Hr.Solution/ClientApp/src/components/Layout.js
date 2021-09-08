@@ -37,8 +37,8 @@ export class Layout extends Component {
         if (this.logoutTimeout) clearTimeout(this.logoutTimeout);
     }
     setTimeout() {
-        this.warnTimeout = setTimeout(this.warn, 30 * 1000);// 30 là 30 giây
-        this.logoutTimeout = setTimeout(this.logout, 60 * 1000); // 60 là 60 giây
+        this.warnTimeout = setTimeout(this.warn, 300000 * 1000);// 30 lï¿½ 30 giï¿½y
+        this.logoutTimeout = setTimeout(this.logout, 600000 * 1000); // 60 lï¿½ 60 giï¿½y
     }
     resetTimeout() {
         this.clearTimeout();
