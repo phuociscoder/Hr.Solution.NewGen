@@ -100,7 +100,7 @@ export class DepartmentDetails extends React.Component {
 
     onAddItemClick = () => {
         const newModel = this.initModel;
-        this.setState({ departmentInfo: newModel, mode: Mode.CREATE });
+        this.setState({ departmentInfo: newModel, mode: Mode.CREATE, showLogo: false });
     }
 
     onInputChange = (e) => {
