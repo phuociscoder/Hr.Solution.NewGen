@@ -23,36 +23,33 @@ export class EmployeeListing extends React.Component {
             selectedDepartments: [],
             pageIndex: 1, 
             pageSize: 20,
+            searchText: '',
             loading: false
         }
     }
 
     componentDidMount = () => {
-        this.getDeptsInUserRoles();
         this.generateColumns();
+        this.getDeptsInUserRoles();
+
     }
 
     getDeptsInUserRoles =() => {
-        this.setState({loading: true});
+        const {pageSize, pageIndex, searchText} = this.state;
         DepartmentServices.GetByCurrentUser().then(response => {
             this.setState({departmentsInUserRoles: response.data});
-            this.loadEmployees(response.data, 1, 20, '');
+            this.loadEmployees(response.data, pageIndex, pageSize, searchText);
         }, error => {
-            debugger;
+            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập được dữ liệu");
         });
     }
 
     loadEmployees =(deptIds, pageIndex, pageSize, freeText) => {
         EmployeeServices.GetByDepartments({departmentIds: deptIds, freeText: freeText, pageSize: pageSize, pageIndex: pageIndex}).then(response => {
-            this.setState({data: response.data, pageIndex: pageIndex, pageSize: pageSize, freeText: freeText, loading: false});
+            this.setState({data: response.data, pageIndex: pageIndex, pageSize: pageSize, freeText: freeText});
         }, error => {
             ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể truy cập danh sách nhân viên");
         });
-    }
-
-    componentDidUpdate =() => {
-        const {loading} = this.state;
-        if(loading) this.setState({loading: false});
     }
 
     generateColumns = () => {
@@ -77,8 +74,8 @@ export class EmployeeListing extends React.Component {
     }
 
     onPageIndexChange =(index) => {
-        const {departmentsInUserRoles} = this.state;
-        this.loadEmployees(departmentsInUserRoles, index, 20, '');
+        const {selectedDepartments, pageSize, searchText} = this.state;
+        this.loadEmployees(selectedDepartments, index, pageSize , searchText);
     }
 
     onPageSizeChange =(pageSize) => {
@@ -87,14 +84,16 @@ export class EmployeeListing extends React.Component {
     }
 
     onDepartmentSelectedChange = (ids) => {
-        const {departmentsInUserRoles, pageSize, pageIndex} = this.state;
+        const {departmentsInUserRoles, pageSize, pageIndex, searchText} = this.state;
         const validDepts = _.intersection(ids, departmentsInUserRoles);
-        this.loadEmployees(validDepts, pageIndex, pageSize, '');
+        this.setState({selectedDepartments: validDepts}, this.loadEmployees(validDepts, pageIndex, pageSize, searchText));
+        
 
     }
 
     render = () => {
         const { data, selectedDepartments, loading } = this.state;
+        console.log(data);
         return (
             <>
                 <div className="w-100 h-4 d-flex justify-content-end mb-2">
