@@ -12,6 +12,10 @@ export class Currency {
     ];
 }
 
+export class TypeValidation{
+    static required = "required";
+}
+
 export class Error {
     static PasswordRequiresNonAlphanumeric = 'PasswordRequiresNonAlphanumeric';
     static PasswordTooShort = 'PasswordTooShort';

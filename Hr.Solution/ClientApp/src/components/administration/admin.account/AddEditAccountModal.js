@@ -6,6 +6,8 @@ import { DefaultPassword, Mode, PasswordType } from "./Constant";
 import { ImageUploader } from "../../Common/ImageUploader";
 import { CustomDatePicker } from "../../Common/DatePicker";
 import axios from "axios";
+import { ValidateField, ValidateFieldMessage } from "../../Common/ValidateionField";
+import { TypeValidation } from "../../Common/Constants";
 // import DatePicker from 'react-date-picker';
 
 export class AddEditAccountModal extends React.Component {
@@ -17,7 +19,9 @@ export class AddEditAccountModal extends React.Component {
             passwordType: PasswordType.Default,
             password: null,
             passwordConfirm: null,
-            model: this.initModel
+            model: this.initModel,
+            checkValueValidate: '',
+            fieldsInValid: []
         }
     }
 
@@ -46,7 +50,7 @@ export class AddEditAccountModal extends React.Component {
 
     onHideModal = () => {
         const { onCancelProcess } = this.props;
-        this.setState({ showModal: false, model: this.initModel }, onCancelProcess());
+        this.setState({ showModal: false, model: this.initModel, fieldsInValid: [] }, onCancelProcess());
     }
 
     onPasswordTypeChange = (type) => {
@@ -65,7 +69,7 @@ export class AddEditAccountModal extends React.Component {
         const fieldName = e.target.getAttribute("fieldname");
         const value = e.target.value;
         const newModel = Object.assign({}, { ...this.state.model, [fieldName]: value });
-        this.setState({ model: newModel });
+        this.setState({ model: newModel, fieldsInValid: [] });
     }
 
     onCheckboxChange = (e) => {
@@ -90,6 +94,17 @@ export class AddEditAccountModal extends React.Component {
         }
         const { model } = this.state;
         const newModel = Object.assign({}, { ...model, password: password });
+        const fieldsValidation = [
+            {field: 'code', value: newModel.code, type:TypeValidation.required},
+            {field: 'userName', value: newModel.userName, type:TypeValidation.required},
+            {field: 'fullName', value: newModel.fullName, type:TypeValidation.required},
+        ]
+        const fieldsInValid = ValidateField(fieldsValidation);
+        if (fieldsInValid.length > 0) {
+            this.setState({ fieldsInValid: fieldsInValid});
+            console.log(fieldsInValid);
+            return;
+        }
         const { onProcessConfirm } = this.props;
         this.setState({ model: newModel, errorMessages: null }, onProcessConfirm(this.state.mode, newModel));
     }
@@ -105,6 +120,10 @@ export class AddEditAccountModal extends React.Component {
 
         if (this.props.model != nextProps.model) {
             this.setState({ model: Object.keys(nextProps.model).length > 0 ? nextProps.model : this.initModel });
+        }
+
+        if (this.props.fieldsInValid != nextProps.fieldsInValid) {
+            this.setState({ fieldsInValid: nextProps.fieldsInValid});
         }
         return true;
     }
@@ -132,7 +151,7 @@ export class AddEditAccountModal extends React.Component {
     }
 
     render = () => {
-        const { showModal, mode, passwordType, customPassword, passwordConfirm, errorMessages } = this.state;
+        const { showModal, mode, passwordType, customPassword, passwordConfirm, errorMessages, fieldsInValid } = this.state;
         const { code, userName, fullName, email, validDate, isActive, isAdmin, isDomain, isLock, isNeverLock, password, lockAfter, avatar } = this.state.model;
         return (
             <Modal size="lg" centered backdrop="static" show={showModal} onHide={this.onHideModal}>
@@ -145,12 +164,15 @@ export class AddEditAccountModal extends React.Component {
                             <div className="w-50 d-flex flex-column">
                                 <label>Mã tài khoản:
                                     <input disabled={mode === Mode.EDIT} value={code} fieldName="code" className="form-control" placeholder="Mã tài khoản" onChange={this.onInputChange}></input>
+                                    { fieldsInValid.find(x=> x.field == "code") && <ValidateFieldMessage message="Không được bỏ trống Mã tài khoản"/>}
                                 </label>
                                 <label>Tài khoản đăng nhập:
                                     <input value={userName} disabled={mode === Mode.EDIT} fieldName="userName" className="form-control" placeholder="Tài khoản" onChange={this.onInputChange}></input>
+                                    { fieldsInValid.find(x=> x.field == "userName") && <ValidateFieldMessage message="Không được bỏ trống Tài khoản đăng nhập"/>}
                                 </label>
                                 <label>Tên hiển thị:
                                     <input value={fullName} fieldName="fullName" className="form-control" placeholder="Tên hiển thị" onChange={this.onInputChange}></input>
+                                    { fieldsInValid.find(x=> x.field == "fullName") && <ValidateFieldMessage message="Không được bỏ trống Tên hiển thị"/>}
                                 </label>
                             </div>
                             <div className="d-flex flex-column ml-5" style={{ marginTop: '0px' }}>
