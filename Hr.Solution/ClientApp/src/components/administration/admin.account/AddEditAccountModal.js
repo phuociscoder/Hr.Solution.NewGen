@@ -20,8 +20,8 @@ export class AddEditAccountModal extends React.Component {
             password: null,
             passwordConfirm: null,
             model: this.initModel,
-            checkValueValidate: '',
-            fieldsInValid: []
+            fieldsInValid: [],
+            validations: []
         }
     }
 
@@ -92,19 +92,20 @@ export class AddEditAccountModal extends React.Component {
             this.setState({ errorMessages: errors });
             return;
         }
-        const { model } = this.state;
+        const { model, validations } = this.state;
+        const isInValid = validations.some(x => x.inValid);
+        if(isInValid) return;
         const newModel = Object.assign({}, { ...model, password: password });
-        const fieldsValidation = [
-            {field: 'code', value: newModel.code, type:TypeValidation.required},
-            {field: 'userName', value: newModel.userName, type:TypeValidation.required},
-            {field: 'fullName', value: newModel.fullName, type:TypeValidation.required},
-        ]
-        const fieldsInValid = ValidateField(fieldsValidation);
-        if (fieldsInValid.length > 0) {
-            this.setState({ fieldsInValid: fieldsInValid});
-            console.log(fieldsInValid);
-            return;
-        }
+        // const fieldsValidation = [
+        //     {field: 'code', value: newModel.code, type:TypeValidation.required},
+        //     {field: 'userName', value: newModel.userName, type:TypeValidation.required},
+        //     {field: 'fullName', value: newModel.fullName, type:TypeValidation.required},
+        // ]
+        // const fieldsInValid = ValidateField(fieldsValidation);
+        // if (fieldsInValid.length > 0) {
+        //     this.setState({ fieldsInValid: fieldsInValid});
+        //     return;
+        // }
         const { onProcessConfirm } = this.props;
         this.setState({ model: newModel, errorMessages: null }, onProcessConfirm(this.state.mode, newModel));
     }
@@ -128,6 +129,12 @@ export class AddEditAccountModal extends React.Component {
         return true;
     }
 
+    // componentDidUpdate = () => {
+    //     console.log("componet");
+    //     // const { isSubmit } = this.state;
+    //     if (isSubmit) this.setState({ isSubmit: false });
+    // }
+
     onPasswordCustomChange = (e) => {
         const value = e.target.value;
         this.setState({ cPassword: value });
@@ -150,6 +157,21 @@ export class AddEditAccountModal extends React.Component {
         return null;
     }
 
+    onValidation = (model) => {
+        // debugger
+        const { validations } = this.state;
+        console.log(validations);
+        let newValidations = [...validations];
+        const modelIndex = validations.findIndex(x => x.fieldName === model.fieldName);
+        if(modelIndex > -1) {
+            newValidations.splice(modelIndex, 1, model); 
+        } else {
+            newValidations.push(model);
+        }
+        console.log(newValidations);
+        this.setState({ validations: newValidations });
+    }
+
     render = () => {
         const { showModal, mode, passwordType, customPassword, passwordConfirm, errorMessages, fieldsInValid } = this.state;
         const { code, userName, fullName, email, validDate, isActive, isAdmin, isDomain, isLock, isNeverLock, password, lockAfter, avatar } = this.state.model;
@@ -163,16 +185,19 @@ export class AddEditAccountModal extends React.Component {
                         <div className="w-100 d-flex">
                             <div className="w-50 d-flex flex-column">
                                 <label>Mã tài khoản:
-                                    <input disabled={mode === Mode.EDIT} value={code} fieldName="code" className="form-control" placeholder="Mã tài khoản" onChange={this.onInputChange}></input>
-                                    { fieldsInValid.find(x=> x.field == "code") && <ValidateFieldMessage message="Không được bỏ trống Mã tài khoản"/>}
+                                    <input disabled={mode === Mode.EDIT} value={code} fieldName="code" className="form-control" placeholder="Mã tài khoản" onChange={this.onInputChange} ></input>
+                                    {/* { fieldsInValid.find(x=> x.field == "code") && <ValidateFieldMessage value={code} type={TypeValidation.REQUIRED} fieldName="Mã Tài Khoản" isSubmit={isSubmit}/>} */}
+                                    <ValidateFieldMessage value={code} type={TypeValidation.REQUIRED} fieldName="code" property="Mã nhân viên" onValidate={this.onValidation}/>
                                 </label>
                                 <label>Tài khoản đăng nhập:
                                     <input value={userName} disabled={mode === Mode.EDIT} fieldName="userName" className="form-control" placeholder="Tài khoản" onChange={this.onInputChange}></input>
-                                    { fieldsInValid.find(x=> x.field == "userName") && <ValidateFieldMessage message="Không được bỏ trống Tài khoản đăng nhập"/>}
+                                    {/* { fieldsInValid.find(x=> x.field == "userName") && <ValidateFieldMessage message="Không được bỏ trống Tài khoản đăng nhập"/>} */}
+                                    <ValidateFieldMessage value={userName} type={TypeValidation.REQUIRED} fieldName="userName" property="Mã Tài Khoản" onValidate={this.onValidation}/>
                                 </label>
                                 <label>Tên hiển thị:
                                     <input value={fullName} fieldName="fullName" className="form-control" placeholder="Tên hiển thị" onChange={this.onInputChange}></input>
-                                    { fieldsInValid.find(x=> x.field == "fullName") && <ValidateFieldMessage message="Không được bỏ trống Tên hiển thị"/>}
+                                    {/* { fieldsInValid.find(x=> x.field == "fullName") && <ValidateFieldMessage message="Không được bỏ trống Tên hiển thị"/>} */}
+                                    <ValidateFieldMessage value={fullName} type={TypeValidation.REQUIRED} fieldName="fullName" property="Tên hiển thị" onValidate={this.onValidation}/>
                                 </label>
                             </div>
                             <div className="d-flex flex-column ml-5" style={{ marginTop: '0px' }}>

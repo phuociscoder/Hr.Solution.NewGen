@@ -14,6 +14,7 @@ export class Currency {
 
 export class TypeValidation{
     static required = "required";
+    static REQUIRED = 1;
 }
 
 export class Error {
