@@ -1,0 +1,35 @@
+.emp-left-menu-item{
+    cursor: pointer;
+    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+    box-shadow: 0 0 20px #eee;
+}
+
+
+ .emp-left-menu-item:hover {
+   color: #fff;
+   background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+ }
+
+ .emp-left-menu-item-active{
+    color: #fff;
+    background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+ }
+
+ .emp-detail-body{
+     overflow-y: auto;
+ }
+
+ .emp-detail-header{
+    color: #fff;
+    background-image: linear-gradient(270deg, #66baf2 0%, #2a2d81 88%);
+ }
+ .emp-detail-footer{
+    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+ }
+
+ .btn-change-user{
+    position: absolute;
+    bottom: 31px;
+    border-radius: 50%;
+    height: 60px;
+ }

@@ -1,4 +1,4 @@
-import { faAlignJustify, faCheck, faCheckCircle, faEdit, faFemale, faMale, faSearch, faUserEdit, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faFemale, faMale, faSearch, faUserEdit, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
 import React from "react";
@@ -13,7 +13,6 @@ import { NotificationType } from "../../Common/notification/Constants";
 import { ShowNotification } from "../../Common/notification/Notification";
 import { DateTimeUltils } from "../../Utilities/DateTimeUltis";
 import { EmployeeServices } from "../employee.Services";
-import { EmployeeTable } from "./EmployeeTable";
 
 export class EmployeeListing extends React.Component {
     constructor() {

@@ -1,6 +1,5 @@
 import React from "react";
 import { Card, Container, Jumbotron } from "react-bootstrap";
-import { EmployeeInfoCard } from "../employees/parts/Employee.InfoCard";
 import { EmployeeContractTable } from "./EmployeeContract.table";
 
 export class EmployeeContract extends React.Component {
@@ -31,7 +30,6 @@ export class EmployeeContract extends React.Component {
             <Container fluid >
                 <div className="w-100"><h4>HỢP ĐỒNG LAO ĐỘNG</h4></div>
                 <div className="w-100">
-                <EmployeeInfoCard />
                 </div>
                 <div>
                     <EmployeeContractTable data={data}/>
