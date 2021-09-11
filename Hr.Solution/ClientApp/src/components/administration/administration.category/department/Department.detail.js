@@ -21,7 +21,8 @@ export class DepartmentDetails extends React.Component {
             departmentInfo: {},
             mode: Mode.VIEW,
             departments: [],
-            reload: false
+            reload: false,
+            showLogo: false
 
         }
     }
@@ -73,7 +74,7 @@ export class DepartmentDetails extends React.Component {
                     departmentFax: resultModel.departmentFax ?? '',
                     logoImage: resultModel.logoImage
                 });
-                this.setState({ departmentInfo: model, originDepartmentInfo: model, mode: Mode.EDIT });
+                this.setState({ departmentInfo: model, originDepartmentInfo: model, mode: Mode.EDIT, showLogo: model.isCompany });
             },
                 error => {
                     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể truy cập thông tin bộ phận");
@@ -99,7 +100,7 @@ export class DepartmentDetails extends React.Component {
 
     onAddItemClick = () => {
         const newModel = this.initModel;
-        this.setState({ departmentInfo: newModel, mode: Mode.CREATE });
+        this.setState({ departmentInfo: newModel, mode: Mode.CREATE, showLogo: false });
     }
 
     onInputChange = (e) => {
@@ -115,6 +116,9 @@ export class DepartmentDetails extends React.Component {
         }
         if (type === 'number') {
             value = parseInt(e.target.value);
+        }
+        if (fieldName === 'isCompany') {
+            this.setState({ showLogo: value });
         }
 
         let newModel = Object.assign({}, { ...departmentInfo, [fieldName]: value });
@@ -140,7 +144,7 @@ export class DepartmentDetails extends React.Component {
     }
 
     render = () => {
-        const { mode, reload } = this.state;
+        const { mode, reload, showLogo } = this.state;
         const { id, departmentCode, departmentName, departmentName2, departmentAddress, departmentEmail, departmentFax,
             departmentTel, isCompany, note, ordinal, taxCode, logoImage, managerId, active, parentID } = this.state.departmentInfo;
         return (
@@ -209,10 +213,10 @@ export class DepartmentDetails extends React.Component {
                                     <input disabled={mode === Mode.VIEW} fieldname="departmentAddress" value={departmentAddress} onChange={this.onInputChange} className="form-control " placeholder="Điện thoại" />
                                 </label>
                             </div>
-                            <div className="w-25 ml-5">
+                            { showLogo && <div className="w-25 ml-5">
                                 <label className="mb-0">Logo:</label>
                                 <ImageUploader disabled={mode === Mode.VIEW} imageSrc={logoImage} onChangeImage={this.onDepartmentLogoChange} width={115} height={115} />
-                            </div>
+                            </div>}
 
                         </div>
                         <div className="w-75 p-3 d-flex flex-column">
