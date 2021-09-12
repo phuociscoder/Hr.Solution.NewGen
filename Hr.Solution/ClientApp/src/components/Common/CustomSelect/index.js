@@ -8,6 +8,17 @@ import { Image } from "react-bootstrap";
 import { ShowNotification } from "../notification/Notification";
 import { NotificationType } from "../notification/Constants";
 
+//data : list pure options
+//dataUrl: route for retrive data
+//selectedValue
+//disabledValue
+//disabled
+//reload
+//onValueChange
+//isClearable
+//isHierachy
+//orderFieldName
+//labelField
 export class CustomSelect extends React.Component {
     constructor(props) {
         super(props);
@@ -16,7 +27,7 @@ export class CustomSelect extends React.Component {
             options: [],
             selectedOpt: {},
             displayName: '',
-            originDisplayName:'',
+            originDisplayName: '',
             selectedValue: null,
             disabledValue: null,
             reload: false
@@ -24,30 +35,34 @@ export class CustomSelect extends React.Component {
     }
 
     componentDidMount = () => {
-        const { disabledValue, selectedValue, disabled } = this.props;
-        this.setState({ disabledValue, selectedValue, disabled }, this.loadData());
+        const { disabledValue, selectedValue, disabled, data, dataUrl } = this.props;
+        this.setState({ disabledValue, selectedValue, disabled }, this.loadData(data, dataUrl));
     }
 
     shouldComponentUpdate = (nextProps) => {
         if (this.props.selectedValue !== nextProps.selectedValue) {
             const optInfo = this.getSelectedOptInfo(nextProps.selectedValue);
-            this.setState({ selectedValue: nextProps.selectedValue, 
-                            options: this.state.originOptions, 
-                            selectedOpt: optInfo ?? {} , 
-                            displayName: optInfo ?optInfo[this.props.labelField] : '',
-                            originDisplayName: optInfo ?optInfo[this.props.labelField] : '' });
+            this.setState({
+                selectedValue: nextProps.selectedValue,
+                options: this.state.originOptions,
+                selectedOpt: optInfo ?? {},
+                displayName: optInfo ? optInfo[this.props.labelField] : '',
+                originDisplayName: optInfo ? optInfo[this.props.labelField] : ''
+            });
+        }
+
+        if (this.props.data !== nextProps.data) {
+            this.loadData(nextProps.data, nextProps.dataUrl);
         }
         if (this.props.disabledValue !== nextProps.disabledValue) {
             this.setState({ disabledValue: nextProps.disabledValue });
         }
-        if(this.props.disabled !== nextProps.disabled)
-        {
-            this.setState({disabled: nextProps.disabled});
+        if (this.props.disabled !== nextProps.disabled) {
+            this.setState({ disabled: nextProps.disabled });
         }
 
-        if(nextProps.reload)
-        {
-            this.loadData();
+        if (nextProps.reload) {
+            this.loadData(nextProps.data, nextProps.dataUrl);
         }
         return true;
     }
@@ -58,15 +73,20 @@ export class CustomSelect extends React.Component {
         return originOptions.find(x => x.id === id);
     }
 
-    loadData = () => {
-        const { dataUrl } = this.props;
-        RestClient.SendGetRequest(dataUrl)
-            .then(response => {
-                const options = this.generateOptions(response.data);
-                this.setState({ options: options, originOptions: options });
-            }, () => {
-               ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể truy cập dữ liệu");
-            });
+    loadData = (data, dataUrl) => {
+        if (data) {
+            const options = this.generateOptions(data);
+            this.setState({ options: options, originOptions: options });
+        }
+        if (dataUrl) {
+            RestClient.SendGetRequest(dataUrl)
+                .then(response => {
+                    const options = this.generateOptions(response.data);
+                    this.setState({ options: options, originOptions: options });
+                }, () => {
+                    ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể truy cập dữ liệu");
+                });
+        }
     }
 
     generateOptions = (items) => {
@@ -108,55 +128,59 @@ export class CustomSelect extends React.Component {
 
     }
 
-    clearOpt =() => {
-        const {onValueChange, isClearable} = this.props;
-        if( !isClearable) return;
-        this.setState({selectedOpt: {}, 
-                       displayName: '',
-                       originDisplayName:'',
-                       selectedValue: null}, onValueChange(null));
+    clearOpt = () => {
+        const { onValueChange, isClearable } = this.props;
+        if (!isClearable) return;
+        this.setState({
+            selectedOpt: {},
+            displayName: '',
+            originDisplayName: '',
+            selectedValue: null
+        }, onValueChange(null));
     }
 
     onInputFocus = () => {
-        const {options, originOptions} = this.state;
+        const { options, originOptions } = this.state;
         this.setState({ show: true, options: originOptions });
     }
     onInputBlur = (e) => {
         _.delay(() => {
-            this.setState({ show: false, onSearching: false});
+            this.setState({ show: false, onSearching: false });
         }, 250);
     }
 
-    componentDidUpdate =() => {
-        const {displayName, originDisplayName, onSearching} = this.state;
-        if(!onSearching && displayName !== originDisplayName)
-        {
-            this.setState({displayName: originDisplayName})
+    componentDidUpdate = () => {
+        const { displayName, originDisplayName, onSearching } = this.state;
+        if (!onSearching && displayName !== originDisplayName) {
+            this.setState({ displayName: originDisplayName })
         }
     }
 
     onOptClick = (opt) => {
-        const {originOptions} = this.state;
+        const { originOptions } = this.state;
         const { onValueChange } = this.props;
-        this.setState({ selectedOpt: opt, 
-            options: originOptions, 
+        this.setState({
+            selectedOpt: opt,
+            options: originOptions,
             displayName: opt[this.props.labelField ?? 'name'],
-            originDisplayName: opt[this.props.labelField ?? 'name'], 
-            selectedValue: opt.id, 
+            originDisplayName: opt[this.props.labelField ?? 'name'],
+            selectedValue: opt.id,
             show: false,
             onSearching: false
-         }, onValueChange(opt.id));
+        }, onValueChange(opt.id));
     }
 
-    onInputChange =(e) => {
-        const {originOptions} = this.state;
+    onInputChange = (e) => {
+        const { originOptions } = this.state;
         const value = e.target.value;
         const options = originOptions.filter(x => x[this.props.labelField].toLowerCase().includes(value.toLowerCase()));
-            this.setState({options: !value || value ==='' ? originOptions : options, 
+        this.setState({
+            options: !value || value === '' ? originOptions : options,
             displayName: value,
-            onSearching: true, 
-            show: true});
-        
+            onSearching: true,
+            show: true
+        });
+
     }
 
 
@@ -167,7 +191,7 @@ export class CustomSelect extends React.Component {
         return (
 
             <div style={{ position: 'relative' }} className={this.props.className}>
-                <div className="w-100 d-flex"  onFocus={() => !disabled ? this.onInputFocus : {}} onClick={!disabled ? this.onInputFocus : {}} onBlur={this.onInputBlur}>
+                <div className="w-100 d-flex" onFocus={() => !disabled ? this.onInputFocus : {}} onClick={!disabled ? this.onInputFocus : {}} onBlur={this.onInputBlur}>
                     {selectedOpt.image && <Image className="opt-select-image" src={selectedOpt.image} width={25} height={25} />}
                     <input className="form-control"
                         style={{ paddingLeft: `${selectedOpt.image ? 35 : 10}px` }}
@@ -178,10 +202,10 @@ export class CustomSelect extends React.Component {
                     ></input>
                     <button className="btn-expand-menu"><FontAwesomeIcon icon={faAngleDown} /></button>
                 </div>
-                {isClearable && <button onClick={this.clearOpt} className="btn-clear"><FontAwesomeIcon icon={faTimes} /></button>} 
+                {isClearable && <button onClick={this.clearOpt} className="btn-clear"><FontAwesomeIcon icon={faTimes} /></button>}
 
                 {show &&
-                    <div style={{ height: options.length *65 < 400 ? `${options.length *65}px` : '400px', overflowY: 'auto' }} className="form-control d-flex flex-column w-100 menu-options-container shadow  mt-1"
+                    <div style={{ height: options.length * 65 < 400 ? `${options.length * 65}px` : '400px', overflowY: 'auto' }} className="form-control d-flex flex-column w-100 menu-options-container shadow  mt-1"
                     >
                         {!options || options.length === 0 &&
                             <div className="select-option p-2 w-100 text-center">

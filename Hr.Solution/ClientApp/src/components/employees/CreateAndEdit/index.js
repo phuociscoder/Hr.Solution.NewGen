@@ -34,7 +34,7 @@ export class EmployeeCreateEdit extends React.Component{
                     <div className="emp-detail-header text-uppercase font-weight-bold p-2 d-flex align-items-center border w-100 h-5">
                         {menu.icon} <span className="ml-1 mt-1">{menu.name}</span>
                     </div>
-                    <div className="emp-detail-body p-2 border w-100 h-90">
+                    <div className="emp-detail-body p-3 border w-100 h-90">
                         {menu.id === EmpMenus.GeneralInfo && <EmployeeGeneralInfo />}
                     </div>
                     <div className="emp-detail-footer justify-content-end d-flex p-2 border w-100 ">
