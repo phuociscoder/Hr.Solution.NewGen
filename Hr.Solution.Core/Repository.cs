@@ -34,6 +34,14 @@ namespace Hr.Solution.Core
             }
         }
 
+        public async Task<int> ExecuteAsync(string procedureName, object args, bool convertToDynamicParams = true)
+        {
+            using (var connection = dbContext.GetDBConnection())
+            {
+                return await connection.ExecuteAsync(procedureName, convertToDynamicParams ? ConvertToParams(args) : args, commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+            }
+        }
+
         public async Task<T> ExecuteScalarAsync<T>(string procedureName, object args, bool convertToDynamicParams = true) where T : class
         {
             using (var connection = dbContext.GetDBConnection())
