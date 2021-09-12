@@ -121,7 +121,7 @@ export class DependenceDetailItem extends React.Component {
                                     <input fieldname="name" value={model.name} onChange={this.onInputChange} disabled={mode === Mode.View} className="form-control" placeholder="Tên người phụ thuộc"></input>
                                 </label>
                                 <label className="w-50 mt-2 ml-4 text-camelcase">
-                                    Ngày, tháng, năm sinh:
+                                    Ngày sinh:
                                     <CustomDatePicker value={model.birthday} disabled={mode === Mode.View} onDateChange={this.onValidDateChange} />
                                 </label>
                             </div>
