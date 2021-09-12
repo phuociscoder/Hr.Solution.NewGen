@@ -18,6 +18,10 @@ namespace Hr.Solution.Data.Responses
         public float PercentageSoftSalary { get; set; }
         public bool IsActive { get; set; }
         public int Type { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime ModifiedOn { get; set; }
 
     }
 
