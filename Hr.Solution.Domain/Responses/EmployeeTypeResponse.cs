@@ -21,7 +21,7 @@ namespace Hr.Solution.Data.Responses
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ModifiedBy { get; set; }
-        public DateTime ModifiedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
 
     }
 
@@ -40,7 +40,7 @@ namespace Hr.Solution.Data.Responses
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ModifiedBy { get; set; }
-        public DateTime ModifiedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
     }
 
     public class EmployeeTypeAddEmpResponse
@@ -71,6 +71,6 @@ namespace Hr.Solution.Data.Responses
         public bool IsActive { get; set; }
         public int Type { get; set; }
         public string ModifiedBy { get; set; }
-        public DateTime ModifiedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
     }
 }
