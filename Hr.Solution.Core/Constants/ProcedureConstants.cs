@@ -42,6 +42,14 @@ namespace Hr.Solution.Core.Constants
 
         public static string SP_CATEGORY_NATION_GETALL = "spCategoryNation_GetAll";
 
+        //AllowanceGrade
+        public static string SP_ALLOWANCEGRADE_GET_LIST = "spLsAllGrade_GetList";
+        public static string SP_ALLOWANCEGRADE_GET_BY_ID = "spLsAllGrade_GetById";
+        public static string SP_ALLOWANCEGRADE_GET_INSERT = "spLsAllGrade_Insert";
+        public static string SP_ALLOWANCEGRADE_GET_UPDATE = "spLsAllGrade_Update";
+        public static string SP_ALLOWANCEGRADE_GET_DELETE = "spLsAllGrade_Delete";
+
+
         //User
         public static string SP_USER_GET = "spUser_GetByName";
         public static string SP_USER_GET_LIST = "spUser_GetList";
