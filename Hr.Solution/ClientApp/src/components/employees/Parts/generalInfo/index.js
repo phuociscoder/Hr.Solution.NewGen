@@ -7,7 +7,7 @@ import { DepartmentSelect } from "../../../Common/DepartmentSelect/DepartmentSel
 import { CardGroup } from "react-bootstrap";
 import { Mode } from "../../Constanst";
 import { CategoryServices } from "../../../administration/administration.category/Category.services";
-import {Function} from "../../../Common/Constants";
+import { Function } from "../../../Common/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
 import { NotificationType } from "../../../Common/notification/Constants";
 import { CustomSelect } from "../../../Common/CustomSelect";
@@ -15,20 +15,27 @@ import { CustomSelect } from "../../../Common/CustomSelect";
 export class EmployeeGeneralInfo extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             model: {},
             mode: Mode.Create
         }
     }
 
-    shouldComponentUpdate =(nextProps) => {
-        if(this.props.model !== nextProps.model)
-        {
-            this.setState({model : nextProps.model});
+    // shouldComponentUpdate =(nextProps) => {
+    //     if(this.props.model !== nextProps.model)
+    //     {
+    //         this.setState({model : nextProps.model});
+    //     }
+    // }
+
+    onGeneralInfoChange = (newModel) => {
+        const { onModelChange } = this.props;
+        if (onModelChange) {
+            this.setState({ model: newModel }, onModelChange(newModel));
         }
     }
 
-    componentDidMount =() => {
+    componentDidMount = () => {
         this.loadSelectOptions(Function.LSEM142, 'jobPositions');
         this.loadSelectOptions(Function.LSEM100, 'nations');
         this.loadSelectOptions(Function.LSEM122, 'religions');
@@ -36,47 +43,51 @@ export class EmployeeGeneralInfo extends React.Component {
         this.loadSelectOptions(Function.LSEM144, 'educations');
     }
 
-    onModelChange =(e) => {
-        debugger;
-        const fieldName= e.target.getAttribute("fieldname");
+    onModelChange = (e) => {
+        const fieldName = e.target.getAttribute("fieldname");
         const value = e.target.value;
+        const { model } = this.state;
         const type = e.target.type;
-        if(type === 'checkbox')
-        {
-            const group = e.target.getAttribute("group");
-            if(group === 'gender')
-            {
-                const name = e.target.name;
-            }
-            
+        if (type === 'checkbox') {
+            const checked = e.target.checked;
+            const newModel = Object.assign({}, { ...model, [fieldName]: checked });
+            this.onGeneralInfoChange(newModel);
+            return;
         }
-        const {model} = this.state;
-        const newModel =Object.assign({}, {...model, [fieldName]: value});
-        this.setState({model: newModel});
-
+        const newModel = Object.assign({}, { ...model, [fieldName]: value });
+        this.onGeneralInfoChange(newModel);
     }
 
-    loadSelectOptions =(functionId, stateName) => {
+    onGenderChange = (e) => {
+        const fieldName = e.target.getAttribute("fieldname");
+        const checked = e.target.checked;
+        const isMale = checked && fieldName === "male";
+        const { model } = this.state;
+        const newModel = Object.assign({}, { ...model, isMale: isMale });
+        this.onGeneralInfoChange(newModel);
+    }
+
+    loadSelectOptions = (functionId, stateName) => {
         CategoryServices.GetCategoryItems(functionId).then(response => {
             const options = response.data;
-            if(options) this.setState({[stateName]: options});
+            if (options) this.setState({ [stateName]: options });
         }, error => {
             ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập danh sách chức vụ");
         });
     }
 
-    onCustomModelChange =(value, stateName) => {
-       const {model} = this.state;
-       const newModel = Object.assign({},{...model, [stateName]: value});
-       this.setState({model: newModel});
+    onCustomModelChange = (value, stateName) => {
+        const { model } = this.state;
+        const newModel = Object.assign({}, { ...model, [stateName]: value });
+        this.onGeneralInfoChange(newModel);
     }
 
     render = () => {
-        const {code, firstName, lastName, isMale, dOb, tAddress, pAddress, education, eduNote, departmentId, jobPosId, isManager, nationId, 
-         religionId, mariageStatusId, phoneNumber, faxNumber, email, joinDate, isActive, idCardNo, idCardNoPlace, idCardNoDate, passportNo, 
-        passportNoPlace, passportNoDate, taxNo, taxNoPlace, taxNoDate, note} = this.state.model;
+        const { code, firstName, lastName, isMale, dOb, tAddress, pAddress, education, eduNote, departmentId, jobPosId, isManager, nationId,
+            religionId, mariageStatusId, phoneNumber, faxNumber, email, joinDate, isActive, idCardNo, idCardNoPlace, idCardNoDate, passportNo,
+            passportNoPlace, passportNoDate, taxNo, taxNoPlace, taxNoDate, note } = this.state.model;
 
-        const {jobPositions, nations, religions, marialStatuses, educations} = this.state;
+        const { jobPositions, nations, religions, marialStatuses, educations } = this.state;
         return (
             <div className="w-100 h-100 d-flex animate__animated animate__fadeIn">
                 <div className="w-15 align-items-center d-flex flex-column">
@@ -104,10 +115,10 @@ export class EmployeeGeneralInfo extends React.Component {
                             Giới tính:
                         </label>
                         <label className="w-20">
-                            <input checked={isMale} group="gender" name="man" fieldName={isMale} onChange={this.onModelChange} type="checkbox" /> <span>Nam</span>
+                            <input checked={isMale} fieldName="male" onChange={this.onGenderChange} type="checkbox" /> <span>Nam</span>
                         </label>
                         <label className="w-20 ml-3">
-                            <input checked={!isMale} group="gender" name="female" fieldName={isMale} onChange={this.onModelChange} type="checkbox" /> <span>Nữ</span>
+                            <input checked={!isMale} fieldName="female" onChange={this.onGenderChange} type="checkbox" /> <span>Nữ</span>
                         </label>
                     </div>
 
@@ -140,13 +151,13 @@ export class EmployeeGeneralInfo extends React.Component {
                     <label className="w-50">
                         Bộ phận:
                         <CustomSelect dataUrl="/api/Department" className="w-100"
-                                        orderFieldName={["level"]}
-                                        orderBy="desc"
-                                        isHierachy={true}
-                                        valueField="id"
-                                        labelField="departmentName"
-                                        isClearable={true}
-                                        onValueChange={(value) => this.onCustomModelChange(value, 'departmentId')} />
+                            orderFieldName={["level"]}
+                            orderBy="desc"
+                            isHierachy={true}
+                            valueField="id"
+                            labelField="departmentName"
+                            isClearable={true}
+                            onValueChange={(value) => this.onCustomModelChange(value, 'departmentId')} />
                     </label>
 
                     <div className="w-100 d-flex ">
@@ -190,25 +201,25 @@ export class EmployeeGeneralInfo extends React.Component {
                         </label>
                     </div>
                     <label className="w-50">
-                        Ngày vào làm: 
+                        Ngày vào làm:
                         <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'joinDate')} />
                     </label>
                     <label className="w-20 mt-2">
-                        <input checked={!isActive} fieldName="isActive" onChange={this.onModelChange} type="checkbox"/> <span className="ml-1">Ngừng hoạt động</span>
+                        <input checked={isActive} fieldName="isActive" onChange={this.onModelChange} type="checkbox" /> <span className="ml-1">Đang hoạt động</span>
                     </label>
                 </div>
                 <div className="w-40 ml-3 d-flex border-radius-2 align-items-end flex-column h-100">
                     <div className="w-100 border p-3">
                         <label className="w-50 pr-4">
                             Số CMND/CCCD:
-                            <input value={idCardNo} fieldName="idCardNo" onChange={this.onModelChange} className="form-control" placeholder="Số CMND / CCCD"/>
+                            <input value={idCardNo} fieldName="idCardNo" onChange={this.onModelChange} className="form-control" placeholder="Số CMND / CCCD" />
                         </label>
                         <label className="w-50">
                             Ngày cấp:
                             <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'idCardNoDate')} />
                         </label>
                         <label className="w-100">
-                            Nơi cấp: 
+                            Nơi cấp:
                             <input value={idCardNoPlace} fieldName="idCardNoPlace" onChange={this.onModelChange} className="form-control" placeholder="Nơi cấp CMND/CCCD" />
                         </label>
                     </div>
@@ -216,14 +227,14 @@ export class EmployeeGeneralInfo extends React.Component {
                     <div className="w-100 border mt-3 p-3">
                         <label className="w-50 pr-4">
                             Số hộ chiếu:
-                            <input value={passportNo} fieldName="passPortNo" onChange={this.onModelChange} className="form-control" placeholder="Số hộ chiếu"/>
+                            <input value={passportNo} fieldName="passPortNo" onChange={this.onModelChange} className="form-control" placeholder="Số hộ chiếu" />
                         </label>
                         <label className="w-50">
                             Ngày cấp:
                             <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'passportNoDate')} />
                         </label>
                         <label className="w-100">
-                            Nơi cấp: 
+                            Nơi cấp:
                             <input value={passportNoPlace} fieldName="passportNoPlace" onChange={this.onModelChange} className="form-control" placeholder="Nơi cấp hộ chiếu" />
                         </label>
                     </div>
@@ -231,14 +242,14 @@ export class EmployeeGeneralInfo extends React.Component {
                     <div className="w-100 border mt-3 p-3">
                         <label className="w-50 pr-4">
                             Mã số thuế:
-                            <input value={taxNo} fieldName="taxNo" onChange={this.onModelChange} className="form-control" placeholder="Mã số thuế"/>
+                            <input value={taxNo} fieldName="taxNo" onChange={this.onModelChange} className="form-control" placeholder="Mã số thuế" />
                         </label>
                         <label className="w-50">
                             Ngày cấp:
                             <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'taxNoDate')} />
                         </label>
                         <label className="w-100">
-                            Nơi cấp: 
+                            Nơi cấp:
                             <input value={taxNoPlace} fieldName="taxNoPlace" onChange={this.onModelChange} className="form-control" placeholder="Nơi cấp mã số thuế" />
                         </label>
                     </div>
