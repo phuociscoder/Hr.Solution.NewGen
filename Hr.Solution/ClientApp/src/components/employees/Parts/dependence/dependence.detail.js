@@ -110,45 +110,43 @@ export class DependenceDetailItem extends React.Component {
                         <button className="btn btn-primary" disabled={mode === Mode.Create} onClick={this.onAddItemClick}><FontAwesomeIcon icon={faPlus} /><span> Thêm mới</span></button>
                     </Card.Header>
                     <Card.Body>
-                        <div className="pl-4 pt-3 w-100">
-                            <div className="d-flex w-80">
-                                <div className="w-30">
-                                    <label className="w-100">
-                                        Mã người phụ thuộc:
-                                        <input fieldname="code" value={model.code} onChange={this.onInputChange} disabled={mode === Mode.Edit || mode === Mode.View} className="form-control" placeholder="Mã người phụ thuộc"></input>
-                                    </label>
-                                    <label className="w-100 mt-2">
-                                        Tên người phụ thuộc:
-                                        <input fieldname="name" value={model.name} onChange={this.onInputChange} disabled={mode === Mode.View} className="form-control" placeholder="Tên người phụ thuộc"></input>
-                                    </label>
-                                    <label className="w-100 mt-2 text-camelcase">
-                                        Ngày, tháng, năm sinh:
-                                        <CustomDatePicker value={model.birthday} disabled={mode === Mode.View} onDateChange={this.onValidDateChange} />
-                                    </label>
-                                    <label className="w-100 mt-2 text-camelcase">
-                                        Quan hệ:
-                                        <CustomSelect data={dependenceDropdown} disabled={mode === Mode.View} labelField="name" placeHolder="-Chọn quan hệ-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'dependenceId')} />
-                                    </label>
-                                    <label className="w-100 mt-2 text-camelcase align-items-center">
-                                        <input fieldname="isTax" onChange={this.onInputChange} disabled={mode === Mode.View} type="checkbox" checked={model.isTax} /> Tính thuế
-                                    </label>
-                                </div>
-                                <div className="w-30 ml-4">
-                                    <label className="w-100 text-camelcase">
-                                        Địa chỉ:
-                                        <input fieldname="address" value={model.address} onChange={this.onInputChange} disabled={mode === Mode.View} className="form-control" placeholder="Địa chỉ"></input>
-                                    </label>
-                                    <label className="w-100 mt-2 text-camelcase">
-                                        Số điện thoại:
-                                        <input fieldname="phone" value={model.phone} onChange={this.onInputChange} disabled={mode === Mode.View} className="form-control" placeholder="Số điện thoại"></input>
-                                    </label>
-                                    <label className="w-100 mt-2">
-                                        Ghi chú:
-                                        <textarea fieldname="note" onChange={this.onInputChange} disabled={mode === Mode.View} value={model.note} className="form-control" rows={5} placeholder="Ghi chú"></textarea>
-                                    </label>
-                                </div>
+                        <div className="pl-4 pt-3 w-80">
+                            <label className="w-40">
+                                Mã người phụ thuộc:
+                                <input fieldname="code" value={model.code} onChange={this.onInputChange} disabled={mode === Mode.Edit || mode === Mode.View} className="form-control" placeholder="Mã người phụ thuộc"></input>
+                            </label>
+                            <div className="d-flex">
+                                <label className="w-50 mt-2">
+                                    Tên người phụ thuộc:
+                                    <input fieldname="name" value={model.name} onChange={this.onInputChange} disabled={mode === Mode.View} className="form-control" placeholder="Tên người phụ thuộc"></input>
+                                </label>
+                                <label className="w-50 mt-2 ml-4 text-camelcase">
+                                    Ngày, tháng, năm sinh:
+                                    <CustomDatePicker value={model.birthday} disabled={mode === Mode.View} onDateChange={this.onValidDateChange} />
+                                </label>
                             </div>
-                            <div className="w-40 d-flex justify-content-end mt-3">
+                            <label className="w-100 mt-2 text-camelcase">
+                                Địa chỉ:
+                                <input fieldname="address" value={model.address} onChange={this.onInputChange} disabled={mode === Mode.View} className="form-control" placeholder="Địa chỉ"></input>
+                            </label>
+                            <div className="d-flex align-items-center">
+                                <label className="w-40 mt-2 text-camelcase">
+                                    Quan hệ:
+                                    <CustomSelect data={dependenceDropdown} selectedValue={model.dependent} disabled={mode === Mode.View} labelField="name" placeHolder="-Chọn quan hệ-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'dependenceId')} />
+                                </label>
+                                <label className="w-40 mt-2 ml-4 text-camelcase">
+                                    Số điện thoại:
+                                    <input fieldname="phone" value={model.phone} onChange={this.onInputChange} disabled={mode === Mode.View} className="form-control" placeholder="Số điện thoại"></input>
+                                </label>
+                                <label className="align-items-center ml-auto align-self-end">
+                                    <input fieldname="isTax" onChange={this.onInputChange} disabled={mode === Mode.View} type="checkbox" checked={model.isTax} /> Tính thuế
+                                </label>
+                            </div>
+                            <label className="w-100 mt-2">
+                                Ghi chú:
+                                <textarea fieldname="note" onChange={this.onInputChange} disabled={mode === Mode.View} value={model.note} className="form-control" rows={5} placeholder="Ghi chú"></textarea>
+                            </label>
+                            <div className="d-flex justify-content-end mt-3">
                                 {mode !== Mode.View && <button className="btn btn-primary" onClick={() => this.setState({showModalProcessConfirm: true})}><FontAwesomeIcon icon={faCheck} /> <span> Lưu thay đổi</span></button>}
                                 {mode === Mode.Edit && <button className="btn btn-danger ml-2" onClick={()=> this.setState({showModalRemoveComfirm: true})}><FontAwesomeIcon icon={faTrash} /><span> Xóa</span></button>}
                                 {mode !== Mode.View && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span> Hủy bỏ</span></button>}
