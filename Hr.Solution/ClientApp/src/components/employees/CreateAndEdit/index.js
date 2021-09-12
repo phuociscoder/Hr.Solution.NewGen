@@ -2,7 +2,7 @@ import { faRecycle, faSave, faTimes, faTimesCircle, faUsers } from "@fortawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { EmpMenus, Mode } from "../Constanst";
-import { EmployeeGeneralInfo } from "../Parts/generalInfo";
+import { EmployeeGeneralInfo } from "../parts/generalInfo";
 import { EmployeeLeftMenu } from "./left-menu";
 
 export class EmployeeCreateEdit extends React.Component{
