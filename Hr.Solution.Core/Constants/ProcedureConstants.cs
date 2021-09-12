@@ -63,5 +63,18 @@ namespace Hr.Solution.Core.Constants
         public static string spEmployees_spGetAll = "spEmployees_spGetAll";
         public static string SP_EMPLOYEE_GET_MANAGERS = "spEmployee_GetManagers";
         public static string SP_EMPLOYEE_GET_BY_DEPTS = "spEmployee_GetByDepts";
+
+        //Employee_Types
+        public static string spEmployeeType_GetAll = "spLSEmployeeType_GetList";
+        public static string spEmployeeType_GetById = "spLSEmployeeType_GetById";
+        public static string spEmployeeType_Update = "spLSEmployeeType_Update";
+        public static string spEmployeeType_AddEmp = "spLSEmployeeType_AddEmp";
+        public static string spEmployeeType_Delete = "spLSEmployeeType_Delete";
+
+        //VanTest
+        public static string spVanTest_GetEmployee = "vspEmp_GetEmployee";
+        public static string spVanTest_InsertEmployee = "vspEmp_InsertEmployee";
+        public static string spVanTest_DeleteEmployee = "vspEmp_DeleteEmployee";
+        public static string spVanTest_GetEmpByFreeText = "vspEmp_GetByFreeText";
     }
 }
