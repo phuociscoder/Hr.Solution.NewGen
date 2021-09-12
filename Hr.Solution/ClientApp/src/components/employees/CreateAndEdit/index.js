@@ -2,6 +2,7 @@ import { faRecycle, faSave, faTimes, faTimesCircle, faUsers } from "@fortawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { EmpMenus, Mode } from "../Constanst";
+import { EmployeeAllowance } from "../parts/allowance";
 import { EmpDependence } from "../parts/dependence";
 // import { EmployeeGeneralInfo } from "../Parts/generalInfo";
 import { EmployeeGeneralInfo } from "../parts/generalInfo";
@@ -46,6 +47,7 @@ export class EmployeeCreateEdit extends React.Component{
                     <div className="emp-detail-body p-3 border w-100 h-90">
                         {menu.id === EmpMenus.GeneralInfo && <EmployeeGeneralInfo onModelChange={this.onGeneralInfoModelChange}/>}
                         {menu.id === EmpMenus.Dependant && <EmpDependence />}
+                        {menu.id === EmpMenus.Allowance && <EmployeeAllowance />}
                     </div>
                     <div className="emp-detail-footer justify-content-end d-flex p-2 border w-100 ">
                         <button className="btn btn-info mr-auto"><FontAwesomeIcon icon={faRecycle}/><span className="ml-1">Hoàn tác</span></button>

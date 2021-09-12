@@ -50,7 +50,6 @@ export class EmpDependence extends React.Component{
             <div className="flex-fill ml-2 h-100">
                <DependenceDetailItem dependence={dependence} onRefresh={this.onRefresh} model={selectedItemDepend} />
             </div>
-            <ReactTooltip />
         </div>
         )
     }
