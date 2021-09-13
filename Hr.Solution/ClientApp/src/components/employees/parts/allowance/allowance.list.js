@@ -5,6 +5,7 @@ import { ShowNotification } from "../../../Common/notification/Notification";
 import _, { debounce } from "lodash";
 import { Function } from "../../../Common/Constants";
 import { CategoryServices } from "../../../administration/administration.category/Category.services";
+import {DateTimeUltils} from '../../../Utilities/DateTimeUltis'
 
 export class EmployeeAllowanceList extends React.Component {
     constructor(props) {
@@ -66,10 +67,10 @@ export class EmployeeAllowanceList extends React.Component {
     }
 
     onSelectItem = (item) => {
-        const { selectedItemDepend } = this.state;
+        const { selectedItem } = this.state;
         const { onChange } = this.props;
-        if (item.id === selectedItemDepend.id) return;
-        this.setState({ selectedItemDepend: item }, onChange(item));
+        if (item === selectedItem) return;
+        this.setState({ selectedItem: item }, onChange(item));
     }
 
     render = () => {
@@ -84,9 +85,13 @@ export class EmployeeAllowanceList extends React.Component {
                         {
                             models && models.length > 0 && models.map((item, index) => {
                                 return (
-                                    <div key={item.id} fieldName={item.id} className={selectedItem.id === item.id ? "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown active" : "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown"}
+                                    <div key={item.id} fieldName={item.id} className={selectedItem === item ? "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown active" : "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown"}
                                         onClick={() => this.onSelectItem(item)}>
-                                        <span>{item.allowanceTypeName} {item.amountDisplay}</span>
+                                        <span><b>{item.allowanceTypeName}</b></span>
+                                        <div className="w-100 d-flex">
+                                            <span>{DateTimeUltils.toDateString(item.validFromDate)}</span>
+                                            <span className="ml-auto">{item.amountDisplay}</span>
+                                        </div>
                                     </div>
                                 )
                             })

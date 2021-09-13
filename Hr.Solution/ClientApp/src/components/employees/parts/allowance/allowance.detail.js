@@ -42,9 +42,6 @@ export class EmployeeAllowanceDetail extends React.Component {
 
 
     shouldComponentUpdate = (nextProps) => {
-        if (this.props.dependence !== nextProps.dependence) {
-            this.setState({ dependence: nextProps.dependence });
-        }
         if (this.props.model !== nextProps.model && Object.keys(nextProps.model).length > 0) {
             this.setState({ model: nextProps.model, editModel: nextProps.model, mode: Mode.Edit });
         }
@@ -161,9 +158,9 @@ export class EmployeeAllowanceDetail extends React.Component {
                         </div>
                         <div className="w-80 border-bottom" />
                         <div className="d-flex w-80 justify-content-end mt-2">
-                            {mode !== Mode.View && <button className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faCheck} /> <span> Lưu thay đổi</span></button>}
-                            {mode === Mode.Edit && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showModalRemoveComfirm: true })}><FontAwesomeIcon icon={faTrash} /><span> Xóa</span></button>}
-                            {mode !== Mode.View && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span> Hủy bỏ</span></button>}
+                            {mode !== Mode.View && <button className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faPlus} /></button>}
+                            {mode === Mode.Edit && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showModalRemoveComfirm: true })}><FontAwesomeIcon icon={faTrash} /></button>}
+                            {mode !== Mode.View && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /></button>}
 
                         </div>
 
@@ -233,28 +230,29 @@ export class EmployeeAllowanceDetail extends React.Component {
 
     onProcessRemoveConfirm = () => {
         const { model } = this.state;
-        const {updateModels} = this.props;
-        updateModels({type: "D", model: model});
+        const {onUpdateModels} = this.props;
+        onUpdateModels({type: "D", model: model});
 
     }
 
     onProcessConfirm = () => {
         const { model, mode, allowances} = this.state;
-        const {updateModels} = this.props;
-        if (mode === Mode.Create) {
-            if(model.allowanceTypeId)
-            {
-                model.allowanceTypeName = allowances.find(x => x.id === model.allowanceTypeId).name;
-            }
+        const {onUpdateModels} = this.props;
 
-            if(model.amount)
-            {
-                model.amountDisplay = NumberUltis.convertToAmountText(model.amount);
-            }
-            
-            updateModels({type:"A" , model: model});
+        if(model.allowanceTypeId)
+        {
+            model.allowanceTypeName = allowances.find(x => x.id === model.allowanceTypeId).name;
+        }
+
+        if(model.amount)
+        {
+            model.amountDisplay = NumberUltis.convertToAmountText(model.amount);
+        }
+
+        if (mode === Mode.Create) {
+            onUpdateModels({type:"A" , model: model});
         } else if (mode === Mode.Edit) {
-            updateModels({type: "E", model: model});
+            onUpdateModels({type: "E", model: model});
         }
     }
 

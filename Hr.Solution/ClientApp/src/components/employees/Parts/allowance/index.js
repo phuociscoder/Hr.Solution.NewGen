@@ -12,6 +12,7 @@ export class EmployeeAllowance  extends React.Component{
         this.state={
             refesh: false,
             employeeAllowances: [],
+            selectedAllowance: null,
             mode: Mode.Create
         }
     }
@@ -51,16 +52,21 @@ export class EmployeeAllowance  extends React.Component{
         }
     }
 
+    onAllowanceSelectChange =(allowance) => {
+        if(!allowance) return;
+        this.setState({selectedAllowance: allowance, mode: Mode.Edit});
+    }
+
 
     render =() => {
-        const {employeeAllowances, refresh, selectedItemDepend} = this.state;
+        const {employeeAllowances, refresh, selectedAllowance, mode} = this.state;
         return (
             <div className="d-flex w-100 h-100">
             <div className="w-20 h-100">
-                <EmployeeAllowanceList refresh={refresh} models={employeeAllowances}/>
+                <EmployeeAllowanceList refresh={refresh} models={employeeAllowances} onChange={this.onAllowanceSelectChange}/>
             </div>
             <div className="flex-fill ml-2 h-100">
-               <EmployeeAllowanceDetail updateModels={this.updateModels} />
+               <EmployeeAllowanceDetail mode={mode} model={selectedAllowance} onUpdateModels={this.updateModels} />
             </div>
         </div>
         )
