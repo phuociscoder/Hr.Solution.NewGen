@@ -1,4 +1,4 @@
-import { faCheck, faPlus, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faCheck, faPlus, faSave, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Card, Modal } from "react-bootstrap";
@@ -18,7 +18,7 @@ export class EmployeeAllowanceDetail extends React.Component {
         super(props);
         this.state = {
             dependence: {},
-            mode: Mode.Create,
+            mode: Mode.View,
             model: {
                 id: 0
             }
@@ -55,9 +55,9 @@ export class EmployeeAllowanceDetail extends React.Component {
             validFromDate: null,
             validToDate: null,
             allowanceTypeId: null,
-            amount: null,
+            amount: 0,
             currency: null,
-            currencyRate: null,
+            currencyRate: 0,
             freeTaxAmount: null,
             isActive: true,
             note: null
@@ -66,7 +66,7 @@ export class EmployeeAllowanceDetail extends React.Component {
     }
 
     onAddItemClick = () => {
-        const newModel = this.resetModel();
+        const newModel = {id: 0, isActive: true};
         this.setState({ model: newModel, mode: Mode.Create });
     }
 
@@ -104,7 +104,8 @@ export class EmployeeAllowanceDetail extends React.Component {
                         <button className="btn btn-primary" disabled={mode === Mode.Create} onClick={this.onAddItemClick}><FontAwesomeIcon icon={faPlus} /><span> Thêm mới</span></button>
                     </Card.Header>
                     <Card.Body>
-                        <div className="w-80 d-flex p-3">
+                    {mode === Mode.View && <div className="w-100 p-5"><h5><b>Chọn từ danh sách hoặc nhấn nút "Thêm mới" để tiếp tục .</b></h5></div>}
+                      {mode !== Mode.View && <div className="w-80 d-flex p-3 animate__animated animate__fadeIn">
                             <div className="w-50 d-flex flex-column">
                                 <label className="w-100">
                                     Số quyết định:
@@ -113,27 +114,27 @@ export class EmployeeAllowanceDetail extends React.Component {
 
                                 <label className="w-100">
                                     Ngày hiệu lực:
-                                    <CustomDatePicker onDateChange={(value) => this.onCustomModelChange(value, 'validFromDate')} />
+                                    <CustomDatePicker value={validFromDate} onDateChange={(value) => this.onCustomModelChange(value, 'validFromDate')} />
                                 </label>
 
                                 <label className="w-100">
                                     Ngày kết thúc:
-                                    <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'validToDate')} />
+                                    <CustomDatePicker value={validToDate} onDateChange={value => this.onCustomModelChange(value, 'validToDate')} />
                                 </label>
 
                                 <label className="w-100">
                                     Loại phụ cấp:
-                                    <CustomSelect data={allowances} labelField="name" onValueChange={value => this.onCustomModelChange(value, 'allowanceTypeId')} />
+                                    <CustomSelect data={allowances} selectedValue={allowanceTypeId} labelField="name" onValueChange={value => this.onCustomModelChange(value, 'allowanceTypeId')} />
                                 </label>
 
                                 <label className="w-100">
                                     Số tiền:
-                                    <Amount placeholder="Số tiền" className="form-control" onAmountChange={value => this.onCustomModelChange(value, 'amount')} />
+                                    <Amount amount={amount} placeholder="Số tiền" className="form-control" onAmountChange={value => this.onCustomModelChange(value, 'amount')} />
                                 </label>
 
                                 <label className="w-100">
                                     Nguyên tệ:
-                                    <CustomSelect data={currencies} labelField="name" onValueChange={value => this.onCustomModelChange(value, 'currencyId')} />
+                                    <CustomSelect selectedValue={currencyId} data={currencies} labelField="name" onValueChange={value => this.onCustomModelChange(value, 'currencyId')} />
                                 </label>
                                 <label className="w-100">
                                     Tỉ giá:
@@ -143,7 +144,7 @@ export class EmployeeAllowanceDetail extends React.Component {
                             <div className="w-50 ml-4">
                                 <label className="w-100">
                                     Số tiền miễn thuế:
-                                    <Amount placeholder="Số tiền miễn thuế" className="form-control" onAmountChange={(value) => this.onCustomModelChange(value, 'freeTaxAmount')} />
+                                    <Amount amount={freeTaxAmount} placeholder="Số tiền miễn thuế" className="form-control" onAmountChange={(value) => this.onCustomModelChange(value, 'freeTaxAmount')} />
                                 </label>
 
                                 <label className="w-100">
@@ -156,13 +157,14 @@ export class EmployeeAllowanceDetail extends React.Component {
                                 </label>
                             </div>
                         </div>
+                        }  
                         <div className="w-80 border-bottom" />
                         <div className="d-flex w-80 justify-content-end mt-2">
-                            {mode !== Mode.View && <button className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faPlus} /></button>}
-                            {mode === Mode.Edit && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showModalRemoveComfirm: true })}><FontAwesomeIcon icon={faTrash} /></button>}
-                            {mode !== Mode.View && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /></button>}
+                            {mode !== Mode.View && <button data-tip="Lưu" className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faAngleLeft} /><span className="ml-1">{mode === Mode.Create ? "Thêm vào danh sách" : "Cập nhật vào danh sách"}</span></button>}
+                            {mode === Mode.Edit && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showModalRemoveComfirm: true })}><FontAwesomeIcon icon={faTrash} /><span className="ml-1">Xóa khỏi danh sách</span></button>}
+                            {mode !== Mode.View && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span className="ml-1">Hủy thao tác</span></button>}
 
-                        </div>
+                        </div>  
 
                     </Card.Body>
                 </Card>
@@ -232,6 +234,7 @@ export class EmployeeAllowanceDetail extends React.Component {
         const { model } = this.state;
         const {onUpdateModels} = this.props;
         onUpdateModels({type: "D", model: model});
+        this.setState({showModalRemoveComfirm: false, mode:Mode.View});
 
     }
 
@@ -251,8 +254,11 @@ export class EmployeeAllowanceDetail extends React.Component {
 
         if (mode === Mode.Create) {
             onUpdateModels({type:"A" , model: model});
+            this.setState({showModalProcessConfirm: false, model: this.resetModel()});
         } else if (mode === Mode.Edit) {
+            
             onUpdateModels({type: "E", model: model});
+            this.setState({showModalProcessConfirm: false});
         }
     }
 

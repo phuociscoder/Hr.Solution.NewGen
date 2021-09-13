@@ -5,7 +5,7 @@ import { ShowNotification } from "../../../Common/notification/Notification";
 import _, { debounce } from "lodash";
 import { Function } from "../../../Common/Constants";
 import { CategoryServices } from "../../../administration/administration.category/Category.services";
-import {DateTimeUltils} from '../../../Utilities/DateTimeUltis'
+import { DateTimeUltils } from '../../../Utilities/DateTimeUltis'
 
 export class EmployeeAllowanceList extends React.Component {
     constructor(props) {
@@ -14,19 +14,20 @@ export class EmployeeAllowanceList extends React.Component {
             employeeAllownances: [],
             loading: false,
             selectedItem: {},
-            depentceList : []
+            depentceList: [],
+            models: []
         }
     }
 
     componentDidMount = () => {
         this.loadAllowances(Function.LSEM165, 'allowances');
-        
+
     }
 
-    loadAllowances =(functionId, stateName) => {
+    loadAllowances = (functionId, stateName) => {
         CategoryServices.GetCategoryItems(functionId).then(response => {
             const options = response.data;
-            if(options) this.setState({[stateName]: options});
+            if (options) this.setState({ [stateName]: options });
         }, error => {
             ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập danh sách quan hệ");
         });
@@ -34,6 +35,7 @@ export class EmployeeAllowanceList extends React.Component {
 
     shouldComponentUpdate = (nextProps) => {
         if (this.props.models !== nextProps.models) {
+            
             this.setState({ models: nextProps.models });
         }
         if (nextProps.refresh) {
@@ -75,6 +77,7 @@ export class EmployeeAllowanceList extends React.Component {
 
     render = () => {
         const { models, loading, selectedItem, allowances } = this.state;
+        
         return (
             <Card className="h-100">
                 <Card.Header>
@@ -83,13 +86,13 @@ export class EmployeeAllowanceList extends React.Component {
                 <Card.Body>
                     <div className="w-100 d-flex flex-column group-role-container">
                         {
-                            models && models.length > 0 && models.map((item, index) => {
+                            models && models.length > 0 && models.filter(x => x.type !== "DELETE").map((item, index) => {
                                 return (
                                     <div key={item.id} fieldName={item.id} className={selectedItem === item ? "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown active" : "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown"}
                                         onClick={() => this.onSelectItem(item)}>
-                                        <span><b>{item.allowanceTypeName}</b></span>
+                                        <span className="text-uppercase"><b>{item.allowanceTypeName}</b></span>
                                         <div className="w-100 d-flex">
-                                            <span>{DateTimeUltils.toDateString(item.validFromDate)}</span>
+                                            <span><i>{DateTimeUltils.toDateString(item.validFromDate)} {item.validToDate ? `- ${DateTimeUltils.toDateString(item.validToDate)}` : null}</i></span>
                                             <span className="ml-auto">{item.amountDisplay}</span>
                                         </div>
                                     </div>
@@ -98,7 +101,7 @@ export class EmployeeAllowanceList extends React.Component {
 
                         }
                         {
-                            !models || models.length === 0 &&
+                            !models || models.filter(x => x.type !== "DELETE").length === 0 &&
                             <div className="w-100 h-100 group-role-item-blank">
                                 Không có dữ liệu.
                             </div>

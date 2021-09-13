@@ -36,7 +36,7 @@ const toDateString = (value) => {
 
     const strDay = day > 9 ? `${day}` : `0${day}`;
     const strMonth = month > 9 ? `${month}` : `0${month}`;
-    let format = "dd-MM-yyyy";
+    let format = "dd/MM/yyyy";
     return format.replace("dd", strDay).replace("MM", strMonth).replace("yyyy", year);
 }
 

@@ -44,6 +44,26 @@ export class EmployeeAllowance  extends React.Component{
         this.setState({employeeAllowances: newModels});
     }
 
+    updateAllowance=(editModel) => {
+        debugger;
+        if(editModel.id)
+        {
+            editModel.type="EDIT";
+        }
+        const {employeeAllowances, selectedAllowance} = this.state;
+        const newModels = [...employeeAllowances.filter(x => x !== selectedAllowance), editModel];
+        this.setState({employeeAllowances: newModels});
+    }
+
+    removeAllowance =(rAllowance) => {
+        rAllowance.type="DELETE";
+        const {employeeAllowances, selectedAllowance} = this.state;
+        const newModels = [...employeeAllowances.filter(x => x !== selectedAllowance), rAllowance];
+        this.setState({employeeAllowances: newModels});
+    }
+
+
+
     loadEmployeeAllowances =() => {
         const {mode} = this.state;
         if(mode === Mode.Edit)
