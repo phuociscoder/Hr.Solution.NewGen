@@ -6,6 +6,7 @@ import { EmployeeAllowance } from "../parts/allowance";
 import { EmpDependence } from "../parts/dependence";
 // import { EmployeeGeneralInfo } from "../Parts/generalInfo";
 import { EmployeeGeneralInfo } from "../parts/generalInfo";
+import { EmployeeTimekeeperInfo } from "../parts/timekeepInfo";
 import { EmployeeLeftMenu } from "./left-menu";
 
 export class EmployeeCreateEdit extends React.Component{
@@ -28,6 +29,11 @@ export class EmployeeCreateEdit extends React.Component{
         this.setState({generalInfo: newModel});
     }
 
+    onTimekeeperInfoModelChange =(model) => {
+        const newModel = Object.assign({}, {...model});
+        this.setState({timekeeperInfo: newModel});
+    }
+
     render =() => {
         const menu = EmpMenus.All.find(x => x.id === this.state.menuId);
         const {mode} = this.state;
@@ -48,6 +54,7 @@ export class EmployeeCreateEdit extends React.Component{
                         {menu.id === EmpMenus.GeneralInfo && <EmployeeGeneralInfo onModelChange={this.onGeneralInfoModelChange}/>}
                         {menu.id === EmpMenus.Dependant && <EmpDependence />}
                         {menu.id === EmpMenus.Allowance && <EmployeeAllowance />}
+                        {menu.id === EmpMenus.TimekeeperInfo && <EmployeeTimekeeperInfo onModelChange={this.onTimekeeperInfoModelChange} />}
                     </div>
                     <div className="emp-detail-footer justify-content-end d-flex p-2 border w-100 ">
                         <button className="btn btn-info mr-auto"><FontAwesomeIcon icon={faRecycle}/><span className="ml-1">Hoàn tác</span></button>
