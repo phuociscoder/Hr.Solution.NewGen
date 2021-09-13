@@ -41,6 +41,11 @@ export class EmployeeGeneralInfo extends React.Component {
         this.loadSelectOptions(Function.LSEM122, 'religions');
         this.loadSelectOptions(Function.LSEM121, 'marialStatuses');
         this.loadSelectOptions(Function.LSEM144, 'educations');
+
+        const {model} = this.props;
+        if(model){
+            this.setState({model: model});
+        }
     }
 
     onModelChange = (e) => {
@@ -85,17 +90,17 @@ export class EmployeeGeneralInfo extends React.Component {
     render = () => {
         const { code, firstName, lastName, isMale, dOb, tAddress, pAddress, education, eduNote, departmentId, jobPosId, isManager, nationId,
             religionId, mariageStatusId, phoneNumber, faxNumber, email, joinDate, isActive, idCardNo, idCardNoPlace, idCardNoDate, passportNo,
-            passportNoPlace, passportNoDate, taxNo, taxNoPlace, taxNoDate, note } = this.state.model;
+            passportNoPlace, passportNoDate, taxNo, taxNoPlace, taxNoDate, note, photo } = this.state.model;
 
         const { jobPositions, nations, religions, marialStatuses, educations } = this.state;
         return (
             <div className="w-100 h-100 d-flex animate__animated animate__fadeIn">
                 <div className="w-15 align-items-center d-flex flex-column">
-                    <ImageUploader onChangeImage={(value => this.onCustomModelChange(value, 'photo'))} type="avatar" />
+                    <ImageUploader imageSrc={photo} onChangeImage={(value => this.onCustomModelChange(value, 'photo'))} type="avatar" />
                 </div>
                 <div className="w-50 h-100 p-3 d-flex flex-column">
                     <label className="w-100">
-                        Mã nhân viên:
+                        Mã nhân viên: <span className="require">*</span>
                         <input value={code} fieldName="code" onChange={this.onModelChange} className="form-control w-50" placeholder="Mã nhân viên" />
                     </label>
 
@@ -124,7 +129,7 @@ export class EmployeeGeneralInfo extends React.Component {
 
                     <label className="w-50">
                         Ngày sinh:
-                        <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'doB')} />
+                        <CustomDatePicker value={dOb} onDateChange={value => this.onCustomModelChange(value, 'doB')} />
                     </label>
 
                     <label className="w-100">
@@ -140,7 +145,7 @@ export class EmployeeGeneralInfo extends React.Component {
                     <div className="w-100 d-flex">
                         <label className="w-50">
                             Trình độ học vấn:
-                            <CustomSelect data={educations} labelField="name" placeHolder="-Chọn trình độ-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'education')} />
+                            <CustomSelect selectedValue={education} data={educations} labelField="name" placeHolder="-Chọn trình độ-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'education')} />
                         </label>
                         <label className="w-100 pl-4">
                             Ghi chú:
@@ -153,6 +158,7 @@ export class EmployeeGeneralInfo extends React.Component {
                         <CustomSelect dataUrl="/api/Department" className="w-100"
                             orderFieldName={["level"]}
                             orderBy="desc"
+                            selectedValue={departmentId}
                             isHierachy={true}
                             valueField="id"
                             labelField="departmentName"
@@ -163,7 +169,7 @@ export class EmployeeGeneralInfo extends React.Component {
                     <div className="w-100 d-flex ">
                         <label className="w-50">
                             Chức vụ:
-                            <CustomSelect data={jobPositions} labelField="name" placeHolder="-Chọn chức vụ-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'jobPosId')} />
+                            <CustomSelect selectedValue={jobPosId} data={jobPositions} labelField="name" placeHolder="-Chọn chức vụ-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'jobPosId')} />
                         </label>
                         <label className="ml-3 mt-2">
                             <label className="w-100"></label>
@@ -174,15 +180,15 @@ export class EmployeeGeneralInfo extends React.Component {
                     <div className="w-100 d-flex">
                         <label className="w-30">
                             Dân tộc:
-                            <CustomSelect data={nations} labelField="name" placeHolder="-Chọn dân tộc-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'nationId')} />
+                            <CustomSelect selectedValue={nationId} data={nations} labelField="name" placeHolder="-Chọn dân tộc-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'nationId')} />
                         </label>
                         <label className="w-30 ml-4">
                             Tôn giáo:
-                            <CustomSelect data={religions} labelField="name" placeHolder="-Chọn tôn giáo-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'religionId')} />
+                            <CustomSelect selectedValue={religionId} data={religions} labelField="name" placeHolder="-Chọn tôn giáo-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'religionId')} />
                         </label>
                         <label className="w-30 ml-4">
                             Tình trạng hôn nhân:
-                            <CustomSelect data={marialStatuses} labelField="name" placeHolder="-Chọn tình trạng hôn nhân-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'marialStatusId')} />
+                            <CustomSelect selectedValue={mariageStatusId} data={marialStatuses} labelField="name" placeHolder="-Chọn tình trạng hôn nhân-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'marialStatusId')} />
                         </label>
                     </div>
 
@@ -200,10 +206,6 @@ export class EmployeeGeneralInfo extends React.Component {
                             <input value={email} fieldName="email" onChange={this.onModelChange} className="form-control " placeholder="Email" />
                         </label>
                     </div>
-                    <label className="w-50">
-                        Ngày vào làm:
-                        <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'joinDate')} />
-                    </label>
                     <label className="w-20 mt-2">
                         <input checked={isActive} fieldName="isActive" onChange={this.onModelChange} type="checkbox" /> <span className="ml-1">Đang hoạt động</span>
                     </label>
@@ -216,7 +218,7 @@ export class EmployeeGeneralInfo extends React.Component {
                         </label>
                         <label className="w-50">
                             Ngày cấp:
-                            <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'idCardNoDate')} />
+                            <CustomDatePicker value={idCardNoDate} onDateChange={value => this.onCustomModelChange(value, 'idCardNoDate')} />
                         </label>
                         <label className="w-100">
                             Nơi cấp:
@@ -231,7 +233,7 @@ export class EmployeeGeneralInfo extends React.Component {
                         </label>
                         <label className="w-50">
                             Ngày cấp:
-                            <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'passportNoDate')} />
+                            <CustomDatePicker value={passportNoDate} onDateChange={value => this.onCustomModelChange(value, 'passportNoDate')} />
                         </label>
                         <label className="w-100">
                             Nơi cấp:
@@ -246,7 +248,7 @@ export class EmployeeGeneralInfo extends React.Component {
                         </label>
                         <label className="w-50">
                             Ngày cấp:
-                            <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'taxNoDate')} />
+                            <CustomDatePicker value={taxNoDate} onDateChange={value => this.onCustomModelChange(value, 'taxNoDate')} />
                         </label>
                         <label className="w-100">
                             Nơi cấp:

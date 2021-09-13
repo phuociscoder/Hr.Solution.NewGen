@@ -106,3 +106,8 @@ export class EmpMenus {
     { id: this.Dependant, name: "Người phụ thuộc", icon :<FontAwesomeIcon icon={faPeopleArrows}/> },
     { id: this.TimekeeperInfo, name: "Thông tin CB tính công" , icon :<FontAwesomeIcon icon={faUserEdit}/>}]
 }
+
+export class SectionState{
+    static NOT_CHANGE = 1;
+    static CHANGED = 2;
+}

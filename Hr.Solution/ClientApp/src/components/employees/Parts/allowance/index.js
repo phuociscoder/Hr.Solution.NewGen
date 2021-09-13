@@ -5,11 +5,10 @@ import { EmployeeAllowanceDetail } from "./allowance.detail";
 import { EmployeeAllowanceList } from "./allowance.list";
 
 
-export class EmployeeAllowance  extends React.Component{
-    constructor(props)
-    {
+export class EmployeeAllowance extends React.Component {
+    constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             refesh: false,
             employeeAllowances: [],
             selectedAllowance: null,
@@ -17,11 +16,15 @@ export class EmployeeAllowance  extends React.Component{
         }
     }
 
-    componentDidMount =() => {
-      
+    componentDidMount = () => {
+        const { models } = this.props;
+        if (models && models.length > 0) {
+            this.setState({ employeeAllowances: models });
+        }
+
     }
 
-    updateModels =(allowance) => {
+    updateModels = (allowance) => {
         switch (allowance.type) {
             case "A":
                 this.addAllowance(allowance.model);
@@ -37,58 +40,58 @@ export class EmployeeAllowance  extends React.Component{
         }
     }
 
-    addAllowance =(newModel) => {
+    addAllowance = (newModel) => {
+        const {onModelChange} = this.props;
         newModel.type = "ADD";
-        const {employeeAllowances} = this.state;
+        const { employeeAllowances } = this.state;
         const newModels = [...employeeAllowances, newModel];
-        this.setState({employeeAllowances: newModels});
+        this.setState({ employeeAllowances: newModels }, onModelChange(newModels));
     }
 
-    updateAllowance=(editModel) => {
-        debugger;
-        if(editModel.id)
-        {
-            editModel.type="EDIT";
+    updateAllowance = (editModel) => {
+        const {onModelChange} = this.props;
+        if (editModel.id) {
+            editModel.type = "EDIT";
         }
-        const {employeeAllowances, selectedAllowance} = this.state;
+        const { employeeAllowances, selectedAllowance } = this.state;
         const newModels = [...employeeAllowances.filter(x => x !== selectedAllowance), editModel];
-        this.setState({employeeAllowances: newModels});
+        this.setState({ employeeAllowances: newModels }, onModelChange(newModels));
     }
 
-    removeAllowance =(rAllowance) => {
-        rAllowance.type="DELETE";
-        const {employeeAllowances, selectedAllowance} = this.state;
+    removeAllowance = (rAllowance) => {
+        const {onModelChange} = this.props;
+        rAllowance.type = "DELETE";
+        const { employeeAllowances, selectedAllowance } = this.state;
         const newModels = [...employeeAllowances.filter(x => x !== selectedAllowance), rAllowance];
-        this.setState({employeeAllowances: newModels});
+        this.setState({ employeeAllowances: newModels }, onModelChange(newModels));
     }
 
 
 
-    loadEmployeeAllowances =() => {
-        const {mode} = this.state;
-        if(mode === Mode.Edit)
-        {
-            
+    loadEmployeeAllowances = () => {
+        const { mode } = this.state;
+        if (mode === Mode.Edit) {
+
         }
     }
 
-    onAllowanceSelectChange =(allowance) => {
-        if(!allowance) return;
-        this.setState({selectedAllowance: allowance, mode: Mode.Edit});
+    onAllowanceSelectChange = (allowance) => {
+        if (!allowance) return;
+        this.setState({ selectedAllowance: allowance, mode: Mode.Edit });
     }
 
 
-    render =() => {
-        const {employeeAllowances, refresh, selectedAllowance, mode} = this.state;
+    render = () => {
+        const { employeeAllowances, refresh, selectedAllowance, mode } = this.state;
         return (
             <div className="d-flex w-100 h-100">
-            <div className="w-20 h-100">
-                <EmployeeAllowanceList refresh={refresh} models={employeeAllowances} onChange={this.onAllowanceSelectChange}/>
+                <div className="w-20 h-100">
+                    <EmployeeAllowanceList refresh={refresh} models={employeeAllowances} onChange={this.onAllowanceSelectChange} />
+                </div>
+                <div className="flex-fill ml-2 h-100">
+                    <EmployeeAllowanceDetail mode={mode} model={selectedAllowance} onUpdateModels={this.updateModels} />
+                </div>
             </div>
-            <div className="flex-fill ml-2 h-100">
-               <EmployeeAllowanceDetail mode={mode} model={selectedAllowance} onUpdateModels={this.updateModels} />
-            </div>
-        </div>
         )
     }
 }

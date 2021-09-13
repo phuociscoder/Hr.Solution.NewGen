@@ -1,54 +1,79 @@
 import React from "react";
-import { Card } from "react-bootstrap";
-import ReactTooltip from "react-tooltip";
-import { DependenceDetailItem } from "./dependence.detail";
-import { DependenceList } from "./dependences.list";
+import { DependenceDetailItem, EmployeeDependantDetail } from "./dependence.detail";
+import { EmployeeDependantList } from "./dependences.list";
 
-export class EmpDependence extends React.Component{
+export class EmployeeDependant extends React.Component{
     constructor(props)
     {
         super(props);
         this.state={
             refesh: false,
-            dependence:{},
-            selectedItemDepend: {}
+            employeeDependants:[],
+            selectedDependant: {}
         }
     }
 
     componentDidMount =() => {
-        const {dependence} = this.props;
-        if(!dependence) return;
-        this.setState({dependence: dependence});
+        const {models} = this.props;
+        if(!models) return;
+        this.setState({employeeDependants: models});
     }
 
-    shouldComponentUpdate =(nextProps) => {
-        if(this.props.dependence !== nextProps.dependence)
-        {
-            this.setState({dependence: nextProps.dependence});
+    updateModels = (dependant) => {
+        switch (dependant.type) {
+            case "A":
+                this.addDependant(dependant.model);
+                break;
+            case "E":
+                this.updateDependant(dependant.model);
+                break;
+            case "D":
+                this.removeDependant(dependant.model);
+                break;
+            default:
+                break;
         }
-        return true;
     }
 
-    onRefresh =(value) => {
-        this.setState({refresh: value});
-    }
-    onRefreshed =()=> {
-        this.setState({refresh: false});
+    addDependant = (newModel) => {
+        const {onModelChange} = this.props;
+        newModel.type = "ADD";
+        const { employeeDependants } = this.state;
+        const newModels = [...employeeDependants, newModel];
+        this.setState({ employeeDependants: newModels }, onModelChange(newModels));
     }
 
-    onDependenceItemChange =(item) => {
-        this.setState({selectedItemDepend: item});
+    updateDependant = (editModel) => {
+        const {onModelChange} = this.props;
+        if (editModel.id) {
+            editModel.type = "EDIT";
+        }
+        const { employeeDependants, selectedDependant } = this.state;
+        const newModels = [...employeeDependants.filter(x => x !== selectedDependant), editModel];
+        this.setState({ employeeDependants: newModels }, onModelChange(newModels));
+    }
+
+    removeDependant = (rAllowance) => {
+        const {onModelChange} = this.props;
+        rAllowance.type = "DELETE";
+        const { employeeDependants, selectedDependant } = this.state;
+        const newModels = [...employeeDependants.filter(x => x !== selectedDependant), rAllowance];
+        this.setState({ employeeDependants: newModels }, onModelChange(newModels));
+    }
+
+    onSelectItemChange =(item) => {
+        this.setState({selectedDependant: item});
     }
 
     render =() => {
-        const {dependence, refresh, selectedItemDepend} = this.state;
+        const {employeeDependants, selectedDependant} = this.state;
         return (
             <div className="d-flex w-100 h-100">
             <div className="w-20 h-100">
-                <DependenceList onRefreshed={this.onRefreshed} refresh={refresh} onChange={this.onDependenceItemChange} dependence={dependence}/>
+                <EmployeeDependantList models={employeeDependants} onChange={this.onSelectItemChange}/>
             </div>
             <div className="flex-fill ml-2 h-100">
-               <DependenceDetailItem dependence={dependence} onRefresh={this.onRefresh} model={selectedItemDepend} />
+               <EmployeeDependantDetail onRefresh={this.onRefresh} model={selectedDependant} onUpdateModels={this.updateModels} />
             </div>
         </div>
         )

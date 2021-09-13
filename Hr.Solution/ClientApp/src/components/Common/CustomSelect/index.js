@@ -25,7 +25,7 @@ export class CustomSelect extends React.Component {
         this.state = {
             show: false,
             options: [],
-            selectedOpt: {},
+            selectedOpt: null,
             displayName: '',
             originDisplayName: '',
             selectedValue: null,
@@ -150,10 +150,22 @@ export class CustomSelect extends React.Component {
     }
 
     componentDidUpdate = () => {
+        if(this.state.selectedValue && Object.keys(this.state.selectedOpt ?? {}).length === 0 && this.state.originOptions)
+        {
+            const optInfo = this.getSelectedOptInfo(this.state.selectedValue);
+            this.setState({
+                selectedOpt: optInfo ?? {},
+                displayName: optInfo ? optInfo[this.props.labelField] : '',
+                originDisplayName: optInfo ? optInfo[this.props.labelField] : ''
+            });
+        }
+
         const { displayName, originDisplayName, onSearching } = this.state;
         if (!onSearching && displayName !== originDisplayName) {
             this.setState({ displayName: originDisplayName })
         }
+
+        
     }
 
     onOptClick = (opt) => {
@@ -192,9 +204,9 @@ export class CustomSelect extends React.Component {
 
             <div style={{ position: 'relative' }} className={this.props.className}>
                 <div className="w-100 d-flex" onFocus={() => !disabled ? this.onInputFocus : {}} onClick={!disabled ? this.onInputFocus : {}} onBlur={this.onInputBlur}>
-                    {selectedOpt.image && <Image className="opt-select-image" src={selectedOpt.image} width={25} height={25} />}
+                    {selectedOpt?.image && <Image className="opt-select-image" src={selectedOpt?.image} width={25} height={25} />}
                     <input className="form-control"
-                        style={{ paddingLeft: `${selectedOpt.image ? 35 : 10}px` }}
+                        style={{ paddingLeft: `${selectedOpt?.image ? 35 : 10}px` }}
                         value={displayName}
                         onChange={this.onInputChange}
                         disabled={disabled}
