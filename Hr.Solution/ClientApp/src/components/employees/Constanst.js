@@ -1,5 +1,5 @@
 import { faBuffer } from "@fortawesome/free-brands-svg-icons";
-import { faAddressCard, faPeopleArrows, faUser, faUserEdit } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faCalendarMinus, faFileContract, faPeopleArrows, faUser, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
@@ -101,10 +101,14 @@ export class EmpMenus {
     static Allowance = 2;
     static Dependant = 3;
     static TimekeeperInfo = 4;
+    static DayLeave = 5;
+    static Contract = 6
     static All = [{ id: this.GeneralInfo, name: "Thông tin cá nhân", icon :<FontAwesomeIcon icon={faAddressCard}/>},
     { id: this.Allowance, name: "Phụ Cấp" , icon :<FontAwesomeIcon icon={faBuffer}/>},
     { id: this.Dependant, name: "Người phụ thuộc", icon :<FontAwesomeIcon icon={faPeopleArrows}/> },
-    { id: this.TimekeeperInfo, name: "Thông tin CB tính công" , icon :<FontAwesomeIcon icon={faUserEdit}/>}]
+    { id: this.TimekeeperInfo, name: "Thông tin CB tính công" , icon :<FontAwesomeIcon icon={faUserEdit}/>},
+    { id: this.DayLeave, name: "Ngày Nghỉ Phép" , icon :<FontAwesomeIcon icon={faCalendarMinus}/>},
+    { id: this.Contract, name: "Hợp đồng lao động" , icon :<FontAwesomeIcon icon={faFileContract}/>},]
 }
 
 export class SectionState{
