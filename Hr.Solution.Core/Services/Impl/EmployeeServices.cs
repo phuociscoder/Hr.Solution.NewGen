@@ -22,6 +22,18 @@ namespace Hr.Solution.Core.Services.Impl
             this.repository = repository;
         }
 
+        public async Task<string> EmployeeCheckExisting(string employeeCode)
+        {
+            var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_EMPLOYEES_CHECK_EXISTING, new {employeeCode = employeeCode });
+            return (string)response;
+        }
+
+        public async Task<EmployeeCreateGeneralInfoResponse> EmployeeCreateGeneralInfo(EmpoyeeCreateGeneralInfoRequest request)
+        {
+            var response = await repository.SingleOrDefault<EmployeeCreateGeneralInfoResponse>(ProcedureConstants.SP_EMPLOYEES_CREATE_GENERAL_INFO, request);
+            return response;
+        }
+
         public async Task<List<EmployeeResponse>> Employees_GetData(bool Active, string strDeptCode, string strValueSearch, ParramsRequest Request)
         {
             var response = await repository.QueryAsync<EmployeeResponse>(ProcedureConstants.spEmployees_spGetAll,
@@ -62,5 +74,6 @@ namespace Hr.Solution.Core.Services.Impl
             response.Total = total;
             return response;
         }
+
     }
 }

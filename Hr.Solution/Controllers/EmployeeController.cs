@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Hr.Solution.Application.Controllers
@@ -15,9 +16,12 @@ namespace Hr.Solution.Application.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeServices employeeServices;
-        public EmployeeController(IEmployeeServices employeeServices)
+        private readonly IMediaServices mediaServices;
+
+        public EmployeeController(IEmployeeServices employeeServices, IMediaServices mediaServices)
         {
             this.employeeServices = employeeServices;
+            this.mediaServices = mediaServices;
         }
 
         [HttpGet, Route("managers")]
@@ -36,5 +40,39 @@ namespace Hr.Solution.Application.Controllers
             return Ok(results);
         }
 
+
+        [HttpPost, Route("generalInfo")]
+        [Authorize]
+        public async Task<ActionResult> CreateGeneralInfo([FromBody] EmpoyeeCreateGeneralInfoRequest employeeRequest)
+        {
+            if (string.IsNullOrEmpty(employeeRequest.Code))
+            {
+                return Ok(new { status = "FAILED", message = "CODE_EMPTY" });
+            }
+
+            if (string.IsNullOrEmpty(employeeRequest.Photo))
+            {
+                employeeRequest.Photo = mediaServices.ResizeImage(employeeRequest.Photo);
+            }
+
+            var checkExisting = await employeeServices.EmployeeCheckExisting(employeeRequest.Code);
+            if (!string.IsNullOrEmpty(checkExisting))
+            {
+                return Ok(new { status = "FAILED", message = "CODE_EXISTING"});
+            }
+
+            var createdBy = User.FindFirst(ClaimTypes.Name).Value;
+            employeeRequest.CreatedBy = createdBy;
+
+            try
+            {
+                var result = await employeeServices.EmployeeCreateGeneralInfo(employeeRequest);
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return Ok(new { status = "FAILED", message = "INSERT_FAILED"});               
+            }
+        }
     }
 }

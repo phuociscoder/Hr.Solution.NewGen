@@ -50,4 +50,14 @@ namespace Hr.Solution.Data.Responses
         public string Image { get; set; }
         public string Email { get; set; }
     }
+
+    public class EmployeeCreateGeneralInfoResponse
+    {
+        public int Id { get; set; }
+    }
+
+    //public class EmployeeCheckExistingResponse
+    //{
+    //    public string EmployeeCode { get; set; }
+    //}
 }
