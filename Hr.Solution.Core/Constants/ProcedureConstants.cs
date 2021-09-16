@@ -63,5 +63,6 @@ namespace Hr.Solution.Core.Constants
         public static string spEmployees_spGetAll = "spEmployees_spGetAll";
         public static string SP_EMPLOYEE_GET_MANAGERS = "spEmployee_GetManagers";
         public static string SP_EMPLOYEE_GET_BY_DEPTS = "spEmployee_GetByDepts";
+        public static string SP_EMPLOYEE_INFORMATION_ADD = "spEmployee_AddGeneraInfomation";
     }
 }

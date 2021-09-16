@@ -6,6 +6,7 @@ import { AuthenticationManager } from "../../../../AuthenticationManager";
 import { NotificationType } from "../../../Common/notification/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
 import { CategoryServices } from "../Category.services";
+import { AddCreatedModifiedField } from "./Common.addfield";
 import { Mode } from "./Constants";
 
 export class CategoryCommonDetailItem extends React.Component {
@@ -110,6 +111,9 @@ export class CategoryCommonDetailItem extends React.Component {
                             <label className="w-100 mt-2">
                                 Ghi chú:
                                 <textarea fieldname="note" onChange={this.onInputChange} disabled={mode === Mode.VIEW} value={model.note} className="form-control" rows={5} placeholder="Ghi chú"></textarea>
+                            </label>
+                            <label className="w-100 mt-2">
+                                <AddCreatedModifiedField createdBy={model.createdBy} createdOn={model.createdOn} modifiedBy={model.modifiedBy} modifiedOn={model.modifiedOn}/>
                             </label>
                             <div className="w-100 d-flex justify-content-end mt-3">
                                 {mode !== Mode.VIEW && <button className="btn btn-primary" onClick={() => this.setState({showModalProcessConfirm: true})}><FontAwesomeIcon icon={faCheck} /> <span> Lưu thay đổi</span></button>}
