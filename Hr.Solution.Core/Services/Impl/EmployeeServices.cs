@@ -34,6 +34,12 @@ namespace Hr.Solution.Core.Services.Impl
             return response;
         }
 
+        public async Task<EmployeeGetByIdGeneralInfoResponse> EmployeeGetByIdGeneralInfo(int Id)
+        {
+            var response = await repository.ExecuteScalarAsync<EmployeeGetByIdGeneralInfoResponse>(ProcedureConstants.SP_EMPLOYEES_GET_BY_ID, new { ID = Id });
+            return response;
+        }
+
         public async Task<List<EmployeeResponse>> Employees_GetData(bool Active, string strDeptCode, string strValueSearch, ParramsRequest Request)
         {
             var response = await repository.QueryAsync<EmployeeResponse>(ProcedureConstants.spEmployees_spGetAll,
@@ -50,6 +56,12 @@ namespace Hr.Solution.Core.Services.Impl
                                 totalRow = 0
                             });
             return response.Data;
+        }
+
+        public async Task<EmployeeUpdateGeneralInfoResponse> EmployeeUpdateGeneralInfo(EmployeeUpdateGeneralInfoRequest request)
+        {
+            var response = await repository.ExecuteScalarAsync<EmployeeUpdateGeneralInfoResponse>(ProcedureConstants.SP_EMPLOYEES_UPDATE, request);
+            return response;
         }
 
         public async Task<List<EmployeeManagersResponse>> Employee_GetManagers()

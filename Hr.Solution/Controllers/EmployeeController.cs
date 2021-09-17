@@ -74,5 +74,23 @@ namespace Hr.Solution.Application.Controllers
                 return Ok(new { status = "FAILED", message = "INSERT_FAILED"});               
             }
         }
+
+        [HttpGet,Route("{id}")]
+        [Authorize]
+        public async Task<ActionResult> GetByIdGeneralInfo(int id)
+        {
+            var result = await employeeServices.EmployeeGetByIdGeneralInfo(id);
+            return Ok(result);
+        }
+
+        [HttpPut, Route("")]
+        [Authorize]
+        public async Task<ActionResult> UpdateGeneralInfo([FromBody] EmployeeUpdateGeneralInfoRequest request)
+        {
+            var modifiedBy = User.FindFirst(ClaimTypes.Name).Value;
+            request.ModifiedBy = modifiedBy;
+            var result = await employeeServices.EmployeeUpdateGeneralInfo(request);
+            return Ok(result);
+        }
     }
 }
