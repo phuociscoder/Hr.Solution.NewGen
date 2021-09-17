@@ -100,13 +100,13 @@ export class EmpMenus {
     static GeneralInfo = 1;
     static Allowance = 2;
     static Dependant = 3;
-    static TimekeeperInfo = 4;
+    static BasicSalaryInfo = 4;
     static DayLeave = 5;
     static Contract = 6
     static All = [{ id: this.GeneralInfo, name: "Thông tin cá nhân", icon :<FontAwesomeIcon icon={faAddressCard}/>},
     { id: this.Allowance, name: "Phụ Cấp" , icon :<FontAwesomeIcon icon={faBuffer}/>},
     { id: this.Dependant, name: "Người phụ thuộc", icon :<FontAwesomeIcon icon={faPeopleArrows}/> },
-    { id: this.TimekeeperInfo, name: "Thông tin CB tính công" , icon :<FontAwesomeIcon icon={faUserEdit}/>},
+    { id: this.BasicSalaryInfo, name: "Thông tin CB tính công" , icon :<FontAwesomeIcon icon={faUserEdit}/>},
     { id: this.DayLeave, name: "Ngày Nghỉ Phép" , icon :<FontAwesomeIcon icon={faCalendarMinus}/>},
     { id: this.Contract, name: "Hợp đồng lao động" , icon :<FontAwesomeIcon icon={faFileContract}/>},]
 }
@@ -114,4 +114,11 @@ export class EmpMenus {
 export class SectionState{
     static NOT_CHANGE = 1;
     static CHANGED = 2;
+}
+
+export class SectionStatus{
+    static IDLE = 1;
+    static PROCESSING =2;
+    static ERROR = 3;
+    static DONE = 4;
 }

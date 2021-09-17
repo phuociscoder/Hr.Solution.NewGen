@@ -7,7 +7,7 @@ import { NotificationType } from "../../../Common/notification/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
 
 export class EmployeeTimekeeperInfo extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             model: {}
@@ -18,6 +18,8 @@ export class EmployeeTimekeeperInfo extends React.Component {
         this.loadSelectOptions(Function.LSEM149, 'employeeTypeDropdown');
         this.loadSelectOptions(Function.LSTS100, 'shiftDropdown');
         this.loadSelectOptions(Function.LSEM125, 'weekOffDropdown');
+        const { model } = this.props;
+        this.setState({ model: model });
     }
 
     loadSelectOptions = (functionId, stateName) => {
@@ -57,58 +59,66 @@ export class EmployeeTimekeeperInfo extends React.Component {
         this.onGeneralInfoChange(newModel);
     }
 
+    // shouldComponentUpdate =(nextProps) =>{
+    //     if(this.props.model !== nextProps.model && Object.keys(nextProps.model).length > 0){
+    //         this.setState({model: nextProps.model});
+    //     }
+    //     return true;
+    // } 
+
     render = () => {
         const { employeeTypeDropdown, shiftDropdown, weekOffDropdown } = this.state;
+        const { joinDate, officialDate, employeeTypeId, code, weekOffId, shiftId } = this.state.model;
         return (
-                <div className="w-100">
-                    <div className="w-30 ml-4">
-                        <label className="w-100 text-camelcase">
-                            Ngày vào làm:
-                            <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'joinDate')} />
-                        </label>
-                        <label className="w-100 mt-3 text-camelcase">
-                            Ngày thành nhân viên chính thức:
-                            <CustomDatePicker onDateChange={value => this.onCustomModelChange(value, 'officalDate')} />
-                        </label>
-                        <label className="w-100 mt-3 text-camelcase">
-                            Loại nhân viên:
-                            <CustomSelect data={employeeTypeDropdown} labelField="name" placeHolder="-Chọn loại nhân viên-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'employeeTypeId')} />
-                        </label>
-                    </div>
-                    <div className="mt-4 pl-4 pt-3 w-80">
-                        <h4>THÔNG TIN CHẤM CÔNG</h4>
-                        <div className="d-flex">
-                            <div className="w-40">
-                                <label className="w-100">
-                                    Mã chấm công:
-                                    <input fieldname="code" onChange={this.onInputChange} className="form-control" placeholder="Mã chấm công"></input>
-                                </label>
-                                <label className="w-100 mt-2">
-                                    Nhóm ngày nghỉ tuần:
-                                    <CustomSelect data={weekOffDropdown} labelField="name" placeHolder="-Chọn loại Nhóm ngày nghỉ tuần-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'weekOffId')} />
-                                </label>
-                            </div>
-                            <div className="w-40 ml-4">
-                                <label className="w-100">
-                                    Ca làm việc:
-                                    <CustomSelect data={shiftDropdown} labelField="name" placeHolder="-Chọn loại ca làm việc-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'shiftId')} />
-                                </label>
-                                <label className="mt-3 w-100">
-                                    <input fieldname="isShiftChange" onChange={this.onInputChange} type="checkbox" /> Ca làm việc thay đổi
-                                </label>
-                                <label className="mt-1 w-100">
-                                    <input fieldname="isDoNotCountLateOrEarly" onChange={this.onInputChange} type="checkbox" /> Không tính đi trễ về sớm
-                                </label>
-                                <label className="mt-1 w-100">
-                                    <input fieldname="isNoNeedScanCard" onChange={this.onInputChange} type="checkbox" /> Không cần quét thẻ
-                                </label>
-                                <label className="mt-1 w-100">
-                                    <input fieldname="isNoOvertimePay" onChange={this.onInputChange} type="checkbox" /> Không tính công ngoài giờ
-                                </label>
-                            </div>
+            <div className="w-100">
+                <div className="w-30 ml-4">
+                    <label className="w-100 text-camelcase">
+                        Ngày vào làm:
+                        <CustomDatePicker value={joinDate} onDateChange={value => this.onCustomModelChange(value, 'joinDate')} />
+                    </label>
+                    <label className="w-100 mt-3 text-camelcase">
+                        Ngày thành nhân viên chính thức:
+                        <CustomDatePicker value={officialDate} onDateChange={value => this.onCustomModelChange(value, 'officialDate')} />
+                    </label>
+                    <label className="w-100 mt-3 text-camelcase">
+                        Loại nhân viên:
+                        <CustomSelect selectedValue={employeeTypeId} data={employeeTypeDropdown} labelField="name" placeHolder="-Chọn loại nhân viên-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'employeeTypeId')} />
+                    </label>
+                </div>
+                <div className="mt-4 pl-4 pt-3 w-80">
+                    <h4>THÔNG TIN CHẤM CÔNG</h4>
+                    <div className="d-flex">
+                        <div className="w-40">
+                            <label className="w-100">
+                                Mã chấm công:
+                                <input fieldname="code" value={code} onChange={this.onInputChange} className="form-control" placeholder="Mã chấm công"></input>
+                            </label>
+                            <label className="w-100 mt-2">
+                                Nhóm ngày nghỉ tuần:
+                                <CustomSelect data={weekOffDropdown} selectedValue={weekOffId} labelField="name" placeHolder="-Chọn loại Nhóm ngày nghỉ tuần-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'weekOffId')} />
+                            </label>
+                        </div>
+                        <div className="w-40 ml-4">
+                            <label className="w-100">
+                                Ca làm việc:
+                                <CustomSelect data={shiftDropdown} selectedValue={shiftId} labelField="name" placeHolder="-Chọn loại ca làm việc-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'shiftId')} />
+                            </label>
+                            <label className="mt-3 w-100">
+                                <input fieldname="isShiftChange" onChange={this.onInputChange} type="checkbox" /> Ca làm việc thay đổi
+                            </label>
+                            <label className="mt-1 w-100">
+                                <input fieldname="isDoNotCountLateOrEarly" onChange={this.onInputChange} type="checkbox" /> Không tính đi trễ về sớm
+                            </label>
+                            <label className="mt-1 w-100">
+                                <input fieldname="isNoNeedScanCard" onChange={this.onInputChange} type="checkbox" /> Không cần quét thẻ
+                            </label>
+                            <label className="mt-1 w-100">
+                                <input fieldname="isNoOvertimePay" onChange={this.onInputChange} type="checkbox" /> Không tính công ngoài giờ
+                            </label>
                         </div>
                     </div>
                 </div>
+            </div>
         )
     }
 }

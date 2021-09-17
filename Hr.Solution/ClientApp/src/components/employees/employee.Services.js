@@ -12,5 +12,14 @@ export class EmployeeServices {
         return RestClient.SendPostRequest(this.getByDeptsUrl, params);
     }
 
+    static Add =(sectionName, params) => {
+        // return RestClient.SendPostRequest(`${this.baseUrl}/${sectionName}`, params);
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve("asssss");
+            }, 2000);
+        });
+    }
+
     
 }
