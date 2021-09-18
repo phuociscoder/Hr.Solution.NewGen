@@ -1,3 +1,4 @@
+import { sequenceExpression } from "@babel/types";
 import { faCheck, faCheckCircle, faRecycle, faSave, faTimes, faTimesCircle, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
@@ -111,95 +112,112 @@ export class EmployeeCreateEdit extends React.Component {
 
     }
 
+    changeStatusSection = (section, status) => {
+        const { processSections } = this.state;
+        const sec = processSections.find(x => x.id === section.id);
+        if (!sec) return;
+        sec.status = status;
+        const secIndex = processSections.findIndex(x => x.id === section.id)
+        const newProcessSections = Object.assign([], processSections);
+        newProcessSections.splice(secIndex, 1, sec);
+        return newProcessSections;
+    }
+
+    processWaitingSection = () => {
+        const { processSections } = this.state;
+        const waitings = processSections.filter(x => x.status === SectionStatus.IDLE);
+        if (waitings.length === 0) return;
+        let selectSec = _.first(waitings);
+
+        const newProcessSections = this.changeStatusSection(selectSec, SectionStatus.PROCESSING);
+        this.setState({ processSections: newProcessSections });
+
+    }
+
     componentDidUpdate = () => {
-        const { waiting, processSections, percentProgress, showProcessModal } = this.state;
-        if (waiting || !showProcessModal) return;
+        console.log("here");
+        const { processSections, showProcessModal } = this.state;
+        const processing = processSections.some(x => x.status === SectionStatus.PROCESSING);
+        if (!showProcessModal) return;
 
-        const waitingProcesses = processSections.filter(x => x.status === SectionStatus.IDLE);
-
-
-        if (waitingProcesses.length === 0) {
-            console.log(percentProgress, processSections);
+        if (!processing) {
+            this.processWaitingSection();
             return;
         }
-        let secPerform = _.first(waitingProcesses);
-        secPerform.status = SectionStatus.PROCESSING;
-        const newProcessSections = [...processSections.filter(x => x.id !== secPerform.id), secPerform];
-        switch (secPerform.id) {
+
+        const processSec = processSections.find(x => x.status === SectionStatus.PROCESSING);
+
+        switch (processSec.id) {
             case EmpMenus.GeneralInfo:
-                this.setState({ waiting: true, processSections: newProcessSections }, this.onProcessGeneralInfo(secPerform));
+                this.onProcessGeneralInfo(processSec);
                 break;
             case EmpMenus.Allowance:
-                this.setState({ waiting: true, processSections: newProcessSections }, this.onProcessAllowances(secPerform));
+                this.onProcessAllowances(processSec);
                 break;
             case EmpMenus.Dependant:
-                this.setState({ waiting: true, processSections: newProcessSections }, this.onProcessDependants(secPerform));
+                this.onProcessDependants(processSec);
                 break;
             case EmpMenus.BasicSalaryInfo:
-                this.setState({ waiting: true, processSections: newProcessSections }, this.onProcessBasicSalaryInfo(secPerform));
+                this.onProcessBasicSalaryInfo(processSec);
                 break;
             case EmpMenus.Contract:
-                this.setState({ waiting: true, processSections: newProcessSections }, this.onProcessContracts(secPerform));
+                this.onProcessContracts(processSec);
                 break;
+
             default:
                 break;
         }
 
     }
+    calculatePercentProcess = (processSections) => {
+        const completed = processSections.filter(x => x.status === SectionStatus.DONE).length;
+        const total = processSections.length;
+        return (100 / total) * completed;
+    }
 
     onProcessGeneralInfo = (section) => {
         const { generalInfo, processSections } = this.state;
-        section.status = SectionStatus.DONE;
-        const newProcessSections = [...processSections.filter(x => x.id !== EmpMenus.GeneralInfo), section];
-
-        const completedCount = _.countBy(newProcessSections, x => x.status === SectionStatus.DONE).true;
-        const percentProgress = (100 / newProcessSections.length) * completedCount;
         setTimeout(() => {
-            this.setState({ waiting: false, processSections: newProcessSections, percentProgress: percentProgress });
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
         }, 1000);
     }
 
     onProcessAllowances = (section) => {
         const { generalInfo, processSections } = this.state;
-        section.status = SectionStatus.DONE;
-        const newProcessSections = [...processSections.filter(x => x.id !== EmpMenus.Allowance), section];
-        const completedCount = _.countBy(newProcessSections, x => x.status === SectionStatus.DONE).true;
-        const percentProgress = (100 / newProcessSections.length) * completedCount;
         setTimeout(() => {
-            this.setState({ waiting: false, processSections: newProcessSections, percentProgress: percentProgress });
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
         }, 1000);
     }
 
     onProcessContracts = (section) => {
+        console.log('go to contract');
         const { generalInfo, processSections } = this.state;
-        section.status = SectionStatus.DONE;
-        const newProcessSections = [...processSections.filter(x => x.id !== EmpMenus.Contract), section];
-        const completedCount = _.countBy(newProcessSections, x => x.status === SectionStatus.DONE).true;
-        const percentProgress = (100 / newProcessSections.length) * completedCount;
         setTimeout(() => {
-            this.setState({ waiting: false, processSections: newProcessSections, percentProgress: percentProgress });
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
         }, 1000);
     }
 
     onProcessDependants = (section) => {
         const { generalInfo, processSections } = this.state;
-        section.status = SectionStatus.DONE;
-        const newProcessSections = [...processSections.filter(x => x.id !== EmpMenus.Dependant), section];
-        const completedCount = _.countBy(newProcessSections, x => x.status === SectionStatus.DONE).true;
-        const percentProgress = (100 / newProcessSections.length) * completedCount;
         setTimeout(() => {
-            this.setState({ waiting: false, processSections: newProcessSections, percentProgress: percentProgress });
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
         }, 1000);
     }
 
     onProcessBasicSalaryInfo = (section) => {
         const { generalInfo, processSections } = this.state;
-        section.status = SectionStatus.DONE;
-        const newProcessSections = [...processSections.filter(x => x.id !== EmpMenus.BasicSalaryInfo), section];
-        const completedCount = _.countBy(newProcessSections, x => x.status === SectionStatus.DONE).true;
-        const percentProgress = (100 / newProcessSections.length) * completedCount;
         setTimeout(() => {
-            this.setState({ waiting: false, processSections: newProcessSections, percentProgress: percentProgress });
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
         }, 1000);
     }
 
@@ -226,11 +244,11 @@ export class EmployeeCreateEdit extends React.Component {
         const { showProcessModal, processSections } = this.state;
         return (
             <Modal centered show={showProcessModal} backdrop="static">
-                <Modal.Body className="p-3">
+                <Modal.Body className="pt-3 pb-3 pl-3 pr-3">
                     <div className="w-100 d-flex flex-column mb-2">
                         {processSections && processSections.map(item => {
                             return (
-                                <div className="d-flex">
+                                <div className="d-flex p-2">
                                     {item.status === SectionStatus.PROCESSING &&
                                         <>
                                             <Spinner animation="border" size="sm" variant="primary" />
@@ -262,7 +280,13 @@ export class EmployeeCreateEdit extends React.Component {
                         })}
                     </div>
                     <ProgressBar animated now={this.state.percentProgress} />
+                        <div className="w-100 d-flex mt-2">
+                            <button onClick={() => this.setState({showProcessModal: false})} style={{visibility: processSections.every(x => x.status !== SectionStatus.IDLE && x.status !== SectionStatus.PROCESSING) ? '' : 'hidden'}} className="btn btn-primary ml-auto"><FontAwesomeIcon icon={faCheck} /> <span className="ml-1">Hoàn tất</span></button>
+                        </div>
                 </Modal.Body>
+
+
+
             </Modal>
         )
     }
