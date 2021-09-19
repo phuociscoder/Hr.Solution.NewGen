@@ -1,4 +1,4 @@
-import { faAlignJustify, faCogs, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faAlignJustify, faCogs, faPager, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
@@ -52,6 +52,14 @@ export class OffcanvasNav extends React.Component {
                         {AuthenticationManager.AllowView(Function.EMP001) && <Link to={AppRoute.EMPLOYEE_MANAGEMENT.path} className="dropdown-item">Quản Lý Nhân Viên</Link>}
                     </DropdownButton>
                 }
+                {/* đổi Funtion. */}
+                {AuthenticationManager.AllowView(Function.ADM000) &&
+                    <DropdownButton id="dropdown-basic-button" className="btn-item-collapse mt-3" drop="right" title={<FontAwesomeIcon icon={faPager} className="icon-toggle" size="2x" />}>
+                        {AuthenticationManager.AllowView(Function.ADM001) && <Link to={AppRoute.WORK_TYPE.path} className="dropdown-item">Danh Mục Các Loại Công</Link>}
+                        {AuthenticationManager.AllowView(Function.ADM002) && <Link to={AppRoute.WORK_MONTH.path} className="dropdown-item">Danh Mục Tháng Tính Công</Link>}
+                        {AuthenticationManager.AllowView(Function.ADM003) && <Link to={AppRoute.WORK_SHIFT.path} className="dropdown-item">Danh Mục Ca</Link>}
+                    </DropdownButton>
+                }
                 <ReactTooltip />
             </>
         )
@@ -80,6 +88,15 @@ export class OffcanvasNav extends React.Component {
                         <span className="ml-2 white d-flex"><FontAwesomeIcon icon={faUsers} color="white" /> <h5 className="ml-2"><b>NHÂN VIÊN</b></h5></span>
                         {AuthenticationManager.AllowView(Function.EMP001) && <Link to={AppRoute.EMPLOYEE_MANAGEMENT.path} onClick={this.onLinkClick} className="ml-5 white cursor-pointer menu-expand-item">Danh Sách Nhân Viên</Link>}
 
+                    </div>
+                }
+                {/* đổi Funtion. */}
+                {AuthenticationManager.AllowView(Function.ADM000) &&
+                    <div className="w-100 d-flex flex-column mt-3 animate__animated animate__backInLeft">
+                        <span className="ml-2 white d-flex"><FontAwesomeIcon className="sys-icon" icon={faPager} color="white" /> <h5 className="ml-2"><b>DANH MỤC CÔNG</b></h5></span>
+                        {AuthenticationManager.AllowView(Function.ADM001) && <Link to={AppRoute.WORK_TYPE.path} className="ml-5 white cursor-pointer menu-expand-item">Danh Mục Các Loại Công</Link>}
+                        {AuthenticationManager.AllowView(Function.ADM002) && <Link to={AppRoute.WORK_MONTH.path} className="ml-5 white cursor-pointer menu-expand-item">Danh Mục Tháng Tính Công</Link>}
+                        {AuthenticationManager.AllowView(Function.ADM003) && <Link to={AppRoute.WORK_SHIFT.path} className="ml-5 white cursor-pointer menu-expand-item">Danh Mục Ca</Link>}
                     </div>
                 }
             </>

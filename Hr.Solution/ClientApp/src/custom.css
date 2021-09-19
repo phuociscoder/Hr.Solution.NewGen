@@ -24,8 +24,20 @@
 .w-40 {
   width: 40%;
 }
+.w-45 {
+  width: 45%;
+}
+.w-55 {
+  width: 55%;
+}
 .w-80 {
   width: 80%;
+}
+.w-70 {
+  width: 70%;
+}
+.w-60 {
+  width: 60%;
 }
 
 .h-6 {
@@ -85,6 +97,12 @@ body {
   position: absolute;
   height: 100%;
   width: 100%;
+}
+
+.react_times_button.time_picker_preview {
+  box-shadow: none !important;
+  border-bottom: 1px solid grey !important;
+  background: none !important;
 }
 
 .modal-backdrop {

@@ -23,6 +23,12 @@ export class AppRoute {
     static ADMIN_SYSTEM_ROLE = { path: `${this.ADMIN}/sysrole`, name: "PHÂN QUYỀN CHỨC NĂNG", parent: [this.HOME] };
     static ADMIN_DATA_ROLE = { path: `${this.ADMIN}/datarole`, name: "PHÂN QUYỀN VÙNG DỮ LIỆU", parent: [this.HOME] };
 
+    // shift
+    static WORK = "/work"
+    static WORK_TYPE = { path: `${this.WORK}/types`, name: "DANH MỤC CÁC LOẠI CÔNG", paren: [this.HOME] };
+    static WORK_MONTH = { path: `${this.WORK}/month`, name: "DANH MỤC THÁNG TÍNH CÔNG", paren: [this.HOME] };
+    static WORK_SHIFT = { path: `${this.WORK}/shift`, name: "DANH MỤC CA", paren: [this.HOME] };
+
     static ALL = [this.HOME,
     this.EMPLOYEE_MANAGEMENT,
     this.EMPLOYEE_CONTRACT,
@@ -32,6 +38,9 @@ export class AppRoute {
     this.ADMIN_ACOUNT,
     this.ADMIN_SYSTEM_ROLE,
     this.ADMIN_DATA_ROLE,
-    this.CATEGORY_DETAIL
+    this.CATEGORY_DETAIL,
+    this.WORK_TYPE,
+    this.WORK_MONTH,
+    this.WORK_SHIFT
     ];
 }

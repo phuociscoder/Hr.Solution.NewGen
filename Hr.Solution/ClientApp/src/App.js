@@ -24,6 +24,9 @@ import { CategoryDetail } from './components/administration/administration.categ
 import { Function } from './components/Common/Constants';
 import { DepartmentConfig } from './components/administration/administration.category/department';
 import { EmployeeCreateEdit } from './components/employees/CreateAndEdit';
+import { WorkType } from './components/administration/administration.category/work/work.type';
+import { WorkMonth } from './components/administration/administration.category/work/work.month';
+import { WorkShift } from './components/administration/administration.category/work/work.shift';
 require('./custom.css');
 
 export default class App extends Component {
@@ -59,6 +62,11 @@ export default class App extends Component {
               <Route exact path={[AppRoute.ADMIN_ACOUNT.path]} component={AuthorizationComponent(AccountListing, Function.ADM001)} />
               <Route exact path={[AppRoute.ADMIN_SYSTEM_ROLE.path]} component={AuthorizationComponent(SystemRoleManagement, Function.ADM002)} />
               <Route exact path={[AppRoute.ADMIN_DATA_ROLE.path]} component={AuthorizationComponent(DataRoleManagement, Function.ADM003)} />
+
+              <Route exact path={[AppRoute.WORK_TYPE.path]} component={AuthorizationComponent(WorkType, Function.ADM003)} />
+              <Route exact path={[AppRoute.WORK_MONTH.path]} component={AuthorizationComponent(WorkMonth, Function.ADM003)} />
+              <Route exact path={[AppRoute.WORK_SHIFT.path]} component={AuthorizationComponent(WorkShift, Function.ADM003)} />
+
               <Route exact path={[AppRoute.HOME.path]} component={AuthorizationComponent(Home)} />
               <Route component={NotFound404} />
             </Switch> 

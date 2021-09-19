@@ -24,10 +24,9 @@ export class CustomDatePicker extends React.Component {
     }
 
     componentDidMount = () => {
-        const { value } = this.props;
-        if (value) {
-            this.setState({ value: new Date(value) });
-        }
+        const { value, disabled } = this.props;
+        if (!value) return;
+        this.setState({ value: new Date(value), disabled: disabled });
     }
 
     shouldComponentUpdate = (nextProps) => {
