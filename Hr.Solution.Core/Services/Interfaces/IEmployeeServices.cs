@@ -14,5 +14,9 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<List<EmployeeResponse>> Employees_GetData(bool Active, string strDeptCode, string strValueSearch, ParramsRequest Request);
         Task<List<EmployeeManagersResponse>> Employee_GetManagers();
         Task<SearchPagedResults<EmployeeResponse>> GetByDepts(GetEmployeeByDeptsRequest request);
+        Task<EmployeeCreateGeneralInfoResponse> EmployeeCreateGeneralInfo(EmpoyeeCreateGeneralInfoRequest request);
+        Task<string> EmployeeCheckExisting(string EmployeeCode);
+        Task<EmployeeGetByIdGeneralInfoResponse> EmployeeGetByIdGeneralInfo(int Id);
+        Task<EmployeeUpdateGeneralInfoResponse> EmployeeUpdateGeneralInfo(EmployeeUpdateGeneralInfoRequest request);
     }
 }

@@ -64,5 +64,9 @@ namespace Hr.Solution.Core.Constants
         public static string SP_EMPLOYEE_GET_MANAGERS = "spEmployee_GetManagers";
         public static string SP_EMPLOYEE_GET_BY_DEPTS = "spEmployee_GetByDepts";
         public static string SP_EMPLOYEE_INFORMATION_ADD = "spEmployee_AddGeneraInfomation";
+        public static string SP_EMPLOYEES_CREATE_GENERAL_INFO = "spEmployee_CreateGeneralInfo";
+        public static string SP_EMPLOYEES_CHECK_EXISTING = "spEmployees_CheckExisting";
+        public static string SP_EMPLOYEES_GET_BY_ID = "spEmployee_GetById";
+        public static string SP_EMPLOYEES_UPDATE = "spEmployee_Update";
     }
 }
