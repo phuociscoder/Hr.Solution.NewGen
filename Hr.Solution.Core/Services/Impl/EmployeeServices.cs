@@ -40,6 +40,18 @@ namespace Hr.Solution.Core.Services.Impl
             return response;
         }
 
+        public async Task<EmployeesBasicSalaryGetByIdResponse> EmployeesBasicSalaryGetById(int Id)
+        {
+            var response = await repository.ExecuteScalarAsync<EmployeesBasicSalaryGetByIdResponse>(ProcedureConstants.SP_EMPLOYEES_BASIC_SALARY_GET_BY_ID, new { ID = Id });
+            return response;
+        }
+
+        public async Task<EmployeesBasicSalaryUpdateResponse> EmployeesBasicSalaryUpdate(EmployeesBasicSalaryUpdateRequest request)
+        {
+            var response = await repository.ExecuteScalarAsync<EmployeesBasicSalaryUpdateResponse>(ProcedureConstants.SP_EMPLOYEES_BASIC_SALARY_UPDATE, request);
+            return response;
+        }
+
         public async Task<List<EmployeeResponse>> Employees_GetData(bool Active, string strDeptCode, string strValueSearch, ParramsRequest Request)
         {
             var response = await repository.QueryAsync<EmployeeResponse>(ProcedureConstants.spEmployees_spGetAll,

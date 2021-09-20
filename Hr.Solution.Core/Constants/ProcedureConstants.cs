@@ -68,5 +68,9 @@ namespace Hr.Solution.Core.Constants
         public static string SP_EMPLOYEES_CHECK_EXISTING = "spEmployees_CheckExisting";
         public static string SP_EMPLOYEES_GET_BY_ID = "spEmployee_GetById";
         public static string SP_EMPLOYEES_UPDATE = "spEmployee_Update";
+
+        //EmployeesBasicSalary
+        public static string SP_EMPLOYEES_BASIC_SALARY_UPDATE = "spEmployeesBasicSalary_Update";
+        public static string SP_EMPLOYEES_BASIC_SALARY_GET_BY_ID = "spEmployeeBasicSalary_GetByID";
     }
 }

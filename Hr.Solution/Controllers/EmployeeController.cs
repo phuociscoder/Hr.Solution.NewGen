@@ -92,5 +92,23 @@ namespace Hr.Solution.Application.Controllers
             var result = await employeeServices.EmployeeUpdateGeneralInfo(request);
             return Ok(result);
         }
+
+        [HttpPut, Route("basicSalary")]
+        [Authorize]
+        public async Task<ActionResult> UpdateBasicSalary([FromBody] EmployeesBasicSalaryUpdateRequest request)
+        {
+            var modifiedBy = User.FindFirst(ClaimTypes.Name).Value;
+            request.ModifiedBy = modifiedBy;
+            var result = await employeeServices.EmployeesBasicSalaryUpdate(request);
+            return Ok(result);
+        }
+
+        [HttpGet, Route("basicSalary/{id}")]
+        [Authorize]
+        public async Task<ActionResult> GetByIdBasicSalary (int id)
+        {
+            var result = await employeeServices.EmployeesBasicSalaryGetById(id);
+            return Ok(result);
+        }
     }
 }
