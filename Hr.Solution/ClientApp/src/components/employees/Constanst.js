@@ -1,5 +1,5 @@
 import { faBuffer } from "@fortawesome/free-brands-svg-icons";
-import { faAddressCard, faCalendarMinus, faFileContract, faPeopleArrows, faUser, faUserEdit } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faBriefcaseMedical, faCalendarMinus, faChartLine, faFileContract, faPeopleArrows, faUser, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
@@ -102,13 +102,18 @@ export class EmpMenus {
     static Dependant = 3;
     static BasicSalaryInfo = 4;
     static DayLeave = 5;
-    static Contract = 6
+    static Contract = 6;
+    static SocialInsurance = 7;
+    static BasicSalaryProcess = 8;
     static All = [{ id: this.GeneralInfo, name: "Thông tin cá nhân", icon :<FontAwesomeIcon icon={faAddressCard}/>},
     { id: this.Allowance, name: "Phụ Cấp" , icon :<FontAwesomeIcon icon={faBuffer}/>},
     { id: this.Dependant, name: "Người phụ thuộc", icon :<FontAwesomeIcon icon={faPeopleArrows}/> },
     { id: this.BasicSalaryInfo, name: "Thông tin CB tính công" , icon :<FontAwesomeIcon icon={faUserEdit}/>},
     { id: this.DayLeave, name: "Ngày Nghỉ Phép" , icon :<FontAwesomeIcon icon={faCalendarMinus}/>},
-    { id: this.Contract, name: "Hợp đồng lao động" , icon :<FontAwesomeIcon icon={faFileContract}/>},]
+    { id: this.Contract, name: "Hợp đồng lao động" , icon :<FontAwesomeIcon icon={faFileContract}/>},
+    { id: this.SocialInsurance, name: "Bảo hiểm" , icon :<FontAwesomeIcon icon={faBriefcaseMedical}/>},
+    { id: this.BasicSalaryProcess, name: "Quá trình lương cơ bản" , icon :<FontAwesomeIcon icon={faChartLine}/>},
+    ]
 }
 
 export class SectionState{

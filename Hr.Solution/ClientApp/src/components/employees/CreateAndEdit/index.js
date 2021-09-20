@@ -6,9 +6,11 @@ import React from "react";
 import { Modal, ProgressBar, Spinner } from "react-bootstrap";
 import { EmpMenus, Mode, SectionState, SectionStatus } from "../Constanst";
 import { EmployeeAllowance } from "../parts/allowance";
+import { EmployeeBasicSalProc } from "../parts/basicSalaryProcess";
 import { EmployeeContract } from "../parts/constract";
 import { EmployeeDependant } from "../parts/dependence";
 import { EmployeeGeneralInfo } from "../parts/generalInfo";
+import { EmployeeSocialInsur } from "../parts/socialInsurance";
 import { EmployeeTimekeeperInfo } from "../parts/timekeepInfo";
 import { EmployeeLeftMenu } from "./left-menu";
 
@@ -23,13 +25,15 @@ export class EmployeeCreateEdit extends React.Component {
                 { id: EmpMenus.Allowance, status: SectionStatus.IDLE, state: SectionState.CHANGED },
                 { id: EmpMenus.Dependant, status: SectionStatus.IDLE, state: SectionState.CHANGED },
                 { id: EmpMenus.BasicSalaryInfo, status: SectionStatus.IDLE, state: SectionState.CHANGED },
-                { id: EmpMenus.Contract, status: SectionStatus.IDLE, state: SectionState.CHANGED }],
+                { id: EmpMenus.Contract, status: SectionStatus.IDLE, state: SectionState.CHANGED },
+                { id: EmpMenus.BasicSalaryProcess, status: SectionStatus.IDLE, state: SectionState.CHANGED }],
 
             generalInfo: {},
             allowances: [],
             dependants: [],
             basicSalaryInfo: {},
             contracts: [],
+            basicSalProcs: [],
 
             waiting: false,
             percentProgress: 0,
@@ -62,9 +66,17 @@ export class EmployeeCreateEdit extends React.Component {
         this.setState({ basicSalaryInfo: model });
     }
 
+    onBasicSalProcChange = (model) => {
+        this.setState({ basicSalProcs: model });
+    }
+
+    onSocialInsur = (model) => {
+        this.setState({ socialInsur: model });
+    }
+
     render = () => {
         const menu = EmpMenus.All.find(x => x.id === this.state.menuId);
-        const { mode, allowances, generalInfo, dependants, basicSalaryInfo } = this.state;
+        const { mode, allowances, generalInfo, dependants, basicSalaryInfo, basicSalProcs, socialInsur } = this.state;
         return (
             <div className="w-100 h-100 d-flex">
                 <div className="w-15 h-100 p-2 ">
@@ -83,6 +95,8 @@ export class EmployeeCreateEdit extends React.Component {
                         {menu.id === EmpMenus.Allowance && <EmployeeAllowance models={allowances} onModelChange={this.onAllowanceChange} />}
                         {menu.id === EmpMenus.TimekeeperInfo && <EmployeeTimekeeperInfo model={basicSalaryInfo} onModelChange={this.onTimekeeperInfoModelChange} />}
                         {menu.id === EmpMenus.Contract && <EmployeeContract models={dependants} onModelChange={this.onDependantChange} />}
+                        {menu.id === EmpMenus.SocialInsurance && <EmployeeSocialInsur models={socialInsur} onModelChange={this.onSocialInsur} />}
+                        {menu.id === EmpMenus.BasicSalaryProcess && <EmployeeBasicSalProc models={basicSalProcs} onModelChange={this.onBasicSalProcChange} />}
                     </div>
                     <div className="emp-detail-footer justify-content-end d-flex p-2 border w-100 ">
                         <button className="btn btn-info mr-auto"><FontAwesomeIcon icon={faRecycle} /><span className="ml-1">Hoàn tác</span></button>
@@ -163,6 +177,9 @@ export class EmployeeCreateEdit extends React.Component {
             case EmpMenus.Contract:
                 this.onProcessContracts(processSec);
                 break;
+            case EmpMenus.BasicSalaryProcess:
+                this.onProcessBasicSalProc(processSec);
+                break;
 
             default:
                 break;
@@ -214,6 +231,15 @@ export class EmployeeCreateEdit extends React.Component {
 
     onProcessBasicSalaryInfo = (section) => {
         const { generalInfo, processSections } = this.state;
+        setTimeout(() => {
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
+        }, 1000);
+    }
+
+    onProcessBasicSalProc = (section) => {
+        const { basicSalaryProc, processSections } = this.state;
         setTimeout(() => {
             const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
             const percent = this.calculatePercentProcess(newProcessSections);
