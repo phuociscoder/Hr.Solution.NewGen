@@ -5,6 +5,7 @@ import _ from "lodash";
 import React from "react";
 import { Modal, ProgressBar, Spinner } from "react-bootstrap";
 import { EmpMenus, Mode, SectionState, SectionStatus } from "../Constanst";
+import { EmployeeServices } from "../employee.Services";
 import { EmployeeAllowance } from "../parts/allowance";
 import { EmployeeContract } from "../parts/constract";
 import { EmployeeDependant } from "../parts/dependence";
@@ -19,52 +20,40 @@ export class EmployeeCreateEdit extends React.Component {
             mode: Mode.Create,
             menuId: EmpMenus.GeneralInfo,
             sections: [
-                { id: EmpMenus.GeneralInfo, status: SectionStatus.IDLE, state: SectionState.CHANGED },
-                { id: EmpMenus.Allowance, status: SectionStatus.IDLE, state: SectionState.CHANGED },
-                { id: EmpMenus.Dependant, status: SectionStatus.IDLE, state: SectionState.CHANGED },
-                { id: EmpMenus.BasicSalaryInfo, status: SectionStatus.IDLE, state: SectionState.CHANGED },
-                { id: EmpMenus.Contract, status: SectionStatus.IDLE, state: SectionState.CHANGED }],
+                { id: EmpMenus.GeneralInfo, status: SectionStatus.IDLE, state: SectionState.NOT_CHANGE , model: {} },
+                { id: EmpMenus.Allowance, status: SectionStatus.IDLE, state: SectionState.NOT_CHANGE, model: [] },
+                { id: EmpMenus.Dependant, status: SectionStatus.IDLE, state: SectionState.NOT_CHANGE, model: [] },
+                { id: EmpMenus.BasicSalaryInfo, status: SectionStatus.IDLE, state: SectionState.NOT_CHANGE, model: {} },
+                { id: EmpMenus.Contract, status: SectionStatus.IDLE, state: SectionState.NOT_CHANGE, model: [] }],
 
-            generalInfo: {},
-            allowances: [],
-            dependants: [],
-            basicSalaryInfo: {},
-            contracts: [],
-
-            waiting: false,
             percentProgress: 0,
             processSections: []
         }
     }
 
 
+    onSectionModelChange =(model, sectionId) => {
+        const {sections} = this.state;
+        let newSections = Object.assign([],sections);
+        let modelSection = newSections.find(x => x.id === sectionId);
+        let newModelSection = Object.assign({}, {...modelSection, state: SectionState.CHANGED, model: model});
+        newSections.splice(newSections.findIndex(x => x.id === sectionId), 1, newModelSection);
+        this.setState({sections: newSections});
+
+    }
 
     onMenuChange = (menuId) => {
         this.setState({ menuId });
     }
 
-    onGeneralInfoModelChange = (model) => {
-        const { sectionStates } = this.state;
-        const newStates = Object.assign({}, { ...sectionStates, generaInfo: SectionState.CHANGED });
-        const newModel = Object.assign({}, { ...model });
-        this.setState({ generalInfo: newModel, sectionStates: newStates });
-    }
-
-    onAllowanceChange = (models) => {
-        this.setState({ allowances: models });
-    }
-
-    onDependantChange = (models) => {
-        this.setState({ dependants: models });
-    }
-
-    onTimekeeperInfoModelChange = (model) => {
-        this.setState({ basicSalaryInfo: model });
-    }
-
     render = () => {
         const menu = EmpMenus.All.find(x => x.id === this.state.menuId);
-        const { mode, allowances, generalInfo, dependants, basicSalaryInfo } = this.state;
+        const { mode, sections } = this.state;
+        const generalInfo = sections.find(x => x.id === EmpMenus.GeneralInfo)?.model;
+        const allowances = sections.find(x => x.id === EmpMenus.Allowance)?.model;
+        const dependants = sections.find(x => x.id === EmpMenus.Dependant)?.model;
+        const basicSalaryInfo = sections.find(x => x.id === EmpMenus.BasicSalaryInfo)?.model;
+        const contracts = sections.find(x => x.id === EmpMenus.Contract)?.model;
         return (
             <div className="w-100 h-100 d-flex">
                 <div className="w-15 h-100 p-2 ">
@@ -78,11 +67,11 @@ export class EmployeeCreateEdit extends React.Component {
                         {menu.icon} <span className="ml-1 mt-1">{menu.name}</span>
                     </div>
                     <div className="emp-detail-body p-3 border w-100 h-90">
-                        {menu.id === EmpMenus.GeneralInfo && <EmployeeGeneralInfo model={generalInfo} onModelChange={this.onGeneralInfoModelChange} />}
-                        {menu.id === EmpMenus.Dependant && <EmployeeDependant models={dependants} onModelChange={this.onDependantChange} />}
-                        {menu.id === EmpMenus.Allowance && <EmployeeAllowance models={allowances} onModelChange={this.onAllowanceChange} />}
-                        {menu.id === EmpMenus.BasicSalaryInfo && <EmployeeTimekeeperInfo model={basicSalaryInfo} onModelChange={this.onTimekeeperInfoModelChange} />}
-                        {menu.id === EmpMenus.Contract && <EmployeeContract models={dependants} onModelChange={this.onDependantChange} />}
+                        {menu.id === EmpMenus.GeneralInfo && <EmployeeGeneralInfo model={generalInfo} onModelChange={model => this.onSectionModelChange(model, EmpMenus.GeneralInfo)} />}
+                        {menu.id === EmpMenus.Dependant && <EmployeeDependant models={dependants} onModelChange={model => this.onSectionModelChange(model, EmpMenus.Dependant)} />}
+                        {menu.id === EmpMenus.Allowance && <EmployeeAllowance models={allowances} onModelChange={model => this.onSectionModelChange(model, EmpMenus.Allowance)} />}
+                        {menu.id === EmpMenus.BasicSalaryInfo && <EmployeeTimekeeperInfo model={basicSalaryInfo} onModelChange={model => this.onSectionModelChange(model, EmpMenus.BasicSalaryInfo)} />}
+                        {menu.id === EmpMenus.Contract && <EmployeeContract models={contracts} onModelChange={model => this.onSectionModelChange(model, EmpMenus.Contract)} />}
                     </div>
                     <div className="emp-detail-footer justify-content-end d-flex p-2 border w-100 ">
                         <button className="btn btn-info mr-auto"><FontAwesomeIcon icon={faRecycle} /><span className="ml-1">Hoàn tác</span></button>
@@ -135,7 +124,6 @@ export class EmployeeCreateEdit extends React.Component {
     }
 
     componentDidUpdate = () => {
-        console.log("here");
         const { processSections, showProcessModal } = this.state;
         const processing = processSections.some(x => x.status === SectionStatus.PROCESSING);
         if (!showProcessModal) return;
@@ -177,11 +165,17 @@ export class EmployeeCreateEdit extends React.Component {
 
     onProcessGeneralInfo = (section) => {
         const { generalInfo, processSections } = this.state;
-        setTimeout(() => {
+        const model = section.model;
+        EmployeeServices.Add('generalInfo', model).then(response => {
+           console.log(response.data);
             const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
             const percent = this.calculatePercentProcess(newProcessSections);
             this.setState({ processSections: newProcessSections, percentProgress: percent });
-        }, 1000);
+        }, error => {
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
+        });
     }
 
     onProcessAllowances = (section) => {

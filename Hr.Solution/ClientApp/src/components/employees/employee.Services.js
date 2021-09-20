@@ -13,12 +13,8 @@ export class EmployeeServices {
     }
 
     static Add =(sectionName, params) => {
-        // return RestClient.SendPostRequest(`${this.baseUrl}/${sectionName}`, params);
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve("asssss");
-            }, 2000);
-        });
+        console.log(params);
+      return RestClient.SendPostRequest(`${this.baseUrl}/${sectionName}`, params);
     }
 
     

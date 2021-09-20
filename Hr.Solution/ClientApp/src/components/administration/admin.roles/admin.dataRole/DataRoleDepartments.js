@@ -43,7 +43,6 @@ export class DataRoleDepartments extends React.Component{
            }
            this.setState({selectedDepartments: selectedValues});
         }, error => {
-            debugger;
         });
     }
 

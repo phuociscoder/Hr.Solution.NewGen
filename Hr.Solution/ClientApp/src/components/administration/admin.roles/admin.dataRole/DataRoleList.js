@@ -128,7 +128,6 @@ export class DataRoleList extends React.Component {
                 this.onHideModal();
                 ShowNotification(NotificationType.SUCCESS, "Chỉnh sửa phân quyền thành công!");
             }, error => {
-                debugger;
             });
     }
 
