@@ -22,7 +22,7 @@ export class EmployeeCreateEdit extends React.Component {
             mode: Mode.Create,
             menuId: EmpMenus.GeneralInfo,
             sections: [
-                { id: EmpMenus.GeneralInfo, status: SectionStatus.IDLE, state: SectionState.NOT_CHANGE , model: {} },
+                { id: EmpMenus.GeneralInfo, status: SectionStatus.IDLE, state: SectionState.NOT_CHANGE, model: {} },
                 { id: EmpMenus.Allowance, status: SectionStatus.IDLE, state: SectionState.NOT_CHANGE, model: [] },
                 { id: EmpMenus.Dependant, status: SectionStatus.IDLE, state: SectionState.NOT_CHANGE, model: [] },
                 { id: EmpMenus.BasicSalaryInfo, status: SectionStatus.IDLE, state: SectionState.NOT_CHANGE, model: {} },
@@ -37,13 +37,13 @@ export class EmployeeCreateEdit extends React.Component {
     }
 
 
-    onSectionModelChange =(model, sectionId) => {
-        const {sections} = this.state;
-        let newSections = Object.assign([],sections);
+    onSectionModelChange = (model, sectionId) => {
+        const { sections } = this.state;
+        let newSections = Object.assign([], sections);
         let modelSection = newSections.find(x => x.id === sectionId);
-        let newModelSection = Object.assign({}, {...modelSection, state: SectionState.CHANGED, model: model});
+        let newModelSection = Object.assign({}, { ...modelSection, state: SectionState.CHANGED, model: model });
         newSections.splice(newSections.findIndex(x => x.id === sectionId), 1, newModelSection);
-        this.setState({sections: newSections});
+        this.setState({ sections: newSections });
 
     }
 
@@ -207,10 +207,10 @@ export class EmployeeCreateEdit extends React.Component {
 
     onProcessAllowances = (section) => {
         const models = section.model;
-        const createModels = models.filter(x => x.id === 0 && x.type ==="ADD");
-        const updateModels = models.filter(x => x.id !==0 && x.type === "EDIT");
+        const createModels = models.filter(x => x.id === 0 && x.type === "ADD");
+        const updateModels = models.filter(x => x.id !== 0 && x.type === "EDIT");
         const deleteModels = models.filter(x => x.id !== 0 && x.type === "DELETE");
-        const newParams = {createAllowances: createModels, updateAllowances: updateModels, deleteAllowances: deleteModels, empId: 1};
+        const newParams = { createAllowances: createModels, updateAllowances: updateModels, deleteAllowances: deleteModels, empId: 1 };
         EmployeeServices.Add('allowances', newParams).then(response => {
             debugger;
         }, error => {
@@ -318,9 +318,9 @@ export class EmployeeCreateEdit extends React.Component {
                         })}
                     </div>
                     <ProgressBar animated now={this.state.percentProgress} />
-                        <div className="w-100 d-flex mt-2">
-                            <button onClick={() => this.setState({showProcessModal: false})} style={{visibility: processSections.every(x => x.status !== SectionStatus.IDLE && x.status !== SectionStatus.PROCESSING) ? '' : 'hidden'}} className="btn btn-primary ml-auto"><FontAwesomeIcon icon={faCheck} /> <span className="ml-1">Hoàn tất</span></button>
-                        </div>
+                    <div className="w-100 d-flex mt-2">
+                        <button onClick={() => this.setState({ showProcessModal: false })} style={{ visibility: processSections.every(x => x.status !== SectionStatus.IDLE && x.status !== SectionStatus.PROCESSING) ? '' : 'hidden' }} className="btn btn-primary ml-auto"><FontAwesomeIcon icon={faCheck} /> <span className="ml-1">Hoàn tất</span></button>
+                    </div>
                 </Modal.Body>
 
 

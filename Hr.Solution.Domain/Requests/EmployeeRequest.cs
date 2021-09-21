@@ -79,6 +79,23 @@ namespace Hr.Solution.Data.Requests
         public string Note { get; set; }
         public string ModifiedBy { get; set; }
     }
+    public class EmployeesBasicSalaryUpdateRequest
+    {
+        public int ID { get; set; }
+        public DateTime JoinDate { get; set; }
+        public DateTime DateFormal { get; set; }
+        public int EmployeeType { get; set; }
+        public int LaborType { get; set; }
+        public string BarCode { get; set; }
+        public string ShiftCode { get; set; }
+        public bool AltShift { get; set; }
+        public bool IsNotLateEarly { get; set; }
+        public bool IsNotScan { get; set; }
+        public bool IsNotOTKow { get; set; }
+        public int LeaveGroupId { get; set; }
+        public int RegionId { get; set; }
+        public string ModifiedBy { get; set; }
+    }
 
     public class EmployeeAllowanceRequest
     {
@@ -104,6 +121,25 @@ namespace Hr.Solution.Data.Requests
         public string Note { get; set; }
     }
 
+    public class EmployeeDependantsRequest
+    {
+        public List<EmployeeDependants> CreateDependants { get; set; }
+        public List<EmployeeDependants> UpdateDependants { get; set; }
+        public List<EmployeeDependants> DeleteDependants { get; set; }
+    }
+    public class EmployeeDependants
+    {
+        public int Id { get; set; }
+        public int EmployeeId { get; set; }
+        public string DependantCode { get; set; }
+        public int RelationTypeId { get; set; }
+        public string Phone { get; set; }
+        public string FullName { get; set; }
+        public string Address { get; set; }
+        public DateTime? DayOfBirth { get; set; }
+        public bool IsTax { get; set; }
+        public string Note { get; set; }
+      
     public class EmployeeContractRequest { 
     
         public List<EmployeeContract> CreateContracts { get; set; }

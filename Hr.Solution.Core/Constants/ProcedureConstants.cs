@@ -69,6 +69,12 @@ namespace Hr.Solution.Core.Constants
         public static string SP_EMPLOYEES_GET_BY_ID = "spEmployee_GetById";
         public static string SP_EMPLOYEES_UPDATE = "spEmployee_Update";
         public static string SP_EMPLOYEE_ALLOWANCE_CUD = "spEmployeeAllowance_CUD";
+        public static string SP_EMPLOYEE_DEPENDANTS_CUD = "spEmployeeDependants_CUD";
         public static string SP_EMPLOYEE_CONTRACT_CUD = "spEmployeeContract_CUD";
+
+        //EmployeesBasicSalary
+        public static string SP_EMPLOYEES_BASIC_SALARY_UPDATE = "spEmployeesBasicSalary_Update";
+        public static string SP_EMPLOYEES_BASIC_SALARY_GET_BY_ID = "spEmployeeBasicSalary_GetByID";
+
     }
 }

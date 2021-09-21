@@ -64,6 +64,18 @@ namespace Hr.Solution.Core.Services.Impl
             return response;
         }
 
+        public async Task<EmployeesBasicSalaryGetByIdResponse> EmployeesBasicSalaryGetById(int Id)
+        {
+            var response = await repository.ExecuteScalarAsync<EmployeesBasicSalaryGetByIdResponse>(ProcedureConstants.SP_EMPLOYEES_BASIC_SALARY_GET_BY_ID, new { ID = Id });
+            return response;
+        }
+
+        public async Task<EmployeesBasicSalaryUpdateResponse> EmployeesBasicSalaryUpdate(EmployeesBasicSalaryUpdateRequest request)
+        {
+            var response = await repository.ExecuteScalarAsync<EmployeesBasicSalaryUpdateResponse>(ProcedureConstants.SP_EMPLOYEES_BASIC_SALARY_UPDATE, request);
+            return response;
+        }
+
         public async Task<List<EmployeeResponse>> Employees_GetData(bool Active, string strDeptCode, string strValueSearch, ParramsRequest Request)
         {
             var response = await repository.QueryAsync<EmployeeResponse>(ProcedureConstants.spEmployees_spGetAll,
@@ -165,6 +177,11 @@ namespace Hr.Solution.Core.Services.Impl
 
         }
 
+        public Task<int> EmployeeDependants_CUD(EmployeeDependantsRequest request, string currentUser)
+        {
+            throw new NotImplementedException();
+        }
+        
         private DataTable ConvertToEmployeeContractTable(List<EmployeeContract> models, string currentUser)
         {
             var tblEmployeeContract = new DataTable();
@@ -204,7 +221,5 @@ namespace Hr.Solution.Core.Services.Impl
             tblEmployeeContract.Columns.Add("DeletedOn", typeof(DateTime));
             return tblEmployeeContract;
         }
-
-      
     }
 }
