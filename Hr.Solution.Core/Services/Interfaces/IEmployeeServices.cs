@@ -22,5 +22,6 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<EmployeesBasicSalaryUpdateResponse> EmployeesBasicSalaryUpdate(EmployeesBasicSalaryUpdateRequest request);
         Task<int> EmployeeAllowance_CUD(EmployeeAllowanceRequest request, string currentUser);
         Task<int> EmployeeDependants_CUD(EmployeeDependantsRequest request, string currentUser);
+        Task<int> EmployeeContract_CUD(EmployeeContractRequest request, string currentUser);
     }
 }
