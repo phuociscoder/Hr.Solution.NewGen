@@ -139,6 +139,7 @@ namespace Hr.Solution.Data.Requests
         public DateTime? DayOfBirth { get; set; }
         public bool IsTax { get; set; }
         public string Note { get; set; }
+    }
       
     public class EmployeeContractRequest { 
     
