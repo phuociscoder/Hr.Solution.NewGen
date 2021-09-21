@@ -164,21 +164,16 @@ export class EmployeeCreateEdit extends React.Component {
     }
 
     onProcessGeneralInfo = (section) => {
-        const { generalInfo, processSections } = this.state;
-        const model = section.model;
-        EmployeeServices.Add('generalInfo', model).then(response => {
-           console.log(response.data);
-            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
-            const percent = this.calculatePercentProcess(newProcessSections);
-            this.setState({ processSections: newProcessSections, percentProgress: percent });
-        }, error => {
-            const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
-            const percent = this.calculatePercentProcess(newProcessSections);
-            this.setState({ processSections: newProcessSections, percentProgress: percent });
-        });
-    }
-
-    onProcessAllowances = (section) => {
+        // const model = section.model;
+        // EmployeeServices.Add('generalInfo', model).then(response => {
+        //     const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+        //     const percent = this.calculatePercentProcess(newProcessSections);
+        //     this.setState({ processSections: newProcessSections, percentProgress: percent });
+        // }, error => {
+        //     const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
+        //     const percent = this.calculatePercentProcess(newProcessSections);
+        //     this.setState({ processSections: newProcessSections, percentProgress: percent });
+        // });
         const { generalInfo, processSections } = this.state;
         setTimeout(() => {
             const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
@@ -187,8 +182,20 @@ export class EmployeeCreateEdit extends React.Component {
         }, 1000);
     }
 
+    onProcessAllowances = (section) => {
+        const models = section.model;
+        const createModels = models.filter(x => x.id === 0 && x.type ==="ADD");
+        const updateModels = models.filter(x => x.id !==0 && x.type === "EDIT");
+        const deleteModels = models.filter(x => x.id !== 0 && x.type === "DELETE");
+        const newParams = {createAllowances: createModels, updateAllowances: updateModels, deleteAllowances: deleteModels, empId: 1};
+        EmployeeServices.Add('allowances', newParams).then(response => {
+            debugger;
+        }, error => {
+            debugger;
+        });
+    }
+
     onProcessContracts = (section) => {
-        console.log('go to contract');
         const { generalInfo, processSections } = this.state;
         setTimeout(() => {
             const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hr.Solution.Data.Requests
 {
-   public class GetEmployeeByDeptsRequest : BaseSearchQuery
+    public class GetEmployeeByDeptsRequest : BaseSearchQuery
     {
         public IEnumerable<int> DepartmentIds { get; set; }
         public string FreeText { get; set; }
@@ -81,5 +81,29 @@ namespace Hr.Solution.Data.Requests
         public DateTime? TaxNoDate { get; set; }
         public string Note { get; set; }
         public string ModifiedBy { get; set; }
+    }
+
+    public class EmployeeAllowanceRequest
+    {
+        public List<EmployeeAllowance> CreateAllowances { get; set; }
+        public List<EmployeeAllowance> UpdateAllowances { get; set; }
+        public List<EmployeeAllowance> DeleteAllowances { get; set; }
+
+    }
+
+    public class EmployeeAllowance
+    {
+        public int Id { get; set; }
+        public int EmployeeId { get; set; }
+        public bool IsActive { get; set; }
+        public long FreeTaxAmount { get; set; }
+        public string DecideNo { get; set; }
+        public DateTime ValidFromDate { get; set; }
+        public DateTime ValidToDate { get; set; }
+        public int AllowanceTypeId { get; set; }
+        public long Amount { get; set; }
+        public int CurrencyId { get; set; }
+        public decimal CurrencyRate { get; set; }
+        public string Note { get; set; }
     }
 }
