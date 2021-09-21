@@ -82,6 +82,23 @@ namespace Hr.Solution.Data.Requests
         public string Note { get; set; }
         public string ModifiedBy { get; set; }
     }
+    public class EmployeesBasicSalaryUpdateRequest
+    {
+        public int ID { get; set; }
+        public DateTime JoinDate { get; set; }
+        public DateTime DateFormal { get; set; }
+        public int EmployeeType { get; set; }
+        public int LaborType { get; set; }
+        public string BarCode { get; set; }
+        public string ShiftCode { get; set; }
+        public bool AltShift { get; set; }
+        public bool IsNotLateEarly { get; set; }
+        public bool IsNotScan { get; set; }
+        public bool IsNotOTKow { get; set; }
+        public int LeaveGroupId { get; set; }
+        public int RegionId { get; set; }
+        public string ModifiedBy { get; set; }
+    }
 
     public class EmployeeAllowanceRequest
     {
