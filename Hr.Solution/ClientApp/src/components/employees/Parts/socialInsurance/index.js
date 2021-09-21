@@ -1,6 +1,6 @@
 import React from "react";
 
-export class EmployeeSocialInsur extends React.Component{
+export class EmployeeInsurance extends React.Component{
     constructor(props){
         super(props);
     }

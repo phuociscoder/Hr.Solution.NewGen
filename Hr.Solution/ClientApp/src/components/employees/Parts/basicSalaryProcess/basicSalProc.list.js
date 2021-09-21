@@ -7,11 +7,11 @@ import { Function } from "../../../Common/Constants";
 import { CategoryServices } from "../../../administration/administration.category/Category.services";
 import { DateTimeUltils } from '../../../Utilities/DateTimeUltis'
 
-export class EmployeeBasicSalProcList extends React.Component {
+export class EmployeeSalaryProcessList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            employeeBasicSalProcs: [],
+            employeeSalaryProcesss: [],
             loading: false,
             selectedItem: {},
             models: []
@@ -19,10 +19,10 @@ export class EmployeeBasicSalProcList extends React.Component {
     }
 
     componentDidMount = () => {
-        // this.loadBasicSalProc(Function.LSEM104, 'basicSalProcs');
+        // this.loadSalaryProcess(Function.LSEM104, 'SalaryProcesss');
     }
 
-    loadBasicSalProc = (functionId, stateName) => {
+    loadSalaryProcess = (functionId, stateName) => {
         CategoryServices.GetCategoryItems(functionId).then(response => {
             const options = response.data;
             if (options) this.setState({ [stateName]: options });
@@ -40,9 +40,9 @@ export class EmployeeBasicSalProcList extends React.Component {
 
     onSearchTextChange = (e) => {
         const value = e.target.value;
-        const { basicSalProc } = this.state;
+        const { salaryProcess } = this.state;
         if (!value || value.trim() === '') {
-            // this.loadBasicSalProcList(basicSalProc.id);
+            // this.loadSalaryProcessList(salaryProcess.id);
             // CALL_DRAFT
             this.loadDraftList();
             return;
@@ -50,12 +50,12 @@ export class EmployeeBasicSalProcList extends React.Component {
         this.onDebounceSearch(value);
     }
 
-    onDebounceSearch = debounce(value => this.searchBasicSalProcItems(value), 1000);
+    onDebounceSearch = debounce(value => this.searchSalaryProcessItems(value), 1000);
 
-    searchBasicSalProcItems = (value) => {
-        const { originBasicSalProcItems } = this.state;
-        const filteredItems = originBasicSalProcItems.filter(x => x.name.toLowerCase().trim().includes(value.toLowerCase().trim()));
-        this.setState({ basicSalProcItems: filteredItems });
+    searchSalaryProcessItems = (value) => {
+        const { originSalaryProcessItems } = this.state;
+        const filteredItems = originSalaryProcessItems.filter(x => x.name.toLowerCase().trim().includes(value.toLowerCase().trim()));
+        this.setState({ SalaryProcessItems: filteredItems });
     }
 
     onSelectItem = (item) => {

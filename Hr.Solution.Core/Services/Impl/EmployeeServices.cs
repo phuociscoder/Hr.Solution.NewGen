@@ -22,6 +22,39 @@ namespace Hr.Solution.Core.Services.Impl
             this.repository = repository;
         }
 
+        public async Task<int> EmployeeAllowance_CUD(EmployeeAllowanceRequest request, string currentUser)
+        {
+            int response = 0;
+            if (request.CreateAllowances.Count > 0)
+            {
+                var tblCreateAllowance = ConvertToDataTable(request.CreateAllowances, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeAllowance>(ProcedureConstants.SP_EMPLOYEE_ALLOWANCE_CUD, new { employeeAllowances = tblCreateAllowance.AsTableValuedParameter("TVP_EmployeeAllowance"), type = "ADD" }, false);
+            }
+
+            if (request.UpdateAllowances.Count > 0)
+            {
+                var tblCreateAllowance = ConvertToDataTable(request.UpdateAllowances, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeAllowance>(ProcedureConstants.SP_EMPLOYEE_ALLOWANCE_CUD, new { employeeAllowances = tblCreateAllowance.AsTableValuedParameter("TVP_EmployeeAllowance"), type = "EDIT" }, false);
+            }
+
+            if (request.DeleteAllowances.Count > 0)
+            {
+                var tblCreateAllowance = ConvertToDataTable(request.DeleteAllowances, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeAllowance>(ProcedureConstants.SP_EMPLOYEE_ALLOWANCE_CUD, new { employeeAllowances = tblCreateAllowance.AsTableValuedParameter("TVP_EmployeeAllowance"), type = "DELETE" }, false);
+            }
+
+            return response;
+        }
+
+        private DataTable ConvertToDataTable(List<EmployeeAllowance> models, string currentUser)
+        {
+            var tblEmployeeAllowance = CreateEmployeeAllowanceTable();
+            models.ForEach(x => {
+                tblEmployeeAllowance.Rows.Add(x.Id, x.DecideNo, x.EmployeeId, x.AllowanceTypeId, x.ValidFromDate, x.Amount, x.FreeTaxAmount, x.CurrencyRate, x.ValidToDate, x.Note, currentUser, null, currentUser, null);
+            });
+            return tblEmployeeAllowance;
+        }
+
         public async Task<string> EmployeeCheckExisting(string employeeCode)
         {
             var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_EMPLOYEES_CHECK_EXISTING, new {employeeCode = employeeCode });
@@ -85,6 +118,29 @@ namespace Hr.Solution.Core.Services.Impl
 
             response.Total = total;
             return response;
+        }
+
+        private DataTable CreateEmployeeAllowanceTable()
+        {
+            var tblEmployeeAllowance = new DataTable();
+            tblEmployeeAllowance.Columns.Add("Id", typeof(long));
+            tblEmployeeAllowance.Columns.Add("DecisionNo", typeof(string));
+            tblEmployeeAllowance.Columns.Add("EmployeeId", typeof(int));
+            tblEmployeeAllowance.Columns.Add("AllowanceTypeId", typeof(int));
+            tblEmployeeAllowance.Columns.Add("EffectDate", typeof(DateTime));
+            tblEmployeeAllowance.Columns.Add("FixAmount", typeof(long));
+            tblEmployeeAllowance.Columns.Add("AmountNoTax", typeof(long));
+            tblEmployeeAllowance.Columns.Add("ExRate", typeof(decimal));
+            tblEmployeeAllowance.Columns.Add("CurrencyId", typeof(int));
+            tblEmployeeAllowance.Columns.Add("EndDate", typeof(DateTime));
+            tblEmployeeAllowance.Columns.Add("Note", typeof(string));
+            tblEmployeeAllowance.Columns.Add("IsActive", typeof(bool));
+            tblEmployeeAllowance.Columns.Add("CreatedBy", typeof(string));
+            tblEmployeeAllowance.Columns.Add("CreatedOn", typeof(DateTime));
+            tblEmployeeAllowance.Columns.Add("ModifiedBy", typeof(string));
+            tblEmployeeAllowance.Columns.Add("ModifiedOn", typeof(DateTime));
+            return tblEmployeeAllowance;
+
         }
 
     }

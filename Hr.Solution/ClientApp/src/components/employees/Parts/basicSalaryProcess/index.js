@@ -1,79 +1,79 @@
 import React from "react";
-import { DependenceDetailItem, EmployeeBasicSalProcDetail } from "./basicSalProc.detail";
-import { EmployeeBasicSalProcList } from "./basicSalProc.list";
+import { EmployeeSalaryProcessDetail } from "./basicSalProc.detail";
+import { EmployeeSalaryProcessList } from "./basicSalProc.list";
 
-export class EmployeeBasicSalProc extends React.Component{
+export class EmployeeSalaryProcess extends React.Component{
     constructor(props)
     {
         super(props);
         this.state={
             refesh: false,
-            employeeBasicSalProcs:[],
-            selectedBasicSalProc: {}
+            employeeSalaryProcesss:[],
+            selectedSalaryProcess: {}
         }
     }
 
     componentDidMount =() => {
         const {models} = this.props;
         if(!models) return;
-        this.setState({employeeBasicSalProcs: models});
+        this.setState({employeeSalaryProcesss: models});
     }
 
-    updateModels = (BasicSalProc) => {
-        switch (BasicSalProc.type) {
+    updateModels = (SalaryProcess) => {
+        switch (SalaryProcess.type) {
             case "A":
-                this.addBasicSalProc(BasicSalProc.model);
+                this.addSalaryProcess(SalaryProcess.model);
                 break;
             case "E":
-                this.updateBasicSalProc(BasicSalProc.model);
+                this.updateSalaryProcess(SalaryProcess.model);
                 break;
             case "D":
-                this.removeBasicSalProc(BasicSalProc.model);
+                this.removeSalaryProcess(SalaryProcess.model);
                 break;
             default:
                 break;
         }
     }
 
-    addBasicSalProc = (newModel) => {
+    addSalaryProcess = (newModel) => {
         const {onModelChange} = this.props;
         newModel.type = "ADD";
-        const { employeeBasicSalProcs } = this.state;
-        const newModels = [...employeeBasicSalProcs, newModel];
-        this.setState({ employeeBasicSalProcs: newModels }, onModelChange(newModels));
+        const { employeeSalaryProcesss } = this.state;
+        const newModels = [...employeeSalaryProcesss, newModel];
+        this.setState({ employeeSalaryProcesss: newModels }, onModelChange(newModels));
     }
 
-    updateBasicSalProc = (editModel) => {
+    updateSalaryProcess = (editModel) => {
         const {onModelChange} = this.props;
         if (editModel.id) {
             editModel.type = "EDIT";
         }
-        const { employeeBasicSalProcs, selectedBasicSalProc } = this.state;
-        const newModels = [...employeeBasicSalProcs.filter(x => x !== selectedBasicSalProc), editModel];
-        this.setState({ employeeBasicSalProcs: newModels }, onModelChange(newModels));
+        const { employeeSalaryProcesss, selectedSalaryProcess } = this.state;
+        const newModels = [...employeeSalaryProcesss.filter(x => x !== selectedSalaryProcess), editModel];
+        this.setState({ employeeSalaryProcesss: newModels }, onModelChange(newModels));
     }
 
-    removeBasicSalProc = (rAllowance) => {
+    removeSalaryProcess = (rAllowance) => {
         const {onModelChange} = this.props;
         rAllowance.type = "DELETE";
-        const { employeeBasicSalProcs, selectedBasicSalProc } = this.state;
-        const newModels = [...employeeBasicSalProcs.filter(x => x !== selectedBasicSalProc), rAllowance];
-        this.setState({ employeeBasicSalProcs: newModels }, onModelChange(newModels));
+        const { employeeSalaryProcesss, selectedSalaryProcess } = this.state;
+        const newModels = [...employeeSalaryProcesss.filter(x => x !== selectedSalaryProcess), rAllowance];
+        this.setState({ employeeSalaryProcesss: newModels }, onModelChange(newModels));
     }
 
     onSelectItemChange =(item) => {
-        this.setState({selectedBasicSalProc: item});
+        this.setState({selectedSalaryProcess: item});
     }
 
     render =() => {
-        const {employeeBasicSalProcs, selectedBasicSalProc} = this.state;
+        const {employeeSalaryProcesss, selectedSalaryProcess} = this.state;
         return (
             <div className="d-flex w-100 h-100">
             <div className="w-20 h-100">
-                <EmployeeBasicSalProcList models={employeeBasicSalProcs} onChange={this.onSelectItemChange}/>
+                <EmployeeSalaryProcessList models={employeeSalaryProcesss} onChange={this.onSelectItemChange}/>
             </div>
             <div className="flex-fill ml-2 h-100">
-               <EmployeeBasicSalProcDetail onRefresh={this.onRefresh} model={selectedBasicSalProc} onUpdateModels={this.updateModels} />
+               <EmployeeSalaryProcessDetail onRefresh={this.onRefresh} model={selectedSalaryProcess} onUpdateModels={this.updateModels} />
             </div>
         </div>
         )

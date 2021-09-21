@@ -50,7 +50,7 @@ namespace Hr.Solution.Application.Controllers
                 return Ok(new { status = "FAILED", message = "CODE_EMPTY" });
             }
 
-            if (string.IsNullOrEmpty(employeeRequest.Photo))
+            if (!string.IsNullOrEmpty(employeeRequest.Photo))
             {
                 employeeRequest.Photo = mediaServices.ResizeImage(employeeRequest.Photo);
             }
@@ -92,5 +92,16 @@ namespace Hr.Solution.Application.Controllers
             var result = await employeeServices.EmployeeUpdateGeneralInfo(request);
             return Ok(result);
         }
+
+        [HttpPost, Route("allowances")]
+        [Authorize]
+        public async Task<ActionResult> EmployeeAllowancesUpdate([FromBody] EmployeeAllowanceRequest request)
+        {
+            var modifiedBy = User.FindFirst(ClaimTypes.Name).Value;
+            var result = await employeeServices.EmployeeAllowance_CUD(request, modifiedBy);
+            return Ok(result);
+        }
+
+
     }
 }

@@ -18,5 +18,6 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<string> EmployeeCheckExisting(string EmployeeCode);
         Task<EmployeeGetByIdGeneralInfoResponse> EmployeeGetByIdGeneralInfo(int Id);
         Task<EmployeeUpdateGeneralInfoResponse> EmployeeUpdateGeneralInfo(EmployeeUpdateGeneralInfoRequest request);
+        Task<int> EmployeeAllowance_CUD(EmployeeAllowanceRequest request, string currentUser);
     }
 }

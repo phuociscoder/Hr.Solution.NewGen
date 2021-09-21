@@ -13,15 +13,18 @@ import { Mode } from "../../Constanst";
 import { NumberUltis } from "../../../Utilities/NumberUltis";
 // import { BasicSalProcServices } from "../basicSalProc.services";
 
-export class EmployeeBasicSalProcDetail extends React.Component {
+export class EmployeeSalaryProcessDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            basicSalProc: {},
+            salaryProcess: {},
             mode: Mode.View,
             model: {
                 id: 0
-            }
+            },
+            // CALL_DRAFT
+            adjustmentSalaryTypes : [],
+            signers: []
 
         }
     }
