@@ -106,4 +106,24 @@ namespace Hr.Solution.Data.Requests
         public decimal CurrencyRate { get; set; }
         public string Note { get; set; }
     }
+
+    public class EmployeeDependantsRequest
+    {
+        public List<EmployeeDependants> CreateDependants { get; set; }
+        public List<EmployeeDependants> UpdateDependants { get; set; }
+        public List<EmployeeDependants> DeleteDependants { get; set; }
+    }
+    public class EmployeeDependants
+    {
+        public int Id { get; set; }
+        public int EmployeeId { get; set; }
+        public string DependantCode { get; set; }
+        public int RelationTypeId { get; set; }
+        public string Phone { get; set; }
+        public string FullName { get; set; }
+        public string Address { get; set; }
+        public DateTime? DayOfBirth { get; set; }
+        public bool IsTax { get; set; }
+        public string Note { get; set; }
+    }
 }

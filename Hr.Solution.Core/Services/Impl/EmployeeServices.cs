@@ -143,5 +143,9 @@ namespace Hr.Solution.Core.Services.Impl
 
         }
 
+        public Task<int> EmployeeDependants_CUD(EmployeeDependantsRequest request, string currentUser)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
