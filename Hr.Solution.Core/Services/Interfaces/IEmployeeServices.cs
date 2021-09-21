@@ -19,5 +19,6 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<EmployeeGetByIdGeneralInfoResponse> EmployeeGetByIdGeneralInfo(int Id);
         Task<EmployeeUpdateGeneralInfoResponse> EmployeeUpdateGeneralInfo(EmployeeUpdateGeneralInfoRequest request);
         Task<int> EmployeeAllowance_CUD(EmployeeAllowanceRequest request, string currentUser);
+        Task<int> EmployeeContract_CUD(EmployeeContractRequest request, string currentUser);
     }
 }

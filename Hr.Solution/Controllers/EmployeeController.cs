@@ -102,6 +102,15 @@ namespace Hr.Solution.Application.Controllers
             return Ok(result);
         }
 
+        [HttpPost, Route("contracts")]
+        [Authorize]
+        public async Task<ActionResult> EmployeeContractUpdate([FromBody] EmployeeContractRequest request)
+        {
+            var currentUser = User.FindFirst(ClaimTypes.Name).Value;
+            var result = await employeeServices.EmployeeContract_CUD(request, currentUser);
+            return Ok(result);
+        }
+
 
     }
 }

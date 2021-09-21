@@ -1,9 +1,6 @@
 ﻿using Hr.Solution.Domain.Query;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hr.Solution.Data.Requests
 {
@@ -105,5 +102,42 @@ namespace Hr.Solution.Data.Requests
         public int CurrencyId { get; set; }
         public decimal CurrencyRate { get; set; }
         public string Note { get; set; }
+    }
+
+    public class EmployeeContractRequest { 
+    
+        public List<EmployeeContract> CreateContracts { get; set; }
+        public List<EmployeeContract> UpdateContracts { get; set; }
+        public List<EmployeeContract> DeleteContracts { get; set; }
+    }
+
+    public class EmployeeContract
+    { 
+        public int Id { get; set; }
+        public int EmployeeId { get; set; }
+        public string ContractNo { get; set; }
+        public DateTime? SignDate { get; set; }
+        public int ContractTypeId { get; set; }
+        public int DurationId { get; set; }
+        public DateTime? ValidDate { get; set; }
+        public DateTime? ExpiredDate { get; set;}
+        public int PaymentMethodId { get; set; }
+        public int SignatorId { get; set; }
+        public long BasicSalary { get; set; }
+        public DateTime? ProbationFromDate { get; set; }
+        public DateTime? ProbationToDate { get; set; }
+        public int WorkingPlaceId { get; set; }
+        public string WorkingTime { get; set; }
+        public string JobTitle { get; set; }
+        public string VehicleInfo { get; set; }
+        public string Note { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public bool IsDeleted { get; set; }
+        public string DeletedBy { get; set; }
+        public DateTime? DeletedOn { get; set; }
+
     }
 }

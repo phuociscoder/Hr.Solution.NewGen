@@ -27,32 +27,23 @@ namespace Hr.Solution.Core.Services.Impl
             int response = 0;
             if (request.CreateAllowances.Count > 0)
             {
-                var tblCreateAllowance = ConvertToDataTable(request.CreateAllowances, currentUser);
+                var tblCreateAllowance = ConvertToAllowanceDataTable(request.CreateAllowances, currentUser);
                 response = response + await repository.ExecuteAsync<EmployeeAllowance>(ProcedureConstants.SP_EMPLOYEE_ALLOWANCE_CUD, new { employeeAllowances = tblCreateAllowance.AsTableValuedParameter("TVP_EmployeeAllowance"), type = "ADD" }, false);
             }
 
             if (request.UpdateAllowances.Count > 0)
             {
-                var tblCreateAllowance = ConvertToDataTable(request.UpdateAllowances, currentUser);
+                var tblCreateAllowance = ConvertToAllowanceDataTable(request.UpdateAllowances, currentUser);
                 response = response + await repository.ExecuteAsync<EmployeeAllowance>(ProcedureConstants.SP_EMPLOYEE_ALLOWANCE_CUD, new { employeeAllowances = tblCreateAllowance.AsTableValuedParameter("TVP_EmployeeAllowance"), type = "EDIT" }, false);
             }
 
             if (request.DeleteAllowances.Count > 0)
             {
-                var tblCreateAllowance = ConvertToDataTable(request.DeleteAllowances, currentUser);
+                var tblCreateAllowance = ConvertToAllowanceDataTable(request.DeleteAllowances, currentUser);
                 response = response + await repository.ExecuteAsync<EmployeeAllowance>(ProcedureConstants.SP_EMPLOYEE_ALLOWANCE_CUD, new { employeeAllowances = tblCreateAllowance.AsTableValuedParameter("TVP_EmployeeAllowance"), type = "DELETE" }, false);
             }
 
             return response;
-        }
-
-        private DataTable ConvertToDataTable(List<EmployeeAllowance> models, string currentUser)
-        {
-            var tblEmployeeAllowance = CreateEmployeeAllowanceTable();
-            models.ForEach(x => {
-                tblEmployeeAllowance.Rows.Add(x.Id, x.DecideNo, x.EmployeeId, x.AllowanceTypeId, x.ValidFromDate, x.Amount, x.FreeTaxAmount, x.CurrencyRate, x.ValidToDate, x.Note, currentUser, null, currentUser, null);
-            });
-            return tblEmployeeAllowance;
         }
 
         public async Task<string> EmployeeCheckExisting(string employeeCode)
@@ -120,6 +111,37 @@ namespace Hr.Solution.Core.Services.Impl
             return response;
         }
 
+        public async Task<int> EmployeeContract_CUD(EmployeeContractRequest request, string currentUser)
+        {
+            int response = 0;
+            if (request.CreateContracts.Count > 0)
+            {
+                var tblCreateContracts = ConvertToEmployeeContractTable(request.CreateContracts, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeContract>(ProcedureConstants.SP_EMPLOYEE_CONTRACT_CUD, new { employeeContracts = tblCreateContracts.AsTableValuedParameter("TVP_EmployeeContract"), type = "ADD" });
+            }
+            if (request.UpdateContracts.Count > 0)
+            {
+                var tblUpdateContracts = ConvertToEmployeeContractTable(request.UpdateContracts, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeContract>(ProcedureConstants.SP_EMPLOYEE_CONTRACT_CUD, new { employeeContracts = tblUpdateContracts.AsTableValuedParameter("TVP_EmployeeContract"), type = "EDIT" });
+            }
+            if (request.DeleteContracts.Count > 0)
+            {
+                var tblDeleteContract = ConvertToEmployeeContractTable(request.DeleteContracts, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeContract>(ProcedureConstants.SP_EMPLOYEE_CONTRACT_CUD, new { employeeContracts = tblDeleteContract.AsTableValuedParameter("TVP_EmployeeContract"), type = "DELETE" });
+            }
+
+            return response;
+        }
+
+        private DataTable ConvertToAllowanceDataTable(List<EmployeeAllowance> models, string currentUser)
+        {
+            var tblEmployeeAllowance = CreateEmployeeAllowanceTable();
+            models.ForEach(x => {
+                tblEmployeeAllowance.Rows.Add(x.Id, x.DecideNo, x.EmployeeId, x.AllowanceTypeId, x.ValidFromDate, x.Amount, x.FreeTaxAmount, x.CurrencyRate, x.ValidToDate, x.Note, currentUser, null, currentUser, null);
+            });
+            return tblEmployeeAllowance;
+        }
+
         private DataTable CreateEmployeeAllowanceTable()
         {
             var tblEmployeeAllowance = new DataTable();
@@ -143,5 +165,46 @@ namespace Hr.Solution.Core.Services.Impl
 
         }
 
+        private DataTable ConvertToEmployeeContractTable(List<EmployeeContract> models, string currentUser)
+        {
+            var tblEmployeeContract = new DataTable();
+            models.ForEach(x => {
+                tblEmployeeContract.Rows.Add(x.Id, x.EmployeeId, x.ContractNo, x.SignDate, x.ContractTypeId, x.DurationId, x.ValidDate, x.ExpiredDate, x.PaymentMethodId, x.SignatorId, x.BasicSalary, x.ProbationFromDate, x.ProbationToDate, x.WorkingPlaceId, x.WorkingTime, x.JobTitle, x.VehicleInfo, x.Note, currentUser, null, currentUser, null, false, currentUser, null);
+            });
+            return tblEmployeeContract;
+        }
+
+        public DataTable CreateEmployeeContractTable() 
+        {
+            var tblEmployeeContract = new DataTable();
+            tblEmployeeContract.Columns.Add("Id", typeof(int));
+            tblEmployeeContract.Columns.Add("EmployeeId", typeof(int));
+            tblEmployeeContract.Columns.Add("ContractNo", typeof(string));
+            tblEmployeeContract.Columns.Add("SignDate", typeof(DateTime));
+            tblEmployeeContract.Columns.Add("ContractTypeId", typeof(int));
+            tblEmployeeContract.Columns.Add("DurationId", typeof(int));
+            tblEmployeeContract.Columns.Add("ValidDate", typeof(DateTime));
+            tblEmployeeContract.Columns.Add("ExpiredDate", typeof(DateTime));
+            tblEmployeeContract.Columns.Add("PaymentMethodId", typeof(int));
+            tblEmployeeContract.Columns.Add("SignatorId", typeof(int));
+            tblEmployeeContract.Columns.Add("BaseSalary", typeof(long));
+            tblEmployeeContract.Columns.Add("ProbationFromDate", typeof(DateTime));
+            tblEmployeeContract.Columns.Add("ProbationToDate", typeof(DateTime));
+            tblEmployeeContract.Columns.Add("WorkingPlaceId", typeof(int));
+            tblEmployeeContract.Columns.Add("WorkingTime", typeof(string));
+            tblEmployeeContract.Columns.Add("JobTitle", typeof(string));
+            tblEmployeeContract.Columns.Add("VehicleInfo", typeof(string));
+            tblEmployeeContract.Columns.Add("Note", typeof(string));
+            tblEmployeeContract.Columns.Add("CreatedBy", typeof(string));
+            tblEmployeeContract.Columns.Add("CreatedOn", typeof(DateTime));
+            tblEmployeeContract.Columns.Add("ModifiedBy", typeof(string));
+            tblEmployeeContract.Columns.Add("ModifiedOn", typeof(DateTime));
+            tblEmployeeContract.Columns.Add("IsDeleted", typeof(bool));
+            tblEmployeeContract.Columns.Add("DeletedBy", typeof(string));
+            tblEmployeeContract.Columns.Add("DeletedOn", typeof(DateTime));
+            return tblEmployeeContract;
+        }
+
+      
     }
 }
