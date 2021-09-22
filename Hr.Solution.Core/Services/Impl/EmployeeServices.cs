@@ -177,9 +177,56 @@ namespace Hr.Solution.Core.Services.Impl
 
         }
 
-        public Task<int> EmployeeDependants_CUD(EmployeeDependantsRequest request, string currentUser)
+        public async Task<int> EmployeeDependants_CUD(EmployeeDependantsRequest request, string currentUser)
         {
-            throw new NotImplementedException();
+            int response = 0;
+            if (request.CreateDependants.Count > 0)
+            {
+                var tblCreateDependants = ConvertToEmployeeDependantsTable(request.CreateDependants, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeDependants>(ProcedureConstants.SP_EMPLOYEE_DEPENDANTS_CUD, new { employeeDependants = tblCreateDependants.AsTableValuedParameter("TVP_EmployeeDependants"), type = "ADD" }, false);
+            }
+
+            if (request.UpdateDependants.Count > 0)
+            {
+                var tblUpdateDependants = ConvertToEmployeeDependantsTable(request.UpdateDependants, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeDependants>(ProcedureConstants.SP_EMPLOYEE_DEPENDANTS_CUD, new { employeeDependants = tblUpdateDependants.AsTableValuedParameter("TVP_EmployeeDependants"), type="EDIT" }, false);
+            }
+
+            if (request.DeleteDependants.Count > 0)
+            {
+                var tblDeleteDependants = ConvertToEmployeeDependantsTable(request.DeleteDependants, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeDependants>(ProcedureConstants.SP_EMPLOYEE_DEPENDANTS_CUD, new { employeeDependants = tblDeleteDependants.AsTableValuedParameter("TVP_EmployeeDependants"), type="DELETE" }, false);
+            }
+            return response;
+        }
+
+        private DataTable ConvertToEmployeeDependantsTable(List<EmployeeDependants> models, string currentUser)
+        {
+            var tblEmployeeDependant = CreateEmployeeDependantsTable();
+            models.ForEach( x =>
+            {
+                tblEmployeeDependant.Rows.Add(x.Id, x.EmployeeId, x.DependantCode, x.RelationTypeId, x.Phone, x.FullName, x.Address, x.DayOfBirth, x.IsTax, x.Note, currentUser, null, currentUser, null);
+            });
+            return tblEmployeeDependant;
+        }
+        private DataTable CreateEmployeeDependantsTable()
+        {
+            var tblEmployeeDependants = new DataTable();
+            tblEmployeeDependants.Columns.Add("Id", typeof(long));
+            tblEmployeeDependants.Columns.Add("EmployeeId", typeof(int));
+            tblEmployeeDependants.Columns.Add("DependantsCode", typeof(string));
+            tblEmployeeDependants.Columns.Add("RelationTypeId", typeof(int));
+            tblEmployeeDependants.Columns.Add("Phone", typeof(string));
+            tblEmployeeDependants.Columns.Add("FullName", typeof(string));
+            tblEmployeeDependants.Columns.Add("Address", typeof(string));
+            tblEmployeeDependants.Columns.Add("DayOfBirth", typeof(DateTime));
+            tblEmployeeDependants.Columns.Add("IsTax", typeof(bool));
+            tblEmployeeDependants.Columns.Add("Note", typeof(string));
+            tblEmployeeDependants.Columns.Add("CreatedBy", typeof(string));
+            tblEmployeeDependants.Columns.Add("CreatedOn", typeof(DateTime));
+            tblEmployeeDependants.Columns.Add("ModifiedBy", typeof(string));
+            tblEmployeeDependants.Columns.Add("ModifiedOn", typeof(DateTime));
+            return tblEmployeeDependants;
         }
         
         private DataTable ConvertToEmployeeContractTable(List<EmployeeContract> models, string currentUser)
