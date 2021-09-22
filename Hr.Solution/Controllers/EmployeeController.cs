@@ -34,7 +34,7 @@ namespace Hr.Solution.Application.Controllers
 
         [HttpPost, Route("getByDepts")]
         [Authorize]
-        public async Task<ActionResult> GetByDepts([FromBody]GetEmployeeByDeptsRequest request)
+        public async Task<ActionResult> GetByDepts([FromBody] GetEmployeeByDeptsRequest request)
         {
             var results = await employeeServices.GetByDepts(request);
             return Ok(results);
@@ -58,7 +58,7 @@ namespace Hr.Solution.Application.Controllers
             var checkExisting = await employeeServices.EmployeeCheckExisting(employeeRequest.Code);
             if (!string.IsNullOrEmpty(checkExisting))
             {
-                return Ok(new { status = "FAILED", message = "CODE_EXISTING"});
+                return Ok(new { status = "FAILED", message = "CODE_EXISTING" });
             }
 
             var createdBy = User.FindFirst(ClaimTypes.Name).Value;
@@ -67,15 +67,16 @@ namespace Hr.Solution.Application.Controllers
             try
             {
                 var result = await employeeServices.EmployeeCreateGeneralInfo(employeeRequest);
-                return Ok(result);
+                return Ok(new { status = "SUCCESS", message = "", value = result.Id });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return Ok(new { status = "FAILED", message = "INSERT_FAILED"});               
+
+                return Ok(new { status = "FAILED", message = "INSERT_FAILED" });
             }
         }
 
-        [HttpGet,Route("{id}")]
+        [HttpGet, Route("{id}")]
         [Authorize]
         public async Task<ActionResult> GetByIdGeneralInfo(int id)
         {
@@ -105,7 +106,7 @@ namespace Hr.Solution.Application.Controllers
 
         [HttpGet, Route("basicSalary/{id}")]
         [Authorize]
-        public async Task<ActionResult> GetByIdBasicSalary (int id)
+        public async Task<ActionResult> GetByIdBasicSalary(int id)
         {
             var result = await employeeServices.EmployeesBasicSalaryGetById(id);
             return Ok(result);
@@ -117,7 +118,7 @@ namespace Hr.Solution.Application.Controllers
         {
             var modifiedBy = User.FindFirst(ClaimTypes.Name).Value;
             var result = await employeeServices.EmployeeAllowance_CUD(request, modifiedBy);
-            return Ok(result);
+            return Ok(new { status = "SUCCESS", message = "", value = result });
         }
 
         [HttpPost, Route("contracts")]

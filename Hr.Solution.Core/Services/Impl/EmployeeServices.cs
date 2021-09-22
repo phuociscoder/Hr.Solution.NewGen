@@ -149,7 +149,7 @@ namespace Hr.Solution.Core.Services.Impl
         {
             var tblEmployeeAllowance = CreateEmployeeAllowanceTable();
             models.ForEach(x => {
-                tblEmployeeAllowance.Rows.Add(x.Id, x.DecideNo, x.EmployeeId, x.AllowanceTypeId, x.ValidFromDate, x.Amount, x.FreeTaxAmount, x.CurrencyRate, x.ValidToDate, x.Note, currentUser, null, currentUser, null);
+                tblEmployeeAllowance.Rows.Add(x.Id, x.DecideNo, x.EmployeeId, x.AllowanceTypeId, x.ValidFromDate, x.Amount, x.FreeTaxAmount, x.CurrencyRate, x.CurrencyId, x.ValidToDate, x.Note, currentUser, null, currentUser, null, x.IsActive);
             });
             return tblEmployeeAllowance;
         }
@@ -168,11 +168,11 @@ namespace Hr.Solution.Core.Services.Impl
             tblEmployeeAllowance.Columns.Add("CurrencyId", typeof(int));
             tblEmployeeAllowance.Columns.Add("EndDate", typeof(DateTime));
             tblEmployeeAllowance.Columns.Add("Note", typeof(string));
-            tblEmployeeAllowance.Columns.Add("IsActive", typeof(bool));
             tblEmployeeAllowance.Columns.Add("CreatedBy", typeof(string));
             tblEmployeeAllowance.Columns.Add("CreatedOn", typeof(DateTime));
             tblEmployeeAllowance.Columns.Add("ModifiedBy", typeof(string));
             tblEmployeeAllowance.Columns.Add("ModifiedOn", typeof(DateTime));
+            tblEmployeeAllowance.Columns.Add("IsActive", typeof(bool));
             return tblEmployeeAllowance;
 
         }
