@@ -81,13 +81,13 @@ namespace Hr.Solution.Data.Requests
     }
     public class EmployeesBasicSalaryUpdateRequest
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public DateTime JoinDate { get; set; }
         public DateTime DateFormal { get; set; }
-        public int EmployeeType { get; set; }
+        public int EmployeeTypeId { get; set; }
         public int LaborType { get; set; }
         public string BarCode { get; set; }
-        public string ShiftCode { get; set; }
+        public int ShiftId { get; set; }
         public bool AltShift { get; set; }
         public bool IsNotLateEarly { get; set; }
         public bool IsNotScan { get; set; }

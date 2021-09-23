@@ -48,7 +48,7 @@ namespace Hr.Solution.Core.Services.Impl
 
         public async Task<string> EmployeeCheckExisting(string employeeCode)
         {
-            var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_EMPLOYEES_CHECK_EXISTING, new {employeeCode = employeeCode });
+            var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_EMPLOYEES_CHECK_EXISTING, new { employeeCode = employeeCode });
             return (string)response;
         }
 
@@ -129,17 +129,17 @@ namespace Hr.Solution.Core.Services.Impl
             if (request.CreateContracts.Count > 0)
             {
                 var tblCreateContracts = ConvertToEmployeeContractTable(request.CreateContracts, currentUser);
-                response = response + await repository.ExecuteAsync<EmployeeContract>(ProcedureConstants.SP_EMPLOYEE_CONTRACT_CUD, new { employeeContracts = tblCreateContracts.AsTableValuedParameter("TVP_EmployeeContract"), type = "ADD" });
+                response = response + await repository.ExecuteAsync<EmployeeContract>(ProcedureConstants.SP_EMPLOYEE_CONTRACT_CUD, new { employeeContract = tblCreateContracts.AsTableValuedParameter("TVP_EmployeeContract"), type = "ADD" }, false);
             }
             if (request.UpdateContracts.Count > 0)
             {
                 var tblUpdateContracts = ConvertToEmployeeContractTable(request.UpdateContracts, currentUser);
-                response = response + await repository.ExecuteAsync<EmployeeContract>(ProcedureConstants.SP_EMPLOYEE_CONTRACT_CUD, new { employeeContracts = tblUpdateContracts.AsTableValuedParameter("TVP_EmployeeContract"), type = "EDIT" });
+                response = response + await repository.ExecuteAsync<EmployeeContract>(ProcedureConstants.SP_EMPLOYEE_CONTRACT_CUD, new { employeeContracts = tblUpdateContracts.AsTableValuedParameter("TVP_EmployeeContract"), type = "EDIT" }, false);
             }
             if (request.DeleteContracts.Count > 0)
             {
                 var tblDeleteContract = ConvertToEmployeeContractTable(request.DeleteContracts, currentUser);
-                response = response + await repository.ExecuteAsync<EmployeeContract>(ProcedureConstants.SP_EMPLOYEE_CONTRACT_CUD, new { employeeContracts = tblDeleteContract.AsTableValuedParameter("TVP_EmployeeContract"), type = "DELETE" });
+                response = response + await repository.ExecuteAsync<EmployeeContract>(ProcedureConstants.SP_EMPLOYEE_CONTRACT_CUD, new { employeeContracts = tblDeleteContract.AsTableValuedParameter("TVP_EmployeeContract"), type = "DELETE" }, false);
             }
 
             return response;
@@ -148,7 +148,8 @@ namespace Hr.Solution.Core.Services.Impl
         private DataTable ConvertToAllowanceDataTable(List<EmployeeAllowance> models, string currentUser)
         {
             var tblEmployeeAllowance = CreateEmployeeAllowanceTable();
-            models.ForEach(x => {
+            models.ForEach(x =>
+            {
                 tblEmployeeAllowance.Rows.Add(x.Id, x.DecideNo, x.EmployeeId, x.AllowanceTypeId, x.ValidFromDate, x.Amount, x.FreeTaxAmount, x.CurrencyRate, x.CurrencyId, x.ValidToDate, x.Note, currentUser, null, currentUser, null, x.IsActive);
             });
             return tblEmployeeAllowance;
@@ -189,13 +190,13 @@ namespace Hr.Solution.Core.Services.Impl
             if (request.UpdateDependants.Count > 0)
             {
                 var tblUpdateDependants = ConvertToEmployeeDependantsTable(request.UpdateDependants, currentUser);
-                response = response + await repository.ExecuteAsync<EmployeeDependants>(ProcedureConstants.SP_EMPLOYEE_DEPENDANTS_CUD, new { employeeDependants = tblUpdateDependants.AsTableValuedParameter("TVP_EmployeeDependants"), type="EDIT" }, false);
+                response = response + await repository.ExecuteAsync<EmployeeDependants>(ProcedureConstants.SP_EMPLOYEE_DEPENDANTS_CUD, new { employeeDependants = tblUpdateDependants.AsTableValuedParameter("TVP_EmployeeDependants"), type = "EDIT" }, false);
             }
 
             if (request.DeleteDependants.Count > 0)
             {
                 var tblDeleteDependants = ConvertToEmployeeDependantsTable(request.DeleteDependants, currentUser);
-                response = response + await repository.ExecuteAsync<EmployeeDependants>(ProcedureConstants.SP_EMPLOYEE_DEPENDANTS_CUD, new { employeeDependants = tblDeleteDependants.AsTableValuedParameter("TVP_EmployeeDependants"), type="DELETE" }, false);
+                response = response + await repository.ExecuteAsync<EmployeeDependants>(ProcedureConstants.SP_EMPLOYEE_DEPENDANTS_CUD, new { employeeDependants = tblDeleteDependants.AsTableValuedParameter("TVP_EmployeeDependants"), type = "DELETE" }, false);
             }
             return response;
         }
@@ -203,29 +204,29 @@ namespace Hr.Solution.Core.Services.Impl
         private DataTable ConvertToEmployeeDependantsTable(List<EmployeeDependants> models, string currentUser)
         {
             var tblEmployeeDependant = CreateEmployeeDependantsTable();
-            models.ForEach( x =>
-            {
-                tblEmployeeDependant.Rows.Add(x.Id, 
-                    x.EmployeeId, 
-                    x.DependantsCode, 
-                    x.RelationTypeId, 
-                    x.Phone, 
-                    x.FullName, 
-                    x.Address, 
-                    x.DayOfBirth, 
-                    x.IsTax, 
-                    x.Note, 
-                    null, 
-                    null, 
-                    currentUser,
-                    currentUser, 
-                    null,
-                    null,
-                    null,
-                    null, 
-                    null,
-                    null);
-            });
+            models.ForEach(x =>
+           {
+               tblEmployeeDependant.Rows.Add(x.Id,
+                   x.EmployeeId,
+                   x.DependantsCode,
+                   x.RelationTypeId,
+                   x.Phone,
+                   x.FullName,
+                   x.Address,
+                   x.DayOfBirth,
+                   x.IsTax,
+                   x.Note,
+                   null,
+                   null,
+                   currentUser,
+                   currentUser,
+                   null,
+                   null,
+                   null,
+                   null,
+                   null,
+                   null);
+           });
             return tblEmployeeDependant;
         }
         private DataTable CreateEmployeeDependantsTable()
@@ -251,25 +252,50 @@ namespace Hr.Solution.Core.Services.Impl
             tblEmployeeDependants.Columns.Add("FromMonth", typeof(string));
             tblEmployeeDependants.Columns.Add("ToMonth", typeof(string));
             tblEmployeeDependants.Columns.Add("IsSub", typeof(bool));
-         
-            
-       
-           
+
+
+
+
 
 
             return tblEmployeeDependants;
         }
-        
+
         private DataTable ConvertToEmployeeContractTable(List<EmployeeContract> models, string currentUser)
         {
-            var tblEmployeeContract = new DataTable();
-            models.ForEach(x => {
-                tblEmployeeContract.Rows.Add(x.Id, x.EmployeeId, x.ContractNo, x.SignDate, x.ContractTypeId, x.DurationId, x.ValidDate, x.ExpiredDate, x.PaymentMethodId, x.SignatorId, x.BasicSalary, x.ProbationFromDate, x.ProbationToDate, x.WorkingPlaceId, x.WorkingTime, x.JobTitle, x.VehicleInfo, x.Note, currentUser, null, currentUser, null, false, currentUser, null);
+            var tblEmployeeContract = CreateEmployeeContractTable();
+            models.ForEach(x =>
+            {
+                tblEmployeeContract.Rows.Add(x.Id,
+                    x.EmployeeId,
+                    x.ContractNo,
+                    x.SignDate,
+                    x.ContractTypeId,
+                    x.DurationId,
+                    x.ValidDate,
+                    x.ExpiredDate,
+                    x.PaymentMethodId,
+                    x.SignatorId,
+                    x.BasicSalary,
+                    x.ProbationFromDate,
+                    x.ProbationToDate,
+                    x.WorkingPlaceId,
+                    x.WorkingTime,
+                    x.JobTitle,
+                    x.VehicleInfo,
+                    x.Note,
+                    currentUser,
+                    null,
+                    null,
+                    currentUser,
+                    false,
+                    currentUser,
+                    null);
             });
             return tblEmployeeContract;
         }
 
-        public DataTable CreateEmployeeContractTable() 
+        public DataTable CreateEmployeeContractTable()
         {
             var tblEmployeeContract = new DataTable();
             tblEmployeeContract.Columns.Add("Id", typeof(int));
@@ -292,8 +318,8 @@ namespace Hr.Solution.Core.Services.Impl
             tblEmployeeContract.Columns.Add("Note", typeof(string));
             tblEmployeeContract.Columns.Add("CreatedBy", typeof(string));
             tblEmployeeContract.Columns.Add("CreatedOn", typeof(DateTime));
-            tblEmployeeContract.Columns.Add("ModifiedBy", typeof(string));
             tblEmployeeContract.Columns.Add("ModifiedOn", typeof(DateTime));
+            tblEmployeeContract.Columns.Add("ModifiedBy", typeof(string));
             tblEmployeeContract.Columns.Add("IsDeleted", typeof(bool));
             tblEmployeeContract.Columns.Add("DeletedBy", typeof(string));
             tblEmployeeContract.Columns.Add("DeletedOn", typeof(DateTime));
