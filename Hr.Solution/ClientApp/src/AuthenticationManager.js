@@ -122,9 +122,13 @@ export class AuthenticationManager {
         return false;
     }
 
-    static IsHasPermission = (prefix, permission) => {
-
+    static IsAdmin = () => {
+        return JSON.parse(localStorage.getItem(AuthenInfo.USER_INFO))?.isAdmin;
     }
+
+    // static IsHasPermission = (prefix, permission) => {
+
+    // }
 
 }
 
