@@ -139,5 +139,13 @@ namespace Hr.Solution.Application.Controllers
             return Ok(new { status = "SUCCESS", message = "", value = result });
         }
 
+        [HttpPost, Route("Basic-Sal")]
+        [Authorize]
+        public async Task<ActionResult> EmployeeBasicSalProcessUpdate([FromBody] EmployeeBasicSalaryProcessRequest request)
+        {
+            var currentUser = User.FindFirst(ClaimTypes.Name).Value;
+            var result = await employeeServices.EmployeeBasicSalaryProcess_CUD(request, currentUser);
+            return Ok(new { status = "SUCCESS", message = "", value = result });
+        }
     }
 }

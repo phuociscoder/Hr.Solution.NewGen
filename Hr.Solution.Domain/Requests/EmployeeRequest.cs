@@ -140,16 +140,17 @@ namespace Hr.Solution.Data.Requests
         public bool IsTax { get; set; }
         public string Note { get; set; }
     }
-      
-    public class EmployeeContractRequest { 
-    
+
+    public class EmployeeContractRequest
+    {
+
         public List<EmployeeContract> CreateContracts { get; set; }
         public List<EmployeeContract> UpdateContracts { get; set; }
         public List<EmployeeContract> DeleteContracts { get; set; }
     }
 
     public class EmployeeContract
-    { 
+    {
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         public string ContractNo { get; set; }
@@ -157,7 +158,7 @@ namespace Hr.Solution.Data.Requests
         public int ContractTypeId { get; set; }
         public int DurationId { get; set; }
         public DateTime? ValidDate { get; set; }
-        public DateTime? ExpiredDate { get; set;}
+        public DateTime? ExpiredDate { get; set; }
         public int PaymentMethodId { get; set; }
         public int SignatorId { get; set; }
         public long BasicSalary { get; set; }
@@ -175,6 +176,34 @@ namespace Hr.Solution.Data.Requests
         public bool IsDeleted { get; set; }
         public string DeletedBy { get; set; }
         public DateTime? DeletedOn { get; set; }
+
+    }
+
+    public class EmployeeBasicSalaryProcessRequest
+    {
+        public List<EmployeeBasicSalaryProcess> CreateBasicSal { get; set; }
+        public List<EmployeeBasicSalaryProcess> UpdateBasicSal { get; set; }
+        public List<EmployeeBasicSalaryProcess> DeleteBasicSal { get; set; }
+    }
+    public class EmployeeBasicSalaryProcess
+    {
+        public int Id { get; set; }
+        public string DecideNo { get; set; }
+        public DateTime? ValidFromDate { get; set; }
+        public DateTime? ValidToDate { get; set; }
+        public long BasicSal { get; set; }
+        public long SISal { get; set; }
+        public int AdjustTypeId { get; set; }
+        public long OTRate { get; set; }
+        public long FixSal { get; set; }
+        public DateTime? SignateDate { get; set; }
+        public int SignatorId { get; set; }
+        public bool IsActive { get; set; }
+        public string Note { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime? ModifiedOn { get; set; }
 
     }
 }

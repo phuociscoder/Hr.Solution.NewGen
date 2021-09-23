@@ -48,7 +48,7 @@ namespace Hr.Solution.Core.Services.Impl
 
         public async Task<string> EmployeeCheckExisting(string employeeCode)
         {
-            var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_EMPLOYEES_CHECK_EXISTING, new {employeeCode = employeeCode });
+            var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_EMPLOYEES_CHECK_EXISTING, new { employeeCode = employeeCode });
             return (string)response;
         }
 
@@ -148,7 +148,8 @@ namespace Hr.Solution.Core.Services.Impl
         private DataTable ConvertToAllowanceDataTable(List<EmployeeAllowance> models, string currentUser)
         {
             var tblEmployeeAllowance = CreateEmployeeAllowanceTable();
-            models.ForEach(x => {
+            models.ForEach(x =>
+            {
                 tblEmployeeAllowance.Rows.Add(x.Id, x.DecideNo, x.EmployeeId, x.AllowanceTypeId, x.ValidFromDate, x.Amount, x.FreeTaxAmount, x.CurrencyRate, x.CurrencyId, x.ValidToDate, x.Note, currentUser, null, currentUser, null, x.IsActive);
             });
             return tblEmployeeAllowance;
@@ -189,13 +190,13 @@ namespace Hr.Solution.Core.Services.Impl
             if (request.UpdateDependants.Count > 0)
             {
                 var tblUpdateDependants = ConvertToEmployeeDependantsTable(request.UpdateDependants, currentUser);
-                response = response + await repository.ExecuteAsync<EmployeeDependants>(ProcedureConstants.SP_EMPLOYEE_DEPENDANTS_CUD, new { employeeDependants = tblUpdateDependants.AsTableValuedParameter("TVP_EmployeeDependants"), type="EDIT" }, false);
+                response = response + await repository.ExecuteAsync<EmployeeDependants>(ProcedureConstants.SP_EMPLOYEE_DEPENDANTS_CUD, new { employeeDependants = tblUpdateDependants.AsTableValuedParameter("TVP_EmployeeDependants"), type = "EDIT" }, false);
             }
 
             if (request.DeleteDependants.Count > 0)
             {
                 var tblDeleteDependants = ConvertToEmployeeDependantsTable(request.DeleteDependants, currentUser);
-                response = response + await repository.ExecuteAsync<EmployeeDependants>(ProcedureConstants.SP_EMPLOYEE_DEPENDANTS_CUD, new { employeeDependants = tblDeleteDependants.AsTableValuedParameter("TVP_EmployeeDependants"), type="DELETE" }, false);
+                response = response + await repository.ExecuteAsync<EmployeeDependants>(ProcedureConstants.SP_EMPLOYEE_DEPENDANTS_CUD, new { employeeDependants = tblDeleteDependants.AsTableValuedParameter("TVP_EmployeeDependants"), type = "DELETE" }, false);
             }
             return response;
         }
@@ -203,29 +204,29 @@ namespace Hr.Solution.Core.Services.Impl
         private DataTable ConvertToEmployeeDependantsTable(List<EmployeeDependants> models, string currentUser)
         {
             var tblEmployeeDependant = CreateEmployeeDependantsTable();
-            models.ForEach( x =>
-            {
-                tblEmployeeDependant.Rows.Add(x.Id, 
-                    x.EmployeeId, 
-                    x.DependantsCode, 
-                    x.RelationTypeId, 
-                    x.Phone, 
-                    x.FullName, 
-                    x.Address, 
-                    x.DayOfBirth, 
-                    x.IsTax, 
-                    x.Note, 
-                    null, 
-                    null, 
-                    currentUser,
-                    currentUser, 
-                    null,
-                    null,
-                    null,
-                    null, 
-                    null,
-                    null);
-            });
+            models.ForEach(x =>
+           {
+               tblEmployeeDependant.Rows.Add(x.Id,
+                   x.EmployeeId,
+                   x.DependantsCode,
+                   x.RelationTypeId,
+                   x.Phone,
+                   x.FullName,
+                   x.Address,
+                   x.DayOfBirth,
+                   x.IsTax,
+                   x.Note,
+                   null,
+                   null,
+                   currentUser,
+                   currentUser,
+                   null,
+                   null,
+                   null,
+                   null,
+                   null,
+                   null);
+           });
             return tblEmployeeDependant;
         }
         private DataTable CreateEmployeeDependantsTable()
@@ -251,25 +252,21 @@ namespace Hr.Solution.Core.Services.Impl
             tblEmployeeDependants.Columns.Add("FromMonth", typeof(string));
             tblEmployeeDependants.Columns.Add("ToMonth", typeof(string));
             tblEmployeeDependants.Columns.Add("IsSub", typeof(bool));
-         
-            
-       
-           
-
 
             return tblEmployeeDependants;
         }
-        
+
         private DataTable ConvertToEmployeeContractTable(List<EmployeeContract> models, string currentUser)
         {
             var tblEmployeeContract = new DataTable();
-            models.ForEach(x => {
+            models.ForEach(x =>
+            {
                 tblEmployeeContract.Rows.Add(x.Id, x.EmployeeId, x.ContractNo, x.SignDate, x.ContractTypeId, x.DurationId, x.ValidDate, x.ExpiredDate, x.PaymentMethodId, x.SignatorId, x.BasicSalary, x.ProbationFromDate, x.ProbationToDate, x.WorkingPlaceId, x.WorkingTime, x.JobTitle, x.VehicleInfo, x.Note, currentUser, null, currentUser, null, false, currentUser, null);
             });
             return tblEmployeeContract;
         }
 
-        public DataTable CreateEmployeeContractTable() 
+        public DataTable CreateEmployeeContractTable()
         {
             var tblEmployeeContract = new DataTable();
             tblEmployeeContract.Columns.Add("Id", typeof(int));
@@ -298,6 +295,79 @@ namespace Hr.Solution.Core.Services.Impl
             tblEmployeeContract.Columns.Add("DeletedBy", typeof(string));
             tblEmployeeContract.Columns.Add("DeletedOn", typeof(DateTime));
             return tblEmployeeContract;
+        }
+
+        private DataTable CreateEmployeeBasicSalaryProcessTable()
+        {
+            var tblEmployeeBasicSalaryProcess = new DataTable();
+            tblEmployeeBasicSalaryProcess.Columns.Add("Id", typeof(int));
+            tblEmployeeBasicSalaryProcess.Columns.Add("DecideNo", typeof(string));
+            tblEmployeeBasicSalaryProcess.Columns.Add("ValidFromDate", typeof(DateTime));
+            tblEmployeeBasicSalaryProcess.Columns.Add("ValidToDate", typeof(DateTime));
+            tblEmployeeBasicSalaryProcess.Columns.Add("BasicSal", typeof(long));
+            tblEmployeeBasicSalaryProcess.Columns.Add("SISal", typeof(long));
+            tblEmployeeBasicSalaryProcess.Columns.Add("AdjustTypeId", typeof(int));
+            tblEmployeeBasicSalaryProcess.Columns.Add("OTRate", typeof(long));
+            tblEmployeeBasicSalaryProcess.Columns.Add("FixSal", typeof(long));
+            tblEmployeeBasicSalaryProcess.Columns.Add("SignateDate", typeof(DateTime));
+            tblEmployeeBasicSalaryProcess.Columns.Add("SignatorId", typeof(int));
+            tblEmployeeBasicSalaryProcess.Columns.Add("IsActive", typeof(bool));
+            tblEmployeeBasicSalaryProcess.Columns.Add("Note", typeof(string));
+            tblEmployeeBasicSalaryProcess.Columns.Add("CreatedBy", typeof(string));
+            tblEmployeeBasicSalaryProcess.Columns.Add("CreatedOn", typeof(DateTime));
+            tblEmployeeBasicSalaryProcess.Columns.Add("ModifiedBy", typeof(string));
+            tblEmployeeBasicSalaryProcess.Columns.Add("ModifiedOn", typeof(DateTime));
+            return tblEmployeeBasicSalaryProcess;
+        }
+
+        private DataTable ConvertToEmployeeBasicSalaryProcessTable(List<EmployeeBasicSalaryProcess> models, string currentUser)
+        {
+            var tblEmployeeBasicSalaryProcess = CreateEmployeeBasicSalaryProcessTable();
+            models.ForEach(x => 
+            {
+                tblEmployeeBasicSalaryProcess.Rows.Add(
+                   x.Id,
+                   x.DecideNo,
+                   x.ValidFromDate,
+                   x.ValidToDate,
+                   x.BasicSal,
+                   x.SISal,
+                   x.AdjustTypeId,
+                   x.OTRate,
+                   x.FixSal,
+                   x.SignateDate,
+                   x.SignatorId,
+                   x.IsActive,
+                   x.Note,
+                   currentUser,
+                   null,
+                   currentUser,
+                   null);
+             });
+            return tblEmployeeBasicSalaryProcess;
+        }
+
+        public async Task<int> EmployeeBasicSalaryProcess_CUD(EmployeeBasicSalaryProcessRequest request, string currentUser)
+        {
+            int response = 0;
+            if (request.CreateBasicSal.Count > 0)
+            {
+                var tblCreatebasicSal = ConvertToEmployeeBasicSalaryProcessTable(request.CreateBasicSal, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeBasicSalaryProcess>(ProcedureConstants.SP_EMPLOYEE_BASIC_SALARY_PROCESS_CUD, new { empBasicSalProcess = tblCreatebasicSal.AsTableValuedParameter("TVP_EmployeeBasicSalProcess"), type="ADD"}, false);
+            }
+
+            if (request.UpdateBasicSal.Count > 0)
+            {
+                var tblUpdatebasicSal = ConvertToEmployeeBasicSalaryProcessTable(request.UpdateBasicSal, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeBasicSalaryProcess>(ProcedureConstants.SP_EMPLOYEE_BASIC_SALARY_PROCESS_CUD, new { empBasicSalProcess = tblUpdatebasicSal.AsTableValuedParameter("TVP_EmployeeBasicSalProcess"), type = "EDIT" }, false);
+            }
+
+            if (request.DeleteBasicSal.Count > 0)
+            {
+                var tblDeletebasicSal = ConvertToEmployeeBasicSalaryProcessTable(request.DeleteBasicSal, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeBasicSalaryProcess>(ProcedureConstants.SP_EMPLOYEE_BASIC_SALARY_PROCESS_CUD, new { empBasicSalProcess = tblDeletebasicSal.AsTableValuedParameter("TVP_EmployeeBasicSalProcess"), type = "DELETE" }, false);
+            }
+            return response;
         }
     }
 }
