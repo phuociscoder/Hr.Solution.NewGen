@@ -43,8 +43,6 @@ export class EmployeeDependantList extends React.Component {
         const value = e.target.value;
         const { dependence } = this.state;
         if (!value || value.trim() === '') {
-            // this.loadDependenceList(dependence.id);
-            // CALL_DRAFT
             this.loadDraftList();
             return;
         }
@@ -81,9 +79,9 @@ export class EmployeeDependantList extends React.Component {
                                 return (
                                     <div key={item.id} fieldName={item.id} className={selectedItem === item ? "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown active" : "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown"}
                                         onClick={() => this.onSelectItem(item)}>
-                                        <span className="text-uppercase"><b>{item.name}</b></span>
+                                        <span className="text-uppercase"><b>{item.fullName}</b></span>
                                         <div className="w-100 d-flex">
-                                            <span><i>{item.relationTypeName} - {DateTimeUltils.toDateString(item.doB)}</i></span>
+                                            <span><i>{item.relationTypeName} - {DateTimeUltils.toDateString(item.dayOfBirth)}</i></span>
                                         </div>
                                     </div>
                                 )

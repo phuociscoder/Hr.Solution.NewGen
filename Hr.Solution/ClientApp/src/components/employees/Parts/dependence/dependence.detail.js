@@ -50,11 +50,12 @@ export class EmployeeDependantDetail extends React.Component {
     resetModel = () => {
         const model = {
             id: 0,
-            code: '',
-            name: '',
+            employeeId: 0,
+            dependantsCode: '',
+            fullName: '',
             phone: '',
             relationTypeId: null,
-            doB: null,
+            dayOfBirth: null,
             address: '',
             isTax: true,
             note: null
@@ -90,7 +91,7 @@ export class EmployeeDependantDetail extends React.Component {
     }
 
     render = () => {
-        const { code, name, doB, address, relationTypeId, phone, isTax, note } = this.state.model;
+        const { dependantsCode, fullName, dayOfBirth, address, relationTypeId, phone, isTax, note } = this.state.model;
         const { mode, relations } = this.state;
         return (
             <>
@@ -104,7 +105,7 @@ export class EmployeeDependantDetail extends React.Component {
                             <div className="w-100 d-flex flex-column">
                             <label className="w-25">
                                 Mã người phụ thuộc:
-                                <input fieldname="code" value={code} onChange={this.onEmployeeDependantModelChange} className="form-control" placeholder="Mã người phụ thuộc"></input>
+                                <input fieldname="dependantsCode" value={dependantsCode} onChange={this.onEmployeeDependantModelChange} className="form-control" placeholder="Mã người phụ thuộc"></input>
                             </label>
                             <label className="w-25 text-camelcase">
                                     Quan hệ:
@@ -113,11 +114,11 @@ export class EmployeeDependantDetail extends React.Component {
                             <div className="d-flex">
                                 <label className="w-50">
                                     Tên người phụ thuộc:
-                                    <input fieldname="name" value={name} onChange={this.onEmployeeDependantModelChange} className="form-control" placeholder="Tên người phụ thuộc"></input>
+                                    <input fieldname="fullName" value={fullName} onChange={this.onEmployeeDependantModelChange} className="form-control" placeholder="Tên người phụ thuộc"></input>
                                 </label>
                                 <label className="w-50 pl-4 text-camelcase">
                                     Ngày sinh:
-                                    <CustomDatePicker value={doB} onDateChange={value => this.onCustomModelChange(value, 'doB')} />
+                                    <CustomDatePicker value={dayOfBirth} onDateChange={value => this.onCustomModelChange(value, 'dayOfBirth')} />
                                 </label>
                             </div>
                             <label className="w-100 text-camelcase">

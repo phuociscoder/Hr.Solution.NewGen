@@ -130,8 +130,8 @@ namespace Hr.Solution.Data.Requests
     public class EmployeeDependants
     {
         public int Id { get; set; }
+        public string DependantsCode { get; set; }
         public int EmployeeId { get; set; }
-        public string DependantCode { get; set; }
         public int RelationTypeId { get; set; }
         public string Phone { get; set; }
         public string FullName { get; set; }

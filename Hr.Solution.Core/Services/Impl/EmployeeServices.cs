@@ -205,16 +205,35 @@ namespace Hr.Solution.Core.Services.Impl
             var tblEmployeeDependant = CreateEmployeeDependantsTable();
             models.ForEach( x =>
             {
-                tblEmployeeDependant.Rows.Add(x.Id, x.EmployeeId, x.DependantCode, x.RelationTypeId, x.Phone, x.FullName, x.Address, x.DayOfBirth, x.IsTax, x.Note, currentUser, null, currentUser, null);
+                tblEmployeeDependant.Rows.Add(x.Id, 
+                    x.EmployeeId, 
+                    x.DependantsCode, 
+                    x.RelationTypeId, 
+                    x.Phone, 
+                    x.FullName, 
+                    x.Address, 
+                    x.DayOfBirth, 
+                    x.IsTax, 
+                    x.Note, 
+                    null, 
+                    null, 
+                    currentUser,
+                    currentUser, 
+                    null,
+                    null,
+                    null,
+                    null, 
+                    null,
+                    null);
             });
             return tblEmployeeDependant;
         }
         private DataTable CreateEmployeeDependantsTable()
         {
             var tblEmployeeDependants = new DataTable();
-            tblEmployeeDependants.Columns.Add("Id", typeof(long));
+            tblEmployeeDependants.Columns.Add("id", typeof(long));
             tblEmployeeDependants.Columns.Add("EmployeeId", typeof(int));
-            tblEmployeeDependants.Columns.Add("DependantsCode", typeof(string));
+            tblEmployeeDependants.Columns.Add("DependantCode", typeof(string));
             tblEmployeeDependants.Columns.Add("RelationTypeId", typeof(int));
             tblEmployeeDependants.Columns.Add("Phone", typeof(string));
             tblEmployeeDependants.Columns.Add("FullName", typeof(string));
@@ -222,10 +241,22 @@ namespace Hr.Solution.Core.Services.Impl
             tblEmployeeDependants.Columns.Add("DayOfBirth", typeof(DateTime));
             tblEmployeeDependants.Columns.Add("IsTax", typeof(bool));
             tblEmployeeDependants.Columns.Add("Note", typeof(string));
-            tblEmployeeDependants.Columns.Add("CreatedBy", typeof(string));
             tblEmployeeDependants.Columns.Add("CreatedOn", typeof(DateTime));
-            tblEmployeeDependants.Columns.Add("ModifiedBy", typeof(string));
             tblEmployeeDependants.Columns.Add("ModifiedOn", typeof(DateTime));
+            tblEmployeeDependants.Columns.Add("CreatedBy", typeof(string));
+            tblEmployeeDependants.Columns.Add("ModifiedBy", typeof(string));
+            tblEmployeeDependants.Columns.Add("IsDeleted", typeof(bool));
+            tblEmployeeDependants.Columns.Add("DeletedDate", typeof(DateTime));
+            tblEmployeeDependants.Columns.Add("DeletedBy", typeof(string));
+            tblEmployeeDependants.Columns.Add("FromMonth", typeof(string));
+            tblEmployeeDependants.Columns.Add("ToMonth", typeof(string));
+            tblEmployeeDependants.Columns.Add("IsSub", typeof(bool));
+         
+            
+       
+           
+
+
             return tblEmployeeDependants;
         }
         

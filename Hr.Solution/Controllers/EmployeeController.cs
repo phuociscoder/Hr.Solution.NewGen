@@ -130,13 +130,13 @@ namespace Hr.Solution.Application.Controllers
             return Ok(result);
         }
 
-        [HttpPost, Route("dependant")]
+        [HttpPost, Route("dependants")]
         [Authorize]
         public async Task<ActionResult> EmployeeDependantUpdate([FromBody] EmployeeDependantsRequest request)
         {
             var currentUser = User.FindFirst(ClaimTypes.Name).Value;
             var result = await employeeServices.EmployeeDependants_CUD(request, currentUser);
-            return Ok(result);
+            return Ok(new { status = "SUCCESS", message = "", value = result });
         }
 
     }
