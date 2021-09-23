@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
 import React from "react";
 import { Modal, ProgressBar, Spinner } from "react-bootstrap";
+import { NotificationType } from "../../Common/notification/Constants";
+import { ShowNotification } from "../../Common/notification/Notification";
 import { EmpMenus, Mode, SectionState, SectionStatus } from "../Constanst";
 import { EmployeeServices } from "../employee.Services";
 import { EmployeeAllowance } from "../parts/allowance";
@@ -187,34 +189,39 @@ export class EmployeeCreateEdit extends React.Component {
     }
 
     onProcessGeneralInfo = (section) => {
-        // const model = section.model;
-        // EmployeeServices.Add('generalInfo', model).then(response => {
-        //     const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
-        //     const percent = this.calculatePercentProcess(newProcessSections);
-        //     this.setState({ processSections: newProcessSections, percentProgress: percent });
-        // }, error => {
-        //     const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
-        //     const percent = this.calculatePercentProcess(newProcessSections);
-        //     this.setState({ processSections: newProcessSections, percentProgress: percent });
-        // });
-        const { generalInfo, processSections } = this.state;
-        setTimeout(() => {
-            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+        const model = section.model;
+        EmployeeServices.Add('generalInfo', model).then(response => {
+            const responseStatus = response.data;
+            const newProcessSections = this.changeStatusSection(section, responseStatus.status === "SUCCESS" ? SectionStatus.DONE : SectionStatus.ERROR);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent, employeeId: responseStatus.value });
+        }, error => {
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
             const percent = this.calculatePercentProcess(newProcessSections);
             this.setState({ processSections: newProcessSections, percentProgress: percent });
-        }, 1000);
+        });
     }
 
     onProcessAllowances = (section) => {
-        const models = section.model;
+        let models = section.model;
+        models = models.map(x => {
+            x.employeeId = this.state.employeeId;
+            return x;
+        });
         const createModels = models.filter(x => x.id === 0 && x.type === "ADD");
         const updateModels = models.filter(x => x.id !== 0 && x.type === "EDIT");
         const deleteModels = models.filter(x => x.id !== 0 && x.type === "DELETE");
-        const newParams = { createAllowances: createModels, updateAllowances: updateModels, deleteAllowances: deleteModels, empId: 1 };
+        const newParams = { createAllowances: createModels, updateAllowances: updateModels, deleteAllowances: deleteModels};
         EmployeeServices.Add('allowances', newParams).then(response => {
-            debugger;
+            const responseStatus = response.data;
+            const newProcessSections = this.changeStatusSection(section, responseStatus.status === "SUCCESS" ? SectionStatus.DONE : SectionStatus.ERROR);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent});
+
         }, error => {
-            debugger;
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
         });
     }
 
@@ -319,7 +326,7 @@ export class EmployeeCreateEdit extends React.Component {
                     </div>
                     <ProgressBar animated now={this.state.percentProgress} />
                     <div className="w-100 d-flex mt-2">
-                        <button onClick={() => this.setState({ showProcessModal: false })} style={{ visibility: processSections.every(x => x.status !== SectionStatus.IDLE && x.status !== SectionStatus.PROCESSING) ? '' : 'hidden' }} className="btn btn-primary ml-auto"><FontAwesomeIcon icon={faCheck} /> <span className="ml-1">Hoàn tất</span></button>
+                        <button onClick={this.onCompleteProcess} style={{ visibility: processSections.every(x => x.status !== SectionStatus.IDLE && x.status !== SectionStatus.PROCESSING) ? '' : 'hidden' }} className="btn btn-primary ml-auto"><FontAwesomeIcon icon={faCheck} /> <span className="ml-1">Hoàn tất</span></button>
                     </div>
                 </Modal.Body>
 
@@ -327,5 +334,10 @@ export class EmployeeCreateEdit extends React.Component {
 
             </Modal>
         )
+    }
+
+    onCompleteProcess =() => {
+        ShowNotification(NotificationType.SUCCESS, "Thêm nhân viên mới thành công");
+        this.props.history.push();
     }
 }
