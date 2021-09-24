@@ -128,3 +128,14 @@ export class SectionStatus{
     static ERROR = 3;
     static DONE = 4;
 }
+
+export class Insurance{
+    static SOCIAL = 1;
+    static HEALTH = 2;
+    static UNEMPLOYMENT = 3;
+    static ALL = [
+        { id: this.SOCIAL, name: "BẢO HIỂM XÃ HỘI" },
+        { id: this.HEALTH, name: "BẢO HIỂM Y TẾ" },
+        { id: this.UNEMPLOYMENT, name: "BẢO HIỂM THẤT NGHIỆP" }
+    ]
+}
