@@ -94,17 +94,17 @@ namespace Hr.Solution.Application.Controllers
             return Ok(result);
         }
 
-        [HttpPut, Route("basicSalary")]
+        [HttpPost, Route("basicSalaryInfo")]
         [Authorize]
         public async Task<ActionResult> UpdateBasicSalary([FromBody] EmployeesBasicSalaryUpdateRequest request)
         {
             var modifiedBy = User.FindFirst(ClaimTypes.Name).Value;
             request.ModifiedBy = modifiedBy;
             var result = await employeeServices.EmployeesBasicSalaryUpdate(request);
-            return Ok(result);
+            return Ok(new { status = "SUCCESS", message = "", value = result });
         }
 
-        [HttpGet, Route("basicSalary/{id}")]
+        [HttpGet, Route("basicSalaryInfo/{id}")]
         [Authorize]
         public async Task<ActionResult> GetByIdBasicSalary(int id)
         {
@@ -127,7 +127,7 @@ namespace Hr.Solution.Application.Controllers
         {
             var currentUser = User.FindFirst(ClaimTypes.Name).Value;
             var result = await employeeServices.EmployeeContract_CUD(request, currentUser);
-            return Ok(result);
+            return Ok(new { status = "SUCCESS", message = "", value = result });
         }
 
         [HttpPost, Route("dependants")]

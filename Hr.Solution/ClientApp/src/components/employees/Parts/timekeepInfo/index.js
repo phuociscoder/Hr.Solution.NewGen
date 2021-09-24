@@ -59,16 +59,9 @@ export class EmployeeTimekeeperInfo extends React.Component {
         this.onGeneralInfoChange(newModel);
     }
 
-    // shouldComponentUpdate =(nextProps) =>{
-    //     if(this.props.model !== nextProps.model && Object.keys(nextProps.model).length > 0){
-    //         this.setState({model: nextProps.model});
-    //     }
-    //     return true;
-    // } 
-
     render = () => {
         const { employeeTypeDropdown, shiftDropdown, weekOffDropdown } = this.state;
-        const { joinDate, officialDate, employeeTypeId, code, weekOffId, shiftId } = this.state.model;
+        const { joinDate, dateFormal, employeeTypeId, barCode, leaveGroupId, shiftId, altShift, isNotlateEarly, isNotScan, isNotOTKow } = this.state.model;
         return (
             <div className="w-100">
                 <div className="w-30 ml-4">
@@ -78,7 +71,7 @@ export class EmployeeTimekeeperInfo extends React.Component {
                     </label>
                     <label className="w-100 mt-3 text-camelcase">
                         Ngày thành nhân viên chính thức:
-                        <CustomDatePicker value={officialDate} onDateChange={value => this.onCustomModelChange(value, 'officialDate')} />
+                        <CustomDatePicker value={dateFormal} onDateChange={value => this.onCustomModelChange(value, 'dateFormal')} />
                     </label>
                     <label className="w-100 mt-3 text-camelcase">
                         Loại nhân viên:
@@ -91,11 +84,11 @@ export class EmployeeTimekeeperInfo extends React.Component {
                         <div className="w-40">
                             <label className="w-100">
                                 Mã chấm công:
-                                <input fieldname="code" value={code} onChange={this.onInputChange} className="form-control" placeholder="Mã chấm công"></input>
+                                <input fieldname="barCode" value={barCode} onChange={this.onInputChange} className="form-control" placeholder="Mã chấm công"></input>
                             </label>
                             <label className="w-100 mt-2">
                                 Nhóm ngày nghỉ tuần:
-                                <CustomSelect data={weekOffDropdown} selectedValue={weekOffId} labelField="name" placeHolder="-Chọn loại Nhóm ngày nghỉ tuần-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'weekOffId')} />
+                                <CustomSelect data={weekOffDropdown} selectedValue={leaveGroupId} labelField="name" placeHolder="-Chọn loại Nhóm ngày nghỉ tuần-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'leaveGroupId')} />
                             </label>
                         </div>
                         <div className="w-40 ml-4">
@@ -104,16 +97,16 @@ export class EmployeeTimekeeperInfo extends React.Component {
                                 <CustomSelect data={shiftDropdown} selectedValue={shiftId} labelField="name" placeHolder="-Chọn loại ca làm việc-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'shiftId')} />
                             </label>
                             <label className="mt-3 w-100">
-                                <input fieldname="isShiftChange" onChange={this.onInputChange} type="checkbox" /> Ca làm việc thay đổi
+                                <input fieldname="altShift" checked={altShift} onChange={this.onInputChange} type="checkbox" /> Ca làm việc thay đổi
                             </label>
                             <label className="mt-1 w-100">
-                                <input fieldname="isDoNotCountLateOrEarly" onChange={this.onInputChange} type="checkbox" /> Không tính đi trễ về sớm
+                                <input fieldname="isNotlateEarly" checked={isNotlateEarly} onChange={this.onInputChange} type="checkbox" /> Không tính đi trễ về sớm
                             </label>
                             <label className="mt-1 w-100">
-                                <input fieldname="isNoNeedScanCard" onChange={this.onInputChange} type="checkbox" /> Không cần quét thẻ
+                                <input fieldname="isNotScan" checked={isNotScan} onChange={this.onInputChange} type="checkbox" /> Không cần quét thẻ
                             </label>
                             <label className="mt-1 w-100">
-                                <input fieldname="isNoOvertimePay" onChange={this.onInputChange} type="checkbox" /> Không tính công ngoài giờ
+                                <input fieldname="isNotOTKow" checked={isNotOTKow} onChange={this.onInputChange} type="checkbox" /> Không tính công ngoài giờ
                             </label>
                         </div>
                     </div>
