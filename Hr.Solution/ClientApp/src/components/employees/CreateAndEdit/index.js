@@ -13,7 +13,7 @@ import { EmployeeSalaryProcess } from "../parts/basicSalaryProcess";
 import { EmployeeContract } from "../parts/constract";
 import { EmployeeDependant } from "../parts/dependence";
 import { EmployeeGeneralInfo } from "../parts/generalInfo";
-import { EmployeeInsurance } from "../parts/socialInsurance";
+import { EmployeeInsurance } from "../parts/insurance";
 import { EmployeeTimekeeperInfo } from "../parts/timekeepInfo";
 import { EmployeeLeftMenu } from "./left-menu";
 
