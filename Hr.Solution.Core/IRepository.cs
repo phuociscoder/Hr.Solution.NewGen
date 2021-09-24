@@ -12,6 +12,7 @@ namespace Hr.Solution.Core
         Task<SearchPagedResults<T>> QueryAsync<T>(string procedureName, object filters, bool convertToDynamicParams = true) where T : class;
         Task<int> QueryTotal(string procedureName, object filters, bool convertToDynamicParams = true);
         Task<int> ExecuteAsync<T>(string procedureName, object args, bool convertToDynamicParams = true) where T : class;
+        Task<int> ExecuteAsync(string procedureName, object args, bool convertToDynamicParams = true);
         Task<T> ExecuteScalarAsync<T>(string procedureName, object args, bool convertToDynamicParams = true) where T : class;
         Task<object> ExecuteScalarAsync(string procedureName, object args, bool convertToDynamicParams = true);
     }
