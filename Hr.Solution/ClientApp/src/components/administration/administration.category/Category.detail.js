@@ -38,7 +38,7 @@ export class CategoryDetail extends React.Component {
               result = <EmployeeTypeConfig prefix={this.state.prefix} category={category} />;
                 break;     
             case CategoryModule.AllowanceType:
-              result = <AllowanceTypeConfig />; // category={category}
+              result = <AllowanceTypeConfig category={category} />; // 
                 break;     
             default:
                 result = <CategoryCommonDetail category={category} />;

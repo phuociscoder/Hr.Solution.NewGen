@@ -3,5 +3,5 @@ export class CategoryModule {
     static WorkDay = "LSTS101";
 
     static EmployeeType = 'LSEM149';
-    static AllowanceType = 'LSPR114';
+    static AllowanceType = 'LSEM156';
 }
