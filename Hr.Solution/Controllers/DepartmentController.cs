@@ -3,6 +3,14 @@ using Hr.Solution.Data.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using Hr.Solution.Application.Authentication;
+using System.Linq;
+using Hr.Solution.Data.Query;
+using Hr.Solution.Data.Responses;
+using System.Collections.Generic;
+using System;
 
 namespace Hr.Solution.Application.Controllers
 {
@@ -12,10 +20,12 @@ namespace Hr.Solution.Application.Controllers
     {
         private readonly IDepartmentServices departmentServices;
         private readonly IMediaServices mediaServices;
-        public DepartmentController(IDepartmentServices departmentServices, IMediaServices mediaServices)
+        private readonly UserManager<ApplicationUser> userManager;
+        public DepartmentController(IDepartmentServices departmentServices, IMediaServices mediaServices, UserManager<ApplicationUser> userManager)
         {
             this.departmentServices = departmentServices;
             this.mediaServices = mediaServices;
+            this.userManager = userManager;
         }
 
         [HttpGet, Route("")]
@@ -61,6 +71,55 @@ namespace Hr.Solution.Application.Controllers
 
         }
 
+        [HttpGet, Route("userDepartments")]
+        [Authorize]
+        public async Task<ActionResult> GetDepartmentInRoles()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await userManager.FindByIdAsync(userId);
+            if (user.IsAdmin)
+            {
+                var depts = await departmentServices.GetByFreeText(freeText: null);
+                return Ok(depts.Select(x => x.Id));
+            }
+            var results = await departmentServices.GetDepartmentIdsByRoles(new Guid(userId));
+            return Ok(results);
+        }
+
+        [HttpGet, Route("roles")]
+        [Authorize]
+        public async Task<ActionResult> GetByRoles([FromQuery] SearchDepartmentQuery query)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await userManager.FindByIdAsync(userId);
+            var allDepts = await departmentServices.GetByFreeText(freeText: null);
+            if (user.IsAdmin || query.FullLoad)
+            {
+                return Ok(allDepts);
+            }
+            List<DepartmentGetByFreeTextResponse> results = new List<DepartmentGetByFreeTextResponse>();
+            var deptIdsInRoles = await departmentServices.GetDepartmentIdsByRoles(new System.Guid(userId));
+            var departments = allDepts.Where(x => deptIdsInRoles.Contains(x.Id)).OrderByDescending(x => x.Level).ToList();
+            results.AddRange(departments);
+                foreach (var dept in departments)
+                {
+                    RetriveParent(dept, allDepts, results);
+                }
+            return Ok(results);
+
+
+        }
+
+        private void RetriveParent(DepartmentGetByFreeTextResponse dept, List<DepartmentGetByFreeTextResponse> allDepts, List<DepartmentGetByFreeTextResponse> results)
+        {
+            var parent = allDepts.FirstOrDefault(x => x.Id == dept.ParentId);
+            if (parent != null && !results.Any(x => x.Id == parent.Id))
+            {
+                results.Add(parent);
+                RetriveParent(parent, allDepts, results);
+            }
+        }
+
         [HttpDelete, Route("{id}")]
         [Authorize]
         public async Task<ActionResult> Delete(int id)
@@ -74,13 +133,14 @@ namespace Hr.Solution.Application.Controllers
         public async Task<ActionResult> Update(int id, [FromBody] DepartmentUpdateRequest request)
         {
             request.Id = id;
-            
+
             if (!string.IsNullOrEmpty(request.LogoImage))
             {
-                request.LogoImage = mediaServices.ResizeImage(request.LogoImage);    
+                request.LogoImage = mediaServices.ResizeImage(request.LogoImage);
             }
             var result = await departmentServices.Update(request);
             return Ok(result);
         }
+
     }
 }

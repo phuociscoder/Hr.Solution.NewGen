@@ -1,6 +1,8 @@
 import React from "react";
 import _, { isNaN } from "lodash";
-
+//seperator 
+//amount
+//onAmountChange
 export class Amount extends React.Component {
     constructor(props) {
         super(props);

@@ -60,25 +60,22 @@ namespace Hr.Solution.Core
             }
         }
 
-        public async Task<SearchPagedResults<T>> QueryAsync<T>(string procedureName, object filters) where T : class
+        public async Task<SearchPagedResults<T>> QueryAsync<T>(string procedureName, object filters, bool convertToDynamicParams = true) where T : class
         {
             var generalFilters = filters as BaseSearchQuery;
             using (var connection = dbContext.GetDBConnection())
             {
                 var parameters = ConvertToParams(filters);
-                var results = await connection.QueryMultipleAsync(procedureName, ConvertToParams(filters), commandType: System.Data.CommandType.StoredProcedure)
+                var results = await connection.QueryMultipleAsync(procedureName, convertToDynamicParams ? ConvertToParams(filters) : filters, commandType: System.Data.CommandType.StoredProcedure)
                      .ConfigureAwait(false);
 
                 var data = results.Read<T>().ToList();
-                var total = !results.IsConsumed ? results.Read().FirstOrDefault()?.Total : data.Count;
-
                 var pageIndex = generalFilters != null ? generalFilters.PageIndex : 0;
                 var pageSize = generalFilters != null ? generalFilters.PageSize : 20;
 
                 var resultModel = new SearchPagedResults<T>
                 {
                     Data = data,
-                    HasMore = total > (pageIndex * 10 + pageSize),
                     PageIndex = pageIndex,
                     PageSize = pageSize
                 };
@@ -91,6 +88,18 @@ namespace Hr.Solution.Core
             using (var connection = dbContext.GetDBConnection())
             {
                 return await connection.QueryMultipleAsync(procedureName, ConvertToParams(filters), commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
+            }
+        }
+
+        public async Task<int> QueryTotal(string procedureName, object filters, bool convertToDynamicParams = true)
+        {
+            using (var connection = dbContext.GetDBConnection())
+            {
+                var parameters = ConvertToParams(filters);
+                var results = await connection.QueryAsync(procedureName, convertToDynamicParams ? ConvertToParams(filters) : filters, commandType: System.Data.CommandType.StoredProcedure)
+                     .ConfigureAwait(false);
+
+               return results.Count();
             }
         }
 

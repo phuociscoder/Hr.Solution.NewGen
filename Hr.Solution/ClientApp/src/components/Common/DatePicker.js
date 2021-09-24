@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import DatePicker from 'react-date-picker';
 
+//value
+//onDateChange
+//disabled
 export class CustomDatePicker extends React.Component {
     constructor(props) {
         super(props);
@@ -31,13 +34,18 @@ export class CustomDatePicker extends React.Component {
         if (this.props.value != nextProps.value) {
             this.setState({ value: new Date(nextProps.value) });
         }
+        if(this.props.disabled !== nextProps.disabled)
+        {
+            this.setState({disabled: nextProps.disabled});
+        }
         return true;
     }
 
     render = () => {
-        const { value } = this.state;
+        const { value, disabled } = this.state;
         return (
             <DatePicker
+                disabled={disabled}
                 className="form-control"
                 dayPlaceholder="Ngày"
                 monthPlaceholder="Tháng"

@@ -16,5 +16,6 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<DepartmentResponse> CheckExisting(string departmentCode);
         Task<string> Delete(int id);
         Task<int> Update(DepartmentUpdateRequest request);
+        Task<List<int>> GetDepartmentIdsByRoles(Guid UserId);
     }
 }

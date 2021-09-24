@@ -33,7 +33,6 @@ export class DepartmentSelect extends React.Component {
                     if (selectedValue) {
                         selectedItem = options.find(x => x.id === selectedValue);
                     }
-                    console.log(options);
                     this.setState({ options: options, selectItem: selectedItem });
                     resolve(options);
                 }, error => { });
@@ -57,7 +56,6 @@ export class DepartmentSelect extends React.Component {
     }
 
     shouldComponentUpdate = (nextProps) => {
-        console.log(nextProps);
         if (this.props.selectedValue !== nextProps.selectedValue) {
         //     const { options } = this.state;
         //     let selectItem = options.find(x => x.id === nextProps.selectedValue);
@@ -94,8 +92,6 @@ export class DepartmentSelect extends React.Component {
             console.log(options);
             this.setState({ options: options, hideOptions: nextProps.hideOptions });
         }
-
-        console.log(this.state.options);
         return true;
     }
 

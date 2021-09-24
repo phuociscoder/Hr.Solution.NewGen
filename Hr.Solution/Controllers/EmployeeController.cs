@@ -1,9 +1,12 @@
 ﻿using Hr.Solution.Core.Services.Interfaces;
+using Hr.Solution.Data.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Hr.Solution.Application.Controllers
@@ -13,16 +16,127 @@ namespace Hr.Solution.Application.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeServices employeeServices;
-        public EmployeeController(IEmployeeServices employeeServices)
+        private readonly IMediaServices mediaServices;
+
+        public EmployeeController(IEmployeeServices employeeServices, IMediaServices mediaServices)
         {
             this.employeeServices = employeeServices;
+            this.mediaServices = mediaServices;
         }
 
         [HttpGet, Route("managers")]
+        [Authorize]
         public async Task<ActionResult> GetManagers()
         {
             var result = await employeeServices.Employee_GetManagers();
             return Ok(result);
+        }
+
+        [HttpPost, Route("getByDepts")]
+        [Authorize]
+        public async Task<ActionResult> GetByDepts([FromBody] GetEmployeeByDeptsRequest request)
+        {
+            var results = await employeeServices.GetByDepts(request);
+            return Ok(results);
+        }
+
+
+        [HttpPost, Route("generalInfo")]
+        [Authorize]
+        public async Task<ActionResult> CreateGeneralInfo([FromBody] EmpoyeeCreateGeneralInfoRequest employeeRequest)
+        {
+            if (string.IsNullOrEmpty(employeeRequest.Code))
+            {
+                return Ok(new { status = "FAILED", message = "CODE_EMPTY" });
+            }
+
+            if (!string.IsNullOrEmpty(employeeRequest.Photo))
+            {
+                employeeRequest.Photo = mediaServices.ResizeImage(employeeRequest.Photo);
+            }
+
+            var checkExisting = await employeeServices.EmployeeCheckExisting(employeeRequest.Code);
+            if (!string.IsNullOrEmpty(checkExisting))
+            {
+                return Ok(new { status = "FAILED", message = "CODE_EXISTING" });
+            }
+
+            var createdBy = User.FindFirst(ClaimTypes.Name).Value;
+            employeeRequest.CreatedBy = createdBy;
+
+            try
+            {
+                var result = await employeeServices.EmployeeCreateGeneralInfo(employeeRequest);
+                return Ok(new { status = "SUCCESS", message = "", value = result.Id });
+            }
+            catch (Exception ex)
+            {
+
+                return Ok(new { status = "FAILED", message = "INSERT_FAILED" });
+            }
+        }
+
+        [HttpGet, Route("{id}")]
+        [Authorize]
+        public async Task<ActionResult> GetByIdGeneralInfo(int id)
+        {
+            var result = await employeeServices.EmployeeGetByIdGeneralInfo(id);
+            return Ok(result);
+        }
+
+        [HttpPut, Route("")]
+        [Authorize]
+        public async Task<ActionResult> UpdateGeneralInfo([FromBody] EmployeeUpdateGeneralInfoRequest request)
+        {
+            var modifiedBy = User.FindFirst(ClaimTypes.Name).Value;
+            request.ModifiedBy = modifiedBy;
+            var result = await employeeServices.EmployeeUpdateGeneralInfo(request);
+            return Ok(result);
+        }
+
+        [HttpPost, Route("basicSalaryInfo")]
+        [Authorize]
+        public async Task<ActionResult> UpdateBasicSalary([FromBody] EmployeesBasicSalaryUpdateRequest request)
+        {
+            var modifiedBy = User.FindFirst(ClaimTypes.Name).Value;
+            request.ModifiedBy = modifiedBy;
+            var result = await employeeServices.EmployeesBasicSalaryUpdate(request);
+            return Ok(new { status = "SUCCESS", message = "", value = result });
+        }
+
+        [HttpGet, Route("basicSalaryInfo/{id}")]
+        [Authorize]
+        public async Task<ActionResult> GetByIdBasicSalary(int id)
+        {
+            var result = await employeeServices.EmployeesBasicSalaryGetById(id);
+            return Ok(result);
+        }
+
+        [HttpPost, Route("allowances")]
+        [Authorize]
+        public async Task<ActionResult> EmployeeAllowancesUpdate([FromBody] EmployeeAllowanceRequest request)
+        {
+            var modifiedBy = User.FindFirst(ClaimTypes.Name).Value;
+            var result = await employeeServices.EmployeeAllowance_CUD(request, modifiedBy);
+            return Ok(new { status = "SUCCESS", message = "", value = result });
+        }
+
+        [HttpPost, Route("contracts")]
+        [Authorize]
+        public async Task<ActionResult> EmployeeContractUpdate([FromBody] EmployeeContractRequest request)
+        {
+            var currentUser = User.FindFirst(ClaimTypes.Name).Value;
+            var result = await employeeServices.EmployeeContract_CUD(request, currentUser);
+            return Ok(new { status = "SUCCESS", message = "", value = result });
+        }
+
+        [HttpPost, Route("dependants")]
+        [Authorize]
+        public async Task<ActionResult> EmployeeDependantUpdate([FromBody] EmployeeDependantsRequest request)
+        {
+            var currentUser = User.FindFirst(ClaimTypes.Name).Value;
+            var result = await employeeServices.EmployeeDependants_CUD(request, currentUser);
+            return Ok(new { status = "SUCCESS", message = "", value = result });
         }
 
     }

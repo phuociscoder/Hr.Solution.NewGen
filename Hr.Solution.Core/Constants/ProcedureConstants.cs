@@ -65,9 +65,24 @@ namespace Hr.Solution.Core.Constants
         public static string SP_DEPARTMENT_CHECKEXISTING = "sp_Department_CheckExisting";
         public static string SP_DEPARTMENT_DELETE = "spDepartment_Delete";
         public static string SP_DEPARTMENT_UPDATE = "spDepartment_Edit";
+        public static string SP_DEPARTMENT_GET_BY_USER_ROLES = "spDepartment_GetByUserRoles";
 
         //Employees
         public static string spEmployees_spGetAll = "spEmployees_spGetAll";
         public static string SP_EMPLOYEE_GET_MANAGERS = "spEmployee_GetManagers";
+        public static string SP_EMPLOYEE_GET_BY_DEPTS = "spEmployee_GetByDepts";
+        public static string SP_EMPLOYEE_INFORMATION_ADD = "spEmployee_AddGeneraInfomation";
+        public static string SP_EMPLOYEES_CREATE_GENERAL_INFO = "spEmployee_CreateGeneralInfo";
+        public static string SP_EMPLOYEES_CHECK_EXISTING = "spEmployees_CheckExisting";
+        public static string SP_EMPLOYEES_GET_BY_ID = "spEmployee_GetById";
+        public static string SP_EMPLOYEES_UPDATE = "spEmployee_Update";
+        public static string SP_EMPLOYEE_ALLOWANCE_CUD = "spEmployeeAllowance_CUD";
+        public static string SP_EMPLOYEE_DEPENDANTS_CUD = "spEmployeeDependants_CUD";
+        public static string SP_EMPLOYEE_CONTRACT_CUD = "spEmployeeContract_CUD";
+
+        //EmployeesBasicSalary
+        public static string SP_EMPLOYEES_BASIC_SALARY_UPDATE = "spEmployeesBasicSalary_Update";
+        public static string SP_EMPLOYEES_BASIC_SALARY_GET_BY_ID = "spEmployeeBasicSalary_GetByID";
+
     }
 }

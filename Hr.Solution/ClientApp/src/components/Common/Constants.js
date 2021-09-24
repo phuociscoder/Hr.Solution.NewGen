@@ -84,6 +84,7 @@ export class Function {
     static LSEM149 = "LSEM149";
     static LSEM153 = "LSEM153";
     static LSEM155 = "LSEM155";
+    static LSEM156 = "LSEM156";
     static LSEM157 = "LSEM157";
     static LSEM158 = "LSEM158";
     static LSEM159 = "LSEM159";
