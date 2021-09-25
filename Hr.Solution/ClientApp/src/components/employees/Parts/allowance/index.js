@@ -41,7 +41,7 @@ export class EmployeeAllowance extends React.Component {
     }
 
     addAllowance = (newModel) => {
-        const {onModelChange} = this.props;
+        const { onModelChange } = this.props;
         newModel.type = "ADD";
         const { employeeAllowances } = this.state;
         const newModels = [...employeeAllowances, newModel];
@@ -49,7 +49,7 @@ export class EmployeeAllowance extends React.Component {
     }
 
     updateAllowance = (editModel) => {
-        const {onModelChange} = this.props;
+        const { onModelChange } = this.props;
         if (editModel.id) {
             editModel.type = "EDIT";
         }
@@ -59,7 +59,7 @@ export class EmployeeAllowance extends React.Component {
     }
 
     removeAllowance = (rAllowance) => {
-        const {onModelChange} = this.props;
+        const { onModelChange } = this.props;
         rAllowance.type = "DELETE";
         const { employeeAllowances, selectedAllowance } = this.state;
         const newModels = [...employeeAllowances.filter(x => x !== selectedAllowance), rAllowance];
