@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Hr.Solution.Application.Controllers
@@ -76,6 +77,42 @@ namespace Hr.Solution.Application.Controllers
         {
             var results = await categoryServices.GetNations(prefix, parentCode);
             return Ok(results);
+        }
+
+        [HttpGet, Route("insurance/{id}")]
+        [Authorize]
+        public async Task<ActionResult> GetInsuranceById(int id)
+        {
+            var result = await categoryServices.GetInsuranceById(id);
+            return Ok(result);
+        }
+
+        [HttpPut, Route("insurance-update")]
+        [Authorize]
+        public async Task<ActionResult> UpdateInsurance([FromBody]LsInsuranceUpdateRequest request)
+        {
+            var modifiedBy = User.FindFirst(ClaimTypes.Name).Value;
+            request.ModifiedBy = modifiedBy;
+            var result = await categoryServices.UpdateInsurance(request);
+            return Ok(result);
+        }
+
+        [HttpPost,Route("insurance-insert")]
+        [Authorize]
+        public async Task<ActionResult> AddInsurance([FromBody] LsInsuranceInsertRequest request)
+        {
+            var createdBy = User.FindFirst(ClaimTypes.Name).Value;
+            request.CreatedBy = createdBy;
+            var result = await categoryServices.AddInsurance(request);
+            return Created(string.Empty, result);
+        }
+
+        [HttpDelete,Route("insurance-delete/{id}")]
+        [Authorize]
+        public async Task<ActionResult> DeleteInsurance(int id)
+        {
+            var result = await categoryServices.DeleteInsurance(id);
+            return Ok(result);
         }
     }
 }

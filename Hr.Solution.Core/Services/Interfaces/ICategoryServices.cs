@@ -16,7 +16,10 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<CategoryKeyValueResponse> AddCategoryItem(AddCategoryItemRequest request);
         Task<CategoryKeyValueResponse> UpdateCategoryItem(UpdateCategoryItemRequest request);
         Task<int> DeleteCategoryItem(DeleteCategoryItemRequest request);
-
         Task<List<NationResponse>> GetNations(string prefix, string parentCode);
+        Task<LsInsuranceResponse> GetInsuranceById(int id);
+        Task<LsInsuranceResponse> AddInsurance(LsInsuranceInsertRequest request);
+        Task<LsInsuranceResponse> UpdateInsurance(LsInsuranceUpdateRequest request);
+        Task<int> DeleteInsurance(int id);
     }
 }

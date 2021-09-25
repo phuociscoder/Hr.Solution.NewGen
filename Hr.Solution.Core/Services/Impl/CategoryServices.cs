@@ -24,9 +24,21 @@ namespace Hr.Solution.Core.Services.Impl
             return response;
         }
 
+        public async Task<LsInsuranceResponse> AddInsurance(LsInsuranceInsertRequest request)
+        {
+            var response = await repository.ExecuteScalarAsync<LsInsuranceResponse>(ProcedureConstants.SP_LSINSURACE_INSERT, request);
+            return response;
+        }
+
         public async Task<int> DeleteCategoryItem(DeleteCategoryItemRequest request)
         {
             var response = await repository.ExecuteAsync<CategoryKeyValueResponse>(ProcedureConstants.SP_CATEGORY_DELETE_ITEM, request);
+            return response;
+        }
+
+        public async Task<int> DeleteInsurance(int id)
+        {
+            var response = await repository.ExecuteAsync(ProcedureConstants.SP_LSINSURANCE_DELETE, new { Id = id });
             return response;
         }
 
@@ -40,6 +52,12 @@ namespace Hr.Solution.Core.Services.Impl
         {
             var response = await repository.QueryAsync<CategoryKeyValueResponse>(ProcedureConstants.SP_CATEGORY_GET_ITEMS, new { id = id });
             return response.Data;
+        }
+
+        public async Task<LsInsuranceResponse> GetInsuranceById(int id)
+        {
+            var response = await repository.ExecuteScalarAsync<LsInsuranceResponse>(ProcedureConstants.SP_LSINSURANCE_GET_BY_ID, new { id = id });
+            return response;
         }
 
         public async Task<List<CategoryResponse>> GetList()
@@ -57,6 +75,12 @@ namespace Hr.Solution.Core.Services.Impl
         public async Task<CategoryKeyValueResponse> UpdateCategoryItem(UpdateCategoryItemRequest request)
         {
             var response = await repository.ExecuteScalarAsync<CategoryKeyValueResponse>(ProcedureConstants.SP_CATEGORY_UPDATE_ITEM, request);
+            return response;
+        }
+
+        public async Task<LsInsuranceResponse> UpdateInsurance(LsInsuranceUpdateRequest request)
+        {
+            var response = await repository.ExecuteScalarAsync<LsInsuranceResponse>(ProcedureConstants.SP_LSINSURANCE_UPDATE, request);
             return response;
         }
     }
