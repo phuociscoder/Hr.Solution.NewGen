@@ -4,6 +4,7 @@ import { CategoryCommonDetail } from "./common";
 import { CategoryModule } from "./Constants";
 import { DepartmentConfig } from "./department";
 import { EmployeeTypeConfig } from "./employeetype";
+import { InsuranceConfig } from "./insurance";
 import { WorkDayConfig } from "./WorkDay";
 
 export class CategoryDetail extends React.Component {
@@ -35,11 +36,14 @@ export class CategoryDetail extends React.Component {
                 result = <WorkDayConfig category={category} />
                 break;
             case CategoryModule.EmployeeType:
-              result = <EmployeeTypeConfig prefix={this.state.prefix} category={category} />;
-                break;     
+                result = <EmployeeTypeConfig prefix={this.state.prefix} category={category} />;
+                break;
             case CategoryModule.AllowanceType:
-              result = <AllowanceTypeConfig category={category} />; // 
-                break;     
+                result = <AllowanceTypeConfig category={category} />;
+                break;
+            case CategoryModule.Insurance:
+                result = <InsuranceConfig category={category} />;
+                break;
             default:
                 result = <CategoryCommonDetail category={category} />;
                 break;
