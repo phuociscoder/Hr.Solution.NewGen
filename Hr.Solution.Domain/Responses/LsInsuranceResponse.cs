@@ -18,7 +18,7 @@ namespace Hr.Solution.Data.Responses
         public int InsType { get; set; }
         public bool Lock { get; set; }
         public string Note { get; set; }
-        public string DepartmentCode { get; set; }
+        public int DepartmentId { get; set; }
         public float RateEmp { get; set; }
         public float RateCo { get; set; }
         public bool IsDefault { get; set; }

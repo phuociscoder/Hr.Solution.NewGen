@@ -15,14 +15,14 @@ namespace Hr.Solution.Data.Requests
         public int InsType { get; set; }
         public bool Lock { get; set; }
         public string Note { get; set; }
-        public string DepartmentCode { get; set; }
+        public int DepartmentId { get; set; }
         public float RateEmp { get; set; }
         public float RateCo { get; set; }
         public bool IsDefault { get; set; }
         public string BUCodes { get; set; }
         public decimal MinSalary { get; set; }
         public decimal MaxSalary { get; set; }
-        public DateTime EffectDate { get; set; }
+        public DateTime? EffectDate { get; set; }
         public decimal BasicSalary { get; set; }
         public decimal BasicSalary1 { get; set; }
         public decimal BasicSalary2 { get; set; }
@@ -40,14 +40,14 @@ namespace Hr.Solution.Data.Requests
         public int InsType { get; set; }
         public bool Lock { get; set; }
         public string Note { get; set; }
-        public string DepartmentCode { get; set; }
+        public int DepartmentId { get; set; }
         public float RateEmp { get; set; }
         public float RateCo { get; set; }
         public bool IsDefault { get; set; }
         public string BUCodes { get; set; }
         public decimal MinSalary { get; set; }
         public decimal MaxSalary { get; set; }
-        public DateTime EffectDate { get; set; }
+        //public DateTime? EffectDate { get; set; }
         public decimal BasicSalary { get; set; }
         public decimal BasicSalary1 { get; set; }
         public decimal BasicSalary2 { get; set; }

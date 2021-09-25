@@ -60,6 +60,12 @@ namespace Hr.Solution.Core.Services.Impl
             return response;
         }
 
+        public async Task<List<LsInsuranceResponse>> GetInsurances()
+        {
+            var response = await repository.QueryAsync<LsInsuranceResponse>(ProcedureConstants.SP_LSINSURANCE_GET_ALL, null);
+            return response.Data;
+        }
+
         public async Task<List<CategoryResponse>> GetList()
         {
             var response = await repository.QueryAsync<CategoryResponse>(ProcedureConstants.SP_CATEGORY_GET_LIST, null);

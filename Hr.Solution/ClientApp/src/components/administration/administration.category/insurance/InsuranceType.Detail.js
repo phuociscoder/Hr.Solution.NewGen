@@ -10,6 +10,8 @@ import { CategoryServices } from "../Category.services";
 import { InsuranceType } from "../Constants";
 import { Mode } from "../department/Constants";
 import {Amount} from "../../../Common/InputAmount";
+import { InsuranceCategoryService } from "./insuranceCategory.services";
+import { InsuranceConfig } from ".";
 
 export class InsuranceTypeDetail extends React.Component {
     constructor(props) {
@@ -27,8 +29,22 @@ export class InsuranceTypeDetail extends React.Component {
         if (!category) return;
         this.setState({ category: category });
         if (Object.keys(model).length > 0) {
-            this.setState({ model: model, editModel: model, mode: Mode.EDIT });
+            this.getInsuranceById(model.id);
         }
+    }
+
+    getInsuranceById =(id) => {
+        InsuranceCategoryService.getById(id)
+        .then(response => {
+            if(response.data)
+            {
+                this.setState({ model: response.data, editModel: response.data, mode: Mode.EDIT });
+                return;
+            }
+            ShowNotification(NotificationType.ERROR, "Dữ liệu có thể đã bị xóa trước đó , vui lòng kiểm tra lại");
+        }, error => {
+            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập vào cơ sở dữ liệu");
+        });
     }
 
     shouldComponentUpdate = (nextProps) => {
@@ -151,6 +167,7 @@ export class InsuranceTypeDetail extends React.Component {
                                 <input disabled={mode === Mode.VIEW} type="checkbox" fieldName="lock" checked={model.lock} onChange={this.onInputChange} /><span className="ml-2">Ngưng sử dụng</span>
                             </label>
                             <label className="w-100">
+                                Áp dụng cho:
                             <CustomSelect dataUrl="/api/Department" className="w-100"
                                         orderFieldName={["level"]}
                                         orderBy="desc"
@@ -170,11 +187,11 @@ export class InsuranceTypeDetail extends React.Component {
                             <div className="d-flex flex-column w-30 pl-4 pt-3 mr-5">
                                 <label className="w-100">
                                     % Cá nhân: 
-                                    <Amount disabled={mode === Mode.VIEW} amount={model.rateEmp} className="form-control" onAmountChange={value => this.onCustomModelChange(value, 'rateEmp')} placeHolder="% cá nhân" />
+                                    <input type="number" disabled={mode === Mode.VIEW} fieldName="rateEmp" value={model.rateEmp} className="form-control" onChange={this.onInputChange} placeHolder="% cá nhân" />
                                 </label>
                                 <label className="w-100">
-                                    % Cá nhân: 
-                                    <Amount disabled={mode === Mode.VIEW} amount={model.rateCo} className="form-control" onAmountChange={value => this.onCustomModelChange(value, 'rateCo')} placeHolder="% công ty" />
+                                    % Công ty: 
+                                    <input  type="number" disabled={mode === Mode.VIEW} value={model.rateCo} fieldName="rateCo" className="form-control" onChange={this.onInputChange} placeHolder="% công ty" />
                                 </label>
                             </div>
                             <div className="d-flex flex-column pl-4 pt-3 mr-5 w-30">
@@ -183,8 +200,8 @@ export class InsuranceTypeDetail extends React.Component {
                                     <Amount disabled={mode === Mode.VIEW} amount={model.minSalary} className="form-control" onAmountChange={value => this.onCustomModelChange(value, 'minSalary')} placeHolder="Mức lương tối thiểu" />
                                 </label>
                                 <label className="w-100">
-                                    % Cá nhân: 
-                                    <Amount disabled={mode === Mode.VIEW} amount={model.maxsalary} className="form-control" onAmountChange={value => this.onCustomModelChange(value, 'maxSalary')} placeHolder="Mức trần đóng BH" />
+                                    Mức trần đóng BH:
+                                    <Amount disabled={mode === Mode.VIEW} amount={model.maxSalary} className="form-control" onAmountChange={value => this.onCustomModelChange(value, 'maxSalary')} placeHolder="Mức trần đóng BH" />
                                 </label>
                             </div>
                         </div>
@@ -262,15 +279,14 @@ export class InsuranceTypeDetail extends React.Component {
 
     onProcessRemoveConfirm =() => {
         const {model} = this.state;
-        // CALL_API delete loại nhân viên
-        // CategoryServices.DeleteCategoryItem(model.id)
-        // .then(response => {
-        //     ShowNotification(NotificationType.SUCCESS, "Xóa chỉ mục khỏi danh mục thành công");
-        //     this.setState({showModalRemoveComfirm: false, model: this.resetModel(), editModel: null, mode: Mode.VIEW}, this.onRefresh(true));
-        // }, error => {
-        //     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể xóa chỉ mục khỏi danh mục");
-        //     this.setState({showModalRemoveComfirm: false});
-        // })
+        InsuranceCategoryService.delete(model.id)
+        .then(response => {
+            ShowNotification(NotificationType.SUCCESS, "Xóa chỉ mục khỏi danh mục thành công");
+            this.setState({showModalRemoveComfirm: false, model: this.resetModel(), editModel: null, mode: Mode.VIEW}, this.onRefresh(true));
+        }, error => {
+            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể xóa chỉ mục khỏi danh mục");
+            this.setState({showModalRemoveComfirm: false});
+        })
 
     }
 
@@ -278,30 +294,26 @@ export class InsuranceTypeDetail extends React.Component {
         const {model, mode, category} = this.state;
         if(mode === Mode.CREATE)
         {
-            const newModel = Object.assign({},{...model, functionId: category.id , createdBy: AuthenticationManager.UserName()});
-            // CALL_API add loại nhân viên
-            // CategoryServices.AddCategoryItem(newModel)
-            // .then(response => {
-            //     const newModel = response.data;
-            //     ShowNotification(NotificationType.SUCCESS, "Thêm chỉ mục vào danh sách thành công");
-            //     this.setState({ model: this.resetModel(), showModalProcessConfirm: false}, this.onRefresh(true));
-            // }, error => {
-            //     this.setState({showModalProcessConfirm: false});
-            //     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thêm chỉ mục vào danh sách");
-            // })
+            InsuranceCategoryService.insert(model)
+            .then(response => {
+                const newModel = response.data;
+                ShowNotification(NotificationType.SUCCESS, "Thêm chỉ mục vào danh sách thành công");
+                this.setState({ model: this.resetModel(), showModalProcessConfirm: false}, this.onRefresh(true));
+            }, error => {
+                this.setState({showModalProcessConfirm: false});
+                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể thêm chỉ mục vào danh sách");
+            })
         }else if(mode === Mode.EDIT)
         {
-            const editModel = Object.assign({},{...model, modifiedBy: AuthenticationManager.UserName()});
-            // CALL_API update loại nhân viên
-            // CategoryServices.UpdateCategoryItem(editModel.id, editModel)
-            // .then(response =>{
-            //     const editModel = response.data;
-            //     ShowNotification(NotificationType.SUCCESS, "Cập nhật chỉ mục thành công");
-            //     this.setState({model: editModel, editModel: editModel, showModalProcessConfirm: false}, this.onRefresh(true));
-            // }, error=> {
-            //     this.setState({showModalProcessConfirm: false});
-            //     ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể cập nhật chỉ mục ");
-            // });
+            InsuranceCategoryService.update(model.id, model)
+            .then(response =>{
+                const editModel = response.data;
+                ShowNotification(NotificationType.SUCCESS, "Cập nhật chỉ mục thành công");
+                this.setState({model: editModel, editModel: editModel, showModalProcessConfirm: false}, this.onRefresh(true));
+            }, error=> {
+                this.setState({showModalProcessConfirm: false});
+                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể cập nhật chỉ mục ");
+            });
         }
     }
 

@@ -73,7 +73,7 @@ namespace Hr.Solution.Application.Controllers
 
         [HttpGet, Route("nations/{prefix}")]
         [Authorize]
-        public async Task<ActionResult> GetNations(string prefix, [FromQuery]string parentCode)
+        public async Task<ActionResult> GetNations(string prefix, [FromQuery] string parentCode)
         {
             var results = await categoryServices.GetNations(prefix, parentCode);
             return Ok(results);
@@ -87,9 +87,9 @@ namespace Hr.Solution.Application.Controllers
             return Ok(result);
         }
 
-        [HttpPut, Route("insurance-update")]
+        [HttpPut, Route("insurance/{id}")]
         [Authorize]
-        public async Task<ActionResult> UpdateInsurance([FromBody]LsInsuranceUpdateRequest request)
+        public async Task<ActionResult> UpdateInsurance(int id, [FromBody] LsInsuranceUpdateRequest request)
         {
             var modifiedBy = User.FindFirst(ClaimTypes.Name).Value;
             request.ModifiedBy = modifiedBy;
@@ -97,7 +97,7 @@ namespace Hr.Solution.Application.Controllers
             return Ok(result);
         }
 
-        [HttpPost,Route("insurance-insert")]
+        [HttpPost, Route("insurance")]
         [Authorize]
         public async Task<ActionResult> AddInsurance([FromBody] LsInsuranceInsertRequest request)
         {
@@ -107,11 +107,19 @@ namespace Hr.Solution.Application.Controllers
             return Created(string.Empty, result);
         }
 
-        [HttpDelete,Route("insurance-delete/{id}")]
+        [HttpDelete, Route("insurance/{id}")]
         [Authorize]
         public async Task<ActionResult> DeleteInsurance(int id)
         {
             var result = await categoryServices.DeleteInsurance(id);
+            return Ok(result);
+        }
+
+        [HttpGet, Route("insurance")]
+        [Authorize]
+        public async Task<ActionResult> GetInsurances()
+        {
+            var result = await categoryServices.GetInsurances();
             return Ok(result);
         }
     }

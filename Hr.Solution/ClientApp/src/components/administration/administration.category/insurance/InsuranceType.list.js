@@ -7,6 +7,8 @@ import { ShowNotification } from "../../../Common/notification/Notification";
 import { CategoryServices } from '../Category.services';
 import '../../admin.roles/admin.dataRole/admin.roles.css';
 import _, { debounce } from "lodash";
+import { InsuranceCategoryService } from "./insuranceCategory.services";
+import { InsuranceType } from "../Constants";
 
 export class InsuranceTypeList extends React.Component {
     constructor(props) {
@@ -25,16 +27,20 @@ export class InsuranceTypeList extends React.Component {
     }
 
     loadCategoryItems = (categoryId) => {
-        // CALL_API get loại nhân viên
-        // if (!categoryId) return;
-        // CategoryServices.GetCategoryItems(categoryId)
-        //     .then(response => {
-        //         let categoryItems = _.orderBy(response.data, x => x.ordinal, "asc");
-        //         this.setState({ categoryItems: categoryItems, originCategoryItems: categoryItems, loading: false }, this.props.onRefreshed());
-        //     }, error => {
-        //         this.setState({ loading: false });
-        //         ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể đọc các chỉ mục của danh mục");
-        //     })
+        if (!categoryId) return;
+        InsuranceCategoryService.getInsurances()
+            .then(response => {
+                let categoryItems = _.orderBy(response.data, x => x.ordinal, "asc");
+                categoryItems = categoryItems.map(item => {
+                    item.typeName = InsuranceType.ALL.find(x => x.id === item.insType)?.name;
+                    return item;
+                });
+                console.log(categoryItems);
+                this.setState({ categoryItems: categoryItems, originCategoryItems: categoryItems, loading: false }, this.props.onRefreshed());
+            }, error => {
+                this.setState({ loading: false });
+                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra ! Không thể đọc các chỉ mục của danh mục");
+            })
     }
 
     shouldComponentUpdate = (nextProps) => {
@@ -89,17 +95,14 @@ export class InsuranceTypeList extends React.Component {
                                     <div key={item.id} fieldName={item.id} className={selectedItem.id === item.id ? "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown active" : "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown"}
                                         onClick={() => this.onSelectItem(item)}>
                                         <div className="d-flex">
-                                            <span className="text-uppercase"><b>{item.name}</b> - {item.code}</span>
-                                            <div className="ml-auto">
-                                                <FontAwesomeIcon className="mr-2" icon={faAngleRight} />
-                                                {
-                                                    !item.isActive && <FontAwesomeIcon icon={faBan} color="red" />
-                                                }
-                                            </div>
+                                        <span className="text-uppercase"><b>{item.siName}</b> - {item.siCode}</span>
+                                        {item.lock && <FontAwesomeIcon className="ml-auto" icon={faLock} color="red" />}
                                         </div>
                                         <div className="d-flex">
-                                            <span><i>{item.name2}</i></span>
+                                            <span><i>{item.siName2}</i></span>
+                                            <span className="ml-auto">{item.typeName}</span>
                                         </div>
+                                          
                                     </div>
                                 )
                             })

@@ -20,6 +20,7 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<LsInsuranceResponse> GetInsuranceById(int id);
         Task<LsInsuranceResponse> AddInsurance(LsInsuranceInsertRequest request);
         Task<LsInsuranceResponse> UpdateInsurance(LsInsuranceUpdateRequest request);
+        Task<List<LsInsuranceResponse>> GetInsurances();
         Task<int> DeleteInsurance(int id);
     }
 }
