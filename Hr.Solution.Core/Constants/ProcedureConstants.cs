@@ -20,6 +20,9 @@ namespace Hr.Solution.Core.Constants
         public static string SP_SYSTEM_ROLE_GET_ROLE_PERMISSIONS = "spSysRole_GetRolePermissions";
         public static string SP_SYSTEM_ROLE_UPDATE_PERMISSION = "spSysRole_UpdatePermission";
 
+        //ExportTemplate
+        public static string SP_SYSTEM_ROLE_GET_COLUMNS_BY_TABLE_NAME = "spSystem_GetColumnsbyTableName";
+
         //Data Roles
         public static string SP_DATA_ROLE_GETS = "spSysDataRole_GetList";
         public static string SP_DATA_ROLE_ADD = "spSysDataRole_Add";
@@ -92,5 +95,6 @@ namespace Hr.Solution.Core.Constants
         public static string SP_EMPLOYEES_BASIC_SALARY_UPDATE = "spEmployeesBasicSalary_Update";
         public static string SP_EMPLOYEES_BASIC_SALARY_GET_BY_ID = "spEmployeeBasicSalary_GetByID";
 
+        
     }
 }
