@@ -26,6 +26,7 @@ export class EmployeeListing extends React.Component {
             loading: false,
             showImportFileModal: false,
             showExportSampleFileModal: false,
+            exportSampleFileFiltered: [],
         }
     }
 
@@ -71,29 +72,14 @@ export class EmployeeListing extends React.Component {
     }
 
     generateExportColumn = () => {
-        // DRAFT data
-        const exportSampleFile = [
-                {id: 'id', name: 'Id', nullAble: false},
-                {id: 'code', name: 'Mã Nhân Viên', nullAble: true}, 
-                {id: 'code2', name: 'Mã Nhân Viên2323332243', nullAble: true}, 
-                {id: 'code3', name: 'Mã Nhân Viên3', nullAble: false}, 
-                {id: 'code4', name: 'Mã Nhân Viên4', nullAble: false}, 
-                {id: 'code5', name: 'Mã Nhân Viên5', nullAble: false}, 
-                {id: 'code6', name: 'Mã Nhân Viên6', nullAble: true}, 
-                {id: 'code7', name: 'Mã Nhân Viên7', nullAble: true}, 
-                {id: 'code8', name: '', nullAble: true}, 
-                {id: 'code9', name: 'Mã Nhân Viênêfefe', nullAble: true}, 
-                {id: 'code726712673', name: 'Mã Nhân Viên2323fe332243', nullAble: true}, 
-                {id: 'code86833728', name: 'Mã Nhân Viênfefef3', nullAble: false}, 
-                {id: 'code82', name: 'Mã Nhân Viên4fefefe', nullAble: false}, 
-                {id: 'code32', name: 'Mã Nhân Viên5fefe', nullAble: false}, 
-                {id: 'code872', name: 'Mã Nhân Viên6fef', nullAble: true}, 
-                {id: 'code733', name: 'Mã Nhân Viên7fef', nullAble: true}, 
-                {id: 'code444', name: '', nullAble: true}, 
-            ]
-        if (!exportSampleFile) return;
-        const exportSampleFileFiltered = exportSampleFile.filter(x => (x.id !== "id") && (x.name !== ""));
-        this.setState({ exportSampleFileFiltered: exportSampleFileFiltered });
+        EmployeeServices.getColumnNameExportFile("employees").then(response => {
+            const exportSampleFile = response.data;
+            if (!exportSampleFile) return;
+            const exportSampleFileFiltered = exportSampleFile.filter(x => (x.id !== "id") && (x.name !== null));
+            this.setState({ exportSampleFileFiltered: exportSampleFileFiltered });
+        }, error => {
+            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập danh sách các cột của bảng Nhân viên.")
+        })
     }
 
     generateActions =(item) => {
@@ -194,7 +180,7 @@ export class EmployeeListing extends React.Component {
         const { exportSampleFileFiltered } = this.state;
         let checkedLists = [];
         exportSampleFileFiltered.forEach(item => {
-            if(!item.nullAble) {
+            if(!item.isNull) {
                 checkedLists.push(item.id);
             }
         });
@@ -209,12 +195,12 @@ export class EmployeeListing extends React.Component {
                     Tải tập tin mẫu
                 </Modal.Header>
                 <Modal.Body>
-                    <div className="p-3" style={{ overflowY: "auto" }}>
+                    <div className="p-3" style={{ overflowY: "auto", height: "500px" }}>
                         <h3>Chọn những thông tin nhân viên cần điền</h3>
                         {exportSampleFileFiltered && exportSampleFileFiltered.map(item => {
                             return(
-                                <label className="mt-3 w-33">
-                                    <input type="checkbox" onChange={this.onCheckboxChange} fieldName={item.id} disabled={!item.nullAble && true} checked={!item.nullAble ? true : item?.checked} />  {item.name}
+                                <label className="mt-4 w-33">
+                                    <input type="checkbox" onChange={this.onCheckboxChange} fieldName={item.id} disabled={!item.isNull} checked={!item.isNull ? true : item?.checked} />  {item.name}
                                 </label>
                             )
                         })}
