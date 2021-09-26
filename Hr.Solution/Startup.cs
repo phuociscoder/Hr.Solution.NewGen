@@ -133,6 +133,7 @@ namespace Hr.Solution
             services.AddScoped<IMediaServices, MediaServices>();
             services.AddScoped<IEmployeeServices, EmployeeServices>();
             services.AddScoped<IExportTemplate, ExportTemplateServices>();
+            services.AddScoped<IAllowanceGradeServices, AllowanceGradeServices>();
         }
     }
 }

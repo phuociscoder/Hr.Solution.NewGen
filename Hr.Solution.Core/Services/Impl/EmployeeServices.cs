@@ -253,11 +253,6 @@ namespace Hr.Solution.Core.Services.Impl
             tblEmployeeDependants.Columns.Add("ToMonth", typeof(string));
             tblEmployeeDependants.Columns.Add("IsSub", typeof(bool));
 
-
-
-
-
-
             return tblEmployeeDependants;
         }
 
@@ -324,6 +319,79 @@ namespace Hr.Solution.Core.Services.Impl
             tblEmployeeContract.Columns.Add("DeletedBy", typeof(string));
             tblEmployeeContract.Columns.Add("DeletedOn", typeof(DateTime));
             return tblEmployeeContract;
+        }
+
+        private DataTable CreateEmployeeBasicSalaryProcessTable()
+        {
+            var tblEmployeeBasicSalaryProcess = new DataTable();
+            tblEmployeeBasicSalaryProcess.Columns.Add("Id", typeof(int));
+            tblEmployeeBasicSalaryProcess.Columns.Add("DecideNo", typeof(string));
+            tblEmployeeBasicSalaryProcess.Columns.Add("ValidFromDate", typeof(DateTime));
+            tblEmployeeBasicSalaryProcess.Columns.Add("ValidToDate", typeof(DateTime));
+            tblEmployeeBasicSalaryProcess.Columns.Add("BasicSal", typeof(long));
+            tblEmployeeBasicSalaryProcess.Columns.Add("SISal", typeof(long));
+            tblEmployeeBasicSalaryProcess.Columns.Add("AdjustTypeId", typeof(int));
+            tblEmployeeBasicSalaryProcess.Columns.Add("OTRate", typeof(long));
+            tblEmployeeBasicSalaryProcess.Columns.Add("FixSal", typeof(long));
+            tblEmployeeBasicSalaryProcess.Columns.Add("SignateDate", typeof(DateTime));
+            tblEmployeeBasicSalaryProcess.Columns.Add("SignatorId", typeof(int));
+            tblEmployeeBasicSalaryProcess.Columns.Add("IsActive", typeof(bool));
+            tblEmployeeBasicSalaryProcess.Columns.Add("Note", typeof(string));
+            tblEmployeeBasicSalaryProcess.Columns.Add("CreatedBy", typeof(string));
+            tblEmployeeBasicSalaryProcess.Columns.Add("CreatedOn", typeof(DateTime));
+            tblEmployeeBasicSalaryProcess.Columns.Add("ModifiedBy", typeof(string));
+            tblEmployeeBasicSalaryProcess.Columns.Add("ModifiedOn", typeof(DateTime));
+            return tblEmployeeBasicSalaryProcess;
+        }
+
+        private DataTable ConvertToEmployeeBasicSalaryProcessTable(List<EmployeeBasicSalaryProcess> models, string currentUser)
+        {
+            var tblEmployeeBasicSalaryProcess = CreateEmployeeBasicSalaryProcessTable();
+            models.ForEach(x => 
+            {
+                tblEmployeeBasicSalaryProcess.Rows.Add(
+                   x.Id,
+                   x.DecideNo,
+                   x.ValidFromDate,
+                   x.ValidToDate,
+                   x.BasicSal,
+                   x.SISal,
+                   x.AdjustTypeId,
+                   x.OTRate,
+                   x.FixSal,
+                   x.SignateDate,
+                   x.SignatorId,
+                   x.IsActive,
+                   x.Note,
+                   currentUser,
+                   null,
+                   currentUser,
+                   null);
+             });
+            return tblEmployeeBasicSalaryProcess;
+        }
+
+        public async Task<int> EmployeeBasicSalaryProcess_CUD(EmployeeBasicSalaryProcessRequest request, string currentUser)
+        {
+            int response = 0;
+            if (request.CreateBasicSal.Count > 0)
+            {
+                var tblCreatebasicSal = ConvertToEmployeeBasicSalaryProcessTable(request.CreateBasicSal, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeBasicSalaryProcess>(ProcedureConstants.SP_EMPLOYEE_BASIC_SALARY_PROCESS_CUD, new { empBasicSalProcess = tblCreatebasicSal.AsTableValuedParameter("TVP_EmployeeBasicSalProcess"), type="ADD"}, false);
+            }
+
+            if (request.UpdateBasicSal.Count > 0)
+            {
+                var tblUpdatebasicSal = ConvertToEmployeeBasicSalaryProcessTable(request.UpdateBasicSal, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeBasicSalaryProcess>(ProcedureConstants.SP_EMPLOYEE_BASIC_SALARY_PROCESS_CUD, new { empBasicSalProcess = tblUpdatebasicSal.AsTableValuedParameter("TVP_EmployeeBasicSalProcess"), type = "EDIT" }, false);
+            }
+
+            if (request.DeleteBasicSal.Count > 0)
+            {
+                var tblDeletebasicSal = ConvertToEmployeeBasicSalaryProcessTable(request.DeleteBasicSal, currentUser);
+                response = response + await repository.ExecuteAsync<EmployeeBasicSalaryProcess>(ProcedureConstants.SP_EMPLOYEE_BASIC_SALARY_PROCESS_CUD, new { empBasicSalProcess = tblDeletebasicSal.AsTableValuedParameter("TVP_EmployeeBasicSalProcess"), type = "DELETE" }, false);
+            }
+            return response;
         }
     }
 }

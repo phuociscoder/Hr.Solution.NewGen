@@ -45,6 +45,21 @@ namespace Hr.Solution.Core.Constants
 
         public static string SP_CATEGORY_NATION_GETALL = "spCategoryNation_GetAll";
 
+        //LsInsurance
+        public static string SP_LSINSURANCE_GET_ALL = "spLsInsurance_GetList";
+        public static string SP_LSINSURANCE_GET_BY_ID = "spLsInsurance_GetByID";
+        public static string SP_LSINSURANCE_UPDATE = "spLsInsurance_Update";
+        public static string SP_LSINSURACE_INSERT = "spLsInsurance_Insert";
+        public static string SP_LSINSURANCE_DELETE = "spLsInsurance_Delete";
+
+        //AllowanceGrade
+        public static string SP_ALLOWANCEGRADE_GET_LIST = "spLsAllGrade_GetList";
+        public static string SP_ALLOWANCEGRADE_GET_BY_ID = "spLsAllGrade_GetById";
+        public static string SP_ALLOWANCEGRADE_GET_INSERT = "spLsAllGrade_Insert";
+        public static string SP_ALLOWANCEGRADE_GET_UPDATE = "spLsAllGrade_Update";
+        public static string SP_ALLOWANCEGRADE_GET_DELETE = "spLsAllGrade_Delete";
+
+
         //User
         public static string SP_USER_GET = "spUser_GetByName";
         public static string SP_USER_GET_LIST = "spUser_GetList";
@@ -74,6 +89,7 @@ namespace Hr.Solution.Core.Constants
         public static string SP_EMPLOYEE_ALLOWANCE_CUD = "spEmployeeAllowance_CUD";
         public static string SP_EMPLOYEE_DEPENDANTS_CUD = "spEmployeeDependants_CUD";
         public static string SP_EMPLOYEE_CONTRACT_CUD = "spEmployeeContract_CUD";
+        public static string SP_EMPLOYEE_BASIC_SALARY_PROCESS_CUD = "spEmpBasicSalProcess_CUD";
 
         //EmployeesBasicSalary
         public static string SP_EMPLOYEES_BASIC_SALARY_UPDATE = "spEmployeesBasicSalary_Update";
