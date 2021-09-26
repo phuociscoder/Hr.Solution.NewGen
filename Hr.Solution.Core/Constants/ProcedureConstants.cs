@@ -42,6 +42,13 @@ namespace Hr.Solution.Core.Constants
 
         public static string SP_CATEGORY_NATION_GETALL = "spCategoryNation_GetAll";
 
+        //LsInsurance
+        public static string SP_LSINSURANCE_GET_ALL = "spLsInsurance_GetList";
+        public static string SP_LSINSURANCE_GET_BY_ID = "spLsInsurance_GetByID";
+        public static string SP_LSINSURANCE_UPDATE = "spLsInsurance_Update";
+        public static string SP_LSINSURACE_INSERT = "spLsInsurance_Insert";
+        public static string SP_LSINSURANCE_DELETE = "spLsInsurance_Delete";
+
         //AllowanceGrade
         public static string SP_ALLOWANCEGRADE_GET_LIST = "spLsAllGrade_GetList";
         public static string SP_ALLOWANCEGRADE_GET_BY_ID = "spLsAllGrade_GetById";
