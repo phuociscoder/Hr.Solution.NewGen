@@ -1,5 +1,7 @@
 import React from "react";
 import { CategoryServices } from "../../../administration/administration.category/Category.services";
+import { InsuranceType } from "../../../administration/administration.category/Constants";
+import { InsuranceCategoryService } from "../../../administration/administration.category/insurance/insuranceCategory.services";
 import { CustomSelect } from "../../../Common/CustomSelect";
 import { CustomDatePicker } from "../../../Common/DatePicker";
 import { NotificationType } from "../../../Common/notification/Constants";
@@ -12,6 +14,7 @@ export class EmployeeInsurance extends React.Component{
         this.state = {
             model: {},
             selectedTab: Insurance.SOCIAL,
+            insurances: [],
             joinSocialInsurance: [],
             joinHealthInsurance: [],
             placeOfMedical: [],
@@ -20,14 +23,7 @@ export class EmployeeInsurance extends React.Component{
     }
 
     componentDidMount = () => {
-        // tham gia BHXH
-        // this.loadSelectOptions(Function.LSEM149, 'joinSocialInsurance');
-        // tham gia BHYT
-        // this.loadSelectOptions(Function.LSTS100, 'joinHealthInsurance');
-        // nơi KCB ban đầu
-        // this.loadSelectOptions(Function.LSEM125, 'placeOfMedical');
-        // tham gia BHTN
-        // this.loadSelectOptions(Function.LSEM125, 'joinUnemploymentInsurance');
+        this.loadInsurances();
         const { model } = this.props;
         this.setState({ model: model });
     }
@@ -39,6 +35,16 @@ export class EmployeeInsurance extends React.Component{
         }, error => {
             ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập danh sách");
         });
+    }
+
+    loadInsurances =() => {
+        InsuranceCategoryService.getInsurances().then(
+            response => {
+                this.setState({insurances: response.data});
+            }, error => {
+                ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập vào danh sách");
+            }
+        );
     }
 
     onInputChange = (e) => {
@@ -114,14 +120,16 @@ export class EmployeeInsurance extends React.Component{
     }
 
     renderSocial = () => {
-        const { joinSocialInsurance } = this.state;
+        const { joinSocialInsurance, insurances } = this.state;
+        const siInsurances = insurances.filter(x => x.insType === InsuranceType.SI);
+        
         const { joinSocialInsuranceId, dateOfSocialInsurance, socialInsuranceNumber, handOverPersonSocialIn, takeOverPersonSocialIn, joinDateSocialInsurance, isHandedOver, isSubmitCompany, isCreateAtCompany, noteSocialInsurance } = this.state.model;
         return (
             <div className="w-60 pt-4 pl-5">
                 <div className="d-flex">
                     <label className="w-50">
                         Tham gia BHXH:
-                        <CustomSelect data={joinSocialInsurance} selectedValue={joinSocialInsuranceId} labelField="name" placeHolder="-Tham gia BHXH-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'joinSocialInsuranceId')} />
+                        <CustomSelect data={siInsurances} selectedValue={joinSocialInsuranceId} labelField="siName" placeHolder="-Tham gia BHXH-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'joinSocialInsuranceId')} />
                     </label>
                     <label className="w-50 ml-4">
                         Ngày cấp:
@@ -170,14 +178,15 @@ export class EmployeeInsurance extends React.Component{
     }
 
     renderHealth = () => {
-        const { joinHealthInsurance, placeOfMedical } = this.state;
+        const { joinHealthInsurance, placeOfMedical, insurances } = this.state;
+        const shInsurances = insurances.filter(x => x.insType === InsuranceType.SH);
         const { joinHealthInsuranceId, dateOfHealthInsurance, healthInsuranceNumber, placeOfMedicalId } = this.state.model;
         return (
             <div className="w-60 pt-4 pl-5">
                 <div className="d-flex">
                     <label className="w-50">
                         Tham gia BHYT:
-                        <CustomSelect data={joinHealthInsurance} selectedValue={joinHealthInsuranceId} labelField="name" placeHolder="-Tham gia BHYT-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'joinHealthInsuranceId')} />
+                        <CustomSelect data={shInsurances} selectedValue={joinHealthInsuranceId} labelField="siName" placeHolder="-Tham gia BHYT-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'joinHealthInsuranceId')} />
                     </label>
                     <label className="w-50 ml-4">
                         Ngày cấp:
@@ -199,14 +208,15 @@ export class EmployeeInsurance extends React.Component{
     }
 
     renderUnemployment = () => {
-        const { joinUnemploymentInsurance } = this.state;
+        const { joinUnemploymentInsurance, insurances } = this.state;
+        const suInsurances = insurances.filter(x => x.insType === InsuranceType.SU);
         const { joinUnemploymentInsuranceId, dateOfUnemploymentInsurance, unemploymentInsuranceNumber } = this.state.model;
         return (
             <div className="w-60 pt-4 pl-5">
                 <div className="d-flex">
                     <label className="w-50">
                         Tham gia BHTN:
-                        <CustomSelect data={joinUnemploymentInsurance} selectedValue={joinUnemploymentInsuranceId} labelField="name" placeHolder="-Tham gia BHTN-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'joinUnemploymentInsuranceId')} />
+                        <CustomSelect data={suInsurances} selectedValue={joinUnemploymentInsuranceId} labelField="siName" placeHolder="-Tham gia BHTN-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'joinUnemploymentInsuranceId')} />
                     </label>
                     <label className="w-50 ml-4">
                         Ngày cấp:
@@ -227,90 +237,3 @@ export class EmployeeInsurance extends React.Component{
 
 }
 
-export class EmployeeTimekeeperInfo extends React.Component {
-    
-
-    // onInputChange = (e) => {
-    //     const fieldName = e.target.getAttribute("fieldname");
-    //     const value = e.target.value;
-    //     const { model } = this.state;
-    //     const type = e.target.type;
-    //     if (type === 'checkbox') {
-    //         const checked = e.target.checked;
-    //         const newModel = Object.assign({}, { ...model, [fieldName]: checked });
-    //         this.onInsuranceChange(newModel);
-    //         return;
-    //     }
-    //     const newModel = Object.assign({}, { ...model, [fieldName]: value });
-    //     this.onInsuranceChange(newModel);
-    // }
-
-    // onInsuranceChange = (newModel) => {
-    //     const { onModelChange } = this.props;
-    //     if (onModelChange) {
-    //         this.setState({ model: newModel }, onModelChange(newModel));
-    //     }
-    // }
-
-    // onCustomModelChange = (value, stateName) => {
-    //     const { model } = this.state;
-    //     const newModel = Object.assign({}, { ...model, [stateName]: value });
-    //     this.onInsuranceChange(newModel);
-    // }
-
-    render = () => {
-        const { employeeTypeDropdown, shiftDropdown, weekOffDropdown } = this.state;
-        const { joinDate, dateFormal, employeeTypeId, barCode, leaveGroupId, shiftId } = this.state.model;
-        return (
-            <div className="w-100">
-                <div className="w-30 ml-4">
-                    <label className="w-100 text-camelcase">
-                        Ngày vào làm:
-                        <CustomDatePicker value={joinDate} onDateChange={value => this.onCustomModelChange(value, 'joinDate')} />
-                    </label>
-                    <label className="w-100 mt-3 text-camelcase">
-                        Ngày thành nhân viên chính thức:
-                        <CustomDatePicker value={dateFormal} onDateChange={value => this.onCustomModelChange(value, 'dateFormal')} />
-                    </label>
-                    <label className="w-100 mt-3 text-camelcase">
-                        Loại nhân viên:
-                        <CustomSelect selectedValue={employeeTypeId} data={employeeTypeDropdown} labelField="name" placeHolder="-Chọn loại nhân viên-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'employeeTypeId')} />
-                    </label>
-                </div>
-                <div className="mt-4 pl-4 pt-3 w-60">
-                    <h4>THÔNG TIN CHẤM CÔNG</h4>
-                    <div className="d-flex">
-                        <div className="w-50">
-                            <label className="w-100">
-                                Mã chấm công:
-                                <input fieldname="barCode" value={barCode} onChange={this.onInputChange} className="form-control" placeholder="Mã chấm công"></input>
-                            </label>
-                            <label className="w-100 mt-2">
-                                Nhóm ngày nghỉ tuần:
-                                <CustomSelect data={weekOffDropdown} selectedValue={leaveGroupId} labelField="name" placeHolder="-Chọn loại Nhóm ngày nghỉ tuần-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'leaveGroupId')} />
-                            </label>
-                        </div>
-                        <div className="w-50 ml-4">
-                            <label className="w-100">
-                                Ca làm việc:
-                                <CustomSelect data={shiftDropdown} selectedValue={shiftId} labelField="name" placeHolder="-Chọn loại ca làm việc-" isClearable={true} onValueChange={(value) => this.onCustomModelChange(value, 'shiftId')} />
-                            </label>
-                            <label className="mt-3 w-100">
-                                <input fieldname="altShift" onChange={this.onInputChange} type="checkbox" /> Ca làm việc thay đổi
-                            </label>
-                            <label className="mt-1 w-100">
-                                <input fieldname="isNotlateEarly" onChange={this.onInputChange} type="checkbox" /> Không tính đi trễ về sớm
-                            </label>
-                            <label className="mt-1 w-100">
-                                <input fieldname="isNotScan" onChange={this.onInputChange} type="checkbox" /> Không cần quét thẻ
-                            </label>
-                            <label className="mt-1 w-100">
-                                <input fieldname="isNotOTKow" onChange={this.onInputChange} type="checkbox" /> Không tính công ngoài giờ
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-}
