@@ -93,13 +93,7 @@ export class EmployeeListing extends React.Component {
             ]
         if (!exportSampleFile) return;
         const exportSampleFileFiltered = exportSampleFile.filter(x => (x.id !== "id") && (x.name !== ""));
-        let checkedLists = [];
-        exportSampleFileFiltered.forEach(item => {
-            if(!item.nullAble) {
-                checkedLists.push(item.id);
-            }
-        });
-        this.setState({ exportSampleFile: exportSampleFile, exportSampleFileFiltered: exportSampleFileFiltered, checkedLists: checkedLists });
+        this.setState({ exportSampleFileFiltered: exportSampleFileFiltered });
     }
 
     generateActions =(item) => {
@@ -168,7 +162,7 @@ export class EmployeeListing extends React.Component {
                             {selectedImportFile && <label className="btn ml-1" onClick={this.clearInputFile}><FontAwesomeIcon icon={faTimesCircle} /></label>}
                             <label for="fileImport" className="btn btn-info ml-1" >Chọn tập tin</label>
                         </div>
-                        <label className="text-primary font-italic mt-3" onClick={ () => this.setState({ showExportSampleFileModal: true }) }><u>Tải tập tin mẫu</u></label>
+                        <label className="text-primary font-italic mt-3" onClick={this.showExportFileModal}><u>Tải tập tin mẫu</u></label>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -193,6 +187,18 @@ export class EmployeeListing extends React.Component {
         const { selectedImportFile } = this.state;
         if(!selectedImportFile) return;
         console.log(selectedImportFile);
+        this.setState({ showImportFileModal: false })
+    }
+
+    showExportFileModal = () => {
+        const { exportSampleFileFiltered } = this.state;
+        let checkedLists = [];
+        exportSampleFileFiltered.forEach(item => {
+            if(!item.nullAble) {
+                checkedLists.push(item.id);
+            }
+        });
+        this.setState({ showExportSampleFileModal: true, checkedLists: checkedLists })
     }
     
     generateExportSampleFileModal = () => {
@@ -242,6 +248,7 @@ export class EmployeeListing extends React.Component {
         const { checkedLists } = this.state;
         if(!checkedLists) return;
         console.log(checkedLists);
+        this.setState({ showExportSampleFileModal: false })
     }
 
 }
