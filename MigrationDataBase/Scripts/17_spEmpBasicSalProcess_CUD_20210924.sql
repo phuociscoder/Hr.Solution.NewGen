@@ -70,7 +70,6 @@ BEGIN
 	BEGIN
 		UPDATE EBS
 		SET
-			EBS.Id = EB.Id	,
 			EBS.DecideNo = EB.DecideNo,
 			EBS.ValidFromDate =	EB.ValidFromDate,
 			EBS.ValidToDate	= EB.ValidToDate,
