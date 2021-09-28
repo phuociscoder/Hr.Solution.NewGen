@@ -39,6 +39,7 @@ export class EmployeeCreateEdit extends React.Component {
 
 
     onSectionModelChange = (model, sectionId) => {
+        console.log(model);
         const { sections } = this.state;
         let newSections = Object.assign([], sections);
         let modelSection = newSections.find(x => x.id === sectionId);
@@ -169,7 +170,7 @@ export class EmployeeCreateEdit extends React.Component {
             case EmpMenus.Contract:
                 this.onProcessContracts(processSec);
                 break;
-            case EmpMenus.BasicSalaryProcess:
+            case EmpMenus.SalaryProcess:
                 this.onProcessBasicSalProc(processSec);
                 break;
             case EmpMenus.Insurance:
@@ -288,11 +289,26 @@ export class EmployeeCreateEdit extends React.Component {
     }
 
     onProcessBasicSalProc = (section) => {
-        setTimeout(() => {
-            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+        let models = section.model;
+        models = models.map(x => {
+            x.employeeId = this.state.employeeId;
+            return x;
+        });
+        const createModels = models.filter(x => x.id === 0 && x.type === "ADD");
+        const updateModels = models.filter(x => x.id !== 0 && x.type === "EDIT");
+        const deleteModels = models.filter(x => x.id !== 0 && x.type === "DELETE");
+        const newParams = { createBasicSal: createModels, updateBasicSal: updateModels, deleteBasicSal: deleteModels };
+        EmployeeServices.Add('basicSalaryProcess', newParams).then(response => {
+            const responseStatus = response.data;
+            const newProcessSections = this.changeStatusSection(section, responseStatus.status === "SUCCESS" ? SectionStatus.DONE : SectionStatus.ERROR);
             const percent = this.calculatePercentProcess(newProcessSections);
             this.setState({ processSections: newProcessSections, percentProgress: percent });
-        }, 1000);
+
+        }, error => {
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
+        });
     }
 
     onProcessInsurance = (section) => {

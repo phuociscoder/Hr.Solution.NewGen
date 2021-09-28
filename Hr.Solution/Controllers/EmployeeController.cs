@@ -139,7 +139,7 @@ namespace Hr.Solution.Application.Controllers
             return Ok(new { status = "SUCCESS", message = "", value = result });
         }
 
-        [HttpPost, Route("Basic-Sal")]
+        [HttpPost, Route("basicSalaryProcess")]
         [Authorize]
         public async Task<ActionResult> EmployeeBasicSalProcessUpdate([FromBody] EmployeeBasicSalaryProcessRequest request)
         {
