@@ -206,4 +206,29 @@ namespace Hr.Solution.Data.Requests
         public DateTime? ModifiedOn { get; set; }
 
     }
+
+    public class EmployeeInsurance {
+        public int Id { get; set; }
+        public int EmployeeId { get; set; }
+        public string InsCode { get; set; }
+        public int Type { get; set; }
+        public int InsTypeId { get; set; }
+        public DateTime? IssueDate { get; set; }
+        public DateTime? JoinDate { get; set; }
+        public bool IsCo { get; set; }
+        public bool IsNew { get; set; }
+        public bool IsTransfer { get; set; }
+        public string Note { get; set; }
+        public string Transferee { get; set; }
+        public string Transferer { get; set; }
+        public int HospitalId { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+    }
+
+    public class EmployeeInsuranceRequest { 
+        public List<EmployeeInsurance> employeeInsurances { get; set; }
+    }
 }

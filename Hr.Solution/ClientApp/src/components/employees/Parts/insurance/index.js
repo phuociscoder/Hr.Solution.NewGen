@@ -27,8 +27,8 @@ export class EmployeeInsurance extends React.Component {
     componentDidMount = () => {
         this.loadInsurances();
         this.loadSelectOptions(Function.LSEM108, 'hospitals');
-        const { model } = this.props;
-        this.setState({ model: model });
+        // const { model } = this.props;
+        // this.setState({ model: model });
     }
 
     loadSelectOptions = (functionId, stateName) => {
@@ -145,7 +145,7 @@ export class EmployeeInsurance extends React.Component {
                 <div className="d-flex mt-2">
                     <label className="w-50">
                         Số BHXH:
-                        <input fieldname="insCode" value={insCode} onChange={e => this.onInputChange(e, InsuranceType.SI)} className="form-control" placeholder="Số BHXH"></input>
+                        <input fieldname="insCode" value={siModel.insCode} onChange={e => this.onInputChange(e, InsuranceType.SI)} className="form-control" placeholder="Số BHXH"></input>
                     </label>
                     <label className="w-50 ml-4">
                         Người bàn giao:
@@ -177,7 +177,7 @@ export class EmployeeInsurance extends React.Component {
                 </div>
                 <label className="w-100 ">
                     Ghi chú:
-                    <textarea fieldname="note" onChange={e => this.onInputChange(e, InsuranceType.SI)} value={note} className="form-control" rows={5} placeholder="Ghi chú"></textarea>
+                    <textarea fieldname="note" onChange={e => this.onInputChange(e, InsuranceType.SI)} value={siModel.note} className="form-control" rows={5} placeholder="Ghi chú"></textarea>
                 </label>
             </div>
         )

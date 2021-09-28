@@ -393,5 +393,65 @@ namespace Hr.Solution.Core.Services.Impl
             }
             return response;
         }
+
+        public async Task<int> EmployeeInsuranceUpdate(EmployeeInsuranceRequest request, string currentUser)
+        {
+            var tbl = ConvertToEmployeeInsuranceTable(request.employeeInsurances, currentUser);
+            var response = await repository.ExecuteAsync(ProcedureConstants.SP_EMPLOYEE_INSURANCES_UPDATE, new { employeeInsurances = tbl.AsTableValuedParameter("TVP_EmployeeInsurances") }, false);
+
+            return response;
+
+        }
+
+        private DataTable CreateEmployeeInsuranceTable()
+        {
+            var tbl = new DataTable();
+            tbl.Columns.Add("Id", typeof(int));
+            tbl.Columns.Add("EmployeeId", typeof(int));
+            tbl.Columns.Add("InsCode", typeof(string));
+            tbl.Columns.Add("Type", typeof(int));
+            tbl.Columns.Add("InsTypeId", typeof(int));
+            tbl.Columns.Add("IssueDate", typeof(DateTime));
+            tbl.Columns.Add("JoinDate", typeof(DateTime));
+            tbl.Columns.Add("IsCo", typeof(bool));
+            tbl.Columns.Add("IsNew", typeof(bool));
+            tbl.Columns.Add("IsTransfer", typeof(bool));
+            tbl.Columns.Add("Note", typeof(string));
+            tbl.Columns.Add("Transferer", typeof(string));
+            tbl.Columns.Add("Transferee", typeof(string));
+            tbl.Columns.Add("HospitalId", typeof(int));
+            tbl.Columns.Add("CreatedBy", typeof(string));
+            tbl.Columns.Add("CreatedOn", typeof(DateTime));
+            tbl.Columns.Add("ModifiedBy", typeof(string));
+            tbl.Columns.Add("ModifiedOn", typeof(DateTime));
+            return tbl;
+        }
+
+        private DataTable ConvertToEmployeeInsuranceTable(List<EmployeeInsurance> models, string currentUser)
+        {
+            var tbl = CreateEmployeeInsuranceTable();
+            models.ForEach(x =>
+            {
+                tbl.Rows.Add(
+                   x.Id,
+                   x.EmployeeId,
+                   x.InsCode,
+                   x.Type,
+                   x.InsTypeId,
+                   x.IssueDate,
+                   x.JoinDate,
+                   x.IsCo,
+                   x.IsNew,
+                   x.IsTransfer,
+                   x.Note,
+                   x.Transferer,
+                   x.Transferee,
+                   x.HospitalId,
+                   currentUser,
+                   null,
+                   currentUser, null);
+            });
+            return tbl;
+        }
     }
 }

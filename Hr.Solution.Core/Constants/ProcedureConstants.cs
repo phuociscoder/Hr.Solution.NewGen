@@ -90,6 +90,7 @@ namespace Hr.Solution.Core.Constants
         public static string SP_EMPLOYEE_DEPENDANTS_CUD = "spEmployeeDependants_CUD";
         public static string SP_EMPLOYEE_CONTRACT_CUD = "spEmployeeContract_CUD";
         public static string SP_EMPLOYEE_BASIC_SALARY_PROCESS_CUD = "spEmpBasicSalProcess_CUD";
+        public static string SP_EMPLOYEE_INSURANCES_UPDATE = "spEmployeeInsuranceUpdate";
 
         //EmployeesBasicSalary
         public static string SP_EMPLOYEES_BASIC_SALARY_UPDATE = "spEmployeesBasicSalary_Update";

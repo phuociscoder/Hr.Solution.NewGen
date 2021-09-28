@@ -1,4 +1,3 @@
-import { sequenceExpression } from "@babel/types";
 import { faCheck, faCheckCircle, faRecycle, faSave, faTimes, faTimesCircle, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
@@ -40,7 +39,6 @@ export class EmployeeCreateEdit extends React.Component {
 
 
     onSectionModelChange = (model, sectionId) => {
-        console.log(model);
         const { sections } = this.state;
         let newSections = Object.assign([], sections);
         let modelSection = newSections.find(x => x.id === sectionId);
@@ -298,12 +296,23 @@ export class EmployeeCreateEdit extends React.Component {
     }
 
     onProcessInsurance = (section) => {
-        const { insurances, processSections } = this.state;
-        setTimeout(() => {
-            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+        let models = section.model;
+        models = models.map(x => {
+            x.employeeId = this.state.employeeId;
+            return x;
+        });
+        const newParams = { employeeInsurances: models };
+        EmployeeServices.Add('insurances', newParams).then(response => {
+            const responseStatus = response.data;
+            const newProcessSections = this.changeStatusSection(section, responseStatus.status === "SUCCESS" ? SectionStatus.DONE : SectionStatus.ERROR);
             const percent = this.calculatePercentProcess(newProcessSections);
             this.setState({ processSections: newProcessSections, percentProgress: percent });
-        }, 1000);
+
+        }, error => {
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
+        });
     }
 
     generateConfirmModal = () => {

@@ -362,7 +362,6 @@ export class DepartmentDetails extends React.Component {
 
     onProcessConfirm = () => {
         const { departmentInfo, mode } = this.state;
-        console.log(departmentInfo);
         if (mode === Mode.CREATE) {
             const newModel = Object.assign({}, { ...departmentInfo, createdBy: AuthenticationManager.UserName() });
             DepartmentServices.Add(newModel)

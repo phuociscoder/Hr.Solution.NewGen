@@ -40,7 +40,6 @@ export class DataRoleManagement extends React.Component {
     }
 
     onDepartmentCheckedChange =(ids) => {
-        console.log(ids);
     }
 
     onRefesh =(value) => {

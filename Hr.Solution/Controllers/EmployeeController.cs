@@ -147,5 +147,15 @@ namespace Hr.Solution.Application.Controllers
             var result = await employeeServices.EmployeeBasicSalaryProcess_CUD(request, currentUser);
             return Ok(new { status = "SUCCESS", message = "", value = result });
         }
+
+        [HttpPost, Route("insurances")]
+        [Authorize]
+        public async Task<ActionResult> EmployeeInsuranceUpdate([FromBody] EmployeeInsuranceRequest request)
+        {
+            var currentUser = User.FindFirst(ClaimTypes.Name).Value;
+            var result = await employeeServices.EmployeeInsuranceUpdate(request, currentUser);
+            return Ok(new { status = "SUCCESS", message = "", value = result });
+            
+        }
     }
 }

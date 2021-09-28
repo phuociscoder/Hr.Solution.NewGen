@@ -35,7 +35,6 @@ export class InsuranceTypeList extends React.Component {
                     item.typeName = InsuranceType.ALL.find(x => x.id === item.insType)?.name;
                     return item;
                 });
-                console.log(categoryItems);
                 this.setState({ categoryItems: categoryItems, originCategoryItems: categoryItems, loading: false }, this.props.onRefreshed());
             }, error => {
                 this.setState({ loading: false });

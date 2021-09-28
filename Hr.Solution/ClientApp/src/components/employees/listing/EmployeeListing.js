@@ -120,7 +120,6 @@ export class EmployeeListing extends React.Component {
 
     render = () => {
         const { data, selectedDepartments, loading } = this.state;
-        console.log(data);
         return (
             <>
                 <div className="w-100 h-4 d-flex justify-content-end mb-2">
@@ -186,7 +185,6 @@ export class EmployeeListing extends React.Component {
     processImportFile = () => {
         const { selectedImportFile } = this.state;
         if(!selectedImportFile) return;
-        console.log(selectedImportFile);
         this.setState({ showImportFileModal: false })
     }
 
@@ -247,7 +245,6 @@ export class EmployeeListing extends React.Component {
     processExportSampleFile = () => {
         const { checkedLists } = this.state;
         if(!checkedLists) return;
-        console.log(checkedLists);
         this.setState({ showExportSampleFileModal: false })
     }
 

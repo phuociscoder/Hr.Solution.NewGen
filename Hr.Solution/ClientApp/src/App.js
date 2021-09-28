@@ -5,7 +5,6 @@ import { Home } from './components/Home';
 
 import './custom.css'
 import { EmployeeListing } from './components/employees/listing/EmployeeListing';
-import { EmployeeContract } from './components/employee.constract/EmployeeContract';
 import { CategoryListing } from './components/administration/administration.category/Category.list';
 import { AppRoute } from './components/AppRoute';
 import AuthorizationComponent from './components/AuthorizationComponent';
@@ -50,7 +49,6 @@ export default class App extends Component {
           <Layout>
             <Switch>
               <Route exact path={[AppRoute.EMPLOYEE_MANAGEMENT.path]} component={AuthorizationComponent(EmployeeListing, Function.EMP000)} />
-              <Route exact path={[AppRoute.EMPLOYEE_CONTRACT.path]} component={EmployeeContract} />
               <Route exact path={[AppRoute.EMPLOYEE_CREATE.path]} component={AuthorizationComponent(EmployeeCreateEdit, Function.EMP001)} />
               <Route exact path={[AppRoute.CATEGORY_LIST.path]} component={AuthorizationComponent(CategoryListing, Function.LS000)} />
               <Route exact path={[AppRoute.CATEGORY_DETAIL.path]} component={WrapperCategoryDetail(CategoryDetail)}/>

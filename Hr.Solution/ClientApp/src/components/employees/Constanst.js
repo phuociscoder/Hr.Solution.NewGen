@@ -56,3 +56,9 @@ export class Insurance{
         { id: this.UNEMPLOYMENT, name: "BẢO HIỂM THẤT NGHIỆP" }
     ]
 }
+
+export class Mode{
+    static View = 0;
+    static Create = 1;
+    static Edit = 2;
+}
