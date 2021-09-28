@@ -11,6 +11,7 @@ import { NotificationType } from "../../../Common/notification/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
 import { Mode } from "../../Constanst";
 import { NumberUltis } from "../../../Utilities/NumberUltis";
+import { Amount } from "../../../Common/InputAmount";
 // import { BasicSalProcServices } from "../basicSalProc.services";
 
 export class EmployeeSalaryProcessDetail extends React.Component {
@@ -22,18 +23,14 @@ export class EmployeeSalaryProcessDetail extends React.Component {
             model: {
                 id: 0
             },
-            // CALL_DRAFT
-            adjustmentSalaryTypes : [],
-            signers: []
+           adjustTypes: []
+           
 
         }
     }
 
     componentDidMount = () => {
-        // Loại điều chỉnh lương
-        // this.loadSelectOptions(Function.LSEM104, 'adjustmentSalaryTypes');
-        // Người ký
-        // this.loadSelectOptions(Function.LSEM104, 'signers');
+        this.loadSelectOptions(Function.LSEM400, 'adjustTypes');
     }
 
     loadSelectOptions = (functionId, stateName) => {
@@ -56,16 +53,16 @@ export class EmployeeSalaryProcessDetail extends React.Component {
     resetModel = () => {
         const model = {
             id: 0,
-            decisionNumber: '',
-            effectiveDate: null,
-            expirationDate: null,
-            basicSalary: 0.0,
-            salarySI: 0.0,
-            adjustmentSalaryTypeId: 0,
-            OTSalary: 0.0,
-            contractSalary: 0.0,
-            signDate: null,
-            signerId: 0,
+            decideNo: '',
+            validFromDate: null,
+            validToDate: null,
+            basicSal: 0,
+            sISal: 0,
+            adjustTypeId: null,
+            oTRate: 0,
+            fixSal: 0,
+            signateDate: null,
+            signatorId: 0,
             isActive: true,
             note: ''
         }
@@ -77,7 +74,7 @@ export class EmployeeSalaryProcessDetail extends React.Component {
         this.setState({ model: newModel, mode: Mode.Create });
     }
 
-    onEmployeeBasicSalProcModelChange = (e) => {
+    onModelChange = (e) => {
         const { model } = this.state;
         const fieldName = e.target.getAttribute("fieldname");
         const type = e.target.type;
@@ -103,8 +100,8 @@ export class EmployeeSalaryProcessDetail extends React.Component {
     }
 
     render = () => {
-        const { decisionNumber, effectiveDate, expirationDate, basicSalary, salarySI, adjustmentSalaryTypeId, OTSalary, contractSalary, signDate, signerId, isActive, note } = this.state.model;
-        const { mode, signers, adjustmentSalaryTypes } = this.state;
+        const { decideNo, validFromDate, validToDate, basicSal, sISal, adjustTypeId, oTRate, fixSal, signateDate, signatorId, isActive, note } = this.state.model;
+        const { mode, signers, adjustTypes } = this.state;
         return (
             <>
                 <Card className="h-100">
@@ -118,62 +115,71 @@ export class EmployeeSalaryProcessDetail extends React.Component {
                                 <div className="d-flex">
                                     <label className="w-50">
                                         Số quyết định:
-                                        <input fieldname="decisionNumber" value={decisionNumber} onChange={this.onEmployeeBasicSalProcModelChange} className="form-control" placeholder="Số quyết định"></input>
+                                        <input fieldname="decideNo" value={decideNo} onChange={this.onModelChange} className="form-control" placeholder="Số quyết định"></input>
                                     </label>
                                     <label className="w-50 pl-4 text-camelcase">
                                         Loại điều chỉnh lương:
-                                        <CustomSelect data={adjustmentSalaryTypes} selectedValue={adjustmentSalaryTypeId} labelField="name" placeHolder="-Chọn quan hệ-" isClearable={true} onValueChange={value => this.onCustomModelChange(value, 'adjustmentSalaryTypeId')} />
+                                        <CustomSelect data={adjustTypes} selectedValue={adjustTypeId} labelField="name" placeHolder="-Chọn loại điều chỉnh-" isClearable={true} onValueChange={value => this.onCustomModelChange(value, 'adjustTypeId')} />
                                     </label>
                                 </div>
                                 <div className="d-flex">
                                     <label className="w-50">
                                         Ngày hiệu lực:
-                                        <CustomDatePicker value={effectiveDate} onDateChange={value => this.onCustomModelChange(value, 'effectiveDate')} />
+                                        <CustomDatePicker value={validFromDate} onDateChange={value => this.onCustomModelChange(value, 'validFromDate')} />
                                     </label>
                                     <label className="w-50 pl-4 text-camelcase">
                                         Đơn giá ngoài giờ:
-                                        <input fieldname="OTSalary" type="number" value={OTSalary} onChange={this.onEmployeeBasicSalProcModelChange} className="form-control" placeholder="Đơn giá ngoài giờ"></input>
+                                        <Amount amount={oTRate} className="form-control" placeHolder="Đơn giá ngoài giờ" onAmountChange={value => this.onCustomModelChange(value, 'oTRate')} />
                                     </label>
                                 </div>
                                 <div className="d-flex">
                                     <label className="w-50">
                                         Ngày hết hạn:
-                                        <CustomDatePicker value={expirationDate} onDateChange={value => this.onCustomModelChange(value, 'expirationDate')} />
+                                        <CustomDatePicker value={validToDate} onDateChange={value => this.onCustomModelChange(value, 'validToDate')} />
                                     </label>
                                     <label className="w-50 pl-4 text-camelcase">
                                         Lương khoán:
-                                        <input fieldname="contractSalary" type="number" value={contractSalary} onChange={this.onEmployeeBasicSalProcModelChange} className="form-control" placeholder="Lương khoán"></input>
+                                        <Amount amount={fixSal} className="form-control" placeHolder="Lương Khoán" onAmountChange={value => this.onCustomModelChange(value, 'fixSal')} />
                                     </label>
                                 </div>
                                 <div className="d-flex">
                                     <label className="w-50">
                                         Lương cơ bản:
-                                        <input fieldname="basicSalary" type="number" value={basicSalary} onChange={this.onEmployeeBasicSalProcModelChange} className="form-control" placeholder="Lương cơ bản"></input>
+                                        <Amount amount={basicSal} className="form-control" placeHolder="Lương cơ bản" onAmountChange={value => this.onCustomModelChange(value, 'basicSal')} />
                                     </label>
                                     <label className="w-50 pl-4 text-camelcase">
                                         Ngày ký:
-                                        <CustomDatePicker value={signDate} onDateChange={value => this.onCustomModelChange(value, 'signDate')} />
+                                        <CustomDatePicker value={signateDate} onDateChange={value => this.onCustomModelChange(value, 'signateDate')} />
                                     </label>
                                 </div>
                                 <div className="d-flex">
                                     <label className="w-50">
                                         Lương đóng BHXH:
-                                        <input fieldname="salarySI" type="number" value={salarySI} onChange={this.onEmployeeBasicSalProcModelChange} className="form-control" placeholder="Lương đóng BHXH"></input>
+                                        <Amount amount={sISal} className="form-control" placeHolder="Lương đóng BHXH" onAmountChange={value => this.onCustomModelChange(value, 'sISal')} />
                                     </label>
                                     <div className="d-flex w-50 pl-4">
                                         <label className="mr-auto text-camelcase">
                                             Người ký:
-                                            <CustomSelect data={signers} selectedValue={signerId} labelField="name" placeHolder="-Chọn quan hệ-" isClearable={true} onValueChange={value => this.onCustomModelChange(value, 'signerId')} />
+                                            <CustomSelect dataUrl="/api/Employee/Managers" className="w-100"
+                                        orderFieldName={["level"]}
+                                        orderBy="desc"
+                                        disabled={mode === Mode.VIEW}
+                                        selectedValue={signatorId}
+                                        isHierachy={false}
+                                        valueField="id"
+                                        labelField="fullName"
+                                        isClearable={true}
+                                        onValueChange={value => this.onCustomModelChange(value, 'signatorId')} />
                                             {/* <CustomDatePicker value={doB} onDateChange={value => this.onCustomModelChange(value, 'doB')} /> */}
                                         </label>
                                         <label className="w-25 ">
-                                            <input fieldname="isActive" onChange={this.onEmployeeBasicSalProcModelChange} type="checkbox" checked={isActive} /> <span className="ml-1"> Đang hiệu lực</span>
+                                            <input fieldname="isActive" onChange={this.onModelChange} type="checkbox" checked={isActive} /> <span className="ml-1"> Đang hiệu lực</span>
                                         </label>
                                     </div>
                                 </div>
                                 <label className="w-100 ">
                                     Ghi chú:
-                                    <textarea fieldname="note" onChange={this.onEmployeeBasicSalProcModelChange} value={note} className="form-control" rows={5} placeholder="Ghi chú"></textarea>
+                                    <textarea fieldname="note" onChange={this.onModelChange} value={note} className="form-control" rows={5} placeholder="Ghi chú"></textarea>
                                 </label>
                             </div>
                         </div>
@@ -258,15 +264,15 @@ export class EmployeeSalaryProcessDetail extends React.Component {
     }
 
     onProcessConfirm = () => {
-        const { model, mode, adjustmentSalaryTypes, signers } = this.state;
+        const { model, mode, adjustTypes, signers } = this.state;
         const { onUpdateModels } = this.props;
 
-        if (model.adjustmentSalaryTypeId) {
-            model.adjustmentSalaryName = adjustmentSalaryTypes.find(x => x.id === model.adjustmentSalaryTypeId)?.name;
+        if (model.adjustTypeId) {
+            model.adjustmentSalaryName = adjustTypes.find(x => x.id === model.adjustTypeId)?.name;
         }
-        if (model.signerId) {
-            model.signerName = signers.find(x => x.id === model.signerId)?.name;
-        }
+        // if (model.signatorId) {
+        //     model.signerName = signers.find(x => x.id === model.signerId)?.name;
+        // }
 
         if (mode === Mode.Create) {
             onUpdateModels({ type: "A", model: model });

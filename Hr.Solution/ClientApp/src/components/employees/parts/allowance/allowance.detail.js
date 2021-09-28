@@ -95,8 +95,6 @@ export class EmployeeAllowanceDetail extends React.Component {
     render = () => {
         const {decideNo, validFromDate, validToDate, allowanceTypeId, amount, currencyId, currencyRate, freeTaxAmount, isActive, note} = this.state.model;
         const { mode, allowances, currencies } = this.state;
-
-        console.log(this.state.model);
         return (
             <>
                 <Card className="h-100">

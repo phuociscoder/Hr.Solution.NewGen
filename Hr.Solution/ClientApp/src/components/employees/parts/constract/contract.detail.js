@@ -48,21 +48,21 @@ export class EmployeeContractDetail extends React.Component {
     resetModel = () => {
         const model = {
             id: 0,
-            code: '',
+            contractNo: '',
             signDate: null,
             employeeId: null,
             contractTypeId: null,
-            duration: null,
-            validFromDate: null,
-            validToDate: null,
+            durationId: null,
+            validDate: null,
+            expiredDate: null,
             paymentMethodId: null,
-            signator: null,
+            signatorId: null,
             basicSalary: null,
-            probationFrom: null,
-            probationTo: null,
+            probationFromDate: null,
+            probationToDate: null,
             workingTime: null,
-            workingPlace: null,
-            vehicle: null,
+            workingPlaceId: null,
+            vehicleInfo: null,
             jobTitle: null,
             note: null
         }
@@ -97,8 +97,8 @@ export class EmployeeContractDetail extends React.Component {
     }
 
     render = () => {
-        const { code, signDate, signator, validFromDate, validToDate, duration, contractTypeId, paymentMethodId, basicSalary, probationFrom, probationTo, workingPlace,
-                workingTime, vehicle, jobTitle, note  } = this.state.model;
+        const { contractNo, signDate, signatorId, validDate, expiredDate, durationId, contractTypeId, paymentMethodId, basicSalary, probationFromDate, probationToDate, workingPlaceId,
+                workingTime, vehicleInfo, jobTitle, note  } = this.state.model;
         const { mode, contractTypes } = this.state;
         return (
             <>
@@ -112,7 +112,7 @@ export class EmployeeContractDetail extends React.Component {
                             <div className="w-50 d-flex flex-column">
                             <label className="w-100">
                                 Số hợp đồng:
-                                <input className="form-control" placeholder="Số hợp đồng" fieldName="code" value={code} onChange={this.onEmployeeContractModelChange} />
+                                <input className="form-control" placeholder="Số hợp đồng" fieldName="contractNo" value={contractNo} onChange={this.onEmployeeContractModelChange} />
                             </label>
                             <label className="w-100">
                                 Ngày ký:
@@ -126,17 +126,17 @@ export class EmployeeContractDetail extends React.Component {
                             
                             <label className="w-100">
                                Thời hạn hợp đồng:
-                               <CustomSelect selectedValue={duration} data={contractTypes} placeHolder="-Chọn thời hạn-" onValueChange={value => this.onCustomModelChange(value, 'duration')} />
+                               <CustomSelect selectedValue={durationId} data={contractTypes} placeHolder="-Chọn thời hạn-" onValueChange={value => this.onCustomModelChange(value, 'durationId')} />
                             </label>
 
                             <label className="w-100">
                                 Ngày hiệu lực:
-                                <CustomDatePicker value={validFromDate} onDateChange={value => this.onCustomModelChange(value, 'validFromDate')} />
+                                <CustomDatePicker value={validDate} onDateChange={value => this.onCustomModelChange(value, 'validDate')} />
                             </label>
 
                             <label className="w-100">
                                 Ngày hết hạn:
-                                <CustomDatePicker value={validToDate} onDateChange={value => this.onCustomModelChange(value, 'validToDate')} />
+                                <CustomDatePicker value={expiredDate} onDateChange={value => this.onCustomModelChange(value, 'expiredDate')} />
                             </label>
 
                             <label className="w-100">
@@ -146,7 +146,7 @@ export class EmployeeContractDetail extends React.Component {
 
                             <label className="w-100">
                                Người ký HĐLD:
-                               <CustomSelect selectedValue={signator} data={contractTypes} placeHolder="-Chọn Người Ký-" onValueChange={value => this.onCustomModelChange(value, 'signator')} />
+                               <CustomSelect selectedValue={signatorId} data={contractTypes} placeHolder="-Chọn Người Ký-" onValueChange={value => this.onCustomModelChange(value, 'signatorId')} />
                             </label>
 
                             <label className="w-100">
@@ -159,17 +159,17 @@ export class EmployeeContractDetail extends React.Component {
                             <div className="w-50 pl-4 ml-4 d-flex flex-column">
                             <label className="w-100">
                                 Thử việc từ ngày:
-                                <CustomDatePicker value={probationFrom} onDateChange={value => this.onCustomModelChange(value, 'probationFrom')} />
+                                <CustomDatePicker value={probationFromDate} onDateChange={value => this.onCustomModelChange(value, 'probationFromDate')} />
                             </label>
 
                             <label className="w-100">
                                 Thử việc đến ngày:
-                                <CustomDatePicker value={probationTo} onDateChange={value => this.onCustomModelChange(value, 'probationTo')} />
+                                <CustomDatePicker value={probationToDate} onDateChange={value => this.onCustomModelChange(value, 'probationToDate')} />
                             </label>
 
                             <label className="w-100">
                                Nơi làm việc:
-                               <CustomSelect selectedValue={workingPlace} data={contractTypes} placeHolder="-Chọn nơi làm việc-" onValueChange={value => this.onCustomModelChange(value, 'workingPlace')} />
+                               <CustomSelect selectedValue={workingPlaceId} data={contractTypes} placeHolder="-Chọn nơi làm việc-" onValueChange={value => this.onCustomModelChange(value, 'workingPlaceId')} />
                             </label>
 
                             <label className="w-100">
@@ -184,7 +184,7 @@ export class EmployeeContractDetail extends React.Component {
 
                             <label className="w-100">
                                Phương tiện đi lại:
-                               <input className="form-control" fieldName="vehicle" value={vehicle} onChange={this.onEmployeeContractModelChange} placeholder="Phương tiện đi lại" />
+                               <input className="form-control" fieldName="vehicleInfo" value={vehicleInfo} onChange={this.onEmployeeContractModelChange} placeholder="Phương tiện đi lại" />
                             </label>
                             <label className="w-100">
                                Thời gian làm việc:

@@ -1,4 +1,3 @@
-import { sequenceExpression } from "@babel/types";
 import { faCheck, faCheckCircle, faRecycle, faSave, faTimes, faTimesCircle, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
@@ -13,7 +12,7 @@ import { EmployeeSalaryProcess } from "../parts/basicSalaryProcess";
 import { EmployeeContract } from "../parts/constract";
 import { EmployeeDependant } from "../parts/dependence";
 import { EmployeeGeneralInfo } from "../parts/generalInfo";
-import { EmployeeInsurance } from "../parts/socialInsurance";
+import { EmployeeInsurance } from "../parts/insurance";
 import { EmployeeTimekeeperInfo } from "../parts/timekeepInfo";
 import { EmployeeLeftMenu } from "./left-menu";
 
@@ -40,6 +39,7 @@ export class EmployeeCreateEdit extends React.Component {
 
 
     onSectionModelChange = (model, sectionId) => {
+        console.log(model);
         const { sections } = this.state;
         let newSections = Object.assign([], sections);
         let modelSection = newSections.find(x => x.id === sectionId);
@@ -107,12 +107,12 @@ export class EmployeeCreateEdit extends React.Component {
     onShowConfirmModal = () => {
         const { sections, mode } = this.state;
         const processSections = sections.filter(x => x.state === SectionState.CHANGED);
-        // if (mode === Mode.Create) {
-        //     const isProcessGeneralInfo = processSections.some(x => x.id === EmpMenus.GeneralInfo);
-        //     this.setState({ processSections: processSections, showConfirmModal: isProcessGeneralInfo })
-        // } else {
+        if (mode === Mode.Create) {
+            const isProcessGeneralInfo = processSections.some(x => x.id === EmpMenus.GeneralInfo);
+            this.setState({ processSections: processSections, showConfirmModal: isProcessGeneralInfo })
+        } else {
             this.setState({ processSections: processSections, showConfirmModal: processSections.length > 0 });
-        // }
+        }
     }
 
     onProcessConfirm = () => {
@@ -170,7 +170,7 @@ export class EmployeeCreateEdit extends React.Component {
             case EmpMenus.Contract:
                 this.onProcessContracts(processSec);
                 break;
-            case EmpMenus.BasicSalaryProcess:
+            case EmpMenus.SalaryProcess:
                 this.onProcessBasicSalProc(processSec);
                 break;
             case EmpMenus.Insurance:
@@ -212,12 +212,12 @@ export class EmployeeCreateEdit extends React.Component {
         const createModels = models.filter(x => x.id === 0 && x.type === "ADD");
         const updateModels = models.filter(x => x.id !== 0 && x.type === "EDIT");
         const deleteModels = models.filter(x => x.id !== 0 && x.type === "DELETE");
-        const newParams = { createAllowances: createModels, updateAllowances: updateModels, deleteAllowances: deleteModels};
+        const newParams = { createAllowances: createModels, updateAllowances: updateModels, deleteAllowances: deleteModels };
         EmployeeServices.Add('allowances', newParams).then(response => {
             const responseStatus = response.data;
             const newProcessSections = this.changeStatusSection(section, responseStatus.status === "SUCCESS" ? SectionStatus.DONE : SectionStatus.ERROR);
             const percent = this.calculatePercentProcess(newProcessSections);
-            this.setState({ processSections: newProcessSections, percentProgress: percent});
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
 
         }, error => {
             const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
@@ -235,12 +235,12 @@ export class EmployeeCreateEdit extends React.Component {
         const createModels = models.filter(x => x.id === 0 && x.type === "ADD");
         const updateModels = models.filter(x => x.id !== 0 && x.type === "EDIT");
         const deleteModels = models.filter(x => x.id !== 0 && x.type === "DELETE");
-        const newParams = { createContracts: createModels, updateContracts: updateModels, deleteContracts: deleteModels};
+        const newParams = { createContracts: createModels, updateContracts: updateModels, deleteContracts: deleteModels };
         EmployeeServices.Add('contracts', newParams).then(response => {
             const responseStatus = response.data;
             const newProcessSections = this.changeStatusSection(section, responseStatus.status === "SUCCESS" ? SectionStatus.DONE : SectionStatus.ERROR);
             const percent = this.calculatePercentProcess(newProcessSections);
-            this.setState({ processSections: newProcessSections, percentProgress: percent});
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
 
         }, error => {
             const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
@@ -258,12 +258,12 @@ export class EmployeeCreateEdit extends React.Component {
         const createModels = models.filter(x => x.id === 0 && x.type === "ADD");
         const updateModels = models.filter(x => x.id !== 0 && x.type === "EDIT");
         const deleteModels = models.filter(x => x.id !== 0 && x.type === "DELETE");
-        const newParams = { createDependants: createModels, updateDependants: updateModels, deleteDependants: deleteModels};
+        const newParams = { createDependants: createModels, updateDependants: updateModels, deleteDependants: deleteModels };
         EmployeeServices.Add('dependants', newParams).then(response => {
             const responseStatus = response.data;
             const newProcessSections = this.changeStatusSection(section, responseStatus.status === "SUCCESS" ? SectionStatus.DONE : SectionStatus.ERROR);
             const percent = this.calculatePercentProcess(newProcessSections);
-            this.setState({ processSections: newProcessSections, percentProgress: percent});
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
 
         }, error => {
             const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
@@ -273,29 +273,62 @@ export class EmployeeCreateEdit extends React.Component {
     }
 
     onProcessBasicSalaryInfo = (section) => {
-        const { generalInfo, processSections } = this.state;
-        setTimeout(() => {
-            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
-            const percent = this.calculatePercentProcess(newProcessSections);
-            this.setState({ processSections: newProcessSections, percentProgress: percent });
-        }, 1000);
+        let model = section.model;
+        model.id = this.state.employeeId;
+       
+      EmployeeServices.Add('basicSalaryInfo', model).then(response => {
+        const responseStatus = response.data;
+        const newProcessSections = this.changeStatusSection(section, responseStatus.status === "SUCCESS" ? SectionStatus.DONE : SectionStatus.ERROR);
+        const percent = this.calculatePercentProcess(newProcessSections);
+        this.setState({ processSections: newProcessSections, percentProgress: percent });
+      }, error => {
+        const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
+        const percent = this.calculatePercentProcess(newProcessSections);
+        this.setState({ processSections: newProcessSections, percentProgress: percent });
+      });
     }
 
     onProcessBasicSalProc = (section) => {
-        setTimeout(() => {
-            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+        let models = section.model;
+        models = models.map(x => {
+            x.employeeId = this.state.employeeId;
+            return x;
+        });
+        const createModels = models.filter(x => x.id === 0 && x.type === "ADD");
+        const updateModels = models.filter(x => x.id !== 0 && x.type === "EDIT");
+        const deleteModels = models.filter(x => x.id !== 0 && x.type === "DELETE");
+        const newParams = { createBasicSal: createModels, updateBasicSal: updateModels, deleteBasicSal: deleteModels };
+        EmployeeServices.Add('basicSalaryProcess', newParams).then(response => {
+            const responseStatus = response.data;
+            const newProcessSections = this.changeStatusSection(section, responseStatus.status === "SUCCESS" ? SectionStatus.DONE : SectionStatus.ERROR);
             const percent = this.calculatePercentProcess(newProcessSections);
             this.setState({ processSections: newProcessSections, percentProgress: percent });
-        }, 1000);
+
+        }, error => {
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
+        });
     }
 
     onProcessInsurance = (section) => {
-        const { insurances, processSections } = this.state;
-        setTimeout(() => {
-            const newProcessSections = this.changeStatusSection(section, SectionStatus.DONE);
+        let models = section.model;
+        models = models.map(x => {
+            x.employeeId = this.state.employeeId;
+            return x;
+        });
+        const newParams = { employeeInsurances: models };
+        EmployeeServices.Add('insurances', newParams).then(response => {
+            const responseStatus = response.data;
+            const newProcessSections = this.changeStatusSection(section, responseStatus.status === "SUCCESS" ? SectionStatus.DONE : SectionStatus.ERROR);
             const percent = this.calculatePercentProcess(newProcessSections);
             this.setState({ processSections: newProcessSections, percentProgress: percent });
-        }, 1000);
+
+        }, error => {
+            const newProcessSections = this.changeStatusSection(section, SectionStatus.ERROR);
+            const percent = this.calculatePercentProcess(newProcessSections);
+            this.setState({ processSections: newProcessSections, percentProgress: percent });
+        });
     }
 
     generateConfirmModal = () => {
@@ -365,9 +398,10 @@ export class EmployeeCreateEdit extends React.Component {
         )
     }
 
-    onCompleteProcess =() => {
+    onCompleteProcess = () => {
         ShowNotification(NotificationType.SUCCESS, "Thêm nhân viên mới thành công");
-        this.props.history.push();
+        this.setState({showProcessModal: false});
+        this.props.history.push("/employees");
     }
 }
 

@@ -13,7 +13,6 @@ export class EmployeeServices {
     }
 
     static Add =(sectionName, params) => {
-        console.log(params);
       return RestClient.SendPostRequest(`${this.baseUrl}/${sectionName}`, params);
     }
 

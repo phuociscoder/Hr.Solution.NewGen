@@ -6,6 +6,7 @@ import _, { debounce } from "lodash";
 import { Function } from "../../../Common/Constants";
 import { CategoryServices } from "../../../administration/administration.category/Category.services";
 import { DateTimeUltils } from '../../../Utilities/DateTimeUltis'
+import { NumberUltis } from "../../../Utilities/NumberUltis";
 
 export class EmployeeSalaryProcessList extends React.Component {
     constructor(props) {
@@ -80,10 +81,10 @@ export class EmployeeSalaryProcessList extends React.Component {
                                 return (
                                     <div key={item.id} fieldName={item.id} className={selectedItem === item ? "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown active" : "w-100 group-role-item d-flex flex-column animate__animated animate__fadeInDown"}
                                         onClick={() => this.onSelectItem(item)}>
-                                        <span className="text-uppercase"><b>{DateTimeUltils.toDateString(item.effectiveDate)}</b></span>
+                                        <span className="text-uppercase"><b>{DateTimeUltils.toDateString(item.validFromDate)}</b></span>
                                         <div className="w-100 d-flex">
-                                            <span className="mr-auto"><i>{item.basicSalary}</i></span>
-                                            <span className={item.isActive ? "ml-auto text-success" : "ml-auto text-danger"}><i>{item.salarySI}</i></span>
+                                            <span className="mr-auto"><i>{NumberUltis.convertToAmountText(item.basicSal)}</i></span>
+                                            <span className={item.isActive ? "ml-auto text-success" : "ml-auto text-danger"}><i>{NumberUltis.convertToAmountText(item.sISal)}</i></span>
                                         </div>
                                     </div>
                                 )

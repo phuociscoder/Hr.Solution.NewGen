@@ -13,7 +13,6 @@ const getYears = () => {
 const getMonthYears = () => {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
-    console.log(currentMonth);
     const startPreviousYear = currentYear - 5;
 
     let monthYears = [];

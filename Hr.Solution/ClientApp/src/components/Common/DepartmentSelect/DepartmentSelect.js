@@ -49,7 +49,6 @@ export class DepartmentSelect extends React.Component {
                     if (selectedValue) {
                         selectedItem = options.find(x => x.id === selectedValue);
                     }
-                    console.log(options);
                     this.setState({ options: options, selectItem: selectedItem });
                 }, error => { });
 
