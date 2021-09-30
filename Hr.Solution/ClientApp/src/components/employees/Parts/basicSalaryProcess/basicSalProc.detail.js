@@ -12,6 +12,8 @@ import { ShowNotification } from "../../../Common/notification/Notification";
 import { Mode } from "../../Constanst";
 import { NumberUltis } from "../../../Utilities/NumberUltis";
 import { Amount } from "../../../Common/InputAmount";
+import { StringUltis } from "../../../Utilities/StringUltis";
+import { DateTimeUltils } from "../../../Utilities/DateTimeUltis";
 // import { BasicSalProcServices } from "../basicSalProc.services";
 
 export class EmployeeSalaryProcessDetail extends React.Component {
@@ -99,6 +101,11 @@ export class EmployeeSalaryProcessDetail extends React.Component {
         this.setState({ model: newModel });
     }
 
+    validModel =() => {
+        const {model} = this.state;
+        return !StringUltis.IsNullOrEmpty(model.decideNo) && DateTimeUltils.IsDate(model.validFromDate) && NumberUltis.IsNumber(model.fixSal) && NumberUltis.IsNumber(model.basicSal);
+    }
+
     render = () => {
         const { decideNo, validFromDate, validToDate, basicSal, sISal, adjustTypeId, oTRate, fixSal, signateDate, signatorId, isActive, note } = this.state.model;
         const { mode, signers, adjustTypes } = this.state;
@@ -114,7 +121,7 @@ export class EmployeeSalaryProcessDetail extends React.Component {
                             <div className="w-100 d-flex flex-column">
                                 <div className="d-flex">
                                     <label className="w-50">
-                                        Số quyết định:
+                                        Số quyết định:<span className="require">*</span>
                                         <input fieldname="decideNo" value={decideNo} onChange={this.onModelChange} className="form-control" placeholder="Số quyết định"></input>
                                     </label>
                                     <label className="w-50 pl-4 text-camelcase">
@@ -124,7 +131,7 @@ export class EmployeeSalaryProcessDetail extends React.Component {
                                 </div>
                                 <div className="d-flex">
                                     <label className="w-50">
-                                        Ngày hiệu lực:
+                                        Ngày hiệu lực:<span className="require">*</span>
                                         <CustomDatePicker value={validFromDate} onDateChange={value => this.onCustomModelChange(value, 'validFromDate')} />
                                     </label>
                                     <label className="w-50 pl-4 text-camelcase">
@@ -138,13 +145,13 @@ export class EmployeeSalaryProcessDetail extends React.Component {
                                         <CustomDatePicker value={validToDate} onDateChange={value => this.onCustomModelChange(value, 'validToDate')} />
                                     </label>
                                     <label className="w-50 pl-4 text-camelcase">
-                                        Lương khoán:
+                                        Lương khoán:<span className="require">*</span>
                                         <Amount amount={fixSal} className="form-control" placeHolder="Lương Khoán" onAmountChange={value => this.onCustomModelChange(value, 'fixSal')} />
                                     </label>
                                 </div>
                                 <div className="d-flex">
                                     <label className="w-50">
-                                        Lương cơ bản:
+                                        Lương cơ bản:<span className="require">*</span>
                                         <Amount amount={basicSal} className="form-control" placeHolder="Lương cơ bản" onAmountChange={value => this.onCustomModelChange(value, 'basicSal')} />
                                     </label>
                                     <label className="w-50 pl-4 text-camelcase">
@@ -170,7 +177,6 @@ export class EmployeeSalaryProcessDetail extends React.Component {
                                         labelField="fullName"
                                         isClearable={true}
                                         onValueChange={value => this.onCustomModelChange(value, 'signatorId')} />
-                                            {/* <CustomDatePicker value={doB} onDateChange={value => this.onCustomModelChange(value, 'doB')} /> */}
                                         </label>
                                         <label className="w-25 ">
                                             <input fieldname="isActive" onChange={this.onModelChange} type="checkbox" checked={isActive} /> <span className="ml-1"> Đang hiệu lực</span>
@@ -186,7 +192,7 @@ export class EmployeeSalaryProcessDetail extends React.Component {
                         }
                         <div className="w-80 border-bottom" />
                         <div className="d-flex w-80 justify-content-end mt-2">
-                            {mode !== Mode.View && <button data-tip="Lưu" className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faAngleLeft} /><span className="ml-1">{mode === Mode.Create ? "Thêm vào danh sách" : "Cập nhật vào danh sách"}</span></button>}
+                            {mode !== Mode.View && <button disabled={!this.validModel()} data-tip="Lưu" className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faAngleLeft} /><span className="ml-1">{mode === Mode.Create ? "Thêm vào danh sách" : "Cập nhật vào danh sách"}</span></button>}
                             {mode === Mode.Edit && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showModalRemoveComfirm: true })}><FontAwesomeIcon icon={faTrash} /><span className="ml-1">Xóa khỏi danh sách</span></button>}
                             {mode !== Mode.View && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span className="ml-1">Hủy thao tác</span></button>}
 

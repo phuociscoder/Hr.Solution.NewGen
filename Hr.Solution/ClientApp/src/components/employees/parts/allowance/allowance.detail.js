@@ -11,6 +11,8 @@ import { ShowNotification } from "../../../Common/notification/Notification";
 import { Mode } from "../../Constanst";
 import { Amount } from "../../../Common/InputAmount";
 import { NumberUltis } from "../../../Utilities/NumberUltis";
+import { StringUltis } from "../../../Utilities/StringUltis";
+import { DateTimeUltils } from "../../../Utilities/DateTimeUltis";
 // import { dependenceServices } from "../dependence.services";
 
 export class EmployeeAllowanceDetail extends React.Component {
@@ -66,7 +68,7 @@ export class EmployeeAllowanceDetail extends React.Component {
     }
 
     onAddItemClick = () => {
-        const newModel = {id: 0, isActive: true};
+        const newModel = { id: 0, isActive: true };
         this.setState({ model: newModel, mode: Mode.Create });
     }
 
@@ -92,8 +94,14 @@ export class EmployeeAllowanceDetail extends React.Component {
         this.setState({ model: newModel });
     }
 
+    validModel = () => {
+        const { model } = this.state;
+        const valid = !StringUltis.IsNullOrEmpty(model.decideNo) && DateTimeUltils.IsDate(model.validFromDate) && NumberUltis.IsNumber(model.allowanceTypeId) && NumberUltis.IsNumber(model.amount);
+        return valid;
+    }
+
     render = () => {
-        const {decideNo, validFromDate, validToDate, allowanceTypeId, amount, currencyId, currencyRate, freeTaxAmount, isActive, note} = this.state.model;
+        const { decideNo, validFromDate, validToDate, allowanceTypeId, amount, currencyId, currencyRate, freeTaxAmount, isActive, note } = this.state.model;
         const { mode, allowances, currencies } = this.state;
         return (
             <>
@@ -102,16 +110,16 @@ export class EmployeeAllowanceDetail extends React.Component {
                         <button className="btn btn-primary" disabled={mode === Mode.Create} onClick={this.onAddItemClick}><FontAwesomeIcon icon={faPlus} /><span> Thêm mới</span></button>
                     </Card.Header>
                     <Card.Body>
-                    {mode === Mode.View && <div className="w-100 p-5"><h5><b>Chọn từ danh sách hoặc nhấn nút "Thêm mới" để tiếp tục .</b></h5></div>}
-                      {mode !== Mode.View && <div className="w-80 d-flex p-3 animate__animated animate__fadeIn">
+                        {mode === Mode.View && <div className="w-100 p-5"><h5><b>Chọn từ danh sách hoặc nhấn nút "Thêm mới" để tiếp tục .</b></h5></div>}
+                        {mode !== Mode.View && <div className="w-80 d-flex p-3 animate__animated animate__fadeIn">
                             <div className="w-50 d-flex flex-column">
                                 <label className="w-100">
-                                    Số quyết định:
+                                    Số quyết định:<span className="require">*</span>
                                     <input value={decideNo} fieldName="decideNo" onChange={this.onEmployeeAllowanceModelChange} placeholder="Số quyết định" className="form-control" />
                                 </label>
 
                                 <label className="w-100">
-                                    Ngày hiệu lực:
+                                    Ngày hiệu lực:<span className="require">*</span>
                                     <CustomDatePicker value={validFromDate} onDateChange={(value) => this.onCustomModelChange(value, 'validFromDate')} />
                                 </label>
 
@@ -121,12 +129,12 @@ export class EmployeeAllowanceDetail extends React.Component {
                                 </label>
 
                                 <label className="w-100">
-                                    Loại phụ cấp:
+                                    Loại phụ cấp:<span className="require">*</span>
                                     <CustomSelect data={allowances} selectedValue={allowanceTypeId} labelField="name" onValueChange={value => this.onCustomModelChange(value, 'allowanceTypeId')} />
                                 </label>
 
                                 <label className="w-100">
-                                    Số tiền:
+                                    Số tiền:<span className="require">*</span>
                                     <Amount amount={amount} placeholder="Số tiền" className="form-control" onAmountChange={value => this.onCustomModelChange(value, 'amount')} />
                                 </label>
 
@@ -155,14 +163,14 @@ export class EmployeeAllowanceDetail extends React.Component {
                                 </label>
                             </div>
                         </div>
-                        }  
+                        }
                         <div className="w-80 border-bottom" />
                         <div className="d-flex w-80 justify-content-end mt-2">
-                            {mode !== Mode.View && <button data-tip="Lưu" className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faAngleLeft} /><span className="ml-1">{mode === Mode.Create ? "Thêm vào danh sách" : "Cập nhật vào danh sách"}</span></button>}
+                            {mode !== Mode.View && <button disabled={!this.validModel()} data-tip="Lưu" className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faAngleLeft} /><span className="ml-1">{mode === Mode.Create ? "Thêm vào danh sách" : "Cập nhật vào danh sách"}</span></button>}
                             {mode === Mode.Edit && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showModalRemoveComfirm: true })}><FontAwesomeIcon icon={faTrash} /><span className="ml-1">Xóa khỏi danh sách</span></button>}
                             {mode !== Mode.View && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span className="ml-1">Hủy thao tác</span></button>}
 
-                        </div>  
+                        </div>
 
                     </Card.Body>
                 </Card>
@@ -230,33 +238,31 @@ export class EmployeeAllowanceDetail extends React.Component {
 
     onProcessRemoveConfirm = () => {
         const { model } = this.state;
-        const {onUpdateModels} = this.props;
-        onUpdateModels({type: "D", model: model});
-        this.setState({showModalRemoveComfirm: false, mode:Mode.View});
+        const { onUpdateModels } = this.props;
+        onUpdateModels({ type: "D", model: model });
+        this.setState({ showModalRemoveComfirm: false, mode: Mode.View });
 
     }
 
     onProcessConfirm = () => {
-        const { model, mode, allowances} = this.state;
-        const {onUpdateModels} = this.props;
+        const { model, mode, allowances } = this.state;
+        const { onUpdateModels } = this.props;
 
-        if(model.allowanceTypeId)
-        {
+        if (model.allowanceTypeId) {
             model.allowanceTypeName = allowances.find(x => x.id === model.allowanceTypeId).name;
         }
 
-        if(model.amount)
-        {
+        if (model.amount) {
             model.amountDisplay = NumberUltis.convertToAmountText(model.amount);
         }
 
         if (mode === Mode.Create) {
-            onUpdateModels({type:"A" , model: model});
-            this.setState({showModalProcessConfirm: false, model: this.resetModel()});
+            onUpdateModels({ type: "A", model: model });
+            this.setState({ showModalProcessConfirm: false, model: this.resetModel() });
         } else if (mode === Mode.Edit) {
-            
-            onUpdateModels({type: "E", model: model});
-            this.setState({showModalProcessConfirm: false});
+
+            onUpdateModels({ type: "E", model: model });
+            this.setState({ showModalProcessConfirm: false });
         }
     }
 

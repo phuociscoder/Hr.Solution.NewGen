@@ -1,3 +1,4 @@
+import _ from "lodash";
 
 
 const getYears = () => {
@@ -39,8 +40,13 @@ const toDateString = (value) => {
     return format.replace("dd", strDay).replace("MM", strMonth).replace("yyyy", year);
 }
 
+const IsDate =(value) => {
+    return _.isDate(value);
+}
+
 export class DateTimeUltils {
     static getYears = getYears;
     static toDateString = toDateString;
     static getMonthYears = getMonthYears;
+    static IsDate = IsDate;
 }

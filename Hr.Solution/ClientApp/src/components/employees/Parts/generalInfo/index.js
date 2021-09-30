@@ -106,11 +106,11 @@ export class EmployeeGeneralInfo extends React.Component {
 
                     <div className="w-100 d-flex">
                         <label className="w-100">
-                            Họ nhân viên:
+                            Họ nhân viên: <span className="require">*</span>
                             <input value={lastName} fieldName="lastName" onChange={this.onModelChange} className="form-control" placeholder="họ nhân viên" />
                         </label>
                         <label className="pl-4 w-100">
-                            Tên nhân viên:
+                            Tên nhân viên: <span className="require">*</span>
                             <input value={firstName} fieldName="firstName" onChange={this.onModelChange} className="form-control" placeholder="Tên nhân viên" />
                         </label>
                     </div>
@@ -154,7 +154,7 @@ export class EmployeeGeneralInfo extends React.Component {
                     </div>
 
                     <label className="w-50">
-                        Bộ phận:
+                        Bộ phận: <span className="require">*</span>
                         <CustomSelect dataUrl="/api/Department" className="w-100"
                             orderFieldName={["level"]}
                             orderBy="desc"

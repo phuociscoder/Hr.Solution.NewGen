@@ -26,7 +26,7 @@ export class EmpMenus {
     { id: this.Allowance, name: "Phụ Cấp" , icon :<FontAwesomeIcon icon={faBuffer}/>},
     { id: this.Dependant, name: "Người phụ thuộc", icon :<FontAwesomeIcon icon={faPeopleArrows}/> },
     { id: this.BasicSalaryInfo, name: "Thông tin CB tính công" , icon :<FontAwesomeIcon icon={faUserEdit}/>},
-    { id: this.DayLeave, name: "Ngày Nghỉ Phép" , icon :<FontAwesomeIcon icon={faCalendarMinus}/>},
+    // { id: this.DayLeave, name: "Ngày Nghỉ Phép" , icon :<FontAwesomeIcon icon={faCalendarMinus}/>},
     { id: this.Contract, name: "Hợp đồng lao động" , icon :<FontAwesomeIcon icon={faFileContract}/>},
     { id: this.SalaryProcess, name: "Quá trình lương cơ bản" , icon :<FontAwesomeIcon icon={faMoneyCheckAlt}/>},
     { id: this.Insurance, name: "Bảo Hiểm" , icon :<FontAwesomeIcon icon={faFileMedical}/>},

@@ -11,6 +11,7 @@ import { NotificationType } from "../../../Common/notification/Constants";
 import { ShowNotification } from "../../../Common/notification/Notification";
 import { Mode } from "../../Constanst";
 import { NumberUltis } from "../../../Utilities/NumberUltis";
+import { StringUltis } from "../../../Utilities/StringUltis";
 // import { dependenceServices } from "../dependence.services";
 
 export class EmployeeDependantDetail extends React.Component {
@@ -90,6 +91,11 @@ export class EmployeeDependantDetail extends React.Component {
         this.setState({ model: newModel });
     }
 
+    validModel = () => {
+        const { model } = this.state;
+        return !StringUltis.IsNullOrEmpty(model.dependantsCode) && NumberUltis.IsNumber(model.relationTypeId) && !StringUltis.IsNullOrEmpty(model.fullName);
+    }
+
     render = () => {
         const { dependantsCode, fullName, dayOfBirth, address, relationTypeId, phone, isTax, note } = this.state.model;
         const { mode, relations } = this.state;
@@ -103,29 +109,29 @@ export class EmployeeDependantDetail extends React.Component {
                         {mode === Mode.View && <div className="w-100 p-5"><h5><b>Chọn từ danh sách hoặc nhấn nút "Thêm mới" để tiếp tục .</b></h5></div>}
                         {mode !== Mode.View && <div className="w-80 d-flex p-3 animate__animated animate__fadeIn">
                             <div className="w-100 d-flex flex-column">
-                            <label className="w-25">
-                                Mã người phụ thuộc:
-                                <input fieldname="dependantsCode" value={dependantsCode} onChange={this.onEmployeeDependantModelChange} className="form-control" placeholder="Mã người phụ thuộc"></input>
-                            </label>
-                            <label className="w-25 text-camelcase">
-                                    Quan hệ:
+                                <label className="w-25">
+                                    Mã người phụ thuộc:<span className="require">*</span>
+                                    <input fieldname="dependantsCode" value={dependantsCode} onChange={this.onEmployeeDependantModelChange} className="form-control" placeholder="Mã người phụ thuộc"></input>
+                                </label>
+                                <label className="w-25 text-camelcase">
+                                    Quan hệ: <span className="require">*</span>
                                     <CustomSelect data={relations} selectedValue={relationTypeId} labelField="name" placeHolder="-Chọn quan hệ-" isClearable={true} onValueChange={value => this.onCustomModelChange(value, 'relationTypeId')} />
                                 </label>
-                            <div className="d-flex">
-                                <label className="w-50">
-                                    Tên người phụ thuộc:
-                                    <input fieldname="fullName" value={fullName} onChange={this.onEmployeeDependantModelChange} className="form-control" placeholder="Tên người phụ thuộc"></input>
+                                <div className="d-flex">
+                                    <label className="w-50">
+                                        Tên người phụ thuộc: <span className="require">*</span>
+                                        <input fieldname="fullName" value={fullName} onChange={this.onEmployeeDependantModelChange} className="form-control" placeholder="Tên người phụ thuộc"></input>
+                                    </label>
+                                    <label className="w-50 pl-4 text-camelcase">
+                                        Ngày sinh:
+                                        <CustomDatePicker value={dayOfBirth} onDateChange={value => this.onCustomModelChange(value, 'dayOfBirth')} />
+                                    </label>
+                                </div>
+                                <label className="w-100 text-camelcase">
+                                    Địa chỉ:
+                                    <input fieldname="address" value={address} onChange={this.onEmployeeDependantModelChange} className="form-control" placeholder="Địa chỉ"></input>
                                 </label>
-                                <label className="w-50 pl-4 text-camelcase">
-                                    Ngày sinh:
-                                    <CustomDatePicker value={dayOfBirth} onDateChange={value => this.onCustomModelChange(value, 'dayOfBirth')} />
-                                </label>
-                            </div>
-                            <label className="w-100 text-camelcase">
-                                Địa chỉ:
-                                <input fieldname="address" value={address} onChange={this.onEmployeeDependantModelChange} className="form-control" placeholder="Địa chỉ"></input>
-                            </label>
-                               
+
                                 <label className="w-50 text-camelcase">
                                     Số điện thoại:
                                     <input fieldname="phone" value={phone} onChange={this.onEmployeeDependantModelChange} className="form-control" placeholder="Số điện thoại"></input>
@@ -133,20 +139,20 @@ export class EmployeeDependantDetail extends React.Component {
                                 <label className="w-25 ">
                                     <input fieldname="isTax" onChange={this.onEmployeeDependantModelChange} type="checkbox" checked={isTax} /> <span className="ml-1"> Tính thuế</span>
                                 </label>
-                            <label className="w-100 ">
-                                Ghi chú:
-                                <textarea fieldname="note" onChange={this.onEmployeeDependantModelChange} value={note} className="form-control" rows={5} placeholder="Ghi chú"></textarea>
-                            </label>
+                                <label className="w-100 ">
+                                    Ghi chú:
+                                    <textarea fieldname="note" onChange={this.onEmployeeDependantModelChange} value={note} className="form-control" rows={5} placeholder="Ghi chú"></textarea>
+                                </label>
                             </div>
                         </div>
                         }
                         <div className="w-80 border-bottom" />
-                            <div className="d-flex w-80 justify-content-end mt-2">
-                                {mode !== Mode.View && <button data-tip="Lưu" className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faAngleLeft} /><span className="ml-1">{mode === Mode.Create ? "Thêm vào danh sách" : "Cập nhật vào danh sách"}</span></button>}
-                                {mode === Mode.Edit && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showModalRemoveComfirm: true })}><FontAwesomeIcon icon={faTrash} /><span className="ml-1">Xóa khỏi danh sách</span></button>}
-                                {mode !== Mode.View && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span className="ml-1">Hủy thao tác</span></button>}
+                        <div className="d-flex w-80 justify-content-end mt-2">
+                            {mode !== Mode.View && <button disabled={!this.validModel()} data-tip="Lưu" className="btn btn-primary" onClick={() => this.setState({ showModalProcessConfirm: true })}><FontAwesomeIcon icon={faAngleLeft} /><span className="ml-1">{mode === Mode.Create ? "Thêm vào danh sách" : "Cập nhật vào danh sách"}</span></button>}
+                            {mode === Mode.Edit && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showModalRemoveComfirm: true })}><FontAwesomeIcon icon={faTrash} /><span className="ml-1">Xóa khỏi danh sách</span></button>}
+                            {mode !== Mode.View && <button className="btn btn-danger ml-2" onClick={() => this.setState({ showCancelConfirmModal: true })}><FontAwesomeIcon icon={faTimes} /><span className="ml-1">Hủy thao tác</span></button>}
 
-                            </div>
+                        </div>
 
 
                     </Card.Body>

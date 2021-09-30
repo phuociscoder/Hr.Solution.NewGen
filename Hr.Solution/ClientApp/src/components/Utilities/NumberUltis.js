@@ -17,6 +17,11 @@ const convertToAmountText = (input) => {
     }
 }
 
+const IsNumber =(value) => {
+    return _.isNumber(value);
+}
+
 export class NumberUltis {
     static convertToAmountText = convertToAmountText;
+    static IsNumber = IsNumber;
 }
