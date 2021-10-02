@@ -16,5 +16,9 @@ export class EmployeeServices {
       return RestClient.SendPostRequest(`${this.baseUrl}/${sectionName}`, params);
     }
 
+    static GetById =(id) => {
+        return RestClient.SendGetRequest(`${this.baseUrl}/${id}`);
+    }
+
     
 }

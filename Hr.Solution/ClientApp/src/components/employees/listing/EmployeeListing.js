@@ -97,7 +97,6 @@ export class EmployeeListing extends React.Component {
     }
 
     onEditEmployee =(emp) => {
-        debugger;
         this.props.history.push(`${AppRoute.EMPLOYEE_EDIT.path.replace(':id', emp.id)}`);
     }
 

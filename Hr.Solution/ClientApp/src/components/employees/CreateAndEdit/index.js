@@ -47,9 +47,26 @@ export class EmployeeCreateEdit extends React.Component {
     }
 
     loadEmployeeInformation =(empId) => {
-     const [response1, response2] =  Promise.all([EmployeeServices.GetManagers(), CategoryServices.GetCategoryItems(Function.LSEM100)]);
-     debugger;
+        const {sections} = this.state;
+        let newSections = Object.assign([], sections);
+       EmployeeServices.GetById(empId).then(response => {
+           const generaInfo = response.data.generalInformation;
+          this.setDataToModelSection(generaInfo, EmpMenus.GeneralInfo, newSections);
+
+          //Phuoc: continue for next sections from there
+          
+          this.setState({sections: newSections});
+
+       }, error => {
+           debugger;
+       });
         
+    }
+
+    setDataToModelSection =(data, sectionId, sections) => {
+        let section = sections.find(x => x.id === sectionId);
+        section.model = data;
+        sections.splice(sections.findIndex(x => x.id === sectionId), 1, section);
     }
 
     componentDidMount =() => {

@@ -21,12 +21,13 @@ export class EmployeeGeneralInfo extends React.Component {
         }
     }
 
-    // shouldComponentUpdate =(nextProps) => {
-    //     if(this.props.model !== nextProps.model)
-    //     {
-    //         this.setState({model : nextProps.model});
-    //     }
-    // }
+    shouldComponentUpdate =(nextProps) => {
+        if(this.props.model !== nextProps.model)
+        {
+            this.setState({model : nextProps.model});
+        }
+        return true;
+    }
 
     onGeneralInfoChange = (newModel) => {
         const { onModelChange } = this.props;
@@ -88,6 +89,7 @@ export class EmployeeGeneralInfo extends React.Component {
     }
 
     render = () => {
+        console.log(this.state.model)
         const { code, firstName, lastName, isMale, dOb, tAddress, pAddress, education, eduNote, departmentId, jobPosId, isManager, nationId,
             religionId, mariageStatusId, phoneNumber, faxNumber, email, joinDate, isActive, idCardNo, idCardNoPlace, idCardNoDate, passportNo,
             passportNoPlace, passportNoDate, taxNo, taxNoPlace, taxNoDate, note, photo } = this.state.model;

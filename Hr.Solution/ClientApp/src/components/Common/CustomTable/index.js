@@ -78,11 +78,11 @@ export class HTable extends React.Component {
                 {
                     data.map(item => {
                         return (
-                            <div className="w-100 d-flex border table-row" style={{height:'50px'}}>
+                            <div className="w-100 d-flex border table-row animate__animated animate__fadeIn " style={{height:'50px'}}>
 
                                     {colOrder && colOrder.length > 0 && colOrder.map(col => {
                                     return (
-                                        <div className={`${col.align === "center" ? 'justify-content-center': ''}  d-flex align-items-center pl-2 border-left`}
+                                        <div className={`${col.align === "center" ? 'justify-content-center': ''}  d-flex align-items-center pl-2 border-left `}
                                             style={{ width: `${col.width}%`}}>
                                             {col.formatContent ? col.formatContent(item) : <span>{item[col.field]}</span>}
                                         </div>
@@ -107,7 +107,7 @@ export class HTable extends React.Component {
                     <div className="htable-header d-flex h-5" style={{width: '98.8%'}}>
                         {this.generateHeader()}
                     </div>
-                    <div className="htable-body h-90">
+                    <div className="htable-body h-90 ">
                         {loading && <div className="w-100 p-2 d-flex justify-content-center">
                             <Loading show={true} />
                         </div>}

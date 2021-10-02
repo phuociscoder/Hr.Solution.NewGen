@@ -23,7 +23,6 @@ const AuthorizationComponent = (WrappedComponent, FunctionPrefix) => {
         }
 
         getComponentName = () => {
-            debugger;
             const path = window.location.pathname;
             const title = AppRoute.ALL.find(x => x.path === path || path.includes(x.alias))?.name;
             this.setState({ title });
