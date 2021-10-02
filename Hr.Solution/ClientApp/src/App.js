@@ -50,6 +50,7 @@ export default class App extends Component {
             <Switch>
               <Route exact path={[AppRoute.EMPLOYEE_MANAGEMENT.path]} component={AuthorizationComponent(EmployeeListing, Function.EMP000)} />
               <Route exact path={[AppRoute.EMPLOYEE_CREATE.path]} component={AuthorizationComponent(EmployeeCreateEdit, Function.EMP001)} />
+              <Route exact path={[AppRoute.EMPLOYEE_EDIT.path]} component={AuthorizationComponent(EmployeeCreateEdit, Function.EMP001)} />
               <Route exact path={[AppRoute.CATEGORY_LIST.path]} component={AuthorizationComponent(CategoryListing, Function.LS000)} />
               <Route exact path={[AppRoute.CATEGORY_DETAIL.path]} component={WrapperCategoryDetail(CategoryDetail)}/>
               <Route exact path={[AppRoute.CONFIG_DEPARTMENT.path]} component={AuthorizationComponent(DepartmentConfig)} />

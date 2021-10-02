@@ -453,5 +453,19 @@ namespace Hr.Solution.Core.Services.Impl
             });
             return tbl;
         }
+
+        public async Task<EmployeeGetByIdResponse> GetById(int employeeId)
+        {
+            var response = await repository.QueryMultiAsync(ProcedureConstants.SP_EMPLOYEES_GET_BY_ID, new { employeeId = employeeId });
+            var employeeInfo = new EmployeeGetByIdResponse();
+            employeeInfo.GeneralInformation = response.ReadFirst<EmployeeGeneralInfoResponse>();
+            employeeInfo.Allowances = response.Read<EmployeeAllowanceResponse>().ToList();
+            employeeInfo.Dependants = response.Read<EmployeeDependantResponse>().ToList();
+            employeeInfo.BasicSalaryInfo = response.Read<EmployeesBasicSalaryGetByIdResponse>().FirstOrDefault();
+            employeeInfo.Contracts = response.Read<EmployeeContractResponse>().ToList();
+            employeeInfo.Insurances = response.Read<EmployeeInsuranceResponse>().ToList();
+            employeeInfo.BasicSalaryProcesses = response.Read<EmployeeBasicSalaryProcessResponse>().ToList();
+            return employeeInfo;
+        }
     }
 }

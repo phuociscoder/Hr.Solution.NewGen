@@ -6,6 +6,7 @@ export class AppRoute {
     //Employee
     static EMPLOYEE_MANAGEMENT = { path: "/employees", name: "QUẢN LÝ NHÂN VIÊN", parent: [this.HOME] };
     static EMPLOYEE_CREATE = { path: "/employees/create", name: "THÊM NHÂN VIÊN", parent: [this.HOME, this.EMPLOYEE_MANAGEMENT] };
+    static EMPLOYEE_EDIT = { path: "/employees/edit/:id", alias: "/employees/edit/" , name: "CHỈNH SỬA THÔNG TIN NHÂN VIÊN", parent: [this.HOME, this.EMPLOYEE_MANAGEMENT] };
 
     static EMPLOYEE_CONTRACT = { path: "/employees/contract/:id", alias: "/employees/contract/", name: "HỢP ĐỒNG LAO ĐỘNG", parent: [this.HOME, this.EMPLOYEE_MANAGEMENT] };
 
@@ -25,6 +26,7 @@ export class AppRoute {
 
     static ALL = [this.HOME,
     this.EMPLOYEE_MANAGEMENT,
+    this.EMPLOYEE_EDIT,
     this.EMPLOYEE_CONTRACT,
     this.EMPLOYEE_CREATE,
     this.CATEGORY_LIST,

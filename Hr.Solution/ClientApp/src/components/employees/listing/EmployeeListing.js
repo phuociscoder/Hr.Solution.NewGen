@@ -96,8 +96,13 @@ export class EmployeeListing extends React.Component {
         this.setState({ exportSampleFileFiltered: exportSampleFileFiltered });
     }
 
+    onEditEmployee =(emp) => {
+        debugger;
+        this.props.history.push(`${AppRoute.EMPLOYEE_EDIT.path.replace(':id', emp.id)}`);
+    }
+
     generateActions =(item) => {
-        return <FontAwesomeIcon icon={faUserEdit}/>
+        return <button className="btn btn-info" onClick={e => this.onEditEmployee(item)}><FontAwesomeIcon icon={faUserEdit} /> </button>
     }
 
     onPageIndexChange =(index) => {

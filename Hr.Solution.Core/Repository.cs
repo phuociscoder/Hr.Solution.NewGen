@@ -85,10 +85,8 @@ namespace Hr.Solution.Core
 
         public async Task<GridReader> QueryMultiAsync(string procedureName, object filters)
         {
-            using (var connection = dbContext.GetDBConnection())
-            {
-                return await connection.QueryMultipleAsync(procedureName, ConvertToParams(filters), commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
-            }
+            var connection = dbContext.GetDBConnection();
+            return await connection.QueryMultipleAsync(procedureName, ConvertToParams(filters), commandType: System.Data.CommandType.StoredProcedure).ConfigureAwait(false);
         }
 
         public async Task<int> QueryTotal(string procedureName, object filters, bool convertToDynamicParams = true)

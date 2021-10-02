@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
 import React from "react";
 import { Modal, ProgressBar, Spinner } from "react-bootstrap";
+import { CategoryServices } from "../../administration/administration.category/Category.services";
+import { Function } from "../../Common/Constants";
 import { NotificationType } from "../../Common/notification/Constants";
 import { ShowNotification } from "../../Common/notification/Notification";
 import { EmpMenus, Mode, SectionState, SectionStatus } from "../Constanst";
@@ -37,9 +39,25 @@ export class EmployeeCreateEdit extends React.Component {
         }
     }
 
+    onInit =() => {
+        const empId = this.props.match.params.id;
+        if(!empId) return;
+        this.setState({mode: Mode.Edit});
+        this.loadEmployeeInformation(empId);
+    }
+
+    loadEmployeeInformation =(empId) => {
+     const [response1, response2] =  Promise.all([EmployeeServices.GetManagers(), CategoryServices.GetCategoryItems(Function.LSEM100)]);
+     debugger;
+        
+    }
+
+    componentDidMount =() => {
+        this.onInit();
+    }
+
 
     onSectionModelChange = (model, sectionId) => {
-        console.log(model);
         const { sections } = this.state;
         let newSections = Object.assign([], sections);
         let modelSection = newSections.find(x => x.id === sectionId);

@@ -76,13 +76,13 @@ namespace Hr.Solution.Application.Controllers
             }
         }
 
-        [HttpGet, Route("{id}")]
-        [Authorize]
-        public async Task<ActionResult> GetByIdGeneralInfo(int id)
-        {
-            var result = await employeeServices.EmployeeGetByIdGeneralInfo(id);
-            return Ok(result);
-        }
+        //[HttpGet, Route("{id}")]
+        //[Authorize]
+        //public async Task<ActionResult> GetByIdGeneralInfo(int id)
+        //{
+        //    var result = await employeeServices.EmployeeGetByIdGeneralInfo(id);
+        //    return Ok(result);
+        //}
 
         [HttpPut, Route("")]
         [Authorize]
@@ -156,6 +156,13 @@ namespace Hr.Solution.Application.Controllers
             var result = await employeeServices.EmployeeInsuranceUpdate(request, currentUser);
             return Ok(new { status = "SUCCESS", message = "", value = result });
             
+        }
+
+        [HttpGet, Route("{id}")]
+        public async Task<ActionResult> GetEmployeeInformation(int id)
+        {
+            var result = await employeeServices.GetById(id);
+            return Ok(result);
         }
     }
 }
