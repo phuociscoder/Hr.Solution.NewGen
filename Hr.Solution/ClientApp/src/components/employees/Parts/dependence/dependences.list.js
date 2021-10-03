@@ -19,18 +19,18 @@ export class EmployeeDependantList extends React.Component {
     }
 
     componentDidMount = () => {
-        this.loadRelationTypes(Function.LSEM104, 'relations');
+       // this.loadRelationTypes(Function.LSEM104, 'relations');
 
     }
 
-    loadRelationTypes = (functionId, stateName) => {
-        CategoryServices.GetCategoryItems(functionId).then(response => {
-            const options = response.data;
-            if (options) this.setState({ [stateName]: options });
-        }, error => {
-            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập danh sách quan hệ");
-        });
-    }
+    // loadRelationTypes = (functionId, stateName) => {
+    //     CategoryServices.GetCategoryItems(functionId).then(response => {
+    //         const options = response.data;
+    //         if (options) this.setState({ [stateName]: options });
+    //     }, error => {
+    //         ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập danh sách quan hệ");
+    //     });
+    // }
 
     shouldComponentUpdate = (nextProps) => {
         if (this.props.models !== nextProps.models) {

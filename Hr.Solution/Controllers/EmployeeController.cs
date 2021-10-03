@@ -164,5 +164,12 @@ namespace Hr.Solution.Application.Controllers
             var result = await employeeServices.GetById(id);
             return Ok(result);
         }
+
+        [HttpGet, Route("photo/{photoId}")]
+        public async Task<ActionResult> GetEmployeePhoto(Guid photoId)
+        {
+            var result = await employeeServices.GetEmployeePhoto(photoId);
+            return Ok(result);
+        }
     }
 }

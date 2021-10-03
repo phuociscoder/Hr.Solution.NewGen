@@ -20,5 +20,9 @@ export class EmployeeServices {
         return RestClient.SendGetRequest(`${this.baseUrl}/${id}`);
     }
 
+    static GetEmployeePhoto =(photoId) => {
+        return RestClient.SendGetRequest(`${this.baseUrl}/photo/${photoId}`);
+    }
+
     
 }

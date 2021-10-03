@@ -19,31 +19,10 @@ export class EmployeeAllowanceList extends React.Component {
         }
     }
 
-    componentDidMount = () => {
-        this.loadAllowances(Function.LSEM165, 'allowances');
-
-    }
-
-    loadAllowances = (functionId, stateName) => {
-        CategoryServices.GetCategoryItems(functionId).then(response => {
-            const options = response.data;
-            if (options) this.setState({ [stateName]: options });
-        }, error => {
-            ShowNotification(NotificationType.ERROR, "Có lỗi xảy ra! Không thể truy cập danh sách quan hệ");
-        });
-    }
-
     shouldComponentUpdate = (nextProps) => {
         if (this.props.models !== nextProps.models) {
             
             this.setState({ models: nextProps.models });
-        }
-        if (nextProps.refresh) {
-            this.loadDependenceList(nextProps.dependence.id);
-        }
-        if (nextProps.refresh) {
-            // CALL_DRAFT
-            this.loadDraftList();
         }
         return true;
     }
@@ -77,7 +56,7 @@ export class EmployeeAllowanceList extends React.Component {
 
     render = () => {
         const { models, loading, selectedItem, allowances } = this.state;
-        
+        console.log(allowances);
         return (
             <Card className="h-100">
                 <Card.Header>

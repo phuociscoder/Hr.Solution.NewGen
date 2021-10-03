@@ -55,7 +55,6 @@ export class EmployeeContractList extends React.Component {
 
     render = () => {
         const { models, selectedItem } = this.state;
-        
         return (
             <Card className="h-100">
                 <Card.Header>
@@ -70,7 +69,7 @@ export class EmployeeContractList extends React.Component {
                                         onClick={() => this.onSelectItem(item)}>
                                         <span className="text-uppercase"><b>{item.contractTypeName}</b></span>
                                         <div className="w-100 d-flex">
-                                            <span><i>{DateTimeUltils.toDateString(item.validFromDate)}</i></span>
+                                            <span><i>{DateTimeUltils.toDateString(item.validDate)}</i></span>
                                             <span className="ml-auto">{NumberUltis.convertToAmountText(item.basicSalary)}</span>
                                         </div>
                                     </div>

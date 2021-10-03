@@ -181,6 +181,7 @@ namespace Hr.Solution.Data.Responses
         public DateTime ValidFromDate { get; set; }
         public DateTime ValidToDate { get; set; }
         public int AllowanceTypeId { get; set; }
+        public string AllowanceTypeName { get; set; }
         public long Amount { get; set; }
         public int CurrencyId { get; set; }
         public decimal CurrencyRate { get; set; }
@@ -197,6 +198,7 @@ namespace Hr.Solution.Data.Responses
         public string DependantsCode { get; set; }
         public int EmployeeId { get; set; }
         public int RelationTypeId { get; set; }
+        public string RelationTypeName { get; set; }
         public string Phone { get; set; }
         public string FullName { get; set; }
         public string Address { get; set; }
@@ -215,6 +217,7 @@ namespace Hr.Solution.Data.Responses
         public string ContractNo { get; set; }
         public DateTime? SignDate { get; set; }
         public int ContractTypeId { get; set; }
+        public string ContractTypeName { get; set; }
         public int DurationId { get; set; }
         public DateTime? ValidDate { get; set; }
         public DateTime? ExpiredDate { get; set; }
@@ -308,7 +311,7 @@ namespace Hr.Solution.Data.Responses
         public string PassPortNoPlace { get; set; }
         public string TaxNo { get; set; }
         public string TaxNoPlace { get; set; }
-        public string Photo { get; set; }
+        public Guid? PhotoId { get; set; }
         public DateTime? TaxNoDate { get; set; }
         public string Note { get; set; }
         public string CreatedBy { get; set; }

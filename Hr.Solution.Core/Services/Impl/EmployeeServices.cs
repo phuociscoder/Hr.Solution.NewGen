@@ -467,5 +467,11 @@ namespace Hr.Solution.Core.Services.Impl
             employeeInfo.BasicSalaryProcesses = response.Read<EmployeeBasicSalaryProcessResponse>().ToList();
             return employeeInfo;
         }
+
+        public async Task<string> GetEmployeePhoto(Guid photoId)
+        {
+            var response = await repository.ExecuteScalarAsync(ProcedureConstants.SP_EMPLOYEE_GET_PHOTO, new { photoId = photoId });
+            return (string)response;
+        }
     }
 }

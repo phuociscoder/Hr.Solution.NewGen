@@ -50,11 +50,27 @@ export class EmployeeCreateEdit extends React.Component {
         const {sections} = this.state;
         let newSections = Object.assign([], sections);
        EmployeeServices.GetById(empId).then(response => {
-           const generaInfo = response.data.generalInformation;
-          this.setDataToModelSection(generaInfo, EmpMenus.GeneralInfo, newSections);
+           let generalInfo = response.data.generalInformation;
+           this.setDataToModelSection(generalInfo, EmpMenus.GeneralInfo, newSections);
+     
+          const allowances = response.data.allowances;
+          this.setDataToModelSection(allowances, EmpMenus.Allowance, newSections);
 
-          //Phuoc: continue for next sections from there
-          
+          const dependants = response.data.dependants;
+          this.setDataToModelSection(dependants, EmpMenus.Dependant, newSections);
+
+          const basicSalaryInfo = response.data.basicSalaryInfo;
+          this.setDataToModelSection(basicSalaryInfo, EmpMenus.BasicSalaryInfo, newSections);
+
+          const contracts = response.data.contracts;
+          this.setDataToModelSection(contracts, EmpMenus.Contract, newSections);
+
+          const insurances = response.data.insurances;
+          this.setDataToModelSection(insurances, EmpMenus.Insurance, newSections);
+
+          const basicSalaryProcess = response.data.basicSalaryProcess;
+          this.setDataToModelSection(basicSalaryProcess, EmpMenus.SalaryProcess, newSections);
+
           this.setState({sections: newSections});
 
        }, error => {

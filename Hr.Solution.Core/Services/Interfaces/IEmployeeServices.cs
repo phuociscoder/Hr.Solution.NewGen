@@ -26,5 +26,6 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<int> EmployeeBasicSalaryProcess_CUD(EmployeeBasicSalaryProcessRequest request, string currentUser);
         Task<int> EmployeeInsuranceUpdate(EmployeeInsuranceRequest request, string currentUser);
         Task<EmployeeGetByIdResponse> GetById(int employeeId);
+        Task<string> GetEmployeePhoto(Guid photoId);
     }
 }
