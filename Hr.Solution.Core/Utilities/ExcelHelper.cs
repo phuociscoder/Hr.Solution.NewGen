@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +11,31 @@ namespace Hr.Solution.Core.Utilities
 {
     public static class ExcelHelper
     {
+        public static byte[] ExportToExcelTemplate(JObject json)
+        {
+            byte[] content ;
+            using (var workbook = new XLWorkbook())
+            {
+                string tabeName = (string)json["tableName"];
+                JArray columns = (JArray)json["columns"];
+                var worksheet = workbook.Worksheets.Add(tabeName);
+                int Row1 = 1;
+                int Row2 = 2;
+                int Colunm = 1;
+                foreach (JToken col in columns.Children())
+                {
+                    worksheet.Cell(Row1, Colunm).Value = col.SelectToken("columnName").ToString();
+                    worksheet.Cell(Row2, Colunm).Value = col.SelectToken("displayName").ToString();
+                    Colunm++;
+                }
+                worksheet.Rows("1").Hide();
+                using var stream = new MemoryStream();
+                workbook.SaveAs(stream);
+                 content = stream.ToArray();
+                
+            }
+            return content;
+        }
 
         public static List<T> GetRecords<T>(Stream stream)
         {
