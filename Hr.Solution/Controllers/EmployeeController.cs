@@ -1,10 +1,13 @@
 ﻿using Hr.Solution.Core.Services.Interfaces;
+using Hr.Solution.Core.Utilities;
+using Hr.Solution.Data.ImportModel;
 using Hr.Solution.Data.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -170,6 +173,23 @@ namespace Hr.Solution.Application.Controllers
         {
             var result = await employeeServices.GetEmployeePhoto(photoId);
             return Ok(result);
+        }
+
+        [HttpPost, Route("ImportData")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ImportEmployees(IFormFile request)
+        {
+            using (Stream xlsxStream = new MemoryStream())
+            {
+                // Read file upload
+                using (var fileStream = request.OpenReadStream())
+                    fileStream.CopyTo(xlsxStream);
+                //get data from excel rows
+                var importList = ExcelHelper.GetRecords<EmployeeModel>(xlsxStream);
+                // call service to do import
+               var errorList= await employeeServices.ImportEmployeeAuto(importList);
+                return Ok("Ok");
+            }
         }
     }
 }

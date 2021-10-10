@@ -1,4 +1,5 @@
-﻿using Hr.Solution.Data.Requests;
+﻿using Hr.Solution.Data.ImportModel;
+using Hr.Solution.Data.Requests;
 using Hr.Solution.Data.Responses;
 using Hr.Solution.Domain.Responses;
 using System;
@@ -25,6 +26,7 @@ namespace Hr.Solution.Core.Services.Interfaces
         Task<int> EmployeeContract_CUD(EmployeeContractRequest request, string currentUser);
         Task<int> EmployeeBasicSalaryProcess_CUD(EmployeeBasicSalaryProcessRequest request, string currentUser);
         Task<int> EmployeeInsuranceUpdate(EmployeeInsuranceRequest request, string currentUser);
+        Task<List<EmployeeModel>> ImportEmployeeAuto(List<EmployeeModel> entity);
         Task<EmployeeGetByIdResponse> GetById(int employeeId);
         Task<string> GetEmployeePhoto(Guid photoId);
     }

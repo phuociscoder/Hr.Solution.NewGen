@@ -1,0 +1,37 @@
+﻿{
+  "tableName": "employee",
+  "columns": [
+    {
+      "columnName": "Code",
+      "displayName": "Mã NV"
+    },
+    {
+      "columnName": "LastName",
+      "displayName": "Họ"
+    },
+    {
+      "columnName": "FirstName",
+      "displayName": "Tên"
+    },
+    {
+      "columnName": "IsMale",
+      "displayName": "Giới Tính"
+    },
+    {
+      "columnName": "DoB",
+      "displayName": "Năm Sinh"
+    },
+    {
+      "columnName": "PhoneNumber",
+      "displayName": "Điện Thoại"
+    },
+    {
+      "columnName": "Email",
+      "displayName": "Email"
+    },
+    {
+      "columnName": "IdCardNo",
+      "displayName": "SCMND"
+    }
+  ]
+}

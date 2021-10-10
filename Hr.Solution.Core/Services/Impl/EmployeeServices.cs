@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using Hr.Solution.Core.Constants;
 using Hr.Solution.Core.Services.Interfaces;
+using Hr.Solution.Core.Utilities;
+using Hr.Solution.Data.ImportModel;
 using Hr.Solution.Data.Requests;
 using Hr.Solution.Data.Responses;
 using Hr.Solution.Domain.Responses;
@@ -8,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Hr.Solution.Core.Services.Impl
@@ -175,7 +176,6 @@ namespace Hr.Solution.Core.Services.Impl
             tblEmployeeAllowance.Columns.Add("ModifiedOn", typeof(DateTime));
             tblEmployeeAllowance.Columns.Add("IsActive", typeof(bool));
             return tblEmployeeAllowance;
-
         }
 
         public async Task<int> EmployeeDependants_CUD(EmployeeDependantsRequest request, string currentUser)
@@ -229,6 +229,7 @@ namespace Hr.Solution.Core.Services.Impl
            });
             return tblEmployeeDependant;
         }
+
         private DataTable CreateEmployeeDependantsTable()
         {
             var tblEmployeeDependants = new DataTable();
@@ -347,7 +348,7 @@ namespace Hr.Solution.Core.Services.Impl
         private DataTable ConvertToEmployeeBasicSalaryProcessTable(List<EmployeeBasicSalaryProcess> models, string currentUser)
         {
             var tblEmployeeBasicSalaryProcess = CreateEmployeeBasicSalaryProcessTable();
-            models.ForEach(x => 
+            models.ForEach(x =>
             {
                 tblEmployeeBasicSalaryProcess.Rows.Add(
                    x.Id,
@@ -367,7 +368,7 @@ namespace Hr.Solution.Core.Services.Impl
                    null,
                    currentUser,
                    null);
-             });
+            });
             return tblEmployeeBasicSalaryProcess;
         }
 
@@ -377,7 +378,7 @@ namespace Hr.Solution.Core.Services.Impl
             if (request.CreateBasicSal.Count > 0)
             {
                 var tblCreatebasicSal = ConvertToEmployeeBasicSalaryProcessTable(request.CreateBasicSal, currentUser);
-                response = response + await repository.ExecuteAsync<EmployeeBasicSalaryProcess>(ProcedureConstants.SP_EMPLOYEE_BASIC_SALARY_PROCESS_CUD, new { empBasicSalProcess = tblCreatebasicSal.AsTableValuedParameter("TVP_EmployeeBasicSalProcess"), type="ADD"}, false);
+                response = response + await repository.ExecuteAsync<EmployeeBasicSalaryProcess>(ProcedureConstants.SP_EMPLOYEE_BASIC_SALARY_PROCESS_CUD, new { empBasicSalProcess = tblCreatebasicSal.AsTableValuedParameter("TVP_EmployeeBasicSalProcess"), type = "ADD" }, false);
             }
 
             if (request.UpdateBasicSal.Count > 0)
@@ -400,7 +401,6 @@ namespace Hr.Solution.Core.Services.Impl
             var response = await repository.ExecuteAsync(ProcedureConstants.SP_EMPLOYEE_INSURANCES_UPDATE, new { employeeInsurances = tbl.AsTableValuedParameter("TVP_EmployeeInsurances") }, false);
 
             return response;
-
         }
 
         private DataTable CreateEmployeeInsuranceTable()
@@ -452,6 +452,24 @@ namespace Hr.Solution.Core.Services.Impl
                    currentUser, null);
             });
             return tbl;
+        }
+
+        public async Task<List<EmployeeModel>> ImportEmployeeAuto(List<EmployeeModel> importList)
+        {
+            List<EmployeeModel> errorsRecord = new List<EmployeeModel>();
+            if (importList != null && importList.Count() > 0)
+            {
+                foreach (var item in importList)
+                {
+                    var pram = DapperHelper.ConvertToDynamicParameters(item);
+                    var response = await repository.ExecuteAsync("ProcedureConstants.SP_EMPLOYEES_CREATE_GENERAL_INFO", pram);
+                    if(response <= 0) // insert failed
+                    {
+                        errorsRecord.Add(item);
+                    }
+                }
+            }
+            return errorsRecord;
         }
 
         public async Task<EmployeeGetByIdResponse> GetById(int employeeId)
